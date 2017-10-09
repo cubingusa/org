@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CubingUSA - {%block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/external/bootstrap.min.css" type="text/css">
+  <link rel="stylesheet" href="/static/base.css" type="text/css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="{{ c.uri_for('home') }}">
+        <img src="/static/img/cubingUSA_4.svg" width="50" height="50"> CubingUSA
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topnav" aria-controls="topnav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="topnav">
+        <ul class="nav navbar-nav">
+          <li><a class="nav-item nav-link active" href="{{ c.uri_for('home') }}">Home <span class="sr-only">(current)</span></a></li>
+          <li><a class="nav-item nav-link">Competitions</a></li>
+          <li><a class="nav-item nav-link">Organizers</a></li>
+          <li><a class="nav-item nav-link">About</a></li>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  <hr>
+  <div class="container">
+    <footer>
+      © CubingUSA 2017
+    </footer>
+  </div>
+  <script src="/static/external/jquery-3.2.1.slim.min.js" type="application/javascript"></script>
+  <script src="/static/external/popper.min.js" type="application/javascript"></script>
+  <script src="/static/external/bootstrap.min.js" type="application/javascript"></script>
+</body>
+</html>
+{% endautoescape %}
