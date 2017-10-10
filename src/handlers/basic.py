@@ -9,7 +9,7 @@ def BasicHandler(template_path):
     def get(self):
       template = JINJA_ENVIRONMENT.get_template(template_path)
       self.response.write(template.render({
-          'c': common.Common(),
+          'c': common.Common(self.request.url),
       }))
 
   return Handler

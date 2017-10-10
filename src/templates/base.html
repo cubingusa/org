@@ -1,5 +1,38 @@
 <!DOCTYPE html>
 {% autoescape true %}
+{% macro navitem(c, uri) %}
+  {% set active = c.uri_matches(uri) %}
+  <li>
+    <a class="nav-item nav-link {% if active %}active{% endif %}"
+       href="{{ uri }}">
+      {{ caller() }}{% if active %}<span class="sr-only"> (current)</span>{% endif %}
+    </a>
+  </li>
+{% endmacro %}
+{% macro navdropdown(c, uri_list, dropdown_id) %}
+  {% set active = False %}
+  {% for text, uri in uri_list %}
+    {% if c.uri_matches(uri) %}
+      {% set active = True %}
+    {% endif %}
+  {% endfor %}
+  <a class="nav-link dropdown-toggle"
+     id="{{ dropdown_id }}"
+     data-toggle="dropdown"
+     aria-haspopup="true"
+     aria-expanded="false">
+    {{ caller() }}
+  </a>
+  <div class="dropdown-menu {% if active %}active{% endif %}"
+       aria-labelledby="{{ dropdown_id }}">
+    {% for text, uri in uri_list %}
+      <a class="dropdown-item {% if c.uri_matches(uri) %}active{% endif %}"
+         href="{{ uri }}">
+        {{ text }}
+      </a>
+    {% endfor %}
+  </div>
+{% endmacro %}
 <html>
 <head>
   <meta charset="utf-8">
@@ -22,10 +55,21 @@
       </button>
       <div class="collapse navbar-collapse" id="topnav">
         <ul class="nav navbar-nav">
-          <li><a class="nav-item nav-link active" href="{{ c.uri_for('home') }}">Home <span class="sr-only">(current)</span></a></li>
-          <li><a class="nav-item nav-link">Competitions</a></li>
-          <li><a class="nav-item nav-link">Organizers</a></li>
-          <li><a class="nav-item nav-link">About</a></li>
+          {% call navitem(c, c.uri_for('home')) %} Home {% endcall %}
+          {% call navdropdown(c, [('US Competitions', c.uri_for('competitions_us')),
+                                  ('Nationals', c.uri_for('competitions_nationals')),
+                                  ('Regional Championships', c.uri_for('competitions_regional'))],
+                              'competitions') %}
+            Competitions
+          {% endcall %}
+          {% call navitem(c, c.uri_for('organizers')) %} Organizers {% endcall %}
+          {% call navdropdown(c, [('About CubingUSA', c.uri_for('about')),
+                                  ('Why we do this', c.uri_for('about_why')),
+                                  ('Who we are', c.uri_for('about_who')),
+                                  ('Donations', c.uri_for('about_donations'))],
+                              'about') %}
+            About
+          {% endcall %}
         </div>
       </div>
     </div>

@@ -1,3 +1,14 @@
 div#content {
   padding-top: 90px;
 }
+
+div.about_row {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.vcenter {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
