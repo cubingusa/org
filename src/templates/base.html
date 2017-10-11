@@ -10,12 +10,7 @@
   </li>
 {% endmacro %}
 {% macro navdropdown(c, uri_list, dropdown_id) %}
-  {% set active = False %}
-  {% for text, uri in uri_list %}
-    {% if c.uri_matches(uri) %}
-      {% set active = True %}
-    {% endif %}
-  {% endfor %}
+  {% set active = c.uri_matches_any(uri_list) %}
   <div class="dropdown {% if active %}active{% endif %}">
     <a class="nav-link dropdown-toggle"
        data-toggle="dropdown"
