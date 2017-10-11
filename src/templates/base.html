@@ -16,21 +16,22 @@
       {% set active = True %}
     {% endif %}
   {% endfor %}
-  <a class="nav-link dropdown-toggle"
-     id="{{ dropdown_id }}"
-     data-toggle="dropdown"
-     aria-haspopup="true"
-     aria-expanded="false">
-    {{ caller() }}
-  </a>
-  <div class="dropdown-menu {% if active %}active{% endif %}"
-       aria-labelledby="{{ dropdown_id }}">
-    {% for text, uri in uri_list %}
-      <a class="dropdown-item {% if c.uri_matches(uri) %}active{% endif %}"
-         href="{{ uri }}">
-        {{ text }}
-      </a>
-    {% endfor %}
+  <div class="dropdown {% if active %}active{% endif %}">
+    <a class="nav-link dropdown-toggle"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">
+      {{ caller() }}
+    </a>
+    <div class="dropdown-menu {% if active %}active{% endif %}"
+         role="menu">
+      {% for text, uri in uri_list %}
+        <a class="dropdown-item {% if c.uri_matches(uri) %}active{% endif %}"
+           href="{{ uri }}">
+          {{ text }}
+        </a>
+      {% endfor %}
+    </div>
   </div>
 {% endmacro %}
 <html>

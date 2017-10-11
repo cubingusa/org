@@ -12,3 +12,7 @@ div.about_row {
   top: 50%;
   transform: translateY(-50%);
 }
+
+.dropdown-toggle {
+  cursor: pointer;
+}
