@@ -16,3 +16,12 @@ div.about_row {
 .dropdown-toggle {
   cursor: pointer;
 }
+
+/* donate.html */
+#paypal-card p.card-text {
+  padding: 10px;
+}
+
+#paypal-card img {
+  text-align: center;
+}

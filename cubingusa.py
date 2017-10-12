@@ -11,5 +11,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about', handler=handlers.BasicHandler('about.html'), name='about'),
   webapp2.Route('/about/why', handler=handlers.BasicHandler('index.html'), name='about_why'),
   webapp2.Route('/about/who', handler=handlers.BasicHandler('index.html'), name='about_who'),
-  webapp2.Route('/about/donations', handler=handlers.BasicHandler('index.html'), name='about_donations'),
+  webapp2.Route('/about/donations', handler=handlers.BasicHandler('donate.html'), name='about_donations'),
+  webapp2.Route('/contact', handler=handlers.BasicHandler('index.html'), name='contact'),
 ])
