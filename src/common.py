@@ -13,3 +13,6 @@ class Common(object):
       if self.uri_matches(uri):
         return True
     return False
+
+  def wca_profile(self, wca_id):
+    return 'https://www.worldcubeassociation.org/persons/%s' % wca_id

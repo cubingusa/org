@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title%}Who we are{% endblock %}
+{% block content %}
+{% macro person_row(img_src) %}
+<div class="row">
+  <div class="col col-md-2">
+    <img src="{{ img_src }}" width="100%">
+  </div>
+  <div class="col col-md-10">
+    <div class="vcenter">
+      {{ caller() }}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+  <div class="container">
+    <h1>Who we are</h1>
+    <div class="row about_row">
+      <div class="col col-md-12">
+        CubingUSA is run entirely by volunteers, many of whom have been involved in our community for 10 or more years.
+      </div>
+    </div>
+    <hr>
+    <h3>Board of Directors</h3>
+    {% call person_row("/static/img/people/kit.jpg") %}
+      <strong><a href="{{ c.wca_profile('2008CLEM01') }}" target="_blank">Kit Clement</a></strong> is the <strong>Executive Director</strong> of CubingUSA.  Kit has been cubing since 2008 and has been an organizer for the US Nationals competition since 2015. Kit was appointed as a WCA Delegate in 2013 and has since delegated competitions throughout the Midwest and Northwest United States. Kit also served as a member (and leader) of the WCA Regulations Committee from 2014 to 2015.
+    {% endcall %}
+    {% call person_row("/static/img/people/kian.jpg") %}
+      <strong><a href="{{ c.wca_profile('2007BARR01') }}" target="_blank">Kian Barry</a></strong> has been the <strong>Chairman</strong> of CubingUSA since its inception.  He began cubing in 2006 and became both a WCA Delegate and Nationals organizer in 2012. Kian also has the most podiums in a competition without a win, with 39 bronze and silver medals in competition. Kian teaches history in Princeton, NJ.
+    {% endcall %}
+    {% call person_row("/static/img/people/shelley.jpg") %}
+      <strong><a href="{{ c.wca_profile('2004CHAN04') }}" target="_blank">Shelley Chang</a></strong> is the <strong>Treasurer</strong> of CubingUSA.  She has been overseeing the finances of CubingUSA since its incorporation and has been managing the funds for US Nationals competitions for about the past ten years. Shelley has been organizing US Nationals since 2006 and was the designer of the current CubingUSA logo. Shelley has been competing since the Caltech competitions held in 2004, delegating competitions since 2008, and is the only person who has attended every US Nationals competition to date.
+    {% endcall %}
+    {% call person_row("/static/img/people/vincent.jpg") %}
+      <strong><a href="{{ c.wca_profile('2006SHEU01') }}" target="_blank">Vincent Sheu</a></strong> has been the <strong>Secretary</strong> since CubingUSA's inception and was instrumental to its incorporation. He began cubing in 2005 and attended his first competition in 2006. Vincent has been an organizer for Nationals since the 2011 competition and is the former president of the Berkeley Cube Club. In 2011, Vincent tied the world record for solving 2x2x2 in 0.96 seconds. In 2014, he tied the world record for 3x3x3 fewest moves with a 25.00 move average. Vincent is currently a student at Stanford University, studying law.
+    {% endcall %}
+    {% call person_row("/static/img/people/bob.jpg") %}
+      <strong><a href="{{ c.wca_profile('2003BURT01') }}" target="_blank">Bob Burton</a></strong> never had a bio on CubingUSA's facebook.
+    {% endcall %}
+    {% call person_row("/static/img/people/shonathon.jpg") %}
+      <strong><a href="{{ c.wca_profile('2011COLL02') }}" target="_blank">Shonathon Collins</a></strong> has been a <strong>Director</strong> of CubingUSA since its inception. He began cubing in 2010 and attended his first competition in 2011. In 2014, Shon was promoted to WCA Delegate for Texas and he joined the Nationals Organizer team last year. Last month, he was crowned the Southern Champion for Fewest Moves. Shonathon earned his Bachelors in Education in May of this year.
+    {% endcall %}
+    {% call person_row("/static/img/people/hildreth.jpg") %}
+      <strong><a href="{{ c.wca_profile('2009HILD01') }}" target="_blank">James Hildreth</a></strong> got beat up by Bob at his first competition.
+    {% endcall %}
+    {% call person_row("/static/img/people/lachance.jpg") %}
+      <strong><a href="{{ c.wca_profile('2010LACH01') }}" target="_blank">James LaChance</a></strong> has been a <strong>Director</strong> of CubingUSA since its inception. He began cubing in 2003 and attended his first competition in 2010. In 2015, James was appointed as a WCA Delegate and joined the Nationals Organizer team. He is also a member of the WCA Software Team (WST) and one of the webmasters of CubingUSA. Outside of cubing, James enjoys programming and video games.
+    {% endcall %}
+    {% call person_row("/static/img/people/felix.jpg") %}
+      <strong><a href="{{ c.wca_profile('2008LEEF01') }}" target="_blank">Felix Lee</a></strong> has been a <strong>Director</strong> of CubingUSA since its inception. He began cubing in 2007 and first competed in 2008. Felix was largely responsible for the growth of cubing in and around Maryland. In 2009, Felix set the North American record for Pyraminx average (and then again three times in 2010). He joined the Nationals Organizer team in 2011. Felix currently works for Google as a software engineer in Mountain View, California.
+    {% endcall %}
+    {% call person_row("/static/img/people/kenneth.jpg") %}
+      <strong><a href="{{ c.wca_profile('2012LUKE01') }}" target="_blank">Kenneth Lu</a></strong> has been a <strong>Director</strong> of CubingUSA since its inception. Ever since he helped to run an Autonomous Robot Design Competition in college, Kenneth has been looking for another competition to help organize. He shot a video of Nationals 2012 and joined the Nationals Organizer team in 2015. If you have ever emailed CubingUSA, you probably received a reply from Kenneth!
+    {% endcall %}
+  </div>
+{% endblock %}
