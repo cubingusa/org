@@ -11,11 +11,34 @@ div.about_text,div.about_row img {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  width: 100%;
 }
 
 .dropdown-toggle {
   cursor: pointer;
 }
+
+.small-event-icon {
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+}
+
+/* competitions_us.html */
+.state {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100%;
+}
+div.region_gl { background-color: purple; }
+div.region_ne { background-color: cornflowerblue; }
+div.region_hl { background-color: salmon; }
+div.region_nw { background-color: seagreen; }
+div.region_w { background-color: gold; }
+div.region_s { background-color: crimson; }
+div.region_se { background-color: orange; }
+/* end competitions_us.html */
 
 /* donate.html */
 #paypal-card p.card-text {
@@ -25,3 +48,4 @@ div.about_text,div.about_row img {
 #paypal-card img {
   text-align: center;
 }
+/* end donate.html */

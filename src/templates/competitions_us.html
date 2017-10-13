@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title%}US Competitions{% endblock %}
+{% block content %}
+{% macro competition_row(competition) %}
+<div class="card">
+  <div class="row">
+    <div class="col-2 col-sm-1">
+      <div class="card state region_{{ competition.region }}">
+        <div class="vcenter">
+          {{ competition.state }}
+        </div>
+      </div>
+    </div>
+    <div class="col-4 col-sm-2">
+      <div class="vcenter">
+        {{ competition.StartDate() }}
+        {% if competition.IsMultiDays() %}
+          &mdash; {{ competition.EndDate() }}
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-6 col-sm-3">
+      <div class="vcenter">
+        {{ competition.name }}
+      </div>
+    </div>
+    <div class="col-12 col-sm-6">
+      <div class="row">
+        {% for evt in competition.events %}
+          <img class="small-event-icon"
+               src="/static/img/events/{{ evt }}.svg">
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+  <h1>US Competitions</h1>
+  {% for competition in competitions %}
+    {{ competition_row(competition) }}
+  {% endfor %}
+{% endblock %}
