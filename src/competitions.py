@@ -33,6 +33,9 @@ class Competition(object):
   def IsMultiDays(self):
     return self.start_date != self.end_date
 
+  def GetWCALink(self):
+    return 'https://www.worldcubeassociation.org/competitions/%s' % self.competition_id
+
 competitions = {
   '2004': [
     Competition('CaltechWinter2004', 'CA', datetime.date(2004, 1, 24), datetime.date(2004, 1, 24), "Caltech Winter competition 2004", ['333']), 
