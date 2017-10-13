@@ -2,9 +2,9 @@ div#content {
   padding-top: 90px;
 }
 
-div.about_row {
-  padding-top: 30px;
-  padding-bottom: 30px;
+div.about_text,div.about_row img {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .vcenter {
