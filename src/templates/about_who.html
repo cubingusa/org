@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 {% block title%}Who we are{% endblock %}
 {% block content %}
-{% macro person_row(img_src, name, person_title, id, accordion_id, is_expanded=False) %}
+{% macro person_row(img_src, name, person_title, id, accordion_id) %}
 <div class="card">
   <div class="card-header" role="tab" id="{{ id }}_heading">
     <a data-toggle="collapse"
        href="#{{ id }}"
-       aria-expanded="{{ 'true' if is_expanded else 'false' }}"
-       aria-controls="{{ id }}">
+       aria-expanded="false"
+       aria-controls="{{ id }}"
+       onclick="window.location.replace('#{{ id }}')"
+       id="{{ id }}_link">
       <h5 class="mb-0">
         <strong>{{ name }}</strong> &mdash; {{ person_title }}
       </h5>
     </a>
   </div>
   <div id="{{ id }}"
-       class="collapse  {{ 'show' if is_expanded else '' }}"
+       class="collapse"
        role="tabpanel"
        aria-labelledby="{{ id }}_heading"
        data-parent="#{{ accordion_id }}">
@@ -40,7 +42,7 @@
   <hr>
   <h3>Board of Directors</h3>
   <div id="directors" role="tablist">
-    {% call person_row("kit.jpg", "Kit Clement", "Executive Director", "kit", "directors", is_expanded=True) %}
+    {% call person_row("kit.jpg", "Kit Clement", "Executive Director", "kit", "directors") %}
       <strong><a href="{{ c.wca_profile('2008CLEM01') }}" target="_blank">Kit Clement</a></strong> is the <strong>Executive Director</strong> of CubingUSA.  Kit has been cubing since 2008 and has been an organizer for the US Nationals competition since 2015. Kit was appointed as a WCA Delegate in 2013 and has since delegated competitions throughout the Midwest and Northwest United States. Kit also served as a member (and leader) of the WCA Regulations Committee from 2014 to 2015.
     {% endcall %}
     {% call person_row("kian.jpg", "Kian Barry", "Chairman", "kian", "directors") %}
@@ -71,4 +73,5 @@
       <strong><a href="{{ c.wca_profile('2012LUKE01') }}" target="_blank">Kenneth Lu</a></strong> has been a <strong>Director</strong> of CubingUSA since its inception. Ever since he helped to run an Autonomous Robot Design Competition in college, Kenneth has been looking for another competition to help organize. He shot a video of Nationals 2012 and joined the Nationals Organizer team in 2015. If you have ever emailed CubingUSA, you probably received a reply from Kenneth!
     {% endcall %}
   </div>
+  <script src="/static/about_who.js" type="application/javascript"></script>
 {% endblock %}
