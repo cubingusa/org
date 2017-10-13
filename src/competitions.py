@@ -12,6 +12,11 @@ state_to_region = {
   'WI': 'gl', 'WY': 'nw'
 }
 
+event_ordering = ['333', '222', '444', '555', '666', '777',
+                  '333bf', '333fm', '333oh', '333ft', 'minx', 'pyram',
+                  'clock', 'skewb', 'sq1', '444bf', '555bf', '333mbf',
+                  '333mbo', 'magic', 'mmagic']
+
 class Competition(object):
   def __init__(self, competition_id, state, start_date, end_date, name, events):
     self.competition_id = competition_id
@@ -20,7 +25,7 @@ class Competition(object):
     self.start_date = start_date
     self.end_date = end_date
     self.name = name
-    self.events = events
+    self.events = sorted(events, key=event_ordering.index)
     
   def StartDate(self):
     return '%s %d' % (self.start_date.strftime('%b'), self.start_date.day)
