@@ -30,6 +30,7 @@ div.about_text,div.about_row img {
   padding-top: 10px;
   padding-bottom: 10px;
   height: 100%;
+  color: black;
 }
 div.region_gl { background-color: purple; }
 div.region_ne { background-color: cornflowerblue; }
@@ -38,9 +39,6 @@ div.region_nw { background-color: seagreen; }
 div.region_w { background-color: gold; }
 div.region_s { background-color: crimson; }
 div.region_se { background-color: orange; }
-div.competition_row {
-  color: black;
-}
 /* end competitions_us.html */
 
 /* donate.html */
