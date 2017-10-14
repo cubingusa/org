@@ -41,5 +41,9 @@ div.about_text,div.about_row img {
   height: 35px;
   padding: 5px;
   float: left;
+  opacity: 0.2;
+}
+.event_selector_icon_selected {
+  opacity: 1;
 }
 /* end event_selector.html */
