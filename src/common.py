@@ -1,9 +1,12 @@
 import webapp2
 
+from src import events
+
 class Common(object):
   def __init__(self, uri):
     self.uri_for = webapp2.uri_for
     self.uri = uri
+    self.events = events.events
 
   def uri_matches(self, uri):
     return self.uri.endswith(uri)

@@ -1,3 +1,15 @@
-{% macro event_selector(id, onselect) %}
-  <div>Hello World</div>
+{% macro event_selector(c, id, onselect) %}
+  <div class="event_selector" id="{{ id }}">
+    {% for event in c.events %}
+      <a href="#" onclick="{{ onselect }}"
+         data-eventid="{{ event.event_id }}">
+        <img src="{{ event.Icon() }}"
+             class="event_selector_icon"
+             data-toggle="tooltip"
+             data-placement="top"
+             title="{{ event.event_name }}">
+      </a>
+    {% endfor %}
+  </div>
+  <script src="/static/event_selector.js" type="application/javascript"></script>
 {% endmacro %}

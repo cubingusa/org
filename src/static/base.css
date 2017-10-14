@@ -25,3 +25,21 @@ div.about_text,div.about_row img {
 #paypal-card img {
   text-align: center;
 }
+/* end donate.html */
+
+/* event_selector.html */
+.event_selector {
+  padding: 10px 0px;
+}
+.event_selector::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.event_selector_icon {
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+  float: left;
+}
+/* end event_selector.html */
