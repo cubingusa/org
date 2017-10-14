@@ -5,7 +5,7 @@ from src import handlers
 app = webapp2.WSGIApplication([
   webapp2.Route('/', handler=handlers.BasicHandler('index.html'), name='home'),
   webapp2.Route('/competitions/us', handler=handlers.BasicHandler('index.html'), name='competitions_us'),
-  webapp2.Route('/nationals', handler=handlers.BasicHandler('index.html'), name='competitions_nationals'),
+  webapp2.Route('/nationals', handler=handlers.BasicHandler('nationals.html'), name='competitions_nationals'),
   webapp2.Route('/regional', handler=handlers.BasicHandler('index.html'), name='competitions_regional'),
   webapp2.Route('/organizers', handler=handlers.BasicHandler('index.html'), name='organizers'),
   webapp2.Route('/about', handler=handlers.BasicHandler('about.html'), name='about'),
