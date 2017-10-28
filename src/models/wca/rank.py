@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+from src.models.user import User
 from src.models.wca.base import BaseModel
 from src.models.wca.event import Event
 from src.models.wca.person import Person
@@ -34,6 +35,10 @@ class RankBase(BaseModel):
     def filter_row(row):
       return row['personId'] in person_ids
     return filter_row
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['personId', 'eventId', 'best', 'worldRank', 'continentRank', 'countryRank']
 
 
 class RankAverage(RankBase):

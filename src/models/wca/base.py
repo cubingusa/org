@@ -9,5 +9,9 @@ class BaseModel(ndb.Model):
     raise Exception('ParseFromDict is unimplemented.')
 
   @staticmethod
+  def ColumnsUsed():
+    raise Exception('ColumnsUsed is unimplemented.')
+
+  @staticmethod
   def Filter():
     return lambda row: True

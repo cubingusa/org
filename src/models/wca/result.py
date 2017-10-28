@@ -50,5 +50,15 @@ class Result(BaseModel):
     known_competitions = set([key.id() for key in Competition.query().iter(keys_only=True)])
 
     def filter_row(row):
-      return row['competitionId'] in known_ids
+      return row['competitionId'] in known_competitions
     return filter_row
+
+  @staticmethod
+  def GetId(row):
+    return '%s_%s_%s_%s' % (row['competitionId'], row['eventId'], row['roundTypeId'], row['personId'])
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['competitionId', 'eventId', 'roundTypeId', 'personId', 'formatId', 'personName',
+            'personCountryId', 'pos', 'best', 'average', 'value1', 'value2', 'value3', 'value4',
+            'value5', 'regionalSingleRecord', 'regionalAverageRecord']

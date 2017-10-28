@@ -47,3 +47,8 @@ class Competition(BaseModel):
     def filter_row(row):
       return row['countryId'] == 'USA'
     return filter_row
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['year', 'month', 'day', 'endMonth', 'endDay', 'cellName', 'eventSpecs',
+            'latitude', 'longitude', 'cityName', 'countryId']

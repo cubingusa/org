@@ -7,3 +7,7 @@ class Format(BaseModel):
 
   def ParseFromDict(self, row):
     self.name = row['name']
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['name']

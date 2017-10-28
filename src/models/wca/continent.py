@@ -9,3 +9,7 @@ class Continent(BaseModel):
   def ParseFromDict(self, row):
     self.name = row['name']
     self.recordName = row['recordName']
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['name', 'recordName']

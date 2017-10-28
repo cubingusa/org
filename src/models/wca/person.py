@@ -16,6 +16,9 @@ class Person(BaseModel):
 
   def ParseFromDict(self, rows):
     subids = sorted(rows.keys())
+    self.all_names = []
+    self.all_countries = []
+    self.all_genders = []
     for subid in subids:
       if subid == 1:
         self.name = rows[subid]['name']
@@ -24,3 +27,7 @@ class Person(BaseModel):
       self.all_names.append(rows[subid]['name'])
       self.all_countries.append(ndb.Key(Country, rows[subid]['countryId']))
       self.all_genders.append(rows[subid]['gender'])
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['name', 'countryId', 'gender', 'subid']

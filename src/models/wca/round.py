@@ -11,3 +11,7 @@ class RoundType(BaseModel):
     self.rank = int(row['rank'])
     self.name = row['cellName']
     self.final = int(row['final']) == 1
+
+  @staticmethod
+  def ColumnsUsed():
+    return ['rank', 'cellName', 'final']
