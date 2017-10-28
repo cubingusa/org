@@ -7,5 +7,3 @@ class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
   city = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)
-
-  # TODO: record historical states so that policies on changing location can be enforced.
