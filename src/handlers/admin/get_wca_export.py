@@ -1,3 +1,4 @@
+import re
 import webapp2
 import StringIO
 import zipfile
@@ -6,6 +7,10 @@ import cloudstorage as gcs
 from google.appengine.api import app_identity
 from google.appengine.api import urlfetch
 from google.appengine.ext import deferred
+
+from src.models.wca.export import WcaExport
+from src.models.wca.export import get_latest_export
+from src.wca import export
 
 CHUNK_SIZE = 16 * 1024 * 1024
 
@@ -21,18 +26,41 @@ def assemble_zip(file_count):
     gcs_file.close()
   export_zip = zipfile.ZipFile(strio)
 
+  new_export_id = None
+  date_regex = re.compile('Date:\s*(.*)')
+
+  with export_zip.open('README.txt') as readme_file:
+    for line in readme_file:
+      m = date_regex.search(line)
+      if m:
+        new_export_id = m.group(1)
+
+  if not new_export_id:
+    # TODO: surface error
+    return
+
+  new_export = WcaExport.get_by_id(new_export_id) or WcaExport(id=new_export_id)
+  if get_latest_export() and new_export.key == get_latest_export().key:
+    # We're trying to reimport the same WCA export.  Abort.
+    return
+  new_export.put()
+
   for table in ('Competitions', 'Continents', 'Countries', 'Events', 'Formats',
                 'Persons', 'RanksAverage', 'RanksSingle', 'Results', 'RoundTypes'):
     table_file = export_zip.open('WCA_export_%s.tsv' % table)
-    filename = '/%s/export/%s.tsv' % (app_identity.get_default_gcs_bucket_name(), table)
+    filename = export.fname(table)
     write_retry_params = gcs.RetryParams(backoff_factor=1.1)
     gcs_file = gcs.open(filename, 'w', content_type='text/plain', retry_params=write_retry_params)
     gcs_file.write(table_file.read())
     gcs_file.close()
   strio.close()
 
+  export.process_export(new_export_id)
 
 def download_export_chunk(idx):
+  deferred.defer(assemble_zip, 4)
+  return
+
   if idx > 10:
     return
   headers = {'Range': 'bytes=%d-%d' % (idx * CHUNK_SIZE, (idx + 1) * CHUNK_SIZE - 1)}

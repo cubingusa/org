@@ -4,7 +4,7 @@ from src.models.wca.country import Country
 from src.models.wca.event import Event
 from src.models.wca.format import Format
 from src.models.wca.person import Person
-from src.models.wca.person import PersonDetails
-from src.models.wca.rank import Rank
+from src.models.wca.rank import RankAverage
+from src.models.wca.rank import RankSingle
 from src.models.wca.result import Result
 from src.models.wca.round import RoundType
