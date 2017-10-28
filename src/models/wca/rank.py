@@ -26,6 +26,15 @@ class RankBase(BaseModel):
     self.continentRank = int(row['continentRank'])
     self.countryRank = int(row['countryRank'])
 
+  @staticmethod
+  def Filter():
+    # Only include rankings for people with a state.
+    person_ids = set([user.wca_person.id() for user in User.query() if user.state])
+
+    def filter_row(row):
+      return row['personId'] in person_ids
+    return filter_row
+
 
 class RankAverage(RankBase):
   pass
