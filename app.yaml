@@ -21,6 +21,9 @@ handlers:
    script: admin.app
    login: admin
    secure: always
+ - url: /_ah/queue/deferred
+   script: google.appengine.ext.deferred.deferred.application
+   login: admin
  - url: /.*
    script: cubingusa.app
    secure: always
