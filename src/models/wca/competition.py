@@ -40,3 +40,10 @@ class Competition(BaseModel):
     self.city_name = row['cityName']
     # TODO: parse state
     self.country = ndb.Key(Country, row['countryId'])
+
+  @staticmethod
+  def Filter():
+    # Only load US competitions.
+    def filter_row(row):
+      return row['countryId'] == 'USA'
+    return filter_row

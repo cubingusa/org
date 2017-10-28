@@ -51,7 +51,10 @@ def process_file(table, object_type, start_row, queue, export_id):
     keys = [ndb.Key(object_type, object_id) for object_id in object_ids]
     query_result = ndb.get_multi_async(keys)
     objects_to_put = []
+    row_filter = object_type.Filter()
     for object_id, query_result in zip(object_ids, query_result):
+      if not row_filter(id_to_dict[object_id]):
+        continue
       obj = query_result.get_result() or object_type(id=object_id)
       obj.ParseFromDict(id_to_dict[object_id])
       objects_to_put.append(obj)

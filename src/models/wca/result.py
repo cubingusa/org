@@ -43,3 +43,12 @@ class Result(BaseModel):
 
     self.regional_single_record = row['regionalSingleRecord']
     self.regional_average_record = row['regionalAverageRecord']
+
+  @staticmethod
+  def Filter():
+    # Only include results of competitions that are in the datastore.
+    known_competitions = [key.id() for key in Competition.query().iter(keys_only=True)]
+
+    def filter_row(row):
+      return row['competitionId'] in known_ids
+    return filter_row

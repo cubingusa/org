@@ -7,3 +7,7 @@ class BaseModel(ndb.Model):
 
   def ParseFromDict(self, row):
     raise Exception('ParseFromDict is unimplemented.')
+
+  @staticmethod
+  def Filter():
+    return lambda row: True
