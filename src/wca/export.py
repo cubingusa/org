@@ -74,15 +74,15 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
         # have changed, then we need to update the Person.  This includes rows that
         # are missing on the base side: this means that this is a new person or a new
         # subid.
-        keys_to_delete = []
+        unchanged_keys = []
         for key, rows in id_to_dict.iteritems():
           for row in rows.itervalues():
             changed = False
             if 'changed' not in row or row['changed']:
               changed = True
           if not changed:
-            keys_to_delete.append(key)
-        for key in keys_to_delete:
+            unchanged_keys.append(key)
+        for key in unchanged_keys:
           del id_to_dict[key]
     except gcs.NotFoundError:
       # This is fine, it just means we can't diff the new file against the old one.
@@ -118,7 +118,8 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
   else:
     export_key = ndb.Key(WcaExport, export_id)
     old_export = set_latest_export(export_key)
-    old_export.delete()
+    if old_export:
+      old_export.key.delete()
   
 
 def get_tables():
