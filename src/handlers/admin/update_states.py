@@ -1,7 +1,7 @@
 import webapp2
 
-from src.models import Region
-from src.models import State
+from src.models.region import Region
+from src.models.state import State
 
 def MakeRegion(region_id, region_name, championship_name, all_regions, futures):
   region = Region.get_by_id(region_id) or Region(id=region_id)
