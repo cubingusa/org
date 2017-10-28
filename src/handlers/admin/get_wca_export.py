@@ -11,6 +11,7 @@ from google.appengine.ext import deferred
 from src.models.wca.export import WcaExport
 from src.models.wca.export import get_latest_export
 from src.wca import export
+from src.wca import sharder
 
 CHUNK_SIZE = 16 * 1024 * 1024
 
@@ -45,14 +46,7 @@ def assemble_zip(file_count):
     return
   new_export.put()
 
-  for table in ('Competitions', 'Continents', 'Countries', 'Events', 'Formats',
-                'Persons', 'RanksAverage', 'RanksSingle', 'Results', 'RoundTypes'):
-    table_file = export_zip.open('WCA_export_%s.tsv' % table)
-    filename = export.fname(table)
-    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
-    gcs_file = gcs.open(filename, 'w', content_type='text/plain', retry_params=write_retry_params)
-    gcs_file.write(table_file.read())
-    gcs_file.close()
+  sharder.write_sharded_files(export_zip)
   strio.close()
 
   export.process_export(new_export_id)
