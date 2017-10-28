@@ -1,11 +1,9 @@
 from google.appengine.ext import ndb
 
-class Format(ndb.Model):
-  name = ndb.StringProperty()
+from src.models.wca.base import BaseModel
 
-  @staticmethod
-  def GetId(row):
-    return row['id']
+class Format(BaseModel):
+  name = ndb.StringProperty()
 
   def ParseFromDict(self, row):
     self.name = row['name']

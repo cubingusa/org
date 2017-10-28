@@ -1,12 +1,10 @@
 from google.appengine.ext import ndb
 
-class Continent(ndb.Model):
+from src.models.wca.base import BaseModel
+
+class Continent(BaseModel):
   name = ndb.StringProperty()
   recordName = ndb.StringProperty()
-
-  @staticmethod
-  def GetId(row):
-    return row['id']
 
   def ParseFromDict(self, row):
     self.name = row['name']

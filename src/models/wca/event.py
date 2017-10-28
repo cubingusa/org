@@ -1,12 +1,10 @@
 from google.appengine.ext import ndb
 
-class Event(ndb.Model):
+from src.wca.models.base import BaseModel
+
+class Event(BaseModel):
   name = ndb.StringProperty()
   rank = ndb.IntegerProperty()
-
-  @staticmethod
-  def GetId(row):
-    return row['id']
 
   def ParseFromDict(self, row):
     self.name = row['name']

@@ -1,13 +1,11 @@
 from google.appengine.ext import ndb
 
-class RoundType(ndb.Model):
+from src.models.wca.base import BaseModel
+
+class RoundType(BaseModel):
   rank = ndb.IntegerProperty()
   name = ndb.StringProperty()
   final = ndb.BooleanProperty()
-
-  @staticmethod
-  def GetId(row):
-    return row['id']
 
   def ParseFromDict(self, row):
     self.rank = int(row['rank'])

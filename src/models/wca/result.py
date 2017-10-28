@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+from src.models.wca.base import BaseModel
 from src.models.wca.competition import Competition
 from src.models.wca.country import Country
 from src.models.wca.event import Event
@@ -7,7 +8,7 @@ from src.models.wca.format import Format
 from src.models.wca.person import Person
 from src.models.wca.round import RoundType
 
-class Result(ndb.Model):
+class Result(BaseModel):
   competition = ndb.KeyProperty(kind=Competition)
   event = ndb.KeyProperty(kind=Event)
   round_type = ndb.KeyProperty(kind=RoundType)
@@ -24,10 +25,6 @@ class Result(ndb.Model):
 
   regional_single_record = ndb.StringProperty()
   regional_average_record = ndb.StringProperty()
-
-  @staticmethod
-  def GetId(row):
-    return row['id']
 
   def ParseFromDict(self, row):
     self.competition = ndb.Key(Competition, row['competitionId'])

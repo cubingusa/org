@@ -3,10 +3,11 @@ import datetime
 from google.appengine.ext import ndb
 
 from src.models.state import State
+from src.models.wca.base import BaseModel
 from src.models.wca.country import Country
 from src.models.wca.event import Event
 
-class Competition(ndb.Model):
+class Competition(BaseModel):
   start_date = ndb.DateProperty()
   end_date = ndb.DateProperty()
   year = ndb.IntegerProperty()
@@ -22,10 +23,6 @@ class Competition(ndb.Model):
   country = ndb.KeyProperty(kind=Country)
   city_name = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)
-
-  @staticmethod
-  def GetId(row):
-    return row['id']
 
   def ParseFromDict(self, row):
     self.start_date = datetime.date(int(row['year']), int(row['month']), int(row['day']))
