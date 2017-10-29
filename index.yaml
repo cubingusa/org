@@ -14,12 +14,17 @@ indexes:
   properties:
   - name: competition
   - name: pos
-    direction: desc
 
 - kind: Result
   properties:
   - name: competition
   - name: event
   - name: round_type
+  - name: pos
+    direction: desc
+
+- kind: Result
+  properties:
+  - name: competition
   - name: pos
     direction: desc
