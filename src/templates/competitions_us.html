@@ -19,12 +19,12 @@
           {% endautoescape %}
         </div>
       </div>
-      <div class="col-6 col-sm-3">
+      <div class="col-6 col-sm-4">
         <div class="vcenter">
           {{ competition.name }}
         </div>
       </div>
-      <div class="col-12 col-sm-6">
+      <div class="col-12 col-sm-5">
         <div class="row">
           {% for evt in c.sort_events(competition.events) %}
             <img class="small-event-icon" src="{{ evt.get().IconURL() }}">
