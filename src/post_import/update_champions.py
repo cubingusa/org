@@ -37,7 +37,7 @@ def UpdateChampions():
     champions = collections.defaultdict(list)
     events_held_with_successes = set()
     for result in (Result.query(Result.competition == championship.competition)
-                         .order(-Result.pos).iter()):
+                         .order(Result.pos).iter()):
       if result.best < 0:
         continue
       if result.round_type not in final_round_keys:
