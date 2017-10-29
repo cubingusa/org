@@ -6,6 +6,9 @@ from src.handlers import async
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/', handler=handlers.BasicHandler('index.html'), name='home'),
+  webapp2.Route('/login', handler=handlers.LoginHandler, name='login'),
+  webapp2.Route('/login_callback', handler=handlers.LoginCallbackHandler, name='login_callback'),
+  webapp2.Route('/logout', handler=handlers.LogoutHandler, name='logout'),
   webapp2.Route('/competitions/us', handler=handlers.BasicHandler('index.html'), name='competitions_us'),
   webapp2.Route('/nationals', handler=handlers.BasicHandler('nationals.html'), name='competitions_nationals'),
   webapp2.Route('/regional', handler=handlers.BasicHandler('index.html'), name='competitions_regional'),

@@ -51,7 +51,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="topnav">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav navbar-left mr-auto">
           {% call navitem(c, c.uri_for('home')) %} Home {% endcall %}
           {% call navdropdown(c, [('US Competitions', c.uri_for('competitions_us')),
                                   ('Nationals', c.uri_for('competitions_nationals')),
@@ -67,7 +67,15 @@
                               'about') %}
             About
           {% endcall %}
-        </div>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          {% if c.user %}
+            {% call navitem(c, c.uri_for('home')) %}My Settings{% endcall %}
+            {% call navitem(c, c.uri_for('logout')) %}Log out{% endcall %}
+          {% else %}
+            {% call navitem(c, c.uri_for('login')) %}Log in with WCA{% endcall %}
+          {% endif %}
+        </ul>
       </div>
     </div>
   </nav>

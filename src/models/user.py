@@ -5,5 +5,8 @@ from src.models.wca.person import Person
 
 class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
+  name = ndb.StringProperty()
+  email = ndb.StringProperty()
+
   city = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)

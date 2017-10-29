@@ -7,6 +7,7 @@ class Common(object):
   def __init__(self, handler):
     self.uri_for = webapp2.uri_for
     self.uri = handler.request.url
+    self.user = handler.user
     self.events = [e for e in Event.query().order(Event.rank).iter()]
     self.len = len
     self.formatters = formatters
