@@ -15,7 +15,7 @@ for (var i = 0; i < events.length; i++) {
   events[i].onclick = eventClick;
 }
 
-document.onload = function() {
+window.onload = function() {
   if (window.location.hash) {
     document.getElementById('event_selector_link_' + window.location.hash.substring(1)).click();
   } else {
