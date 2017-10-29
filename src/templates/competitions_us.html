@@ -4,7 +4,7 @@
 {% block title%}US Competitions{% endblock %}
 {% block content %}
 {% macro competition_row(competition) %}
-<div class="card competition-row"
+<div class="card competition-row-container"
      data-evts="{{ competition.GetEventsString() }}">
   <a href="{{ competition.GetWCALink() }}" target="_blank">
     <div class="row competition_row">
