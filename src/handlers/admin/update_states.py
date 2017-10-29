@@ -90,6 +90,7 @@ class UpdateStatesHandler(BaseHandler):
       MakeState(state_id, state_name, region, True, all_states, futures)
 
     for territory_id, territory_name, region in (
+        ('dc', 'D. C.', NORTHEAST),
         ('pr', 'Puerto Rico', SOUTHEAST),
         ('gu', 'Guam', WEST),
         ('mp', 'Northern Mariana Islands', WEST),
