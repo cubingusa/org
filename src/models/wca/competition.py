@@ -60,3 +60,6 @@ class Competition(BaseModel):
   def ColumnsUsed():
     return ['year', 'month', 'day', 'endMonth', 'endDay', 'cellName', 'eventSpecs',
             'latitude', 'longitude', 'cityName', 'countryId']
+
+  def GetWCALink(self):
+    return 'https://worldcubeassociation.org/competitions/%s' % self.key.id()
