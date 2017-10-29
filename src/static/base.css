@@ -52,10 +52,10 @@ div.region_se { background-color: orange; }
 /* end donate.html */
 
 /* event_selector.html */
-.event_selector {
+#event_selector {
   padding: 10px 0px;
 }
-.event_selector::after {
+#event_selector::after {
   content: "";
   display: table;
   clear: both;

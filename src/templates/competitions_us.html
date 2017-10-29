@@ -39,7 +39,7 @@
 </div>
 {% endmacro %}
   <h1>US Competitions</h1>
-  {{ event_selector.event_selector(c, 'comp_event_selector', 'selectCompEvent') }}
+  {{ event_selector.event_selector(c, 'selectCompEvent', auto_select=0) }}
   {% for competition in competitions %}
     {{ competition_row(competition) }}
   {% endfor %}

@@ -18,7 +18,7 @@ for (var i = 0; i < events.length; i++) {
 window.onload = function() {
   if (window.location.hash) {
     document.getElementById('event_selector_link_' + window.location.hash.substring(1)).click();
-  } else {
+  } else if (document.getElementById('event_selector').dataset.autoselect == '1') {
     document.getElementById('event_selector_link_333').click();
   }
 }
