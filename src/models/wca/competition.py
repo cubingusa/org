@@ -63,3 +63,6 @@ class Competition(BaseModel):
 
   def GetWCALink(self):
     return 'https://worldcubeassociation.org/competitions/%s' % self.key.id()
+
+  def GetEventsString(self):
+    return ','.join([e.id() for e in self.events])

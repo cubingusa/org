@@ -1,9 +1,11 @@
 {% import "components/event_icon.html" as event_icon %}
+{% import "components/event_selector.html" as event_selector %}
 {% extends "base.html" %}
 {% block title%}US Competitions{% endblock %}
 {% block content %}
 {% macro competition_row(competition) %}
-<div class="card">
+<div class="card competition-row"
+     data-evts="{{ competition.GetEventsString() }}">
   <a href="{{ competition.GetWCALink() }}" target="_blank">
     <div class="row competition_row">
       <div class="col-2 col-sm-1">
@@ -37,7 +39,9 @@
 </div>
 {% endmacro %}
   <h1>US Competitions</h1>
+  {{ event_selector.event_selector(c, 'comp_event_selector', 'selectCompEvent') }}
   {% for competition in competitions %}
     {{ competition_row(competition) }}
   {% endfor %}
+  <script src="/static/competitions_us.js" type="application/javascript"></script>
 {% endblock %}
