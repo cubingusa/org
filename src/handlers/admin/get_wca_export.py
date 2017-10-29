@@ -52,9 +52,6 @@ def assemble_zip(file_count):
   export.process_export(new_export_id)
 
 def download_export_chunk(idx):
-  deferred.defer(assemble_zip, 4)
-  return
-
   if idx > 10:
     return
   headers = {'Range': 'bytes=%d-%d' % (idx * CHUNK_SIZE, (idx + 1) * CHUNK_SIZE - 1)}

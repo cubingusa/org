@@ -37,8 +37,16 @@ class Competition(BaseModel):
     self.latitude = int(row['latitude'])
     self.longitude = int(row['longitude'])
 
-    self.city_name = row['cityName']
-    # TODO: parse state
+    state = None
+    if ',' in row['cityName']:
+      city_split = row['cityName'].split(',')
+      state_name = city_split[-1].strip()
+      state = State.get_state(state_name)
+      self.city_name = ','.join(city_split[:-1])
+    if state:
+      self.state = state.key
+    else:
+      self.city_name = row['cityName']
     self.country = ndb.Key(Country, row['countryId'])
 
   @staticmethod

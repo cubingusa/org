@@ -1,4 +1,5 @@
 import csv
+import hashlib
 
 import cloudstorage as gcs
 
@@ -16,7 +17,7 @@ def write_sharded_files(export_zip):
       for writer in gcs_writers:
         writer.writeheader()
       for row in reader:
-        idx = hash(model.GetId(row)) % shards
+        idx = int(hashlib.md5(model.GetId(row)).hexdigest(), 16) % shards
         gcs_writers[idx].writerow(row)
     for f in gcs_files:
       f.close()
