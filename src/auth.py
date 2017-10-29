@@ -1,8 +1,11 @@
 import datetime
 
+from src.models.user import Roles
 from src.models.user import UserLocationUpdate
 
 def CanEditLocation(user, editor):
+  if editor.HasAnyRole(Roles.AdminRoles()):
+    return True
   if user == editor:
     last_update = (UserLocationUpdate.query(UserLocationUpdate.user == user.key)
                                      .order(-UserLocationUpdate.update_time)
@@ -14,4 +17,6 @@ def CanEditLocation(user, editor):
     return False
 
 def CanViewUser(user, viewer):
-  return user == viewer
+  return (user == viewer or
+          viewer.HasAnyRole(Roles.DelegateRoles()) or
+          viewer.HasAnyRole(Roles.AdminRoles()))
