@@ -26,6 +26,6 @@ class ChampionsByYearHandler(BaseHandler):
                             if c.event == ndb.Key(Event, str(event_id))],
                            key = lambda c: c.championship.id(), reverse=True)
     self.response.write(template.render({
-        'c': common.Common(self.request.url),
+        'c': common.Common(self),
         'champions': all_champions,
     }))
