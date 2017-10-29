@@ -96,7 +96,7 @@ class UpdateStatesHandler(BaseHandler):
         ('mp', 'Northern Mariana Islands', WEST),
         ('as', 'American Samoa', WEST),
         ('vi', 'U.S. Virgin Islands', SOUTHEAST)):
-      MakeState(state_id, state_name, region, False, all_states, futures)
+      MakeState(territory_id, territory_name, region, False, all_states, futures)
 
     for future in futures:
       future.wait()
