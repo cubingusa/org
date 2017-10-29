@@ -1,5 +1,4 @@
 import re
-import webapp2
 import StringIO
 import zipfile
 
@@ -8,6 +7,7 @@ from google.appengine.api import app_identity
 from google.appengine.api import urlfetch
 from google.appengine.ext import deferred
 
+from src.handlers.base import BaseHandler
 from src.models.wca.export import WcaExport
 from src.models.wca.export import get_latest_export
 from src.wca import export
@@ -73,6 +73,6 @@ def download_export_chunk(idx):
     deferred.defer(download_export_chunk, idx + 1)
   
 
-class GetExportHandler(webapp2.RequestHandler):
+class GetExportHandler(BaseHandler):
   def get(self):
     deferred.defer(download_export_chunk, idx=0)

@@ -1,8 +1,7 @@
-import webapp2
-
-from src.post_import import mutations
+from src.handlers.base import BaseHandler
 from src.models.state import State
+from src.post_import import mutations
 
-class PostImportMutationsHandler(webapp2.RequestHandler):
+class PostImportMutationsHandler(BaseHandler):
   def get(self):
     mutations.DoMutations()

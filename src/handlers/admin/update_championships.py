@@ -1,11 +1,10 @@
-import webapp2
-
+from src.handlers.base import BaseHandler
 from src.models.championship import Championship
 from src.models.wca.competition import Competition
 
 # TODO: make a UI for this.
 
-class UpdateChampionshipsHandler(webapp2.RequestHandler):
+class UpdateChampionshipsHandler(BaseHandler):
   def get(self):
     for comp_id in (
         'US2004',

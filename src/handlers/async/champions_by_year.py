@@ -1,8 +1,7 @@
-import webapp2
-
 from google.appengine.ext import ndb
 
 from src import common
+from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.champion import Champion
 from src.models.championship import Championship
@@ -11,7 +10,7 @@ from src.models.state import State
 from src.models.wca.event import Event
 
 # An async handler to return a table of the champions in a particular year.
-class ChampionsByYearHandler(webapp2.RequestHandler):
+class ChampionsByYearHandler(BaseHandler):
   def get(self, event_id, championship_type, championship_region):
     template = JINJA_ENVIRONMENT.get_template('champions_by_year.html')
     all_champions = []

@@ -1,5 +1,4 @@
-import webapp2
-
+from src.handlers.base import BaseHandler
 from src.models.region import Region
 from src.models.state import State
 
@@ -20,7 +19,7 @@ def MakeState(state_id, state_name, region, is_state, all_states, futures):
   all_states[state_id] = state
   return state
 
-class UpdateStatesHandler(webapp2.RequestHandler):
+class UpdateStatesHandler(BaseHandler):
   def get(self):
     futures = []
     all_regions = {}

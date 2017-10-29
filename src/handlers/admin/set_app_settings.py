@@ -1,8 +1,7 @@
-import webapp2
-
+from src.handlers.base import BaseHandler
 from src.models.app_settings import AppSettings
 
-class SetAppSettingsHandler(webapp2.RequestHandler):
+class SetAppSettingsHandler(BaseHandler):
   def get(self, setting, value):
     app_settings = AppSettings.Get()
     if setting == 'session_secret_key':
