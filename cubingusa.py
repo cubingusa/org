@@ -9,6 +9,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/login', handler=handlers.LoginHandler, name='login'),
   webapp2.Route('/login_callback', handler=handlers.LoginCallbackHandler, name='login_callback'),
   webapp2.Route('/logout', handler=handlers.LogoutHandler, name='logout'),
+  webapp2.Route('/edit', handler=handlers.EditUserHandler, name='edit_user'),
+  webapp2.Route('/edit/<user_id:\d+>', handler=handlers.EditUserHandler, name='edit_user_by_id'),
   webapp2.Route('/competitions/us', handler=handlers.BasicHandler('index.html'), name='competitions_us'),
   webapp2.Route('/nationals', handler=handlers.BasicHandler('nationals.html'), name='competitions_nationals'),
   webapp2.Route('/regional', handler=handlers.BasicHandler('index.html'), name='competitions_regional'),

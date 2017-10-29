@@ -70,7 +70,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if c.user %}
-            {% call navitem(c, c.uri_for('home')) %}My Settings{% endcall %}
+            {% call navitem(c, c.uri_for('edit_user')) %}My Settings{% endcall %}
             {% call navitem(c, c.uri_for('logout')) %}Log out{% endcall %}
           {% else %}
             {% call navitem(c, c.uri_for('login')) %}Log in with WCA{% endcall %}

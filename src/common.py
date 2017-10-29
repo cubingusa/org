@@ -1,6 +1,7 @@
 import webapp2
 
 from src import formatters
+from src.models.state import State
 from src.models.wca.event import Event
 
 class Common(object):
@@ -23,3 +24,6 @@ class Common(object):
 
   def wca_profile(self, wca_id):
     return 'https://www.worldcubeassociation.org/persons/%s' % wca_id
+
+  def all_states(self):
+    return [state for state in State.query().order(State.name).iter()]
