@@ -1,5 +1,5 @@
 var eventClick = function() {
-  window.location.hash = this.dataset.eventid;
+  history.replaceState(null, null, '#' + this.dataset.eventid);
   var imgs = document.getElementsByClassName('event_selector_icon_selected');
   for (var i = 0; i < imgs.length; i++) {
     imgs[i].classList.remove('event_selector_icon_selected');
@@ -7,7 +7,7 @@ var eventClick = function() {
   this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
 
   callbackName = this.parentElement.dataset.callback;
-  window[callbackName](this.dataset.eventid);
+  window[callbackName](this.dataset.eventid, this.dataset.eventname);
 }
 
 var events = document.getElementsByClassName('event_selector_link');

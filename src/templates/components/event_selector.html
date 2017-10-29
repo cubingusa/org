@@ -3,10 +3,10 @@
        id="{{ id }}"
        data-callback="{{ onselect }}">
     {% for event in c.events %}
-      <a href="#"
-         class="event_selector_link"
+      <a class="event_selector_link"
          id="event_selector_link_{{ event.event_id }}"
-         data-eventid="{{ event.event_id }}">
+         data-eventid="{{ event.event_id }}"
+         data-eventname="{{ event.event_name }}">
         <img src="{{ event.Icon() }}"
              class="event_selector_icon"
              data-toggle="tooltip"
