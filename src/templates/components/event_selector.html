@@ -4,14 +4,14 @@
        data-callback="{{ onselect }}">
     {% for event in c.events %}
       <a class="event_selector_link"
-         id="event_selector_link_{{ event.event_id }}"
-         data-eventid="{{ event.event_id }}"
-         data-eventname="{{ event.event_name }}">
-        <img src="{{ event.Icon() }}"
+         id="event_selector_link_{{ event.key.id() }}"
+         data-eventid="{{ event.key.id() }}"
+         data-eventname="{{ event.name }}">
+        <img src="{{ event.IconURL() }}"
              class="event_selector_icon"
              data-toggle="tooltip"
              data-placement="top"
-             title="{{ event.event_name }}">
+             title="{{ event.name }}">
       </a>
     {% endfor %}
   </div>
