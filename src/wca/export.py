@@ -53,6 +53,8 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
         columns_to_diff = object_type.ColumnsUsed()
         old_reader = csv.DictReader(old_file, delimiter='\t')
         for old_row in old_reader:
+          if not row_filter(old_row):
+            continue
           row_id = object_type.GetId(old_row)
           if row_id in id_to_dict:
             new_row = id_to_dict[row_id]
@@ -78,7 +80,7 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
         for key, rows in id_to_dict.iteritems():
           for row in rows.itervalues():
             changed = False
-            if 'changed' not in row or row['changed']:
+            if ('changed' not in row) or row['changed']:
               changed = True
           if not changed:
             unchanged_keys.append(key)
