@@ -1,13 +1,28 @@
-var eventClick = function() {
-  history.replaceState(null, null, '#' + this.dataset.eventid);
-  var imgs = document.getElementsByClassName('event_selector_icon_selected');
-  for (var i = 0; i < imgs.length; i++) {
-    imgs[i].classList.remove('event_selector_icon_selected');
-  }
-  this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
+var selectedEvent = '';
 
-  callbackName = this.parentElement.dataset.callback;
-  window[callbackName](this.dataset.eventid, this.dataset.eventname);
+var eventClick = function() {
+  if (this.dataset.eventid == selectedEvent) {
+    if (this.parentElement.dataset.unselect) {
+      history.replaceState(null, null, '#');
+      document.getElementById('event_selector_link_' + selectedEvent)
+              .getElementsByTagName('img')[0]
+              .classList.remove('event_selector_icon_selected');
+      selectedEvent = '';
+      callbackName = this.parentElement.dataset.unselectcallback;
+      window[callbackName]();
+    }
+  } else {
+    if (selectedEvent) {
+      document.getElementById('event_selector_link_' + selectedEvent)
+              .getElementsByTagName('img')[0]
+              .classList.remove('event_selector_icon_selected');
+    }
+    this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
+    selectedEvent = this.dataset.eventid;
+    history.replaceState(null, null, '#' + this.dataset.eventid);
+    callbackName = this.parentElement.dataset.callback;
+    window[callbackName](this.dataset.eventid, this.dataset.eventname);
+  }
 }
 
 var events = document.getElementsByClassName('event_selector_link');

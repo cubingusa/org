@@ -9,3 +9,10 @@ selectCompEvent = function(event_id, event_name) {
     }
   }
 };
+
+unselectCompEvent = function() {
+  var elts = document.getElementsByClassName('competition-row-container');
+  for (var i = 0; i < elts.length; i++) {
+    elts[i].style.display = '';
+  }
+};

@@ -1,8 +1,13 @@
 {% import "components/event_icon.html" as event_icon %}
-{% macro event_selector(c, onselect, auto_select=1) %}
+{% macro event_selector(c, onselect_callback,
+                        auto_select_333=1,
+                        unselect_enabled=0,
+                        unselect_callback='') %}
   <div id="event_selector"
-       data-callback="{{ onselect }}"
-       data-autoselect="{{ auto_select }}">
+       data-callback="{{ onselect_callback }}"
+       data-autoselect="{{ auto_select_333 }}"
+       data-unselect="{{ unselect_enabled }}"
+       data-unselectcallback="{{ unselect_callback }}">
     {% for event in c.events %}
       <a class="event_selector_link"
          id="event_selector_link_{{ event.key.id() }}"
