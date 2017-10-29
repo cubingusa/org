@@ -6,6 +6,7 @@ from google.appengine.api import app_identity
 from google.appengine.ext import deferred
 from google.appengine.ext import ndb
 
+from src.post_import import mutations
 from src.models.wca.competition import Competition
 from src.models.wca.continent import Continent
 from src.models.wca.country import Country
@@ -122,6 +123,7 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
     old_export = set_latest_export(export_key)
     if old_export:
       old_export.key.delete()
+    mutations.DoMutations()
   
 
 def get_tables():

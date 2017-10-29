@@ -1,0 +1,27 @@
+{% autoescape true %}
+{% macro championship_row(champion) %}
+  {% set competition = champion.championship.get().competition.get() %}
+  <div class="row">
+    <div class="col-sm-1 col-3">
+      <a href="https://worldcubeassociation.org/competitions/{{ competition.key.id() }}" target="_blank">
+        {{ competition.year }}
+      </a>
+    </div>
+    <div class="col-sm-3 d-none d-sm-block">
+      {{ competition.city_name }}{% if competition.state %}, {{ competition.state.id().upper() }}{% endif %}
+    </div>
+    <div class="col-sm-8 col-9">
+      {% for winner in champion.champions %}
+        <a href="{{ c.wca_profile(winner.get().person.id()) }}">
+          {{ winner.get().person_name -}}
+        </a>{% if loop.index < c.len(champion.champions) %}, {% endif %}
+      {% endfor %}
+      &ndash; {{ c.formatters.FormatResult(champion.champions[0].get(), verbose=True) }}
+    </div>
+  </div>
+{% endmacro %}
+
+{% for champion in champions %}
+  {{ championship_row(champion) }}
+{% endfor %}
+{% endautoescape %}
