@@ -1,6 +1,7 @@
 import webapp2
 
 from src import handlers
+from src.handlers import async
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/', handler=handlers.BasicHandler('index.html'), name='home'),
@@ -13,4 +14,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/who', handler=handlers.BasicHandler('about_who.html'), name='about_who'),
   webapp2.Route('/about/donations', handler=handlers.BasicHandler('donations.html'), name='about_donations'),
   webapp2.Route('/contact', handler=handlers.BasicHandler('index.html'), name='contact'),
+  webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
+                handler=async.ChampionsByYearHandler)
 ])

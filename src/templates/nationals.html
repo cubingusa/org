@@ -11,40 +11,12 @@
       We're working hard on finalizing the details of CubingUSA Nationals 2018.  We'll let you know the date and location as soon as we can; watch this space for more information.
     </p>
   </div>
-{% macro nats_row(year, competition_id, location, winner, person_id, average) %}
-  <div class="row">
-    <div class="col-sm-1 col-3">
-      <a href="https://worldcubeassociation.org/competitions/{{ competition_id }}" target="_blank">
-        {{ year }}
-      </a>
-    </div>
-    <div class="col-sm-3 d-none d-sm-block">
-      {{ location }}
-    </div>
-    <div class="col-sm-8 col-9">
-      <a href="{{ c.wca_profile(person_id) }}">
-        {{ winner }}
-      </a> &mdash; {{ average }}
-    </div>
-  </div>
-{% endmacro %}
   <div class="card">
     <div class="card-body">
       <h4 class="card-title">Past National Champions</h4>
-      {{ event_selector.event_selector(c, 'nats_event_selector', 'natsEventSelect') }}
-      {{ nats_row('2017', 'CubingUSANationals2017', 'Fort Wayne, IN', 'Max Park', '2012PARK03', '7.06 seconds') }}
-      {{ nats_row('2016', 'USNationals2016', 'Portland, OR', 'Lucas Etter', '2011ETTE01', '7.54 seconds') }}
-      {{ nats_row('2015', 'USNationals2015', 'Hilton Head Island, SC', 'Drew Brads', '2010BRAD01', '8.33 seconds') }}
-      {{ nats_row('2014', 'USNationals2014', 'Jersey City, NJ', 'Collin Burns', '2010BURN01', '8.32 seconds') }}
-      {{ nats_row('2013', 'WC2013', 'Las Vegas, NV', 'Andy Smith', '2009SMIT03', '9.73 seconds') }}
-      {{ nats_row('2012', 'USNationals2012', 'Las Vegas, NV', 'Andrew Ricci', '2010RICC02', '9.55 seconds') }}
-      {{ nats_row('2011', 'USNationals2011', 'Columbus, OH', 'Dan Cohen', '2007COHE01', '10.13 seconds') }}
-      {{ nats_row('2010', 'USNationals2010', 'Cambridge, MA', 'Rowe Hessler', '2007HESS01', '10.93 seconds') }}
-      {{ nats_row('2009', 'USNationals2009', 'Stanford, CA', 'Rowe Hessler', '2007HESS01', '11.64 seconds') }}
-      {{ nats_row('2008', 'USOpen2008', 'Atlanta, GA', 'Andrew Kang', '2006KANG01', '12.97 seconds') }}
-      {{ nats_row('2007', 'USOpen2007', 'Chicago, IL', 'Ryan Patricio', '2004PATR01', '14.92 seconds') }}
-      {{ nats_row('2006', 'USNationals2006', 'San Francisco, CA', 'Leyan Lo', '2004LOLE01', '15.50 seconds') }}
-      {{ nats_row('2004', 'USNationals2004', 'Pasadena, CA', 'Jon Morris', '2003MORR02', '20.06 seconds') }}
+      {{ event_selector.event_selector(c, 'nats_event_selector', 'setChampionsTable') }}
+      <div id="champions-table"></div>
+    </div>
   </div>
   <script src="/static/nationals.js" type="application/javascript"></script>
 {% endblock %}

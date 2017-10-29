@@ -7,6 +7,7 @@ class Common(object):
     self.uri_for = webapp2.uri_for
     self.uri = uri
     self.events = events.events
+    self.len = len
 
   def uri_matches(self, uri):
     return self.uri.endswith(uri)
