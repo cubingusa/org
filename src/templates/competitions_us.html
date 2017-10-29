@@ -1,3 +1,4 @@
+{% import "components/event_icon.html" as event_icon %}
 {% extends "base.html" %}
 {% block title%}US Competitions{% endblock %}
 {% block content %}
@@ -27,7 +28,7 @@
       <div class="col-12 col-sm-5">
         <div class="row">
           {% for evt in c.sort_events(competition.events) %}
-            <img class="small-event-icon" src="{{ evt.get().IconURL() }}">
+            {{ event_icon.event_icon(evt.get(), 'small-event-icon') }}
           {% endfor %}
         </div>
       </div>

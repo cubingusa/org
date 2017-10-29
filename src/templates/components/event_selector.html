@@ -1,3 +1,4 @@
+{% import "components/event_icon.html" as event_icon %}
 {% macro event_selector(c, id, onselect) %}
   <div class="event_selector"
        id="{{ id }}"
@@ -7,11 +8,7 @@
          id="event_selector_link_{{ event.key.id() }}"
          data-eventid="{{ event.key.id() }}"
          data-eventname="{{ event.name }}">
-        <img src="{{ event.IconURL() }}"
-             class="event_selector_icon"
-             data-toggle="tooltip"
-             data-placement="top"
-             title="{{ event.name }}">
+        {{ event_icon.event_icon(event, 'event_selector_icon') }}
       </a>
     {% endfor %}
   </div>
