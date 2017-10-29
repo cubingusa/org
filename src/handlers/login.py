@@ -8,6 +8,7 @@ from google.appengine.ext import ndb
 
 from src.handlers.base import BaseHandler
 from src.models.app_settings import AppSettings
+from src.models.user import Roles
 from src.models.user import User
 from src.models.wca.person import Person
 
@@ -79,6 +80,15 @@ class LoginCallbackHandler(BaseHandler):
       user.email = wca_info['email']
     else:
       del user.email
+
+    user.roles = [role for role in user.roles if role not in Roles.DelegateRoles()]
+    if 'delegate_status' in wca_info:
+      if wca_info['delegate_status'] == 'senior_delegate':
+        user.roles.append(Roles.SENIOR_DELEGATE)
+      elif wca_info['delegate_status'] == 'delegate':
+        user.roles.append(Roles.DELEGATE)
+      elif wca_info['delegate_status'] == 'candidate_delegate':
+        user.roles.append(Roles.CANDIDATE_DELEGATE)
 
     user.put()
     self.redirect(str(self.request.get('state')))

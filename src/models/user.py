@@ -16,6 +16,10 @@ class Roles:
     return [Roles.GLOBAL_ADMIN, Roles.DIRECTOR, Roles.WEBMASTER,
             Roles.SENIOR_DELEGATE, Roles.DELEGATE, Roles.CANDIDATE_DELEGATE]
 
+  @staticmethod
+  def DelegateRoles():
+    return [Roles.SENIOR_DELEGATE, Roles.DELEGATE, Roles.CANDIDATE_DELEGATE]
+
 class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
   name = ndb.StringProperty()
