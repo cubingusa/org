@@ -1,0 +1,4 @@
+cron:
+ - description: Reload WCA export
+   url: /admin/wca/get_export
+   schedule: every 6 hours

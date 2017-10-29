@@ -17,6 +17,13 @@ handlers:
  - url: /static
    static_dir: src/static
    secure: always
+ - url: /admin/.*
+   script: admin.app
+   login: admin
+   secure: always
+ - url: /_ah/queue/deferred
+   script: google.appengine.ext.deferred.deferred.application
+   login: admin
  - url: /.*
    script: cubingusa.app
    secure: always
