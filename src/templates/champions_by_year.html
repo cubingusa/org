@@ -13,8 +13,8 @@
     <div class="col-sm-8 col-9">
       {% for winner in champion.champions %}
         <a href="{{ c.wca_profile(winner.get().person.id()) }}">
-          {{ winner.get().person_name }}
-        </a>{% if loop.index + 1 < c.len(champion.champions) %}, {% endif %}
+          {{ winner.get().person_name -}}
+        </a>{% if loop.index < c.len(champion.champions) %}, {% endif %}
       {% endfor %}
       &ndash; {{ champion.champions[0].get().average }}
     </div>
