@@ -16,7 +16,7 @@
           {{ winner.get().person_name -}}
         </a>{% if loop.index < c.len(champion.champions) %}, {% endif %}
       {% endfor %}
-      &ndash; {{ champion.champions[0].get().average }}
+      &ndash; {{ c.formatters.FormatResult(champion.champions[0].get(), verbose=True) }}
     </div>
   </div>
 {% endmacro %}

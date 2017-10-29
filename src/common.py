@@ -1,5 +1,6 @@
 import webapp2
 
+from src import formatters
 from src.models.wca.event import Event
 
 class Common(object):
@@ -8,6 +9,7 @@ class Common(object):
     self.uri = uri
     self.events = [e for e in Event.query().order(Event.rank).iter()]
     self.len = len
+    self.formatters = formatters
 
   def uri_matches(self, uri):
     return self.uri.endswith(uri)
