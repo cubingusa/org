@@ -1,3 +1,5 @@
+import datetime
+
 from google.appengine.ext import ndb
 
 from src import auth
@@ -6,6 +8,7 @@ from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.state import State
 from src.models.user import User
+from src.models.user import UserLocationUpdate
 
 class EditUserHandler(BaseHandler):
   def return_error(self, error):
@@ -45,21 +48,38 @@ class EditUserHandler(BaseHandler):
     if user is None:
       self.return_error('Unrecognized user ID %d provided.' % user_id)
       return
-    city = self.request.POST['city']
-    state_id = self.request.POST['state']
+    if 'city' in self.request.POST and 'state_id' in self.request.POST:
+      city = self.request.POST['city']
+      state_id = self.request.POST['state']
+    else:
+      city = user.city
+      state_id = user.state.id()
     template_dict = {
         'c': common.Common(self),
         'user': user,
     }
-    if auth.CanEditLocation(user=user, editor=self.user):
+    changed_location = user.city != city or user.state.id() != state_id
+    if auth.CanEditLocation(user=user, editor=self.user) and changed_location:
       user.city = city
       if state_id:
         user.state = ndb.Key(State, state_id)
       else:
         del user.state
       user.put()
+
+      if changed_location:
+        # Also save the Update.
+        update = UserLocationUpdate()
+        update.user = user.key
+        update.updater = self.user.key
+        update.city = city
+        update.update_time = datetime.datetime.now()
+        if state_id:
+          update.state = ndb.Key(State, state_id)
+        update.put()
+
       template_dict['successful'] = True
-    elif user.city != city or user.state != state_id:
+    elif changed_location:
       template_dict['unauthorized'] = True
 
     # Note that this might have changed.

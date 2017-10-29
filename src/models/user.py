@@ -10,3 +10,11 @@ class User(ndb.Model):
 
   city = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)
+
+class UserLocationUpdate(ndb.Model):
+  city = ndb.StringProperty()
+  state = ndb.KeyProperty(kind=State)
+
+  update_time = ndb.DateTimeProperty()
+  user = ndb.KeyProperty(kind=User)
+  updater = ndb.KeyProperty(kind=User)
