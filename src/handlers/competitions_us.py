@@ -10,7 +10,7 @@ class USCompetitionsHandler(webapp2.RequestHandler):
     template = JINJA_ENVIRONMENT.get_template('competitions_us.html')
     comps = []
     if year == 'upcoming':
-      comps = Competition.query(Competition.start_date > datetime.date.today()).iter()
+      comps = Competition.query(Competition.end_date >= datetime.date.today()).iter()
     else:
       comps = Competiiton.query(Competition.year == int(year)).iter()
     self.response.write(template.render({
