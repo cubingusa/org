@@ -8,7 +8,7 @@
        data-autoselect="{{ auto_select_333 }}"
        data-unselect="{{ unselect_enabled }}"
        data-unselectcallback="{{ unselect_callback }}">
-    {% for event in c.events %}
+    {% for event in c.events() %}
       <a class="event_selector_link"
          id="event_selector_link_{{ event.key.id() }}"
          data-eventid="{{ event.key.id() }}"
