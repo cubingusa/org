@@ -11,7 +11,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/logout', handler=handlers.LogoutHandler, name='logout'),
   webapp2.Route('/edit', handler=handlers.EditUserHandler, name='edit_user'),
   webapp2.Route('/edit/<user_id:\d+>', handler=handlers.EditUserHandler, name='edit_user_by_id'),
-  webapp2.Route('/competitions/us', handler=handlers.USCompetitionsHandler, name='competitions_us'),
+  webapp2.Route('/competitions/us', handler=handlers.BasicHandler('competitions_us.html'), name='competitions_us'),
   webapp2.Route('/nationals', handler=handlers.BasicHandler('nationals.html'), name='competitions_nationals'),
   webapp2.Route('/regional', handler=handlers.BasicHandler('index.html'), name='competitions_regional'),
   webapp2.Route('/organizers', handler=handlers.BasicHandler('index.html'), name='organizers'),
@@ -21,5 +21,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/donations', handler=handlers.BasicHandler('donations.html'), name='about_donations'),
   webapp2.Route('/contact', handler=handlers.BasicHandler('index.html'), name='contact'),
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
-                handler=async.ChampionsByYearHandler)
+                handler=async.ChampionsByYearHandler),
+  webapp2.Route('/async/competitions_us/<year:.*>', handler=async.USCompetitionsHandler),
 ], config=config.GetAppConfig())

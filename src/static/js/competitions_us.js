@@ -1,4 +1,4 @@
-competitionsUsModule = (function() {
+usCompetitionsModule = (function() {
   var activeEvent = ''
   var activeRegion = ''
   
@@ -49,10 +49,35 @@ competitionsUsModule = (function() {
       activeRegion = '';
       applyFilters();
     },
+
+    selectCompYear: function(year) {
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+          if (req.status == 200) {
+            document.getElementById('us_competitions_container').innerHTML = req.responseText;
+            applyFilters();
+          } else {
+            document.getElementById('us_competitions_container').innerHTML = '';
+          }
+        }
+      };
+      req.open('GET', '/async/competitions_us/' + year);
+      req.send();
+    },
   };
 }());
 
-eventSelectorModule.setSelectListener(competitionsUsModule.selectCompEvent);
-eventSelectorModule.setUnselectListener(competitionsUsModule.unselectCompEvent);
-regionSelectorModule.setSelectListener(competitionsUsModule.selectCompRegion);
-regionSelectorModule.setUnselectListener(competitionsUsModule.unselectCompRegion);
+eventSelectorModule.setSelectListener(usCompetitionsModule.selectCompEvent);
+eventSelectorModule.setUnselectListener(usCompetitionsModule.unselectCompEvent);
+regionSelectorModule.setSelectListener(usCompetitionsModule.selectCompRegion);
+regionSelectorModule.setUnselectListener(usCompetitionsModule.unselectCompRegion);
+
+onloadModule.register(function() {
+  hash = hashModule.getValue('y');
+  if (hash) {
+    usCompetitionsModule.selectCompYear(hash);
+  } else {
+    usCompetitionsModule.selectCompYear('upcoming');
+  }
+});

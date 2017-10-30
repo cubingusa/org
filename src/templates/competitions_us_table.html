@@ -1,0 +1,41 @@
+{% autoescape true %}
+{% import "components/event_icon.html" as event_icon %}
+{% macro competition_row(competition) %}
+<div class="card competition-row-container"
+     data-evts="{{ competition.GetEventsString() }}">
+  <a href="{{ competition.GetWCALink() }}" target="_blank">
+    <div class="row competition_row">
+      <div class="col-2 col-sm-1">
+        <div class="card state {{ competition.state.get().region.get().CssClass() }}">
+          <div class="vcenter">
+            {{ competition.state.id().upper() }}
+          </div>
+        </div>
+      </div>
+      <div class="col-4 col-sm-2">
+        <div class="vcenter">
+          {% autoescape false %}
+            {{ c.format_date_range(competition.start_date, competition.end_date) }}
+          {% endautoescape %}
+        </div>
+      </div>
+      <div class="col-6 col-sm-4">
+        <div class="vcenter">
+          {{ competition.name }}
+        </div>
+      </div>
+      <div class="col-12 col-sm-5">
+        <div class="row">
+          {% for evt in c.sort_events(competition.events) %}
+            {{ event_icon.event_icon(evt.get(), 'small-event-icon') }}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+{% endmacro %}
+{% for competition in competitions %}
+  {{ competition_row(competition) }}
+{% endfor %}
+{% endautoescape %}
