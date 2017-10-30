@@ -8,7 +8,8 @@
        href="#{{ id }}"
        aria-expanded="false"
        aria-controls="{{ id }}"
-       onclick="window.location.replace('#{{ id }}')"
+       class="personLink"
+       data-name="{{ id }}"
        id="{{ id }}_link">
       <h5 class="mb-0">
         <strong>{{ name }}</strong> &mdash; {{ person_title }}

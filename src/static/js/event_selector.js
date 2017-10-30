@@ -13,7 +13,7 @@ var eventSelectorModule = (function() {
     eventClick: function() {
       if (this.dataset.eventid == selectedEvent) {
         if (unselectListener) {
-          history.replaceState(null, null, '#');
+          hashModule.deleteKey('e');
           document.getElementById('event_selector_link_' + selectedEvent)
                   .getElementsByTagName('img')[0]
                   .classList.remove('event_selector_icon_selected');
@@ -28,7 +28,7 @@ var eventSelectorModule = (function() {
         }
         this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
         selectedEvent = this.dataset.eventid;
-        history.replaceState(null, null, '#' + this.dataset.eventid);
+        hashModule.setValue('e', this.dataset.eventid);
         selectListener(this.dataset.eventid, this.dataset.eventname);
       }
     },
@@ -47,8 +47,9 @@ onloadModule.register(function() {
     events[i].onclick = eventSelectorModule.eventClick;
   }
 
-  if (window.location.hash) {
-    //document.getElementById('event_selector_link_' + window.location.hash.substring(1)).click();
+  hash = hashModule.getValue('e');
+  if (hash) {
+    document.getElementById('event_selector_link_' + hash).click();
   } else if (eventSelectorModule.getDefaultEvt()) {
     document.getElementById('event_selector_link_' + eventSelectorModule.getDefaultEvt()).click();
   }

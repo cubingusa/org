@@ -10,7 +10,7 @@ var regionSelectorModule = (function() {
     regionClick: function() {
       if (this.dataset.regionid == selectedRegion) {
         if (unselectListener) {
-          history.replaceState(null, null, '#');
+          hashModule.deleteKey('r');
           document.getElementById('region_selector_link_' + selectedRegion)
                   .getElementsByClassName('region_selector_item')[0]
                   .classList.remove('region_selector_item_selected');
@@ -25,7 +25,7 @@ var regionSelectorModule = (function() {
         }
         this.getElementsByClassName('region_selector_item')[0].classList.add('region_selector_item_selected');
         selectedRegion = this.dataset.regionid;
-        history.replaceState(null, null, '#' + this.dataset.regionid);
+        hashModule.setValue('r', this.dataset.regionid);
         selectListener(this.dataset.regionid);
       }
     },
@@ -41,7 +41,8 @@ onloadModule.register(function() {
     regions[i].onclick = regionSelectorModule.regionClick;
   }
 
-  if (window.location.hash) {
-    document.getElementById('region_selector_link_' + window.location.hash.substring(1)).click();
+  hash = hashModule.getValue('r')
+  if (hash) {
+    document.getElementById('region_selector_link_' + hash).click();
   }
 });

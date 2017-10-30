@@ -22,3 +22,4 @@ var nationalsModule = (function() {
 
 eventSelectorModule.setSelectListener(nationalsModule.setChampionsTable);
 eventSelectorModule.setDefaultEvt('333');
+hashModule.expectOneKey('e');
