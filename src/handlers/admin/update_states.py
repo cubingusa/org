@@ -1,7 +1,11 @@
-import webapp2
-
+from src.handlers.admin.admin_base import AdminBaseHandler
 from src.models.region import Region
 from src.models.state import State
+from src.models.user import Roles
+
+# This handler populates the list of states and their regions.
+# It's possible that we should have a UI for this, but it's not expected that
+# this will change frequently.
 
 def MakeRegion(region_id, region_name, championship_name, all_regions, futures):
   region = Region.get_by_id(region_id) or Region(id=region_id)
@@ -20,7 +24,7 @@ def MakeState(state_id, state_name, region, is_state, all_states, futures):
   all_states[state_id] = state
   return state
 
-class UpdateStatesHandler(webapp2.RequestHandler):
+class UpdateStatesHandler(AdminBaseHandler):
   def get(self):
     futures = []
     all_regions = {}
@@ -91,12 +95,13 @@ class UpdateStatesHandler(webapp2.RequestHandler):
       MakeState(state_id, state_name, region, True, all_states, futures)
 
     for territory_id, territory_name, region in (
+        ('dc', 'D. C.', NORTHEAST),
         ('pr', 'Puerto Rico', SOUTHEAST),
         ('gu', 'Guam', WEST),
         ('mp', 'Northern Mariana Islands', WEST),
         ('as', 'American Samoa', WEST),
         ('vi', 'U.S. Virgin Islands', SOUTHEAST)):
-      MakeState(state_id, state_name, region, False, all_states, futures)
+      MakeState(territory_id, territory_name, region, False, all_states, futures)
 
     for future in futures:
       future.wait()
@@ -108,3 +113,7 @@ class UpdateStatesHandler(webapp2.RequestHandler):
     for state in State.query().iter():
       if state.key.id() not in all_states:
         state.delete()
+    self.response.write('ok')
+
+  def PermittedRoles(self):
+    return [Roles.GLOBAL_ADMIN, Roles.WEBMASTER]

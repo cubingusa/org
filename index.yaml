@@ -28,3 +28,9 @@ indexes:
   - name: competition
   - name: pos
     direction: desc
+
+- kind: UserLocationUpdate
+  properties:
+  - name: user
+  - name: update_time
+    direction: desc
