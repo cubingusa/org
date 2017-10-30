@@ -20,3 +20,15 @@ def CanViewUser(user, viewer):
   return (user == viewer or
           viewer.HasAnyRole(Roles.DelegateRoles()) or
           viewer.HasAnyRole(Roles.AdminRoles()))
+
+def CanViewRoles(user, viewer):
+  return (viewer.HasAnyRole(Roles.DelegateRoles()) or
+          viewer.HasAnyRole(Roles.AdminRoles()))
+
+def EditableRoles(user, editor):
+  if editor.HasAnyRole([Roles.GLOBAL_ADMIN]):
+    return Roles.AllRoles()
+  elif editor.HasAnyRole([Roles.WEBMASTER, Roles.DIRECTOR]):
+    return [Roles.WEBMASTER, Roles.DIRECTOR]
+  else:
+    return []

@@ -7,6 +7,7 @@ from src import common
 from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.state import State
+from src.models.user import Roles
 from src.models.user import User
 from src.models.user import UserLocationUpdate
 
@@ -24,6 +25,16 @@ class EditUserHandler(BaseHandler):
     else:
       return self.user
 
+  def TemplateDict(self, user):
+    return {
+        'c': common.Common(self),
+        'user': user,
+        'all_roles': Roles.AllRoles(),
+        'editing_location_enabled': auth.CanEditLocation(user=user, editor=self.user),
+        'can_view_roles': auth.CanViewRoles(user=user, viewer=self.user),
+        'editable_roles': auth.EditableRoles(user=user, editor=self.user),
+    }
+
   def get(self, user_id=-1):
     user_id = int(user_id)
     user = self.get_user(user_id)
@@ -36,11 +47,7 @@ class EditUserHandler(BaseHandler):
       return
 
     template = JINJA_ENVIRONMENT.get_template('edit_user.html')
-    self.response.write(template.render({
-        'c': common.Common(self),
-        'user': user,
-        'editing_location_enabled': auth.CanEditLocation(user=user, editor=self.user),
-    }))
+    self.response.write(template.render(self.TemplateDict(user)))
 
   def post(self, user_id=-1):
     user_id = int(user_id)
@@ -54,18 +61,16 @@ class EditUserHandler(BaseHandler):
     else:
       city = user.city
       state_id = user.state.id()
-    template_dict = {
-        'c': common.Common(self),
-        'user': user,
-    }
+    template_dict = {}
     changed_location = user.city != city or user.state.id() != state_id
+    user_modified = False
     if auth.CanEditLocation(user=user, editor=self.user) and changed_location:
       user.city = city
       if state_id:
         user.state = ndb.Key(State, state_id)
       else:
         del user.state
-      user.put()
+      user_modified = True
 
       if changed_location:
         # Also save the Update.
@@ -77,14 +82,24 @@ class EditUserHandler(BaseHandler):
         if state_id:
           update.state = ndb.Key(State, state_id)
         update.put()
-
-      template_dict['successful'] = True
     elif changed_location:
       template_dict['unauthorized'] = True
 
-    # Note that this might have changed.
-    template_dict['editing_location_enabled'] = auth.CanEditLocation(user=user, editor=self.user)
+    for role in auth.EditableRoles(user=user, editor=self.user):
+      if role in self.request.POST and role not in user.roles:
+        user.roles.append(role)
+        user_modified = True
+      elif role not in self.request.POST and role in user.roles:
+        user.roles.remove(role)
+        user_modified = True
       
+    if user_modified:
+      user.put()
+      template_dict['successful'] = True
+
+    # Note that edit privileges may have changed.
+    template_dict.update(self.TemplateDict(user))
+ 
     template = JINJA_ENVIRONMENT.get_template('edit_user.html')
     self.response.write(template.render(template_dict))
     

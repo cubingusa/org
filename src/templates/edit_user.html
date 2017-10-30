@@ -72,6 +72,26 @@
           </div>
         </div>
       </fieldset>
+      {% if can_view_roles %}
+        <div class="form-group">
+          <div>
+            <label>Roles</label>
+          </div>
+          {% for role in all_roles %}
+            <div class="form-check form-check-inline {{ 'disabled' if role not in editable_roles }}">
+              <label class="form-check-label">
+                <input class="form-check-input"
+                       type="checkbox"
+                       name="{{ role }}"
+                       id="{{ role }}"
+                       value="{{ role }}"
+                       {{ 'checked' if role in user.roles else '' }}
+                       {{ 'disabled' if role not in editable_roles else '' }}>{{ role }}
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
       <button class="btn btn-primary" type="submit">Submit</button>
     </form>
   </div>
