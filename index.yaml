@@ -10,6 +10,17 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Competition
+  properties:
+  - name: year
+  - name: end_date
+
+- kind: Competition
+  properties:
+  - name: year
+  - name: end_date
+    direction: desc
+
 - kind: Result
   properties:
   - name: competition
