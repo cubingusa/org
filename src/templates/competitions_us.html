@@ -9,7 +9,7 @@
   <a href="{{ competition.GetWCALink() }}" target="_blank">
     <div class="row competition_row">
       <div class="col-2 col-sm-1">
-        <div class="card state region_{{ competition.state.get().region.id() }}">
+        <div class="card state {{ competition.state.get().region.get().CssClass() }}">
           <div class="vcenter">
             {{ competition.state.id().upper() }}
           </div>
