@@ -72,12 +72,4 @@ eventSelectorModule.setSelectListener(usCompetitionsModule.selectCompEvent);
 eventSelectorModule.setUnselectListener(usCompetitionsModule.unselectCompEvent);
 regionSelectorModule.setSelectListener(usCompetitionsModule.selectCompRegion);
 regionSelectorModule.setUnselectListener(usCompetitionsModule.unselectCompRegion);
-
-onloadModule.register(function() {
-  hash = hashModule.getValue('y');
-  if (hash) {
-    usCompetitionsModule.selectCompYear(hash);
-  } else {
-    usCompetitionsModule.selectCompYear('upcoming');
-  }
-});
+yearSelectorModule.setSelectListener(usCompetitionsModule.selectCompYear);

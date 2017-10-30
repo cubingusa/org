@@ -1,9 +1,11 @@
 {% import "components/event_selector.html" as event_selector %}
 {% import "components/region_selector.html" as region_selector %}
+{% import "components/year_selector.html" as year_selector %}
 {% extends "base.html" %}
 {% block title%}US Competitions{% endblock %}
 {% block content %}
   <h1>US Competitions</h1>
+  {{ year_selector.year_selector(c, include_upcoming=True) }}
   {{ event_selector.event_selector(c) }}
   {{ region_selector.region_selector(c) }}
   <div id="us_competitions_container"></div>

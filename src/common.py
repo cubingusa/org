@@ -1,3 +1,4 @@
+import datetime
 import webapp2
 
 from src import formatters
@@ -47,3 +48,6 @@ class Common(object):
 
   def events(self):
     return [e for e in Event.query().order(Event.rank).iter()]
+
+  def years(self):
+    return reversed(range(2004, datetime.date.today().year + 2))
