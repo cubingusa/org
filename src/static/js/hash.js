@@ -10,7 +10,7 @@ hashModule = (function() {
       for (var key in valueMap) {
         segments.push(key + '=' + valueMap[key]);
       }
-      history.replaceState(null, null, '#' + segments.join(','));
+      history.replaceState(null, null, '#/' + segments.join('/'));
     }
   };
 
@@ -43,7 +43,7 @@ hashModule = (function() {
       if (window.location.hash.length < 2) {
         return;
       }
-      var hashSplit = window.location.hash.substring(1).split(',');
+      var hashSplit = window.location.hash.substring(2).split('/');
       for (var i = 0; i < hashSplit.length; i++) {
         var eltSplit = hashSplit[i].split('=', 2);
         if (eltSplit.length == 2) {
