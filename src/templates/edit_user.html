@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title%}Edit{% endblock %}
+{% block content %}
+  {% if successful %}
+    <div class="alert alert-success" role="alert">
+      <strong>Updates saved!</strong>
+    </div>
+  {% endif %}
+  {% if unauthorized %}
+    <div class="alert alert-danger" role="alert">
+      <strong>Failed to edit!</strong>  Note that you're only allowed to update your location once per year.
+    </div>
+  {% endif %}
+  <div class="edit_user_container">
+    <form action="{{ c.uri }}" method="POST">
+      <h3>Edit {{ user.name }}</h3>
+      <div class="form-group">
+        <label for="wcaid">WCA ID</label>
+        <input class="form-control"
+               type="text"
+               id="wcaid"
+               placeholder="{{ user.wca_person.id() if user.wca_person else '' }}"
+               aria-describedby="wcaid-help"
+               readonly>
+        <small id="wcaid-help" class="form-text text-muted">
+          You can update your WCA ID on the
+          <a href="https://www.worldcubeassociation.org/profile/edit"
+             target="_blank">WCA website</a>.  We'll pick up this change next time you log in.
+        </small>
+      </div>
+      <fieldset {{ 'disabled' if not editing_location_enabled else ''}}>
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            <label for="city">City</label>
+            <input class="form-control"
+                   type="text"
+                   id="city"
+                   name="city"
+                   value="{{ user.city }}"
+                   aria-describedby="city-help">
+          </div>
+          <div class="col-12 col-sm-4">
+            <label for="state">State</label>
+            <select class="form-control custom-select"
+                    id="state"
+                    name="state"
+                    aria-describedby="city-help">
+              <option value="empty"></option>
+              {% for state in c.all_states() %}
+                <option value="{{ state.key.id() }}"
+                        data-regionid="{{ state.region.id() }}"
+                        data-regionname="{{ state.region.get().name }}"
+                        {{ 'selected' if state.key == user.state else ''}}>
+                  {{ state.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-12 col-sm-4">
+            <label for="region">Region</label>
+            <input class="form-control {{ user.state.get().region.get().CssClass() if user.state else ''}}"
+                   type="text"
+                   id="region"
+                   data-regionid="{{ user.state.get().region.id() if user.state else ''}}"
+                   value="{{ user.state.get().region.get().name if user.state else ''}}"
+                   readonly>
+          </div>
+          <div class="col-12 col-sm-12">
+            <small id="city-help" class="form-text text-muted">
+              City and state determine your eligibility for Regional Championships.  You may only represent a state where you live at least 50% of the year, and you may only change your information once per year.  We reserve the right to ask for proof of residency.
+            </small>
+          </div>
+        </div>
+      </fieldset>
+      {% if can_view_roles %}
+        <div class="form-group">
+          <div>
+            <label>Roles</label>
+          </div>
+          <div class="row">
+            {% for role in all_roles %}
+              <div class="col-12 col-sm-2">
+                <div class="form-check form-check-inline col-4 col-sm-3
+                            {{ 'disabled' if role not in editable_roles }}">
+                  <label class="form-check-label">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="{{ role }}"
+                           id="{{ role }}"
+                           value="{{ role }}"
+                           {{ 'checked' if role in user.roles else '' }}
+                           {{ 'disabled' if role not in editable_roles else '' }}>{{ role }}
+                  </label>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+  <script src="/static/edit_user.js" type="application/javascript"></script>
+{% endblock %}

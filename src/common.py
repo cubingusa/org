@@ -1,12 +1,14 @@
 import webapp2
 
 from src import formatters
+from src.models.state import State
 from src.models.wca.event import Event
 
 class Common(object):
-  def __init__(self, uri):
+  def __init__(self, handler):
     self.uri_for = webapp2.uri_for
-    self.uri = uri
+    self.uri = handler.request.url
+    self.user = handler.user
     self.events = [e for e in Event.query().order(Event.rank).iter()]
     self.len = len
     self.formatters = formatters
@@ -36,3 +38,6 @@ class Common(object):
 
   def sort_events(self, events):
     return sorted(events, key=lambda evt: evt.get().rank)
+
+  def all_states(self):
+    return [state for state in State.query().order(State.name).iter()]

@@ -71,3 +71,16 @@ div.region_se { background-color: orange; }
   opacity: 1;
 }
 /* end event_selector.html */
+
+/* edit_user.html */
+#region {
+  font-weight: bold;
+}
+#region.region_gl { background-color: purple; }
+#region.region_ne { background-color: cornflowerblue; }
+#region.region_hl { background-color: salmon; }
+#region.region_nw { background-color: seagreen; }
+#region.region_w { background-color: gold; }
+#region.region_s { background-color: crimson; }
+#region.region_se { background-color: orange; }
+/* end edit_user.html */
