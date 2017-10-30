@@ -2,6 +2,9 @@ from src.handlers.base import BaseHandler
 from src.models.user import Roles
 from src.models.user import User
 
+# Note that this handler does NOT use AdminHandler.  For bootstrapping reasons,
+# we need to be able to assign roles without anyone already having roles
+# assigned.
 class AssignRoleHandler(BaseHandler):
   def get(self, user_id, role):
     user = User.get_by_id(int(user_id))

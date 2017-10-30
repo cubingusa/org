@@ -7,13 +7,17 @@ from google.appengine.api import app_identity
 from google.appengine.api import urlfetch
 from google.appengine.ext import deferred
 
-from src.handlers.base import BaseHandler
+from src.handlers.admin.admin_base import AdminBaseHandler
+from src.models.user import Roles
 from src.models.wca.export import WcaExport
 from src.models.wca.export import get_latest_export
 from src.wca import export
 from src.wca import sharder
 
 CHUNK_SIZE = 16 * 1024 * 1024
+
+# This handler is designed for use by cron.  However, admins can run it as a
+# one-off.
 
 def fname(idx):
   return '/%s/export_tmp/WCA_export.tsv.zip.%d' % (app_identity.get_default_gcs_bucket_name(), idx)
@@ -73,6 +77,10 @@ def download_export_chunk(idx):
     deferred.defer(download_export_chunk, idx + 1)
   
 
-class GetExportHandler(BaseHandler):
+class GetExportHandler(AdminBaseHandler):
   def get(self):
     deferred.defer(download_export_chunk, idx=0)
+    self.response.write('Running in background.')
+
+  def PermittedRoles(self):
+    return Roles.AdminRoles()

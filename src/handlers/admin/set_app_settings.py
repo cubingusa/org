@@ -1,7 +1,11 @@
-from src.handlers.base import BaseHandler
+from src.handlers.admin.admin_base import AdminBaseHandler
 from src.models.app_settings import AppSettings
+from src.models.user import Roles
 
-class SetAppSettingsHandler(BaseHandler):
+# This handler configures app-level settings that should be updated with care.
+# As such, access is very limited.
+
+class SetAppSettingsHandler(AdminBaseHandler):
   def get(self, setting, value):
     app_settings = AppSettings.Get()
     if setting == 'session_secret_key':
@@ -16,3 +20,6 @@ class SetAppSettingsHandler(BaseHandler):
       return
     app_settings.put()
     self.response.write('ok')
+
+  def PermittedRoles(self):
+    return [Roles.GLOBAL_ADMIN]

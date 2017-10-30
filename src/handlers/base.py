@@ -3,6 +3,7 @@ import webapp2
 
 from webapp2_extras import sessions
 
+from src.models.user import Roles
 from src.models.user import User
 
 # Log out every week.
@@ -21,8 +22,19 @@ class BaseHandler(webapp2.RequestHandler):
         del self.session['login_time']
 
     try:
-      # Dispatch the request.
-      webapp2.RequestHandler.dispatch(self)
+      is_cron = ('X-Appengine-Cron' in self.request.headers and
+                 self.request.headers['X-Appengine-Cron'])
+      redirected = False
+      if not is_cron and self.RequireAuth():
+        if self.user is None:
+          redirected = True
+        elif not self.user.HasAnyRole(self.PermittedRoles() + [Roles.GLOBAL_ADMIN]):
+          redirected = True
+      if redirected:
+        self.redirect('/')
+      else:
+        # Dispatch the request.
+        webapp2.RequestHandler.dispatch(self)
     finally:
       # Save all sessions.
       self.session_store.save_sessions(self.response)
@@ -37,3 +49,13 @@ class BaseHandler(webapp2.RequestHandler):
     if 'wca_account_number' in self.session:
       return User.get_by_id(self.session['wca_account_number'])
     return None
+
+  # If True, is in AdminBaseHandler, verify that the user is logged in and has a
+  # whitelisted role.
+  def RequireAuth(self):
+    return False
+
+  # When PermittedRoles is True, the user must have one of these roles to access
+  # this handler.  GLOBAL_ADMIN always has access.
+  def PermittedRoles(self):
+    return []

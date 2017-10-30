@@ -1,10 +1,13 @@
-from src.handlers.base import BaseHandler
+from src.handlers.admin.admin_base import AdminBaseHandler
 from src.models.championship import Championship
+from src.models.user import Roles
 from src.models.wca.competition import Competition
 
+# This is used to populate championships.  This handler will be retired and
+# replaced with a UI.
 # TODO: make a UI for this.
 
-class UpdateChampionshipsHandler(BaseHandler):
+class UpdateChampionshipsHandler(AdminBaseHandler):
   def get(self):
     for comp_id in (
         'US2004',
@@ -26,3 +29,7 @@ class UpdateChampionshipsHandler(BaseHandler):
       championship.national_championship = True
       championship.competition = comp.key
       championship.put()
+    self.response.write('ok')
+
+  def PermittedRoles(self):
+    return [Roles.GLOBAL_ADMIN, Roles.WEBMASTER]
