@@ -1,4 +1,4 @@
-window.onload = function() {
+onloadModule.register(function() {
   var elt = null;
   if (window.location.hash != "") {
     elt = document.getElementById(window.location.hash.substring(1) + "_link");
@@ -10,4 +10,4 @@ window.onload = function() {
     }
   }
   elt.click();
-}
+});

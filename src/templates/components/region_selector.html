@@ -1,13 +1,5 @@
-{% macro region_selector(c, onselect_callback,
-                         unselect_enabled=0,
-                         unselect_callback='',
-                         multi_selectors=0) %}
-  <div id="region_selector"
-       class="row"
-       data-callback="{{ onselect_callback }}"
-       data-unselect="{{ unselect_enabled }}"
-       data-unselectcallback="{{ unselect_callback }}"
-       data-multiselectors="{{ multi_selectors }}">
+{% macro region_selector(c) %}
+  <div id="region_selector" class="row">
     {% for region in c.regions() %}
       <div class="col region_selector_col">
         <a class="region_selector_link"

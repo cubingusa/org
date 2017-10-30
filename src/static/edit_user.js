@@ -1,11 +1,17 @@
-document.getElementById('state').onchange = function() {
-  select = document.getElementById('state');
-  selected = select.options[select.selectedIndex];
-  region = document.getElementById('region');
+editUserModule = (function() {
+  var select = document.getElementById('state');
+  var region = document.getElementById('region');
+  var region_id = region.dataset.regionid;
+  
+  return {
+    onStateChange: function() {
+      selected = select.options[select.selectedIndex];
+      region.classList.remove('region_' + region_id);
+      region_id = selected.dataset.regionid;
+      region.value = selected.dataset.regionname;
+      region.classList.add('region_' + region_id);
+    },
+  };
+})();
 
-  old_region_id = region.dataset.regionid;
-  region.dataset.regionid = selected.dataset.regionid;
-  region.value = selected.dataset.regionname;
-  region.classList.remove('region_' + old_region_id);
-  region.classList.add('region_' + selected.dataset.regionid);
-};
+document.getElementById('state').onchange = editUserModule.onStateChange;

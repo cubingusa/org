@@ -1,39 +1,55 @@
-var selectedEvent = '';
+var eventSelectorModule = (function() {
+  var selectedEvent = '';
+  var eventSelector = document.getElementById('event_selector');
 
-var eventClick = function() {
-  if (this.dataset.eventid == selectedEvent) {
-    if (this.parentElement.dataset.unselect) {
-      history.replaceState(null, null, '#');
-      document.getElementById('event_selector_link_' + selectedEvent)
-              .getElementsByTagName('img')[0]
-              .classList.remove('event_selector_icon_selected');
-      selectedEvent = '';
-      callbackName = this.parentElement.dataset.unselectcallback;
-      window[callbackName]();
-    }
-  } else {
-    if (selectedEvent) {
-      document.getElementById('event_selector_link_' + selectedEvent)
-              .getElementsByTagName('img')[0]
-              .classList.remove('event_selector_icon_selected');
-    }
-    this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
-    selectedEvent = this.dataset.eventid;
-    history.replaceState(null, null, '#' + this.dataset.eventid);
-    callbackName = this.parentElement.dataset.callback;
-    window[callbackName](this.dataset.eventid, this.dataset.eventname);
+  var selectListener = null;
+  var unselectListener = null;
+
+  var defaultEvt = '';
+  
+  return {
+    eventSelector: eventSelector,
+
+    eventClick: function() {
+      if (this.dataset.eventid == selectedEvent) {
+        if (unselectListener) {
+          history.replaceState(null, null, '#');
+          document.getElementById('event_selector_link_' + selectedEvent)
+                  .getElementsByTagName('img')[0]
+                  .classList.remove('event_selector_icon_selected');
+          selectedEvent = '';
+          unselectListener();
+        }
+      } else {
+        if (selectedEvent) {
+          document.getElementById('event_selector_link_' + selectedEvent)
+                  .getElementsByTagName('img')[0]
+                  .classList.remove('event_selector_icon_selected');
+        }
+        this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
+        selectedEvent = this.dataset.eventid;
+        history.replaceState(null, null, '#' + this.dataset.eventid);
+        selectListener(this.dataset.eventid, this.dataset.eventname);
+      }
+    },
+
+    setSelectListener: function(listener) { selectListener = listener; },
+    setUnselectListener: function(listener) { unselectListener = listener; },
+    setDefaultEvt: function(evt) { defaultEvt = evt; },
+    getDefaultEvt: function() { return defaultEvt; },
   }
-}
+})();
 
-var events = document.getElementsByClassName('event_selector_link');
-for (var i = 0; i < events.length; i++) {
-  events[i].onclick = eventClick;
-}
+onloadModule.register(function() {
+  var events = document.getElementsByClassName('event_selector_link');
+  
+  for (var i = 0; i < events.length; i++) {
+    events[i].onclick = eventSelectorModule.eventClick;
+  }
 
-window.onload = function() {
   if (window.location.hash) {
-    document.getElementById('event_selector_link_' + window.location.hash.substring(1)).click();
-  } else if (document.getElementById('event_selector').dataset.autoselect == '1') {
-    document.getElementById('event_selector_link_333').click();
+    //document.getElementById('event_selector_link_' + window.location.hash.substring(1)).click();
+  } else if (eventSelectorModule.getDefaultEvt()) {
+    document.getElementById('event_selector_link_' + eventSelectorModule.getDefaultEvt()).click();
   }
-}
+});

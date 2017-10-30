@@ -40,13 +40,8 @@
 </div>
 {% endmacro %}
   <h1>US Competitions</h1>
-  {{ event_selector.event_selector(c, 'selectCompEvent',
-                                   auto_select_333=0,
-                                   unselect_enabled=1,
-                                   unselect_callback='unselectCompEvent') }}
-  {{ region_selector.region_selector(c, 'selectCompRegion',
-                                     unselect_enabled=1,
-                                     unselect_callback='unselectCompRegion') }}
+  {{ event_selector.event_selector(c) }}
+  {{ region_selector.region_selector(c) }}
   {% for competition in competitions %}
     {{ competition_row(competition) }}
   {% endfor %}
