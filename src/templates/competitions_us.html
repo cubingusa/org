@@ -1,5 +1,6 @@
 {% import "components/event_icon.html" as event_icon %}
 {% import "components/event_selector.html" as event_selector %}
+{% import "components/region_selector.html" as region_selector %}
 {% extends "base.html" %}
 {% block title%}US Competitions{% endblock %}
 {% block content %}
@@ -43,6 +44,9 @@
                                    auto_select_333=0,
                                    unselect_enabled=1,
                                    unselect_callback='unselectCompEvent') }}
+  {{ region_selector.region_selector(c, 'selectCompRegion',
+                                     unselect_enabled=1,
+                                     unselect_callback='unselectCompRegion') }}
   {% for competition in competitions %}
     {{ competition_row(competition) }}
   {% endfor %}

@@ -32,13 +32,13 @@ div.about_text,div.about_row img {
   height: 100%;
   color: black;
 }
-div.region_gl { background-color: purple; }
-div.region_ne { background-color: cornflowerblue; }
-div.region_hl { background-color: salmon; }
-div.region_nw { background-color: seagreen; }
-div.region_w { background-color: gold; }
-div.region_s { background-color: crimson; }
-div.region_se { background-color: orange; }
+.region_gl { background-color: darkorchid; }
+.region_ne { background-color: cornflowerblue; }
+.region_hl { background-color: salmon; }
+.region_nw { background-color: seagreen; }
+.region_w { background-color: gold; }
+.region_s { background-color: crimson; }
+.region_se { background-color: orange; }
 /* end competitions_us.html */
 
 /* donate.html */
@@ -72,11 +72,26 @@ div.region_se { background-color: orange; }
 }
 /* end event_selector.html */
 
+/* region_selector.html */
+.region_selector_item {
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+  opacity: 0.5;
+}
+.region_selector_item_selected {
+  opacity: 1;
+}
+.region_selector_col {
+  padding-right: 0px;
+}
+/* end region_selector.html */
+
 /* edit_user.html */
 #region {
   font-weight: bold;
 }
-#region.region_gl { background-color: purple; }
+#region.region_gl { background-color: darkorchid; }
 #region.region_ne { background-color: cornflowerblue; }
 #region.region_hl { background-color: salmon; }
 #region.region_nw { background-color: seagreen; }

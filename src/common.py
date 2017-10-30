@@ -1,6 +1,7 @@
 import webapp2
 
 from src import formatters
+from src.models.region import Region
 from src.models.state import State
 from src.models.wca.event import Event
 
@@ -41,3 +42,6 @@ class Common(object):
 
   def all_states(self):
     return [state for state in State.query().order(State.name).iter()]
+
+  def regions(self):
+    return [r for r in Region.query().order(Region.name).iter()]
