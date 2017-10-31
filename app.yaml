@@ -18,7 +18,11 @@ handlers:
    static_dir: src/static
    secure: always
  - url: /admin/assign_role/.*
-   script: admin_assign_role.app
+   script: admin_setup_app.app
+   login: admin
+   secure: always
+ - url: /admin/set_app_settings/.*
+   script: admin_setup_app.app
    login: admin
    secure: always
  - url: /admin/.*
