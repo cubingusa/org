@@ -1,6 +1,5 @@
 from src.handlers.base import BaseHandler
 from src.models.app_settings import AppSettings
-from src.models.user import Roles
 
 # This handler configures app-level settings that should be updated with care.
 # As such, access is very limited.
@@ -20,6 +19,3 @@ class SetAppSettingsHandler(BaseHandler):
       return
     app_settings.put()
     self.response.write('ok')
-
-  def PermittedRoles(self):
-    return [Roles.GLOBAL_ADMIN]
