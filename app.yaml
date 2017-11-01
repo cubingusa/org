@@ -17,20 +17,6 @@ handlers:
  - url: /static
    static_dir: src/static
    secure: always
- - url: /admin/assign_role/.*
-   script: admin_setup_app.app
-   login: admin
-   secure: always
- - url: /admin/set_app_settings/.*
-   script: admin_setup_app.app
-   login: admin
-   secure: always
- - url: /admin/.*
-   script: admin.app
-   secure: always
- - url: /_ah/queue/deferred
-   script: google.appengine.ext.deferred.deferred.application
-   login: admin
  - url: /.*
    script: cubingusa.app
    secure: always
