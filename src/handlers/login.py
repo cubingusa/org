@@ -19,7 +19,7 @@ class LoginHandler(BaseHandler):
         'client_id': app_settings.wca_oauth_client_id,
         'response_type': 'code',
         'redirect_uri': webapp2.uri_for('login_callback', _full=True),
-        'state': self.request.referer,
+        'state': self.request.referer if self.request.referer else '/',
         'scope': 'public',
     }
 
@@ -99,4 +99,8 @@ class LogoutHandler(BaseHandler):
       del self.session['wca_account_number']
     if 'login_time' in self.session:
       del self.session['login_time']
-    self.redirect(self.request.referer)
+
+    if self.request.referer:
+      self.redirect(self.request.referer)
+    else:
+      self.redirect('/')
