@@ -24,14 +24,14 @@ class BaseHandler(webapp2.RequestHandler):
     try:
       is_cron = ('X-Appengine-Cron' in self.request.headers and
                  self.request.headers['X-Appengine-Cron'])
-      redirected = False
+      redirect_target = None
       if not is_cron and self.RequireAuth():
         if self.user is None:
-          redirected = True
+          redirect_target = '/login'
         elif not self.user.HasAnyRole(self.PermittedRoles() + [Roles.GLOBAL_ADMIN]):
-          redirected = True
-      if redirected:
-        self.redirect('/')
+          redirect_target = '/'
+      if redirect_target:
+        self.redirect(redirect_target)
       else:
         # Dispatch the request.
         webapp2.RequestHandler.dispatch(self)
