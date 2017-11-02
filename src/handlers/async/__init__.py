@@ -1,2 +1,0 @@
-from src.handlers.async.champions_by_year import ChampionsByYearHandler
-from src.handlers.async.competitions_us import USCompetitionsHandler
