@@ -31,4 +31,4 @@ app = webapp2.WSGIApplication([
                 name='delete_document'),
   webapp2.Route('/about/restore_document/<document_id:.*>', handler=RestoreDocumentHandler,
                 name='restore_document'),
-], config=config.GetAppConfig())
+], config=config.GetAppConfig(is_admin=False))

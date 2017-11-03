@@ -31,4 +31,4 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/contact', handler=BasicHandler('index.html'), name='contact'),
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler)
-], config=config.GetAppConfig())
+], config=config.GetAppConfig(is_admin=True))
