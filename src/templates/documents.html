@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title%}Public Documents{% endblock %}
+{% block content %}
+  <h1>CubingUSA Public Documents</h1>
+  {% if admin_page and just_uploaded %}
+    <div class="alert alert-success" role="alert">
+      File uploaded successfully!  It'll show up here in a few minutes.
+    </div>
+  {% endif %}
+  {% for section, documents in documents_by_section.iteritems() %}
+    <h3>{{ section }}</h3>
+    {% for document in documents %}
+      <div class="row card {% if document.deletion_time %}deleted{% endif %}">
+        <a href="{{ c.uri_for('get_document', document_id=document.key.id(),
+                                              document_name=document.original_filename) }}"
+           target="_blank">
+          <div class="col-8 {% if admin_page %}col-sm-6{% else %}col-sm-3{% endif %}">
+            {{ document.name }}
+          </div>
+        </a>
+        <div class="col-4 {% if admin_page %}col-sm-6{% else %}col-sm-3{% endif %}">
+          {{ c.format_date(document.upload_time) }}
+        </div>
+        {% if admin_page %}
+          <div class="col-sm-3 d-none d-sm-block"> 
+            Uploaded by {{ c.uploader.get().user.get().name }}
+          </div>
+          <div class="col-sm-3 d-none d-sm-block">
+            {% if document.deletion_time %}
+              <a href="c.uri_for('restore_document', document_id=document.key.id())">
+                [Restore]
+              <a>
+            {% else %}
+              <a href="c.uri_for('delete_document', document_id=document.key.id())">
+                [Delete]
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% endfor %}
+  {% if admin_page %}
+    <h3>Upload a document</h3>
+    <form action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="uploader" value="{{ c.user.key.id() }}">
+      <div class="form-group">
+        <label for="name">Document Name</label>
+        <input type="text" class="form-control" name="name" placeholder="Document Name">
+        <small class="form-text text-muted">This is the publicly visible name of this document.</small>
+      </div>
+      <div class="form-group">
+        <label for="section">Section</label>
+        <div class="form-check">
+          {% for section in documents_by_section %}
+            <label class="form-check-label">
+              <input class="form-check-input"
+                     type="radio"
+                     name="section"
+                     value="{{ section }}">
+              {{ section }}
+            </label>
+          {% endfor %}
+          <label class="form-check-label">
+            <input class="form-check-input"
+                   type="radio"
+                   name="section"
+                   value="_other">
+            <input type="text" class="form-control" name="other" placeholder="New Section">
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="file">File to Upload</label>
+        <input type="file" class="form-control-file" name="file" id="file">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  {% endif %}    
+{% endblock %}

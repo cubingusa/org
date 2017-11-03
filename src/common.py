@@ -27,3 +27,6 @@ class Common(object):
 
   def all_states(self):
     return [state for state in State.query().order(State.name).iter()]
+
+  def format_date(self, date):
+    return '%s %d, %d' % (date.strftime('%B'), date.day, datetime.year)

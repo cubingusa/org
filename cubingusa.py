@@ -4,6 +4,7 @@ from src import config
 from src import handlers
 from src.handlers.async.champions_by_year import ChampionsByYearHandler
 from src.handlers.basic import BasicHandler
+from src.handlers.documents import DocumentsHandler
 from src.handlers.edit_user import EditUserHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
@@ -24,6 +25,9 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/why', handler=BasicHandler('index.html'), name='about_why'),
   webapp2.Route('/about/who', handler=BasicHandler('about_who.html'), name='about_who'),
   webapp2.Route('/about/donations', handler=BasicHandler('donations.html'), name='about_donations'),
+  webapp2.Route('/about/documents', handler=DocumentsHandler(False), name='documents'),
+  webapp2.Route('/about/get_document/<document_id:.*>/<document_name:.*>',
+                handler=GetDocumentsHandler(False), name='get_document'),
   webapp2.Route('/contact', handler=BasicHandler('index.html'), name='contact'),
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler)
