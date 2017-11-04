@@ -30,7 +30,7 @@ class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
       document.original_filename = upload.filename
       document.name = self.request.get('name')
       document.put()
-    self.redirect(webapp2.uri_for('document') + '?success=1')
+    self.redirect(webapp2.uri_for('documents') + '?success=1')
 
 class DeleteDocumentHandler(BaseHandler):
   def get(self, document_id):
@@ -40,7 +40,7 @@ class DeleteDocumentHandler(BaseHandler):
       return
     document.deletion_time = datetime.datetime.now()
     document.put()
-    self.redirect_to('document')
+    self.redirect_to('documents')
     
 class RestoreDocumentHandler(BaseHandler):
   def get(self, document_id):
@@ -50,4 +50,4 @@ class RestoreDocumentHandler(BaseHandler):
       return
     del document.deletion_time
     document.put()
-    self.redirect_to('document')
+    self.redirect_to('documents')
