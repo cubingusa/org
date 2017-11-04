@@ -40,7 +40,7 @@ class DeleteDocumentHandler(BaseHandler):
       return
     document.deletion_time = datetime.datetime.now()
     document.put()
-    self.redirect_to('documents')
+    self.redirect(webapp2.uri_for('documents') + '?success=1')
     
 class RestoreDocumentHandler(BaseHandler):
   def get(self, document_id):
@@ -50,4 +50,4 @@ class RestoreDocumentHandler(BaseHandler):
       return
     del document.deletion_time
     document.put()
-    self.redirect_to('documents')
+    self.redirect(webapp2.uri_for('documents') + '?success=1')
