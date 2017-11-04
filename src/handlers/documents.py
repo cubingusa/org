@@ -1,4 +1,5 @@
 import collections
+import mimetypes
 import webapp2
 
 from google.appengine.ext import blobstore
@@ -21,12 +22,15 @@ class DocumentsHandler(BaseHandler):
     for document in Document.query().iter():
       if not document.deletion_time or is_admin:
         documents_by_section[document.section].append(document)
+    for documents in documents_by_section.values():
+      documents.sort(key=lambda x: x.upload_time, reverse=True)
 
     template_dict = {
         'c': common.Common(self),
-        'documents_by_section': documents_by_section,
+        'documents_by_section':
+            sorted(documents_by_section.items(), key=lambda x: x[0]),
         'admin_page': is_admin,
-        'just_uploaded': self.request.get('uploaded') == '1',
+        'just_uploaded': self.request.get('success') == '1',
     }
 
     if is_admin:
@@ -37,10 +41,10 @@ class DocumentsHandler(BaseHandler):
 
 class GetDocumentHandler(blobstore_handlers.BlobstoreDownloadHandler):
   def get(self, document_id, document_name):
-    document = Document.get_by_id(document_id)
+    document = Document.get_by_id(int(document_id))
     if not document or not blobstore.get(document.blob_key):
       self.error(404)
-    if not auth.CanUploadDocuments(self.user) and document.deletion_time:
-      self.error(404)
     else:
+      self.response.headers.add('Content-Type', mimetypes.guess_type(document_name))
+      self.response.headers.add('Content-Disposition:', 'inline; filename="%s"' % document_name)
       self.send_blob(document.blob_key)

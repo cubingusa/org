@@ -34,7 +34,7 @@ class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
 
 class DeleteDocumentHandler(BaseHandler):
   def get(self, document_id):
-    document = Document.get_by_id(document_id)
+    document = Document.get_by_id(int(document_id))
     if not document:
       self.error(404)
       return
@@ -44,7 +44,7 @@ class DeleteDocumentHandler(BaseHandler):
     
 class RestoreDocumentHandler(BaseHandler):
   def get(self, document_id):
-    document = Document.get_by_id(document_id)
+    document = Document.get_by_id(int(document_id))
     if not document:
       self.error(404)
       return
