@@ -23,7 +23,7 @@
         </div>
         {% if admin_page %}
           <div class="col-sm-3 d-none d-sm-block"> 
-            Uploaded by {{ c.uploader.get().user.get().name }}
+            Uploaded by {{ document.uploader.get().name }}
           </div>
           <div class="col-sm-3 d-none d-sm-block">
             {% if document.deletion_time %}

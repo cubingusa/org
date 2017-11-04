@@ -32,3 +32,6 @@ def EditableRoles(user, editor):
     return [Roles.WEBMASTER, Roles.DIRECTOR]
   else:
     return []
+
+def CanUploadDocuments(user):
+  return user.HasAnyRole([Roles.GLOBAL_ADMIN, Roles.DIRECTOR])

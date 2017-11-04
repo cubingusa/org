@@ -1,5 +1,6 @@
 import collections
 import datetime
+import webapp2
 
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
@@ -11,8 +12,10 @@ from src.models.user import User
 
 class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
   def post(self):
-    uploader = User.get_by_id(self.request.get('uploader'))
+    print self.request.POST
+    uploader = User.get_by_id(int(self.request.get('uploader')))
     if not uploader:
+      print 'no uploader'
       self.error(404)
       return
     for upload in self.get_uploads():
@@ -24,7 +27,7 @@ class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
       else:
         document.section = self.request.get('section')
       document.blob_key = upload.key()
-      document.original_filename = upload.filename()
+      document.original_filename = upload.filename
       document.name = self.request.get('name')
       document.put()
     self.redirect(webapp2.uri_for('document') + '?success=1')

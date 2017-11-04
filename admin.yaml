@@ -22,10 +22,7 @@ handlers:
  - url: /_ah/queue/deferred
    script: google.appengine.ext.deferred.deferred.application
    login: admin
- - url: /setup/.*
-   script: admin_setup_app.app
-   login: admin
-   secure: always
  - url: /.*
    script: admin.app
+   login: admin
    secure: always

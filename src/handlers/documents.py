@@ -4,6 +4,7 @@ import webapp2
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 
+from src import auth
 from src import common
 from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
@@ -12,7 +13,7 @@ from src.models.document import Document
 
 class DocumentsHandler(BaseHandler):
   def get(self):
-    is_admin = self.app.config.get('is_admin')
+    is_admin = auth.CanUploadDocuments(self.user)
 
     template = JINJA_ENVIRONMENT.get_template('documents.html')
     documents_by_section = collections.defaultdict(list)
@@ -39,7 +40,7 @@ class GetDocumentHandler(blobstore_handlers.BlobstoreDownloadHandler):
     document = Document.get_by_id(document_id)
     if not document or not blobstore.get(document.blob_key):
       self.error(404)
-    if not self.app.config.get('is_admin') and document.deletion_time:
+    if not auth.CanUploadDocuments(self.user) and document.deletion_time:
       self.error(404)
     else:
       self.send_blob(document.blob_key)

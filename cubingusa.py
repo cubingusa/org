@@ -6,6 +6,9 @@ from src.handlers.async.champions_by_year import ChampionsByYearHandler
 from src.handlers.basic import BasicHandler
 from src.handlers.documents import DocumentsHandler
 from src.handlers.documents import GetDocumentHandler
+from src.handlers.admin.documents import DeleteDocumentHandler
+from src.handlers.admin.documents import RestoreDocumentHandler
+from src.handlers.admin.documents import UploadDocumentHandler
 from src.handlers.edit_user import EditUserHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
@@ -31,5 +34,12 @@ app = webapp2.WSGIApplication([
                 handler=GetDocumentHandler, name='get_document'),
   webapp2.Route('/contact', handler=BasicHandler('index.html'), name='contact'),
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
-                handler=ChampionsByYearHandler)
-], config=config.GetAppConfig(is_admin=False))
+                handler=ChampionsByYearHandler),
+  # Admin
+  webapp2.Route('/admin/upload_document', handler=UploadDocumentHandler,
+                name='upload_document'),
+  webapp2.Route('/admin/delete_document/<document_id:.*>', handler=DeleteDocumentHandler,
+                name='delete_document'),
+  webapp2.Route('/admin/restore_document/<document_id:.*>', handler=RestoreDocumentHandler,
+                name='restore_document'),
+], config=config.GetAppConfig())
