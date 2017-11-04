@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title%}Public Documents{% endblock %}
+{% block content %}
+  <h1>CubingUSA Public Documents</h1>
+  {% if admin_page and just_uploaded %}
+    <div class="alert alert-success" role="alert">
+      Change made successfully!  It'll show up here in a few minutes.
+    </div>
+  {% endif %}
+  {% for section, documents in documents_by_section %}
+    <div class="documents-section">
+      <h3>{{ section }}</h3>
+      {% for document in documents %}
+        <div>
+          <a href="{{ c.uri_for('get_document', document_id=document.key.id(),
+                                                document_name=document.original_filename) }}"
+             target="_blank">
+              {{ document.name }}
+          </a> &ndash; posted
+            {% if admin_page %} by {{ document.uploader.get().name }} {% endif -%}
+          {{ c.format_date(document.upload_time) -}}
+          {% if admin_page -%}
+            {% if document.deletion_time -%}
+              , deleted on {{ c.format_date(document.deletion_time) }}
+              <a href="{{ c.uri_for('restore_document', document_id=document.key.id()) }}">
+                [Restore]
+              <a>
+            {% else %}
+              <a href="{{ c.uri_for('delete_document', document_id=document.key.id()) }}">
+                [Delete]
+              </a>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  {% if admin_page %}
+    <div class="documents-section">
+      <h3>Upload a document</h3>
+      <form action="{{ upload_url }}"
+            method="POST"
+            enctype="multipart/form-data"
+            id="upload-form">
+        <input type="hidden" name="uploader" value="{{ c.user.key.id() }}">
+        <div class="row">
+          <div class="col-sm-2 col-4">
+            <label for="name">Document Name</label>
+          </div>
+          <div class="col-sm-10 col-8">
+            <input type="text" class="form-control" name="name" placeholder="Document Name" required>
+            <small class="form-text text-muted">This is the publicly visible name of this document.</small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 col-4">
+            <label for="section">Section</label>
+          </div>
+          <div class="col-sm-10 col-8">
+            {% for section, documents in documents_by_section %}
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="section"
+                         value="{{ section }}">
+                  {{ section }}
+                </label>
+              </div>
+            {% endfor %}
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input"
+                       type="radio"
+                       name="section"
+                       value="_other"
+                       checked>
+                <input type="text" class="form-control" name="other" placeholder="New Section">
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 col-4">
+            <label for="file">File to Upload</label>
+          </div>
+          <div class="col-sm-10 col-8">
+            <input type="file" class="form-control-file" name="file" id="file" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <script>
+    window.addEventListener('load', function() {
+      var form = document.getElementById('upload-form');
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    }, false);
+    </script>
+  {% endif %}    
+{% endblock %}

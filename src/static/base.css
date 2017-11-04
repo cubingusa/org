@@ -99,3 +99,8 @@ div.about_text,div.about_row img {
 #region.region_s { background-color: crimson; }
 #region.region_se { background-color: orange; }
 /* end edit_user.html */
+
+/* documents.html */
+.documents-section {
+  padding-top: 20px;
+}

@@ -12,14 +12,17 @@ instance_class: B4
 basic_scaling:
   max_instances: 1
 
+libraries:
+ - name: webapp2
+   version: latest
+ - name: jinja2
+   version: latest
+
 handlers:
  - url: /_ah/queue/deferred
    script: google.appengine.ext.deferred.deferred.application
    login: admin
- - url: /setup/.*
-   script: admin_setup_app.app
-   login: admin
-   secure: always
  - url: /.*
    script: admin.app
+   login: admin
    secure: always
