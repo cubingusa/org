@@ -13,12 +13,12 @@ class Common(object):
     self.len = len
     self.formatters = formatters
 
-  def uri_matches(self, uri):
-    return self.uri.endswith(uri)
+  def uri_matches(self, handler_name):
+    return self.uri.endswith(self.uri_for(handler_name))
 
-  def uri_matches_any(self, uri_list):
-    for text, uri in uri_list:
-      if self.uri_matches(uri):
+  def uri_matches_any(self, handler_list):
+    for text, handler_name in handler_list:
+      if self.uri_matches(handler_name):
         return True
     return False
 
@@ -30,3 +30,29 @@ class Common(object):
 
   def format_date(self, date):
     return '%s %d, %d' % (date.strftime('%B'), date.day, datetime.year)
+
+  def is_string(self, h):
+    return type(h) is str
+
+  def get_nav_items(self):
+    return [('Home', 'home'),
+            ('Competitions', [
+                ('US Competitions', 'competitions_us'),
+                ('Nationals', 'competitions_nationals'),
+                ('Regional Championships', 'competitions_regional'),
+            ]),
+            ('Organizers', 'organizers'),
+            ('About', [
+                ('About CubingUSA', 'about'),
+                ('Who we are', 'about_who'),
+                ('Donations', 'about_donations'),
+                ('Public Documents', 'documents'),
+            ]),
+           ]
+
+  def get_right_nav_items(self):
+    if self.user:
+      return [('My Settings', 'edit_user'),
+              ('Log out', 'logout')]
+    else:
+      return [('Log in with WCA', 'login')]
