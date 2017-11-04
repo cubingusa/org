@@ -6,6 +6,7 @@ skip_files:
  - ^(.*/)?.*~$
  - ^(.*/)?.*\.py[co]$
  - ^(.*/)?\..*$
+ - external/bootstrap
 
 libraries:
  - name: webapp2
