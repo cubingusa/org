@@ -42,39 +42,67 @@
   {% endfor %}
   {% if admin_page %}
     <h3>Upload a document</h3>
-    <form action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ upload_url }}"
+          method="POST"
+          enctype="multipart/form-data"
+          id="upload-form">
       <input type="hidden" name="uploader" value="{{ c.user.key.id() }}">
-      <div class="form-group">
-        <label for="name">Document Name</label>
-        <input type="text" class="form-control" name="name" placeholder="Document Name">
-        <small class="form-text text-muted">This is the publicly visible name of this document.</small>
+      <div class="row">
+        <div class="col-sm-2 col-4">
+          <label for="name">Document Name</label>
+        </div>
+        <div class="col-sm-10 col-8">
+          <input type="text" class="form-control" name="name" placeholder="Document Name" required>
+          <small class="form-text text-muted">This is the publicly visible name of this document.</small>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="section">Section</label>
-        <div class="form-check">
-          {% for section in documents_by_section %}
+      <div class="row">
+        <div class="col-sm-2 col-4">
+          <label for="section">Section</label>
+        </div>
+        <div class="col-sm-10 col-8">
+          <div class="form-check">
+            {% for section in documents_by_section %}
+              <label class="form-check-label">
+                <input class="form-check-input"
+                       type="radio"
+                       name="section"
+                       value="{{ section }}">
+                {{ section }}
+              </label>
+            {% endfor %}
             <label class="form-check-label">
               <input class="form-check-input"
                      type="radio"
                      name="section"
-                     value="{{ section }}">
-              {{ section }}
+                     value="_other"
+                     checked>
+              <input type="text" class="form-control" name="other" placeholder="New Section">
             </label>
-          {% endfor %}
-          <label class="form-check-label">
-            <input class="form-check-input"
-                   type="radio"
-                   name="section"
-                   value="_other">
-            <input type="text" class="form-control" name="other" placeholder="New Section">
-          </label>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <label for="file">File to Upload</label>
-        <input type="file" class="form-control-file" name="file" id="file">
+      <div class="row">
+        <div class="col-sm-2 col-4">
+          <label for="file">File to Upload</label>
+        </div>
+        <div class="col-sm-10 col-8">
+          <input type="file" class="form-control-file" name="file" id="file" required>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <script>
+    window.addEventListener('load', function() {
+      var form = document.getElementById('upload-form');
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    }, false);
+    </script>
   {% endif %}    
 {% endblock %}
