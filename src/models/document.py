@@ -11,6 +11,6 @@ class Document(ndb.Model):
   deletion_time = ndb.DateTimeProperty()
   section = ndb.StringProperty()
 
-  blob_key = ndb.StringProperty()
+  blob_key = ndb.BlobKeyProperty()
   name = ndb.StringProperty()
   original_filename = ndb.StringProperty()
