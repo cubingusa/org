@@ -1,21 +1,8 @@
-div#content {
-  padding-top: 90px;
-}
-
-div.about_text,div.about_row img {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
 .vcenter {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 100%;
-}
-
-.dropdown-toggle {
-  cursor: pointer;
 }
 
 .small-event-icon {
@@ -41,37 +28,6 @@ div.about_text,div.about_row img {
 .region_se { background-color: orange; }
 /* end competitions_us.html */
 
-/* donate.html */
-#paypal-card p.card-text {
-  padding: 10px;
-}
-
-#paypal-card img {
-  text-align: center;
-}
-/* end donate.html */
-
-/* event_selector.html */
-#event_selector {
-  padding: 10px 0px;
-}
-#event_selector::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-.event_selector_icon {
-  width: 35px;
-  height: 35px;
-  padding: 5px;
-  float: left;
-  opacity: 0.2;
-}
-.event_selector_icon_selected {
-  opacity: 1;
-}
-/* end event_selector.html */
-
 /* region_selector.html */
 .region_selector_item {
   font-weight: bold;
@@ -87,20 +43,3 @@ div.about_text,div.about_row img {
 }
 /* end region_selector.html */
 
-/* edit_user.html */
-#region {
-  font-weight: bold;
-}
-#region.region_gl { background-color: darkorchid; }
-#region.region_ne { background-color: cornflowerblue; }
-#region.region_hl { background-color: salmon; }
-#region.region_nw { background-color: seagreen; }
-#region.region_w { background-color: gold; }
-#region.region_s { background-color: crimson; }
-#region.region_se { background-color: orange; }
-/* end edit_user.html */
-
-/* documents.html */
-.documents-section {
-  padding-top: 20px;
-}

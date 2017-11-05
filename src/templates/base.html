@@ -3,7 +3,7 @@
 {% macro navitem(c, handler) %}
   {% set active = c.uri_matches(handler) %}
   <li>
-    <a class="nav-item nav-link {% if active %}active{% endif %}"
+    <a class="navbar-item {% if active %}active{% endif %}"
        href="{{ c.uri_for(handler) }}">
       {{ caller() }}{% if active %}<span class="sr-only"> (current)</span>{% endif %}
     </a>
@@ -12,7 +12,7 @@
 {% macro navdropdown(c, handler_list) %}
   {% set active = c.uri_matches_any(handler_list) %}
   <div class="dropdown {% if active %}active{% endif %}">
-    <a class="nav-link dropdown-toggle"
+    <a class="navbar-dropdown"
        data-toggle="dropdown"
        aria-haspopup="true"
        aria-expanded="false">
@@ -35,15 +35,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CubingUSA - {%block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="/static/external/bootstrap.min.css" type="text/css">
-  <link rel="stylesheet" href="/static/base.css" type="text/css">
+  {% block style %}
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+  {% endblock %}
   <script src="/static/external/jquery-3.2.1.slim.min.js" type="application/javascript"></script>
   <script src="/static/js/onload.js" type="application/javascript"></script>
   <script src="/static/js/hash.js" type="application/javascript"></script>
   {% block head %}{% endblock %}
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <div class="navbar">
     <div class="container">
       <a class="navbar-brand" href="{{ c.uri_for('home') }}">
         <img src="/static/img/cubingUSA_4.svg" width="50" height="50"> CubingUSA
@@ -59,7 +60,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="topnav">
-        <ul class="nav navbar-nav navbar-left mr-auto">
+        <ul class="navbar-left">
           {% for title, handler in c.get_nav_items() %}
             {% if c.is_string(handler) %}
               {% call navitem(c, handler) %} {{ title }} {% endcall %}
@@ -68,7 +69,7 @@
             {% endif %}
           {% endfor %}
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="navbar-right">
           {% for title, handler in c.get_right_nav_items() %}
             {% if c.is_string(handler) %}
               {% call navitem(c, handler) %} {{ title }} {% endcall %}
@@ -79,7 +80,7 @@
         </ul>
       </div>
     </div>
-  </nav>
+  </div>
   <div class="container">
     <div id="content">
       {% block content %}{% endblock %}

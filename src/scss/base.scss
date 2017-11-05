@@ -1,0 +1,35 @@
+@import "variables";
+@import "../../external/bootstrap/scss/bootstrap";
+
+.navbar {
+  @extend .navbar-expand-lg;
+  @extend .fixed-top;
+  @extend .navbar-dark;
+  @extend .bg-primary;
+
+  .navbar-left {
+    @extend .nav;
+    @extend .navbar-nav;
+    @extend .mr-auto;
+  }
+
+  .navbar-right {
+    @extend .nav;
+    @extend .navbar-nav;
+  }
+
+  .navbar-item {
+    @extend .nav-item;
+    @extend .nav-link;
+  }
+
+  .navbar-dropdown {
+    @extend .nav-link;
+    @extend .dropdown-toggle;
+    cursor: pointer;
+  }
+}
+
+div#content {
+  padding-top: 90px;
+}

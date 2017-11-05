@@ -1,0 +1,10 @@
+.button {
+  @extend .btn;
+  @extend .btn-primary;
+  @extend .btn-lg;
+}
+
+.button:after {
+  content: " \00BB";  // &raquo;
+}
+

@@ -6,6 +6,8 @@ skip_files:
  - ^(.*/)?.*~$
  - ^(.*/)?.*\.py[co]$
  - ^(.*/)?\..*$
+ - external/bootstrap
+ - src/scss
 
 service: admin
 instance_class: B4

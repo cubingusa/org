@@ -6,10 +6,10 @@ editUserModule = (function() {
   return {
     onStateChange: function() {
       selected = select.options[select.selectedIndex];
-      region.classList.remove('region_' + region_id);
+      region.classList.remove('region-' + region_id);
       region_id = selected.dataset.regionid;
       region.value = selected.dataset.regionname;
-      region.classList.add('region_' + region_id);
+      region.classList.add('region-' + region_id);
     },
   };
 })();

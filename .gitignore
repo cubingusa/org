@@ -1,3 +1,5 @@
 *.pyc
 *.swp
 lib/*/
+.sass-cache/
+src/static/css/

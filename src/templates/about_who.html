@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block title%}Who we are{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/about_who.css" type="text/css">
+{% endblock %}
 {% block content %}
 {% macro person_row(img_src, name, person_title, id, accordion_id) %}
 <div class="card">
@@ -22,11 +25,11 @@
        aria-labelledby="{{ id }}_heading"
        data-parent="#{{ accordion_id }}">
     <div class="card-body">
-      <div class="row">
-        <div class="col-5 col-sm-2">
+      <div class="person-row">
+        <div class="person-image">
           <img src="/static/img/people/{{ img_src }}" width="100%">
         </div>
-        <div class="col-7 col-sm-10">
+        <div class="person-text">
           {{ caller() }}
         </div>
       </div>
