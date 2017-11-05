@@ -43,6 +43,7 @@
       @include media-breakpoint-down(xs) {
         @include make-col(10);
       }
+      padding: 0px;
 
       .comp-dates {
         @include make-col-ready();
@@ -50,7 +51,7 @@
           @include make-col(2);
         }
         @include media-breakpoint-down(xs) {
-          @include make-col(4, 10);
+          @include make-col(3, 10);
         }
         .date-with-year {
           @include media-breakpoint-down(xs) {
@@ -69,7 +70,7 @@
           @include make-col(4);
         }
         @include media-breakpoint-down(xs) {
-          @include make-col(6, 10);
+          @include make-col(7, 10);
         }
       }
       .event-list {
