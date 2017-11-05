@@ -10,7 +10,7 @@
 # TODO: consider fixing this by using different CSS paths for dev and prod.
 
 echo "Recompiling minified CSS."
-sass scss:src/static/css --style compressed
+sass src/scss:src/static/css --style compressed
 
 echo "Deploying to App Engine."
 gcloud app deploy "$@"
