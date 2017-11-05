@@ -5,4 +5,4 @@ class Region(ndb.Model):
   championship_name = ndb.StringProperty()
 
   def CssClass(self):
-    return 'region_%s' % self.key.id()
+    return 'region-%s' % self.key.id()

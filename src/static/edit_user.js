@@ -6,6 +6,6 @@ document.getElementById('state').onchange = function() {
   old_region_id = region.dataset.regionid;
   region.dataset.regionid = selected.dataset.regionid;
   region.value = selected.dataset.regionname;
-  region.classList.remove('region_' + old_region_id);
-  region.classList.add('region_' + selected.dataset.regionid);
+  region.classList.remove('region-' + old_region_id);
+  region.classList.add('region-' + selected.dataset.regionid);
 };
