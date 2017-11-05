@@ -2,22 +2,81 @@
 @import "components/event_selector";
 @import "components/region_selector";
 
-.state {
-  text-align: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  height: 100%;
+.competition-row-container {
+  @extend .card;
 
-  @each $region, $color in $region-colors {
-    &.region-#{$region} {
-      background-color: $color;
-      color: color-yiq($color);
+  .competition-row {
+    @include make-row();
+
+    .state-container {
+      @include make-col-ready();
+      @include media-breakpoint-up(sm) {
+        @include make-col(1);
+      }
+      @include media-breakpoint-down(xs) {
+        @include make-col(2);
+      }
+
+      .state {
+        @extend .card;
+
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        height: 100%;
+
+        @each $region, $color in $region-colors {
+          &.region-#{$region} {
+            background-color: $color;
+            color: color-yiq($color);
+          }
+        }
+      }
+    }
+
+    .rest-of-competition-row {
+      @include make-row();
+      @include make-col-ready();
+      @include media-breakpoint-up(sm) {
+        @include make-col(11);
+      }
+      @include media-breakpoint-down(xs) {
+        @include make-col(10);
+      }
+
+      .comp-dates {
+        @include make-col-ready();
+        @include media-breakpoint-up(sm) {
+          @include make-col(2);
+        }
+        @include media-breakpoint-down(xs) {
+          @include make-col(4, 10);
+        }
+      }
+      .comp-name {
+        @include make-col-ready();
+        @include media-breakpoint-up(sm) {
+          @include make-col(4);
+        }
+        @include media-breakpoint-down(xs) {
+          @include make-col(6, 10);
+        }
+      }
+      .event-list {
+        @include make-col-ready();
+        @include media-breakpoint-up(sm) {
+          @include make-col(5);
+        }
+        @include media-breakpoint-down(xs) {
+          @include make-col(10, 10);
+        }
+
+        .small-event-icon {
+          width: 35px;
+          height: 35px;
+          padding: 5px;
+        }
+      }
     }
   }
-}
-
-.small-event-icon {
-  width: 35px;
-  height: 35px;
-  padding: 5px;
 }
