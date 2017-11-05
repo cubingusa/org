@@ -1,6 +1,6 @@
 var eventSelectorModule = (function() {
   var selectedEvent = '';
-  var eventSelector = document.getElementById('event_selector');
+  var eventSelector = document.getElementById('event-selector');
 
   var selectListener = null;
   var unselectListener = null;
@@ -14,19 +14,19 @@ var eventSelectorModule = (function() {
       if (this.dataset.eventid == selectedEvent) {
         if (unselectListener) {
           hashModule.deleteKey('e');
-          document.getElementById('event_selector_link_' + selectedEvent)
+          document.getElementById('event-selector-link-' + selectedEvent)
                   .getElementsByTagName('img')[0]
-                  .classList.remove('event_selector_icon_selected');
+                  .classList.remove('selected');
           selectedEvent = '';
           unselectListener();
         }
       } else {
         if (selectedEvent) {
-          document.getElementById('event_selector_link_' + selectedEvent)
+          document.getElementById('event-selector-link-' + selectedEvent)
                   .getElementsByTagName('img')[0]
-                  .classList.remove('event_selector_icon_selected');
+                  .classList.remove('selected');
         }
-        this.getElementsByClassName('event_selector_icon')[0].classList.add('event_selector_icon_selected');
+        this.getElementsByClassName('event-selector-icon')[0].classList.add('selected');
         selectedEvent = this.dataset.eventid;
         hashModule.setValue('e', this.dataset.eventid);
         selectListener(this.dataset.eventid, this.dataset.eventname);
@@ -41,7 +41,7 @@ var eventSelectorModule = (function() {
 })();
 
 onloadModule.register(function() {
-  var events = document.getElementsByClassName('event_selector_link');
+  var events = document.getElementsByClassName('event-selector-link');
   
   for (var i = 0; i < events.length; i++) {
     events[i].onclick = eventSelectorModule.eventClick;
@@ -49,8 +49,8 @@ onloadModule.register(function() {
 
   hash = hashModule.getValue('e');
   if (hash) {
-    document.getElementById('event_selector_link_' + hash).click();
+    document.getElementById('event-selector-link-' + hash).click();
   } else if (eventSelectorModule.getDefaultEvt()) {
-    document.getElementById('event_selector_link_' + eventSelectorModule.getDefaultEvt()).click();
+    document.getElementById('event-selector-link-' + eventSelectorModule.getDefaultEvt()).click();
   }
 });

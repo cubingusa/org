@@ -11,7 +11,7 @@ usCompetitionsModule = (function() {
         }
       }
       if (activeRegion != '') {
-        elts = elt.getElementsByClassName('region_' + activeRegion);
+        elts = elt.getElementsByClassName('region-' + activeRegion);
         if (elts.length == 0) {
           return false;
         }

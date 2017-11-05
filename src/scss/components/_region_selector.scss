@@ -1,0 +1,36 @@
+#region-selector {
+
+  .region-selector-col {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(1, 7);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(1, 3);
+    }
+    padding-right: 0px;
+  }
+
+  .region-selector-item {
+    @extend .card;
+
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+    opacity: 0.5;
+
+    &.selected {
+      opacity: 1;
+    }
+
+    @each $region, $color in $region-colors {
+      &.region-#{$region} {
+        background-color: $color;
+        color: color-yiq($color);
+      }
+    }
+  }
+  .region-selector-item-selected {
+    opacity: 1;
+  }
+}

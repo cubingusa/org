@@ -1,0 +1,23 @@
+@import "base";
+@import "components/event_selector";
+@import "components/region_selector";
+
+.state {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: 100%;
+
+  @each $region, $color in $region-colors {
+    &.region-#{$region} {
+      background-color: $color;
+      color: color-yiq($color);
+    }
+  }
+}
+
+.small-event-icon {
+  width: 35px;
+  height: 35px;
+  padding: 5px;
+}

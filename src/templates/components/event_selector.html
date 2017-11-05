@@ -1,12 +1,12 @@
 {% import "components/event_icon.html" as event_icon %}
 {% macro event_selector(c) %}
-  <div id="event_selector">
+  <div id="event-selector">
     {% for event in c.events() %}
-      <a class="event_selector_link"
-         id="event_selector_link_{{ event.key.id() }}"
+      <a class="event-selector-link"
+         id="event-selector-link-{{ event.key.id() }}"
          data-eventid="{{ event.key.id() }}"
          data-eventname="{{ event.name }}">
-        {{ event_icon.event_icon(event, 'event_selector_icon') }}
+        {{ event_icon.event_icon(event, 'event-selector-icon') }}
       </a>
     {% endfor %}
   </div>

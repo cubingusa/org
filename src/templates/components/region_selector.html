@@ -1,11 +1,11 @@
 {% macro region_selector(c) %}
-  <div id="region_selector" class="row">
+  <div id="region-selector" class="row">
     {% for region in c.regions() %}
-      <div class="col region_selector_col">
-        <a class="region_selector_link"
-           id="region_selector_link_{{ region.key.id() }}"
+      <div class="region-selector-col">
+        <a class="region-selector-link"
+           id="region-selector-link-{{ region.key.id() }}"
            data-regionid="{{ region.key.id() }}">
-            <span class="card {{ region.CssClass() }} region_selector_item">
+            <span class="region-selector-item {{ region.CssClass() }}">
               {{ region.name }}
             </span>
         </a>
