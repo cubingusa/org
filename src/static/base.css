@@ -1,8 +1,3 @@
-div.about_text,div.about_row img {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
 .vcenter {
   position: absolute;
   top: 50%;
@@ -16,16 +11,6 @@ div.about_text,div.about_row img {
 .region_w { background-color: gold; }
 .region_s { background-color: crimson; }
 .region_se { background-color: orange; }
-
-/* donate.html */
-#paypal-card p.card-text {
-  padding: 10px;
-}
-
-#paypal-card img {
-  text-align: center;
-}
-/* end donate.html */
 
 /* event_selector.html */
 .event_selector {

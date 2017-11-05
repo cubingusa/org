@@ -1,0 +1,57 @@
+@import "base";
+@import "components/button";
+@import "components/standard_block";
+
+.about-row {
+  @include make-row();
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  .abouttext-base {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(8);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(12);
+    }
+  }
+
+  .abouttext-left {
+    @extend .abouttext-base;
+    @include media-breakpoint-up(sm) {
+      order: 1;
+    }
+  }
+
+  .abouttext-right {
+    @extend .abouttext-base;
+    @include media-breakpoint-up(sm) {
+      order: 2;
+    }
+  }
+
+  .image-base {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(4);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(12);
+    }
+  }
+
+  .image-left {
+    @extend .image-base;
+    @include media-breakpoint-up(sm) {
+      order: 1;
+    }
+  }
+
+  .image-right {
+    @extend .image-base;
+    @include media-breakpoint-up(sm) {
+      order: 2;
+    }
+  }
+}
