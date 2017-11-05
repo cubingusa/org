@@ -1,0 +1,21 @@
+@import "base";
+
+.button {
+  @extend .btn;
+  @extend .btn-primary;
+  @extend .btn-lg;
+}
+
+.button:after {
+  content: " \00BB";  // &raquo;
+}
+
+.standard-block {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col(4);
+  }
+  @include media-breakpoint-down(xs) {
+    @include make-col(12);
+  }
+}
