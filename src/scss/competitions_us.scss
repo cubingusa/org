@@ -52,6 +52,16 @@
         @include media-breakpoint-down(xs) {
           @include make-col(4, 10);
         }
+        .date-with-year {
+          @include media-breakpoint-down(xs) {
+            display: none;
+          }
+        }
+        .date-no-year {
+          @include media-breakpoint-up(sm) {
+            display: none;
+          }
+        }
       }
       .comp-name {
         @include make-col-ready();

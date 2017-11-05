@@ -14,9 +14,16 @@
       </div>
       <div class="rest-of-competition-row">
         <div class="comp-dates">
-          <div class="vcenter">
+          <div class="date-with-year">
             {% autoescape false %}
-              {{ c.format_date_range(competition.start_date, competition.end_date) }}
+              {{ c.format_date_range(competition.start_date, competition.end_date,
+                                     include_year=True) }}
+            {% endautoescape %}
+          </div>
+          <div class="date-no-year">
+            {% autoescape false %}
+              {{ c.format_date_range(competition.start_date, competition.end_date,
+                                     include_year=False) }}
             {% endautoescape %}
           </div>
         </div>
