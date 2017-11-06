@@ -33,6 +33,9 @@ class User(ndb.Model):
   city = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)
 
+  latitude = ndb.IntegerProperty()
+  longitude = ndb.IntegerProperty()
+
   def HasAnyRole(self, roles):
     for role in self.roles:
       if role in roles:
