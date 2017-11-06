@@ -1,10 +1,10 @@
 {% import "components/event_icon.html" as event_icon %}
 {% macro year_selector(c, include_upcoming=False) %}
   <div class="row">
-    <div class="col col-2 col-sm-1">
-      <label for="year-selector" class="vcenter">Year</label>
+    <div class="label-container">
+      <label for="year-selector" class="label">Year</label>
     </div>
-    <div class="col col-6 col-sm-2">
+    <div class="selector-container">
       <select class="form-control" id="year-selector">
         {% if include_upcoming %}
           <option value="upcoming">Upcoming</option>
