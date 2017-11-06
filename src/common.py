@@ -47,8 +47,9 @@ class Common(object):
   def regions(self):
     return [r for r in Region.query().order(Region.name).iter()]
 
-  def events(self):
-    return [e for e in Event.query().order(Event.rank).iter()]
+  def events(self, include_obsolete):
+    return [e for e in Event.query().order(Event.rank).iter()
+            if include_obsolete or e.key.id() not in ['333mbo', 'magic', 'mmagic']]
 
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
