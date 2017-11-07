@@ -1,18 +1,21 @@
-.event_selector {
+#event-selector {
   padding: 10px 0px;
-}
-.event_selector::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-.event_selector_icon {
-  width: 35px;
-  height: 35px;
-  padding: 5px;
-  float: left;
-  opacity: 0.2;
-}
-.event_selector_icon_selected {
-  opacity: 1;
+
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .event-selector-icon {
+    width: 35px;
+    height: 35px;
+    padding: 5px;
+    float: left;
+    opacity: 0.2;
+
+    &.selected {
+      opacity: 1;
+    }
+  }
 }

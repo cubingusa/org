@@ -1,0 +1,16 @@
+{% macro region_selector(c) %}
+  <div id="region-selector" class="row">
+    {% for region in c.regions() %}
+      <div class="region-selector-col">
+        <a class="region-selector-link"
+           id="region-selector-link-{{ region.key.id() }}"
+           data-regionid="{{ region.key.id() }}">
+            <span class="region-selector-item {{ region.CssClass() }}">
+              {{ region.name }}
+            </span>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  <script src="/static/js/region_selector.js" type="application/javascript"></script>
+{% endmacro %}
