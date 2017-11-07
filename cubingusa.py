@@ -22,7 +22,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
   webapp2.Route('/edit', handler=EditUserHandler, name='edit_user'),
   webapp2.Route('/edit/<user_id:\d+>', handler=EditUserHandler, name='edit_user_by_id'),
-  webapp2.Route('/competitions/us', handler=BasicHandler('competitions_us.html'), name='competitions_us'),
+  webapp2.Route('/competitions/us', handler=BasicHandler('index.html'), name='competitions_us'),
   webapp2.Route('/nationals', handler=BasicHandler('nationals.html'), name='competitions_nationals'),
   webapp2.Route('/regional', handler=BasicHandler('index.html'), name='competitions_regional'),
   webapp2.Route('/organizers', handler=BasicHandler('index.html'), name='organizers'),
