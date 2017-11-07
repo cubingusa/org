@@ -1,0 +1,82 @@
+@import "base";
+
+.user-container {
+  @extend .card;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+  .user {
+    @include make-row();
+  
+    .person-name {
+      @include make-col-ready();
+      padding-left: 30px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      @include media-breakpoint-up(sm) {
+        @include make-col(3);
+      }
+      @include media-breakpoint-down(xs) {
+        @include make-col(5);
+      }
+    }
+  
+    .person-id {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      @include make-col-ready();
+      @include media-breakpoint-up(sm) {
+        @include make-col(2);
+      }
+      @include media-breakpoint-down(xs) {
+        @include make-col(5);
+      }
+    }
+    
+  
+    .state-container {
+      @include make-col-ready();
+      @include media-breakpoint-up(sm) {
+        @include make-col(1);
+      }
+      @include media-breakpoint-down(xs) {
+        @include make-col(2);
+      }
+  
+      .state {
+        @extend .card;
+  
+        text-align: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        height: 100%;
+  
+        @each $region, $color in $region-colors {
+          &.region-#{$region} {
+            background-color: $color;
+            color: color-yiq($color);
+          }
+        }
+      }
+    }
+  
+    .city {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      @include media-breakpoint-up(sm) {
+        @include make-col-ready();
+        @include make-col(6);
+      }
+      @include media-breakpoint-down(xs) {
+        display: none;
+      }
+    }
+  
+  }
+  &.user-visible:nth-of-type(n+50) {
+    display: none;
+  }
+  &.user-visible:nth-of-type(even) {
+    background-color: #dddddd;
+  }
+}

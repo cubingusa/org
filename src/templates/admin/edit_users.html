@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title%}Edit Users{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/admin_edit_users.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <div class="user-table">
+    {% for user in users %}
+      <div class="user-container user-visible"
+           id="user_{{ user.key.id() }}"
+           data-name="{{ user.name }}"
+           data-wcaid="{{ user.wca_person.id() }}"
+           data-userid="{{ user.key.id() }}"
+           data-needslatlng="{{ 1 if user.latitude != 0 and user.city and user.state else 0 }}"
+           data-city="{{ user.city if user.city else '' }}"
+           data-state="{{ user.state.id() if user.state else '' }}">
+        <div class="user">
+          <div class="person-name">
+            <a href="{{ c.uri_for('edit_user_by_id', user_id=user.key.id()) }}">
+              {{ user.name }} [edit]
+            </a>
+          </div>
+          <div class="person-id">
+            {% if user.wca_person %}
+              <a href="{{ user.wca_person.get().GetWCALink() }}" target="_blank">
+                {{ user.wca_person.id() }}
+              </a>
+            {% endif %}
+          </div>
+          <div class="city">
+            {% if user.city %}
+              {{ user.city }} (<span class="lat">{{ user.latitude if user.latitude else 'n/a' }}</span>,
+                               <span class="lng">{{ user.longitude if user.longitude else 'n/a' }}</span>)
+            {% endif %}
+          </div>
+          <div class="state-container">
+            {% if user.state %}
+              <div class="state {{ user.state.get().region.get().CssClass() }}">
+                {{ user.state.id().upper() }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
