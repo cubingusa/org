@@ -13,6 +13,8 @@ class SetAppSettingsHandler(BaseHandler):
       app_settings.wca_oauth_client_id = value
     elif setting == 'wca_oauth_client_secret':
       app_settings.wca_oauth_client_secret = value
+    elif setting == 'google_maps_api_key':
+      app_settings.google_maps_api_key = value
     else:
       self.response.write('error: unrecognized setting %s' % setting)
       self.response.set_status(400)
