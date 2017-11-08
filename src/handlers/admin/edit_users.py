@@ -8,7 +8,7 @@ from src.models.user import User
 
 class EditUsersHandler(AdminBaseHandler):
   def get(self):
-    all_users = User.query().order(User.name).fetch() * 2
+    all_users = User.query().order(User.name).fetch()
     template = JINJA_ENVIRONMENT.get_template('admin/edit_users.html')
     self.response.write(template.render({
         'c': common.Common(self),

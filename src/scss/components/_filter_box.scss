@@ -1,0 +1,27 @@
+.filter-box-row {
+  @include make-row();
+
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  .filter-label-container {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(1);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(3);
+    }
+    @extend .col-form-label;
+  }
+
+  .filter-box-container {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(5);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(9);
+    }
+  }
+}

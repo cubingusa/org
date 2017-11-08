@@ -1,15 +1,17 @@
+{% import "components/filter_box.html" as filter_box %}
 {% extends "base.html" %}
 {% block title%}Edit Users{% endblock %}
 {% block style %}
   <link rel="stylesheet" href="/static/css/admin_edit_users.css" type="text/css">
 {% endblock %}
 {% block content %}
-  <div class="user-table">
+  <h3>Edit Users</h3>
+  {{ filter_box.filter_box(c) }}
+  <div class="user-table" id="filter-table">
     {% for user in users %}
-      <div class="user-container user-visible"
+      <div class="user-container user-visible filter-row"
            id="user_{{ user.key.id() }}"
-           data-name="{{ user.name }}"
-           data-wcaid="{{ user.wca_person.id() }}"
+           data-filtertext="{{ user.name }}|{{ user.wca_person.id() }}"
            data-userid="{{ user.key.id() }}"
            data-needslatlng="{{ 1 if user.latitude != 0 and user.city and user.state else 0 }}"
            data-city="{{ user.city if user.city else '' }}"

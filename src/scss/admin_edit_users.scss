@@ -1,4 +1,5 @@
 @import "base";
+@import "components/_filter_box";
 
 .user-container {
   @extend .card;
@@ -32,7 +33,6 @@
         @include make-col(5);
       }
     }
-    
   
     .state-container {
       @include make-col-ready();
@@ -73,7 +73,10 @@
     }
   
   }
-  &.user-visible:nth-of-type(n+50) {
+  &.user-visible:nth-of-type(n+30) {
+    display: none;
+  }
+  &.user-invisible {
     display: none;
   }
   &.user-visible:nth-of-type(even) {
