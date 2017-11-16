@@ -8,42 +8,5 @@
   <h3>Edit Users</h3>
   {{ filter_box.filter_box(c) }}
   <div class="user-table" id="filter-table">
-    {% for user in users %}
-      <div class="user-container user-visible filter-row"
-           id="user_{{ user.key.id() }}"
-           data-filtertext="{{ user.name }}|{{ user.wca_person.id() }}"
-           data-userid="{{ user.key.id() }}"
-           data-needslatlng="{{ 1 if user.latitude != 0 and user.city and user.state else 0 }}"
-           data-city="{{ user.city if user.city else '' }}"
-           data-state="{{ user.state.id() if user.state else '' }}">
-        <div class="user">
-          <div class="person-name">
-            <a href="{{ c.uri_for('edit_user_by_id', user_id=user.key.id()) }}">
-              {{ user.name }} [edit]
-            </a>
-          </div>
-          <div class="person-id">
-            {% if user.wca_person %}
-              <a href="{{ user.wca_person.get().GetWCALink() }}" target="_blank">
-                {{ user.wca_person.id() }}
-              </a>
-            {% endif %}
-          </div>
-          <div class="city">
-            {% if user.city %}
-              {{ user.city }} (<span class="lat">{{ user.latitude if user.latitude else 'n/a' }}</span>,
-                               <span class="lng">{{ user.longitude if user.longitude else 'n/a' }}</span>)
-            {% endif %}
-          </div>
-          <div class="state-container">
-            {% if user.state %}
-              <div class="state {{ user.state.get().region.get().CssClass() }}">
-                {{ user.state.id().upper() }}
-              </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+  <script src="/static/js/admin_edit_users.js" type="application/javascript"></script>
 {% endblock %}

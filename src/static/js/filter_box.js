@@ -1,41 +1,31 @@
 filterModule = (function() {
-  var currentFilterText = '';
+  var handler = '';
 
   return {
     changeListener: function(evt) {
-      newFilterText = this.value;
-      stricterFilter = newFilterText.search(newFilterText) != -1;
-      currentFilterText = newFilterText;
-
-      filterWords = currentFilterText.split(' ');
-
-      rowsToCheck = document.getElementById('filter-table').getElementsByClassName(
-          stricterFilter ? 'filter-row' : 'user-visible');
-
-      numMatches = 0;
-
-      Array.prototype.some.call(rowsToCheck, function(row) {
-        matches = true;
-        filterWords.forEach(function(word) {
-          if (row.dataset.filtertext.toLowerCase().search(word.toLowerCase()) == -1) {
-            matches = false;
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+          if (req.status == 200) {
+            document.getElementById('filter-table').innerHTML = req.responseText;
+          } else {
+            document.getElementById('filter-table').innerHTML = '';
           }
-        });
-        if (matches) {
-          row.classList.add('user-visible');
-          row.classList.remove('user-invisible');
-          numMatches++;
-          if (numMatches >= 30) {
-            return true;
-          }
-        } else {
-          row.classList.add('user-invisible');
-          row.classList.remove('user-visible');
         }
-        return false;
-      });
+      };
+
+      var uri = handler + '/' + encodeURIComponent(document.getElementById('filter-box').value);
+      req.open('GET', uri);
+      req.send();
+    },
+
+    setAsyncHandler: function(newHandler) {
+      handler = newHandler;
     },
   };
 })();
 
-document.getElementById('filter-box').addEventListener('keyup', filterModule.changeListener);
+document.getElementById('filter-box').addEventListener('change', filterModule.changeListener);
+onloadModule.register(function() {
+  filterModule.changeListener(null);
+});
