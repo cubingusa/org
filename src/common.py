@@ -4,6 +4,7 @@ import webapp2
 from src import formatters
 from src.models.region import Region
 from src.models.state import State
+from src.models.user import Roles
 from src.models.wca.event import Event
 
 class Common(object):
@@ -61,20 +62,24 @@ class Common(object):
     return type(h) is str
 
   def get_nav_items(self):
-    return [('Home', 'home'),
-            ('Competitions', [
-                ('US Competitions', 'competitions_us'),
-                ('Nationals', 'competitions_nationals'),
-                ('Regional Championships', 'competitions_regional'),
-            ]),
-            ('Organizers', 'organizers'),
-            ('About', [
-                ('About CubingUSA', 'about'),
-                ('Who we are', 'about_who'),
-                ('Donations', 'about_donations'),
-                ('Public Documents', 'documents'),
-            ]),
-           ]
+    items = [('Home', 'home'),
+             ('Competitions', [
+                 ('US Competitions', 'competitions_us'),
+                 ('Nationals', 'competitions_nationals'),
+                 ('Regional Championships', 'competitions_regional'),
+             ]),
+             ('Organizers', 'organizers'),
+             ('About', [
+                 ('About CubingUSA', 'about'),
+                 ('Who we are', 'about_who'),
+                 ('Donations', 'about_donations'),
+                 ('Public Documents', 'documents'),
+             ]),
+            ]
+    if self.user and self.user.HasAnyRole(Roles.AdminRoles()):
+      admin_list = [('Edit Users', 'admin_edit_users')]
+      items.append(('Admin', admin_list))
+    return items
 
   def get_right_nav_items(self):
     if self.user:

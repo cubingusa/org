@@ -15,6 +15,7 @@ from src.handlers.edit_user import EditUserHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
 from src.handlers.login import LogoutHandler
+from src.models.user import Roles
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/', handler=BasicHandler('index.html'), name='home'),
@@ -39,11 +40,15 @@ app = webapp2.WSGIApplication([
                 handler=ChampionsByYearHandler),
   webapp2.Route('/async/competitions_us/<year:.*>', handler=USCompetitionsHandler),
   # Admin
-  webapp2.Route('/admin/edit_users', handler=EditUsersHandler),
+  webapp2.Route('/admin/edit_users',
+                handler=BasicHandler('admin/edit_users.html',
+                                     permitted_roles=Roles.AllRoles()),
+                name='admin_edit_users'),
   webapp2.Route('/admin/upload_document', handler=UploadDocumentHandler,
                 name='upload_document'),
   webapp2.Route('/admin/delete_document/<document_id:.*>', handler=DeleteDocumentHandler,
                 name='delete_document'),
   webapp2.Route('/admin/restore_document/<document_id:.*>', handler=RestoreDocumentHandler,
                 name='restore_document'),
+  webapp2.Route('/admin/async/get_users/<filter_text:.*>', handler=EditUsersHandler),
 ], config=config.GetAppConfig())
