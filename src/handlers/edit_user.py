@@ -58,9 +58,13 @@ class EditUserHandler(BaseHandler):
     if 'city' in self.request.POST and 'state' in self.request.POST:
       city = self.request.POST['city']
       state_id = self.request.POST['state']
+      lat = int(self.request.POST['lat'])
+      lng = int(self.request.POST['lng'])
     else:
       city = user.city
       state_id = user.state.id()
+      lat = user.latitude
+      lng = user.longitude
     template_dict = {}
     changed_location = user.city != city or user.state.id() != state_id
     user_modified = False
@@ -70,6 +74,8 @@ class EditUserHandler(BaseHandler):
         user.state = ndb.Key(State, state_id)
       else:
         del user.state
+      user.latitude = lat
+      user.longitude = lng
       user_modified = True
 
       if changed_location:

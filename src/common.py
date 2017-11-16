@@ -2,6 +2,7 @@ import datetime
 import webapp2
 
 from src import formatters
+from src.models.app_settings import AppSettings
 from src.models.region import Region
 from src.models.state import State
 from src.models.user import Roles
@@ -87,3 +88,6 @@ class Common(object):
               ('Log out', 'logout')]
     else:
       return [('Log in with WCA', 'login')]
+
+  def maps_api_key(self):
+    return AppSettings.Get().google_maps_api_key

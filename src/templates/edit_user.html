@@ -14,7 +14,7 @@
       <strong>Failed to edit!</strong>  Note that you're only allowed to update your location once per year.
     </div>
   {% endif %}
-  <form action="{{ c.uri }}" method="POST">
+  <form action="{{ c.uri }}" id="form" method="POST">
     <h3>Edit {{ user.name }}</h3>
     <div class="form-group">
       <label for="wcaid">WCA ID</label>
@@ -74,6 +74,8 @@
         </div>
       </div>
     </fieldset>
+    <input type="hidden" name="lat" id="lat" value="">
+    <input type="hidden" name="lng" id="lng" value="">
     {% if can_view_roles %}
       <div class="form-group">
         <div>
@@ -99,7 +101,9 @@
         </div>
       </div>
     {% endif %}
-    <button class="button" type="submit">Submit</button>
+    <button class="button" type="submit" name="btnSubmit">Submit</button>
   </form>
+  <script src="https://maps.googleapis.com/maps/api/js?key={{ c.maps_api_key() }}"></script>
+  <script src="/static/js/geocoding.js" type="application/javascript"></script>
   <script src="/static/js/edit_user.js" type="application/javascript"></script>
 {% endblock %}
