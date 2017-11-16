@@ -38,7 +38,7 @@
                  type="text"
                  id="city"
                  name="city"
-                 value="{{ user.city }}"
+                 value="{{ user.city if user.city else '' }}"
                  aria-describedby="city-help">
         </div>
         <div class="standard-block">
