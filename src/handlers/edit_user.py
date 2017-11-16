@@ -55,7 +55,7 @@ class EditUserHandler(BaseHandler):
     if user is None:
       self.return_error('Unrecognized user ID %d provided.' % user_id)
       return
-    if 'city' in self.request.POST and 'state_id' in self.request.POST:
+    if 'city' in self.request.POST and 'state' in self.request.POST:
       city = self.request.POST['city']
       state_id = self.request.POST['state']
     else:
