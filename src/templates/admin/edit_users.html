@@ -1,0 +1,12 @@
+{% import "components/filter_box.html" as filter_box %}
+{% extends "base.html" %}
+{% block title%}Edit Users{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/admin_edit_users.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <h3>Edit Users</h3>
+  {{ filter_box.filter_box(c) }}
+  <div class="user-table" id="filter-table">
+  <script src="/static/js/admin_edit_users.js" type="application/javascript"></script>
+{% endblock %}

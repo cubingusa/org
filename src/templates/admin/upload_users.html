@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload Users</title>
+</head>
+<body>
+  <h3>Upload Users</h3>
+  <form action="{{ c.uri_for('upload_users') }}" method="POST" enctype="multipart/form-data">
+    <div>
+      <input type="file" name="file">
+    </div>
+    <div>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</body>
+</html>

@@ -62,10 +62,10 @@ class LoginCallbackHandler(BaseHandler):
 
     # Save the account information we need.
     wca_info = json.loads(response.read())['me']
-    self.session['wca_account_number'] = wca_info['id']
+    self.session['wca_account_number'] = str(wca_info['id'])
     self.session['login_time'] = (
         datetime.datetime.now() - datetime.datetime.utcfromtimestamp(0)).total_seconds()
-    user = User.get_by_id(wca_info['id']) or User(id=wca_info['id'])
+    user = User.get_by_id(str(wca_info['id'])) or User(id=str(wca_info['id']))
     if 'wca_id' in wca_info:
       user.wca_person = ndb.Key(Person, wca_info['wca_id'])
     else:
@@ -89,6 +89,20 @@ class LoginCallbackHandler(BaseHandler):
         user.roles.append(Roles.DELEGATE)
       elif wca_info['delegate_status'] == 'candidate_delegate':
         user.roles.append(Roles.CANDIDATE_DELEGATE)
+
+    wca_id_user = User.get_by_id(wca_info['wca_id'])
+    if wca_id_user:
+      if wca_id_user.city and not user.city:
+        user.city = wca_id_user.city
+      if wca_id_user.state and not user.state:
+        user.state = wca_id_user.state
+      if wca_id_user.latitude and not user.latitude:
+        user.latitude = wca_id_user.latitude
+      if wca_id_user.longitude and not user.longitude:
+        user.longitude = wca_id_user.longitude
+      wca_id_user.key.delete()
+
+    user.last_login = datetime.datetime.now()
 
     user.put()
     self.redirect(str(self.request.get('state')))

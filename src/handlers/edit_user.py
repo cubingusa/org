@@ -36,10 +36,9 @@ class EditUserHandler(BaseHandler):
     }
 
   def get(self, user_id=-1):
-    user_id = int(user_id)
     user = self.get_user(user_id)
     if user is None:
-      self.return_error('Unrecognized user ID %d provided.' % user_id)
+      self.return_error('Unrecognized user ID %s provided.' % user_id)
       return
 
     if not auth.CanViewUser(user=user, viewer=self.user):
@@ -50,19 +49,27 @@ class EditUserHandler(BaseHandler):
     self.response.write(template.render(self.TemplateDict(user)))
 
   def post(self, user_id=-1):
-    user_id = int(user_id)
+    # Users with a WCA account linked have integer IDs.
+    # Users without a WCA account linked have string IDs (their WCA ID).
     user = self.get_user(user_id)
     if user is None:
-      self.return_error('Unrecognized user ID %d provided.' % user_id)
+      self.return_error('Unrecognized user ID %s provided.' % user_id)
       return
-    if 'city' in self.request.POST and 'state_id' in self.request.POST:
-      city = self.request.POST['city']
-      state_id = self.request.POST['state']
+    city = self.request.POST['city']
+    state_id = self.request.POST['state']
+    if state_id == 'empty':
+      state_id = ''
+
+    if self.request.POST['lat'] and self.request.POST['lng']:
+      lat = int(self.request.POST['lat'])
+      lng = int(self.request.POST['lng'])
     else:
-      city = user.city
-      state_id = user.state.id()
+      lat = 0
+      lng = 0
     template_dict = {}
-    changed_location = user.city != city or user.state.id() != state_id
+
+    old_state_id = user.state.id() if user.state else ''
+    changed_location = user.city != city or old_state_id != state_id
     user_modified = False
     if auth.CanEditLocation(user=user, editor=self.user) and changed_location:
       user.city = city
@@ -70,6 +77,8 @@ class EditUserHandler(BaseHandler):
         user.state = ndb.Key(State, state_id)
       else:
         del user.state
+      user.latitude = lat
+      user.longitude = lng
       user_modified = True
 
       if changed_location:
