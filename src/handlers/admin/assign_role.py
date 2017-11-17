@@ -7,9 +7,9 @@ from src.models.user import User
 # assigned.
 class AssignRoleHandler(BaseHandler):
   def get(self, user_id, role):
-    user = User.get_by_id(int(user_id))
+    user = User.get_by_id(user_id)
     if not user:
-      self.response.write('error: unrecognized user %d' % user_id)
+      self.response.write('error: unrecognized user %s' % user_id)
       self.response.set_status(400)
       return
     if role not in Roles.AllRoles():
