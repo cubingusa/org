@@ -55,18 +55,21 @@ class EditUserHandler(BaseHandler):
     if user is None:
       self.return_error('Unrecognized user ID %s provided.' % user_id)
       return
-    if 'city' in self.request.POST and 'state' in self.request.POST:
-      city = self.request.POST['city']
-      state_id = self.request.POST['state']
+    city = self.request.POST['city']
+    state_id = self.request.POST['state']
+    if state_id == 'empty':
+      state_id = ''
+
+    if self.request.POST['lat'] and self.request.POST['lng']:
       lat = int(self.request.POST['lat'])
       lng = int(self.request.POST['lng'])
     else:
-      city = user.city
-      state_id = user.state.id()
-      lat = user.latitude
-      lng = user.longitude
+      lat = 0
+      lng = 0
     template_dict = {}
-    changed_location = user.city != city or user.state.id() != state_id
+
+    old_state_id = user.state.id() if user.state else ''
+    changed_location = user.city != city or old_state_id != state_id
     user_modified = False
     if auth.CanEditLocation(user=user, editor=self.user) and changed_location:
       user.city = city
