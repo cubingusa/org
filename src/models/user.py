@@ -76,7 +76,7 @@ class User(ndb.Model):
     User.GetSearchIndex().put(document)
 
   def DeleteUser(self):
-    GetSearchIndex().delete(str(self.key.id()))
+    User.GetSearchIndex().delete(str(self.key.id()))
     self.key.delete()
  
 
