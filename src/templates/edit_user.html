@@ -47,7 +47,9 @@
                   id="state"
                   name="state"
                   aria-describedby="city-help">
-            <option value="empty"></option>
+            <option value="empty"
+                    data-regionid=""
+                    data-regionname=""></option>
             {% for state in c.all_states() %}
               <option value="{{ state.key.id() }}"
                       data-regionid="{{ state.region.id() }}"
