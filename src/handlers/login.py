@@ -62,10 +62,10 @@ class LoginCallbackHandler(BaseHandler):
 
     # Save the account information we need.
     wca_info = json.loads(response.read())['me']
-    self.session['wca_account_number'] = wca_info['id']
+    self.session['wca_account_number'] = str(wca_info['id'])
     self.session['login_time'] = (
         datetime.datetime.now() - datetime.datetime.utcfromtimestamp(0)).total_seconds()
-    user = User.get_by_id(wca_info['id']) or User(id=wca_info['id'])
+    user = User.get_by_id(str(wca_info['id'])) or User(id=str(wca_info['id']))
     if 'wca_id' in wca_info:
       user.wca_person = ndb.Key(Person, wca_info['wca_id'])
     else:
