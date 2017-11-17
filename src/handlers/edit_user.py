@@ -36,10 +36,13 @@ class EditUserHandler(BaseHandler):
     }
 
   def get(self, user_id=-1):
-    user_id = int(user_id)
+    try:
+      user_id = int(user_id)
+    except ValueError:
+      pass
     user = self.get_user(user_id)
     if user is None:
-      self.return_error('Unrecognized user ID %d provided.' % user_id)
+      self.return_error('Unrecognized user ID %s provided.' % str(user_id))
       return
 
     if not auth.CanViewUser(user=user, viewer=self.user):
@@ -50,10 +53,15 @@ class EditUserHandler(BaseHandler):
     self.response.write(template.render(self.TemplateDict(user)))
 
   def post(self, user_id=-1):
-    user_id = int(user_id)
+    # Users with a WCA account linked have integer IDs.
+    # Users without a WCA account linked have string IDs (their WCA ID).
+    try:
+      user_id = int(user_id)
+    except ValueError:
+      pass
     user = self.get_user(user_id)
     if user is None:
-      self.return_error('Unrecognized user ID %d provided.' % user_id)
+      self.return_error('Unrecognized user ID %s provided.' % str(user_id))
       return
     if 'city' in self.request.POST and 'state' in self.request.POST:
       city = self.request.POST['city']
