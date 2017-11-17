@@ -90,6 +90,18 @@ class LoginCallbackHandler(BaseHandler):
       elif wca_info['delegate_status'] == 'candidate_delegate':
         user.roles.append(Roles.CANDIDATE_DELEGATE)
 
+    wca_id_user = User.get_by_id(wca_info['wca_id'])
+    if wca_id_user:
+      if wca_id_user.city and not user.city:
+        user.city = wca_id_user.city
+      if wca_id_user.state and not user.state:
+        user.state = wca_id_user.state
+      if wca_id_user.latitude and not user.latitude:
+        user.latitude = wca_id_user.latitude
+      if wca_id_user.longitude and not user.longitude:
+        user.longitude = wca_id_user.longitude
+      wca_id_user.key.delete()
+
     user.put()
     self.redirect(str(self.request.get('state')))
 
