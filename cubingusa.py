@@ -28,6 +28,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/nationals', handler=BasicHandler('nationals.html'), name='competitions_nationals'),
   webapp2.Route('/regional', handler=BasicHandler('index.html'), name='competitions_regional'),
   webapp2.Route('/organizers', handler=BasicHandler('index.html'), name='organizers'),
+  webapp2.Route('/state_rankings', handler=BasicHandler('index.html'), name='state_rankings'),
+  webapp2.Route('/tutorial', handler=BasicHandler('index.html'), name='tutorial'),
   webapp2.Route('/about', handler=BasicHandler('about.html'), name='about'),
   webapp2.Route('/about/who', handler=BasicHandler('about_who.html'), name='about_who'),
   webapp2.Route('/about/donations', handler=BasicHandler('donations.html'), name='about_donations'),
