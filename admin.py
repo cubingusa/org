@@ -13,6 +13,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/post_import_mutations', handler=PostImportMutationsHandler),
   webapp2.Route('/update_championships', handler=UpdateChampionshipsHandler),
   webapp2.Route('/update_states', handler=UpdateStatesHandler),
+  webapp2.Route('/upload_users', handler=UploadUsersHandler, name='upload_users'),
   webapp2.Route('/wca/get_export', handler=GetExportHandler),
   webapp2.Route('/assign_role/<user_id:\d+>/<role:.*>', handler=AssignRoleHandler),
   webapp2.Route('/set_app_settings/<setting:.*>/<value:.*>', handler=SetAppSettingsHandler),
