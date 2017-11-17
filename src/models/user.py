@@ -37,6 +37,8 @@ class User(ndb.Model):
   latitude = ndb.IntegerProperty()
   longitude = ndb.IntegerProperty()
 
+  last_login = ndb.DateTimeProperty()
+
   def HasAnyRole(self, roles):
     for role in self.roles:
       if role in roles:

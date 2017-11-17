@@ -102,6 +102,8 @@ class LoginCallbackHandler(BaseHandler):
         user.longitude = wca_id_user.longitude
       wca_id_user.key.delete()
 
+    user.last_login = datetime.datetime.now()
+
     user.put()
     self.redirect(str(self.request.get('state')))
 
