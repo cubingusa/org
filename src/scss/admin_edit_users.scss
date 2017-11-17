@@ -73,12 +73,6 @@
     }
   
   }
-  &.user-visible:nth-of-type(n+30) {
-    display: none;
-  }
-  &.user-invisible {
-    display: none;
-  }
   &.user-visible:nth-of-type(even) {
     background-color: #dddddd;
   }
