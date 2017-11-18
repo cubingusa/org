@@ -32,11 +32,11 @@ def old_fname(table, shard):
 def process_file(table, object_type, shard, total_shards, queue, export_id):
   print 'Processing table %s shard %d/%d' % (table, shard, total_shards)
   filename = fname(table, shard)
+  row_filter = object_type.Filter()
 
   with gcs.open(filename, 'r') as gcs_file:
     reader = csv.DictReader(gcs_file, delimiter='\t')
     id_to_dict = collections.defaultdict(dict)
-    row_filter = object_type.Filter()
     for row in reader:
       if not row_filter(row):
         continue
@@ -50,12 +50,10 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
 
     try:
       # Check for rows that have not changed, so we don't need to rewrite them.
-      with gcs.open(old_fname(table, shard), 'r') as old_file:
+      with gcs.open(old_fname(table, shard) + 'doesntexist', 'r') as old_file:
         columns_to_diff = object_type.ColumnsUsed()
         old_reader = csv.DictReader(old_file, delimiter='\t')
         for old_row in old_reader:
-          if not row_filter(old_row):
-            continue
           row_id = object_type.GetId(old_row)
           if row_id in id_to_dict:
             new_row = id_to_dict[row_id]
@@ -111,7 +109,18 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
     print 'Finished write'
 
   # We're done with this shard, make it the new finished table.
-  gcs.copy2(fname(table, shard), old_fname(table, shard))
+  # But, we can't just copy the file, we need to filter out rows that we didn't consider.
+  with gcs.open(filename, 'r') as gcs_file:
+    reader = csv.DictReader(gcs_file, delimiter='\t')
+    fields_to_write = object_type.ColumnsUsed()
+    if 'id' in reader.fieldnames:
+      fields_to_write.append('id')
+    with gcs.open(old_fname(table, shard), 'w') as old_file:
+      writer = csv.DictWriter(old_file, delimiter='\t', fieldnames=fields_to_write)
+      writer.writeheader()
+      for row in reader:
+        if row_filter(row):
+          writer.writerow({k: v for k, v in row.iteritems() if k in fields_to_write})
 
   if shard + 1 < total_shards:
     deferred.defer(process_file, table, object_type, shard + 1, total_shards, queue, export_id)
