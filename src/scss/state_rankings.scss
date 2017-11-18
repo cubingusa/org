@@ -1,0 +1,46 @@
+@import "base";
+@import "components/event_selector";
+
+.ranking-row-container {
+  @extend .card;
+  margin-top: 2px;
+  margin-bottom: 2px;
+
+  .row {
+    padding: 5px;
+  }
+
+  .rank-col {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(1);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(2);
+    }
+  }
+
+  .person-col {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(6);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(7);
+    }
+  }
+
+  .time-col {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(5);
+    }
+    @include media-breakpoint-down(xs) {
+      @include make-col(3);
+    }
+  }
+
+  &:nth-of-type(even) {
+    background-color: #eeeeee;
+  }
+}

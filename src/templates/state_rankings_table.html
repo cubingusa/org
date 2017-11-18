@@ -1,0 +1,29 @@
+{% autoescape true %}
+{% macro ranking_row(ranking, rank) %}
+  <div class="ranking-row-container">
+    <div class="row">
+      <div class="rank-col">
+        {{ rank }}
+      </div>
+      <div class="person-col">
+        <a href="{{ ranking.person.get().GetWCALink() }}" target="_blank">
+          {{ ranking.person.get().name }}
+        </a>
+      </div>
+      <div class="time-col">
+        {{ c.formatters.FormatTime(ranking.best, ranking.event, is_average) }}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% set last_time = 0 %}
+{% set rank = 0 %}
+{% for ranking in rankings %}
+  {% if ranking.best != last_time %}
+    {% set rank = loop.index %}
+    {% set last_time = ranking.best %}
+  {% endif %}
+  {{ ranking_row(ranking, rank) }}
+{% endfor %}
+{% endautoescape %}

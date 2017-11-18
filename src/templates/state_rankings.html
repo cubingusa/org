@@ -1,0 +1,12 @@
+{% import "components/event_selector.html" as event_selector %}
+{% extends "base.html" %}
+{% block title%}State Rankings{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/state_rankings.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <h3 id="header">State Rankings</h3>
+  {{ event_selector.event_selector(c) }}
+  <div id="state-rankings-table"></div>
+  <script src="/static/js/state_rankings.js" type="application/javascript"></script>
+{% endblock %}

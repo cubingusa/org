@@ -21,6 +21,12 @@ indexes:
   - name: end_date
     direction: desc
 
+- kind: RankAverage
+  properties:
+  - name: event
+  - name: state
+  - name: worldRank
+
 - kind: Result
   properties:
   - name: competition
