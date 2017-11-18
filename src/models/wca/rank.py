@@ -32,7 +32,8 @@ class RankBase(BaseModel):
   @staticmethod
   def Filter():
     # Only include rankings for people with a state.
-    person_ids = set([user.wca_person.id() for user in User.query() if user.state])
+    person_ids = set([user.wca_person.id() for user in User.query()
+                      if user.state and user.wca_person])
 
     def filter_row(row):
       return row['personId'] in person_ids
