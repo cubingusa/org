@@ -23,6 +23,8 @@
     @include make-col(12);
     margin-left: 0px;
   }
+  padding-top: 5px;
+  padding-bottom: 5px;
 
   .single-average-button {
     @extend .btn;
