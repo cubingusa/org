@@ -27,6 +27,12 @@ indexes:
   - name: state
   - name: worldRank
 
+- kind: RankSingle
+  properties:
+  - name: event
+  - name: state
+  - name: worldRank
+
 - kind: Result
   properties:
   - name: competition
