@@ -8,6 +8,7 @@ from src.handlers.admin.update_championships import UpdateChampionshipsHandler
 from src.handlers.admin.update_states import UpdateStatesHandler
 from src.handlers.admin.upload_users import UploadUsersHandler
 from src.handlers.admin.get_wca_export import GetExportHandler
+from src.handlers.admin.app_settings import AppSettingsHandler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/post_import_mutations', handler=PostImportMutationsHandler),
@@ -17,4 +18,5 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/wca/get_export', handler=GetExportHandler),
   webapp2.Route('/assign_role/<user_id:\d+>/<role:.*>', handler=AssignRoleHandler),
   webapp2.Route('/set_app_settings/<setting:.*>/<value:.*>', handler=SetAppSettingsHandler),
+  webapp2.Route('/app_settings', handler=AppSettingsHandler, name='app_settings'),
 ], config=config.GetAppConfig())

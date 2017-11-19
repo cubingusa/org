@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>App Settings</title>
+</head>
+<body>
+  <h2>App Settings</h2>
+  <p>
+    <b>Please don't change these in prod if you don't know what you're doing.</b>  Many of these settings will break things if set incorrectly or changed.</b>
+  <form action="{{ c.uri_for('app_settings') }}" method="POST">
+    <h3>Session Secret Key</h3>
+    <p>
+      <input type="text" name="session_secret_key" value="{{ settings.session_secret_key }}">
+      <div>(Required) This should be an arbitrary (random) string.  It's used to configure login cookies.  Changing this will log out every user, so don't change this once set unless you have a good reason.</div>
+    </p>
+    <h3>WCA OAuth</h3>
+    <p>
+      <div>
+        WCA OAuth Client ID:
+        <input type="text" name="wca_oauth_client_id" value="{{ settings.wca_oauth_client_id }}">
+      </div>
+      <div>
+        WCA OAuth Client Secret:
+        <input type="text" name="wca_oauth_client_secret" value="{{ settings.wca_oauth_client_secret }}">
+      </div>
+    </p>
+    <p>
+      (Required) For dev apps, you should create an OAuth application <a href="https://www.worldcubeassociation.org/oauth/applications">here</a>.  You can set the callback URL to:
+      <pre>
+urn:ietf:wg:oauth:2.0:oob
+http://localhost:8080/login_callback
+      </pre>
+      The prod keys are currently held by Tim Reynolds at <a href="https://www.worldcubeassociation.org/oauth/applications/122/edit">this link</a>.
+    </p>
+    <h3>Google Maps API key</h3>
+    <p>
+      <input type="text" name="google_maps_api_key" value="{{ settings.google_maps_api_key }}">
+      <div>(Optional) If this is not provided, then maps will not be shown and user locations will not be validated.  You can follow the instructions <a href="https://developers.google.com/maps/documentation/javascript/geocoding">here</a> to get an API key.</div>
+    </p>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
