@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
   <h3 id="header">State Rankings</h3>
-  {{ event_selector.event_selector(c) }}
+  {{ event_selector.event_selector(c, include_obsolete=False) }}
   <div id="state-rankings-table"></div>
   <script src="/static/js/state_rankings.js" type="application/javascript"></script>
 {% endblock %}
