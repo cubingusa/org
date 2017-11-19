@@ -69,6 +69,10 @@ class Common(object):
                  ('Nationals', 'competitions_nationals'),
                  ('Regional Championships', 'competitions_regional'),
              ]),
+             ('Competitors', [
+                 ('State Rankings', 'state_rankings'),
+                 ('Competitor Tutorial', 'tutorial'),
+             ]),
              ('Organizers', 'organizers'),
              ('About', [
                  ('About CubingUSA', 'about'),

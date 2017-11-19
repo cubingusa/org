@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+from src.models.state import State
 from src.models.user import User
 from src.models.wca.base import BaseModel
 from src.models.wca.event import Event
@@ -9,6 +10,7 @@ class RankBase(BaseModel):
   person = ndb.KeyProperty(kind=Person)
   event = ndb.KeyProperty(kind=Event)
   best = ndb.IntegerProperty()
+  state = ndb.KeyProperty(kind=State)
 
   worldRank = ndb.IntegerProperty()
   continentRank = ndb.IntegerProperty()
@@ -30,7 +32,8 @@ class RankBase(BaseModel):
   @staticmethod
   def Filter():
     # Only include rankings for people with a state.
-    person_ids = set([user.wca_person.id() for user in User.query() if user.state])
+    person_ids = set([user.wca_person.id() for user in User.query()
+                      if user.state and user.wca_person])
 
     def filter_row(row):
       return row['personId'] in person_ids

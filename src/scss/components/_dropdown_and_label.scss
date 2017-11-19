@@ -1,0 +1,27 @@
+.label-container {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col(1);
+    min-width: 50px;
+  }
+  @include media-breakpoint-down(xs) {
+    @include make-col(2);
+  }
+
+  .label {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }  
+}
+
+.selector-container {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col(2);
+    min-width: 240px;
+  }
+  @include media-breakpoint-down(xs) {
+    @include make-col(6);
+  }
+}
