@@ -1,7 +1,7 @@
 {% autoescape true %}
   <div class="user-table" id="filter-table">
     {% for user in users %}
-      <div class="user-container user-visible filter-row"
+      <div class="user-container filter-row"
            id="user_{{ user.key.id() }}"
            data-userid="{{ user.key.id() }}"
            data-needslatlng="{{ 1 if user.latitude != 0 and user.city and user.state else 0 }}"

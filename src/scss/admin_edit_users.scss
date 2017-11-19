@@ -73,7 +73,7 @@
     }
   
   }
-  &.user-visible:nth-of-type(even) {
+  &:nth-of-type(even) {
     background-color: #dddddd;
   }
 }
