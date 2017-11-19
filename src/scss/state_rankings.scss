@@ -2,6 +2,43 @@
 @import "components/event_selector";
 @import "components/state_selector";
 
+.state-selector-container {
+  @include make-col-ready();
+  margin-left: 0px;
+
+  @include media-breakpoint-up(sm) {
+    @include make-col(4);
+  }
+  @include media-breakpoint-down(xs) {
+    @include make-col(12);
+  }
+}
+
+.single-average-toggle {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col(4);
+  }
+  @include media-breakpoint-down(xs) {
+    @include make-col(12);
+    margin-left: 0px;
+  }
+
+  .single-average-button {
+    @extend .btn;
+    @extend .btn-primary;
+    background-color: white;
+    border-color: theme-color("primary");
+    color: theme-color("primary");
+
+    &.single-average-button-active {
+      background-color: theme-color("primary");
+      border-color: white;
+      color: white;
+    }
+  }
+}
+
 .ranking-row-container {
   @extend .card;
   margin-top: 2px;

@@ -8,7 +8,19 @@
 {% block content %}
   <h3 id="header">State Rankings</h3>
   {{ event_selector.event_selector(c, include_obsolete=False) }}
-  {{ state_selector.state_selector(c) }}
+  <div class="row">
+    <div class="state-selector-container">
+      {{ state_selector.state_selector(c) }}
+    </div>
+    <div class="single-average-toggle">
+      <div class="single-average-button" id="single">
+        Single
+      </div>
+      <div class="single-average-button" id="average">
+        Average
+      </div>
+    </div>
+  </div>
   <div id="state-rankings-table"></div>
   {% macro faq_item(header, id) %}
   <div class="card">

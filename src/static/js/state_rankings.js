@@ -5,16 +5,16 @@ var stateRankingsModule = (function() {
   var activeStateId = '';
   var activeStateName = '';
 
-  var activeAverage = 1;
+  var activeAverage = '';
 
   updateTable = function() {
-    if (!activeStateId || !activeEventId) {
+    if (!activeStateId || !activeEventId || activeAverage === '') {
       return;
     }
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
-      if (req.readyState == 4) {
-        if (req.status == 200) {
+      if (req.readyState === 4) {
+        if (req.status === 200) {
           document.getElementById('state-rankings-table').innerHTML = req.responseText;
           document.getElementById('header').innerHTML =
               activeStateName + ' ' + activeEventName + ' Rankings';
@@ -44,9 +44,33 @@ var stateRankingsModule = (function() {
       activeStateName = state_name;
       updateTable();
     },
+
+    setAverage: function(value) {
+      activeAverage = value;
+      if (activeAverage === '1') {
+        document.getElementById('average').classList.add('single-average-button-active');
+        document.getElementById('single').classList.remove('single-average-button-active');
+      } else {
+        document.getElementById('average').classList.remove('single-average-button-active');
+        document.getElementById('single').classList.add('single-average-button-active');
+      }
+      hashModule.setValue('a', value);
+      updateTable();
+    }
   };
 })();
 
 eventSelectorModule.setSelectListener(stateRankingsModule.setEvent);
 eventSelectorModule.setDefaultEvt('333');
 stateSelectorModule.setSelectListener(stateRankingsModule.setState);
+
+onloadModule.register(function() {
+  var averageFromHash = hashModule.getValue('a');
+  if (averageFromHash === '') {
+    averageFromHash = '1';
+  }
+  stateRankingsModule.setAverage(averageFromHash);
+
+  document.getElementById('average').onclick = function(evt) { stateRankingsModule.setAverage('1'); };
+  document.getElementById('single').onclick = function(evt) { stateRankingsModule.setAverage('0'); };
+});
