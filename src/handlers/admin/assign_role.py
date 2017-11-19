@@ -1,13 +1,17 @@
+from google.appengine.ext import ndb
+
 from src.handlers.base import BaseHandler
 from src.models.user import Roles
 from src.models.user import User
+from src.models.wca.person import Person
 
 # Note that this handler does NOT use AdminHandler.  For bootstrapping reasons,
 # we need to be able to assign roles without anyone already having roles
 # assigned.
 class AssignRoleHandler(BaseHandler):
   def get(self, user_id, role):
-    user = User.get_by_id(user_id)
+    user = (User.get_by_id(user_id) or
+            User.query(User.wca_person == ndb.Key(Person, user_id))).get()
     if not user:
       self.response.write('error: unrecognized user %s' % user_id)
       self.response.set_status(400)
