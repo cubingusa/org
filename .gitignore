@@ -3,4 +3,4 @@
 lib/*/
 .sass-cache/
 src/static/css/
-.local_sorage/
+.local_storage/
