@@ -50,7 +50,7 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
 
     try:
       # Check for rows that have not changed, so we don't need to rewrite them.
-      with gcs.open(old_fname(table, shard) + 'doesntexist', 'r') as old_file:
+      with gcs.open(old_fname(table, shard), 'r') as old_file:
         columns_to_diff = object_type.ColumnsUsed()
         old_reader = csv.DictReader(old_file, delimiter='\t')
         for old_row in old_reader:
