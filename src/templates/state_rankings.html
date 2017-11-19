@@ -10,5 +10,45 @@
   {{ event_selector.event_selector(c, include_obsolete=False) }}
   {{ state_selector.state_selector(c) }}
   <div id="state-rankings-table"></div>
+  {% macro faq_item(header, id) %}
+  <div class="card">
+    <div class="card-header" role="tab" id="heading_{{ id }}">
+      <a data-toggle="collapse"
+         href="#collapse_{{ id }}"
+         aria-expanded="false"
+         aria-controls="collapse_{{ id }}">
+        <h5 class="mb-0">
+          {{ header }}
+        </h5>
+      </a>
+    </div>
+    <div id="collapse_{{ id }}"
+         class="collapse"
+         role="tabpanel"
+         aria-labelledby="heading_{{ id }}"
+         data-parent="#faq">
+      <div class="card-body">
+        {{ caller() }}
+      </div>
+    </div>
+  </div>
+  {% endmacro %}
+  <p>
+    <h3>FAQ</h3>
+    <div id="faq" role="tablist">
+      {% call faq_item("Why doesn't my name appear?", "why") %}
+        State residence is self-reported, so you'll need to tell us your state:
+        <ul>
+          <li>Create an account on the <a href="https://worldcubeassociation.org">WCA website</a> and link it with your WCA ID.
+          <li><a href="{{ c.uri_for('login') }}">Log in</a> to the CubingUSA website.
+          <li><a href="{{ c.uri_for('edit_user') }}">Edit</a> your account and set your home state.  Since this also affects Regional Championship eligibility, you can only do this once per year.
+        </ul>
+        Note that it can take up to 48 hours for us to reprocess the rankings once you've recorded your home state.
+      {% endcall %}
+      {% call faq_item("Why does this person appear in my state rankings?  They don't live here!", "other") %}
+        Please <a href="{{ c.uri_for('contact') }}">contact us</a> and we'll be happy to investigate.
+      {% endcall %}
+    </div>
+  </p>
   <script src="/static/js/state_rankings.js" type="application/javascript"></script>
 {% endblock %}
