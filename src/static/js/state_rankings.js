@@ -1,13 +1,16 @@
 var stateRankingsModule = (function() {
-  var activeEventId = "";
-  var activeEventName = "";
+  var activeEventId = '';
+  var activeEventName = '';
 
-  var activeStateId = "ma";
-  var activeStateName = "Massachusetts";
+  var activeStateId = '';
+  var activeStateName = '';
 
   var activeAverage = 1;
 
   updateTable = function() {
+    if (!activeStateId || !activeEventId) {
+      return;
+    }
     var req = new XMLHttpRequest();
     req.onreadystatechange = function() {
       if (req.readyState == 4) {
@@ -35,8 +38,15 @@ var stateRankingsModule = (function() {
       activeEventName = event_name;
       updateTable();
     },
+
+    setState: function(state_id, state_name) {
+      activeStateId = state_id;
+      activeStateName = state_name;
+      updateTable();
+    },
   };
 })();
 
 eventSelectorModule.setSelectListener(stateRankingsModule.setEvent);
 eventSelectorModule.setDefaultEvt('333');
+stateSelectorModule.setSelectListener(stateRankingsModule.setState);
