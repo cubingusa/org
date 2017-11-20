@@ -94,5 +94,5 @@ class Common(object):
     else:
       return [('Log in with WCA', 'login')]
 
-  def maps_api_key(self):
-    return AppSettings.Get().google_maps_api_key
+  def app_settings(self):
+    return AppSettings.Get()
