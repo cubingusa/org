@@ -105,7 +105,9 @@
     {% endif %}
     <button class="button" type="submit" name="btnSubmit">Submit</button>
   </form>
-  <script src="https://maps.googleapis.com/maps/api/js?key={{ c.maps_api_key() }}"></script>
-  <script src="/static/js/geocoding.js" type="application/javascript"></script>
+  {% if c.maps_api_key() %}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ c.maps_api_key() }}"></script>
+    <script src="/static/js/geocoding.js" type="application/javascript"></script>
+  {% endif %}
   <script src="/static/js/edit_user.js" type="application/javascript"></script>
 {% endblock %}

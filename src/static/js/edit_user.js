@@ -23,6 +23,10 @@ editUserModule = (function() {
         // a city, allow the submission.
         return;
       }
+      if (typeof geocoderModule === 'undefined') {
+        // If we don't have a maps API key, we can't geocode, so proceed with the submit.
+        return;
+      }
       // Prevent the submission from going through until we've confirmed geocode.
       event.preventDefault();
       event.stopPropagation();
