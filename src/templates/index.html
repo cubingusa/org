@@ -4,15 +4,24 @@
   <link rel="stylesheet" href="/static/css/index.css" type="text/css">
 {% endblock %}
 {% block content %}
-  <div class="jumbotron">
-    <div class="container">
-      <h1>CubingUSA</h1>
-      <p>CubingUSA's goal is to support and grow the US speedcubing community.  We organize the US National Championships every summer, and support a number of other competitions throughout the year.</p>
-      <p>
-        <a class="button" href="{{ c.uri_for('about') }}" role="button">Learn More</a>
-        <a class="button" href="{{ c.uri_for('about_donations') }}" role="button">Donate</a>
-      </p>
+  <div class="container">
+  <p>
+  <div class="card">
+    <img class="card-img-top"
+         src="/static/img/group-photo-2015.jpg"
+         alt="Competitors, spectators, and staff at Nationals 2015">
+    <div class="card-body main-card">
+      <h1 class="card-title">CubingUSA</h1>
+      <div class="card-text">
+        <p>CubingUSA's goal is to support and grow the US speedcubing community.  We organize the US National Championships every summer, and support a number of other competitions throughout the year.</p>
+        <p>
+          <a class="button" href="{{ c.uri_for('about') }}" role="button">Learn More</a>
+          <a class="button" href="{{ c.uri_for('about_donations') }}" role="button">Donate</a>
+        </p>
+      </div>
     </div>
+  </div>
+  </p>
   </div>
   <div class="container">
     <div class="row">
