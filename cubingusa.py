@@ -6,6 +6,7 @@ from src.handlers.async.champions_by_year import ChampionsByYearHandler
 from src.handlers.async.competitions_us import USCompetitionsHandler
 from src.handlers.async.state_rankings import StateRankingsHandler
 from src.handlers.basic import BasicHandler
+from src.handlers.contact import ContactHandler
 from src.handlers.documents import DocumentsHandler
 from src.handlers.documents import GetDocumentHandler
 from src.handlers.admin.documents import DeleteDocumentHandler
@@ -37,7 +38,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/documents', handler=DocumentsHandler, name='documents'),
   webapp2.Route('/about/get_document/<document_id:.*>/<document_name:.*>',
                 handler=GetDocumentHandler, name='get_document'),
-  webapp2.Route('/contact', handler=BasicHandler('index.html'), name='contact'),
+  webapp2.Route('/contact', handler=ContactHandler, name='contact'),
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler),
