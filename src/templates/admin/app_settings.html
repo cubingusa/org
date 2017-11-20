@@ -10,33 +10,45 @@
   <form action="{{ c.uri_for('app_settings') }}" method="POST">
     <h3>Session Secret Key</h3>
     <p>
-      <input type="text" name="session_secret_key" value="{{ settings.session_secret_key }}">
+      <input type="text" name="session_secret_key" value="{{ settings.session_secret_key or '' }}">
       <div>(Required) This should be an arbitrary (random) string.  It's used to configure login cookies.  Changing this will log out every user, so don't change this once set unless you have a good reason.</div>
     </p>
     <h3>WCA OAuth</h3>
     <p>
       <div>
         WCA OAuth Client ID:
-        <input type="text" name="wca_oauth_client_id" value="{{ settings.wca_oauth_client_id }}">
+        <input type="text" name="wca_oauth_client_id" value="{{ settings.wca_oauth_client_id or '' }}">
       </div>
       <div>
         WCA OAuth Client Secret:
-        <input type="text" name="wca_oauth_client_secret" value="{{ settings.wca_oauth_client_secret }}">
+        <input type="text" name="wca_oauth_client_secret" value="{{ settings.wca_oauth_client_secret or '' }}">
       </div>
     </p>
     <p>
-      (Required) For dev apps, you should create an OAuth application <a href="https://www.worldcubeassociation.org/oauth/applications">here</a>.  You can set the callback URL to:
+      (Required) For dev apps, you should create an OAuth application <a href="https://www.worldcubeassociation.org/oauth/applications" target="_blank">here</a>.  You can set the callback URL to:
       <pre>
 urn:ietf:wg:oauth:2.0:oob
 http://localhost:8080/login_callback
       </pre>
-      The prod keys are currently held by Tim Reynolds at <a href="https://www.worldcubeassociation.org/oauth/applications/122/edit">this link</a>.
+      The prod keys are currently held by Tim Reynolds at <a href="https://www.worldcubeassociation.org/oauth/applications/122/edit" target="_blank">this link</a>.
     </p>
     <h3>Google Maps API key</h3>
     <p>
-      <input type="text" name="google_maps_api_key" value="{{ settings.google_maps_api_key }}">
-      <div>(Optional) If this is not provided, then maps will not be shown and user locations will not be validated.  You can follow the instructions <a href="https://developers.google.com/maps/documentation/javascript/geocoding">here</a> to get an API key.</div>
+      <input type="text" name="google_maps_api_key" value="{{ settings.google_maps_api_key or '' }}">
+      <div>(Optional) If this is not provided, then maps will not be shown and user locations will not be validated.  You can follow the instructions <a href="https://developers.google.com/maps/documentation/javascript/geocoding" target="_blank">here</a> to get an API key.</div>
     </p>
+    <h3>ReCAPTCHA</h3>
+    <div>
+      ReCAPTCHA site key:
+      <input type="text" name="recaptcha_site_key" value="{{ settings.recaptcha_site_key or '' }}">
+    </div>
+    <div>
+      ReCAPTCHA secret key:
+      <input type="text" name="recaptcha_secret_key" value="{{ settings.recaptcha_secret_key or '' }}">
+    </div>
+    <div>
+      (Optional) We use <a href="https://www.google.com/recaptcha" target="_blank">ReCAPTCHA</a> for the contact form.  To generate an API key, go to the <a href="https://www.google.com/recaptcha/admin" target="_blank">ReCAPTCHA admin page</a> and generate a V2 key.  If this is not provided, then we won't protect the contact form.
+    </div>
     <button type="submit">Submit</button>
   </form>
 </body>
