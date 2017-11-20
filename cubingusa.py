@@ -38,7 +38,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/documents', handler=DocumentsHandler, name='documents'),
   webapp2.Route('/about/get_document/<document_id:.*>/<document_name:.*>',
                 handler=GetDocumentHandler, name='get_document'),
-  webapp2.Route('/contact', handler=ContactHandler, name='contact'),
+  webapp2.Route('/about/logo', handler=BasicHandler('logo.html'), name='logo'),
+  webapp2.Route('/about/contact', handler=ContactHandler, name='contact'),
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler),

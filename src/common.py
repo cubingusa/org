@@ -79,6 +79,7 @@ class Common(object):
                  ('Who we are', 'about_who'),
                  ('Donations', 'about_donations'),
                  ('Contact Us', 'contact'),
+                 ('Logo', 'logo'),
                  ('Public Documents', 'documents'),
              ]),
             ]
