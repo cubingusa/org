@@ -78,6 +78,7 @@ class Common(object):
                  ('About CubingUSA', 'about'),
                  ('Who we are', 'about_who'),
                  ('Donations', 'about_donations'),
+                 ('Contact Us', 'contact'),
                  ('Public Documents', 'documents'),
              ]),
             ]
