@@ -1,4 +1,5 @@
 import collections
+import logging
 
 from google.appengine.ext import ndb
 
@@ -33,7 +34,7 @@ def UpdateChampions():
   all_event_keys = set(e.key for e in Event.query().iter())
   for championship in all_championships:
     competition_id = championship.competition.id()
-    print 'Computing champions for %s' % competition_id
+    logging.info('Computing champions for %s' % competition_id)
     champions = collections.defaultdict(list)
     events_held_with_successes = set()
     for result in (Result.query(Result.competition == championship.competition)

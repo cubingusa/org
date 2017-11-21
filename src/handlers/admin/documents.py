@@ -1,5 +1,6 @@
 import collections
 import datetime
+import logging
 import webapp2
 
 from google.appengine.ext import blobstore
@@ -14,7 +15,7 @@ class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
   def post(self):
     uploader = User.get_by_id(int(self.request.get('uploader')))
     if not uploader:
-      print 'no uploader'
+      logging.error('no uploader')
       self.error(404)
       return
     for upload in self.get_uploads():
@@ -35,6 +36,7 @@ class DeleteDocumentHandler(BaseHandler):
   def get(self, document_id):
     document = Document.get_by_id(int(document_id))
     if not document:
+      logging.error('no document found')
       self.error(404)
       return
     document.deletion_time = datetime.datetime.now()
@@ -45,6 +47,7 @@ class RestoreDocumentHandler(BaseHandler):
   def get(self, document_id):
     document = Document.get_by_id(int(document_id))
     if not document:
+      logging.error('no document found')
       self.error(404)
       return
     del document.deletion_time

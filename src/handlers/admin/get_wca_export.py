@@ -1,3 +1,4 @@
+import logging
 import re
 import StringIO
 import zipfile
@@ -69,7 +70,7 @@ def download_export_chunk(idx):
   gcs_file.write(fetch_result.content)
   gcs_file.close()
 
-  print 'Fetched %d bytes' % len(fetch_result.content)
+  logging.info('Fetched %d bytes' % len(fetch_result.content))
 
   if len(fetch_result.content) < CHUNK_SIZE:
     deferred.defer(assemble_zip, idx + 1)

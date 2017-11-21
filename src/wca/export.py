@@ -1,5 +1,6 @@
 import collections
 import csv
+import logging
 
 import cloudstorage as gcs
 from google.appengine.api import app_identity
@@ -30,7 +31,7 @@ def old_fname(table, shard):
 
 
 def process_file(table, object_type, shard, total_shards, queue, export_id):
-  print 'Processing table %s shard %d/%d' % (table, shard, total_shards)
+  logging.info('Processing table %s shard %d/%d' % (table, shard, total_shards))
   filename = fname(table, shard)
   row_filter = object_type.Filter()
 
@@ -44,7 +45,7 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
         id_to_dict[object_type.GetId(row)][int(row['subid'])] = row
       else:
         id_to_dict[object_type.GetId(row)] = row
-    print 'Finished reading file.  Found %d entries' % len(id_to_dict)
+    logging.info('Finished reading file.  Found %d entries' % len(id_to_dict))
 
     keys_to_delete = []
 
@@ -89,10 +90,10 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
       # This is fine, it just means we can't diff the new file against the old one.
       pass
 
-    print 'Finished diffing.  Inserting %d entries.' % len(id_to_dict)
-    print 'Deleting %d entries.' % len(keys_to_delete)
+    logging.info('Finished diffing.  Inserting %d entries.' % len(id_to_dict))
+    logging.info('Deleting %d entries.' % len(keys_to_delete))
     if keys_to_delete:
-      print 'Deleting: %s' % (', '.join(key.id() for key in keys_to_delete[:10]))
+      logging.info('Deleting: %s' % (', '.join(key.id() for key in keys_to_delete[:10])))
 
     ndb.delete_multi(keys_to_delete)
 
@@ -104,9 +105,9 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
       obj = query_result.get_result() or object_type(id=object_id)
       obj.ParseFromDict(id_to_dict[object_id])
       objects_to_put.append(obj)
-    print 'Starting write'
+    logging.info('Starting write')
     ndb.put_multi(objects_to_put)
-    print 'Finished write'
+    logging.info('Finished write')
 
   # We're done with this shard, make it the new finished table.
   # But, we can't just copy the file, we need to filter out rows that we didn't consider.
