@@ -7,6 +7,7 @@ from src.models.region import Region
 from src.models.state import State
 from src.models.user import Roles
 from src.models.wca.event import Event
+from src.models.wca.export import get_latest_export
 
 class Common(object):
   def __init__(self, handler):
@@ -15,6 +16,7 @@ class Common(object):
     self.user = handler.user
     self.len = len
     self.formatters = formatters
+    self.include_wca_disclaimer = handler.IncludeWcaDisclaimer()
 
   def uri_matches(self, handler_name):
     return self.uri.endswith(self.uri_for(handler_name))
@@ -97,3 +99,6 @@ class Common(object):
 
   def app_settings(self):
     return AppSettings.Get()
+
+  def get_wca_export(self):
+    return get_latest_export().key.id()
