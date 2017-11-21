@@ -25,12 +25,10 @@ def FormatVerbose(time):
     return '%s seconds' % FormatStandard(time)
 
 def FormatMultiBlindOld(time, verbose):
-  print time
   time_in_seconds = time % 100000
   res = time / 100000
   attempted = res % 100
   solved = 199 - res / 100
-  print (attempted, solved, time_in_seconds)
 
   if verbose:
     return '%d out of %d cubes in %s' % (solved, attempted, FormatStandard(time_in_seconds * 100))

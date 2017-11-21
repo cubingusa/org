@@ -32,7 +32,6 @@ class ContactHandler(BaseHandler):
           payload=urllib.urlencode(payload),
           method=urlfetch.POST)
       result = json.loads(fetch.content)
-      print result
       if not result['success']:
         self.response.write(template.render({
             'c': common.Common(self),

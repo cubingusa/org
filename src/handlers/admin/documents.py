@@ -12,7 +12,6 @@ from src.models.user import User
 
 class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
   def post(self):
-    print self.request.POST
     uploader = User.get_by_id(int(self.request.get('uploader')))
     if not uploader:
       print 'no uploader'
