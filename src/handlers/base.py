@@ -59,3 +59,8 @@ class BaseHandler(webapp2.RequestHandler):
   # this handler.  GLOBAL_ADMIN always has access.
   def PermittedRoles(self):
     return []
+
+  # This must return true on any page that displays information from the WCA
+  # export.
+  def IncludeWcaDisclaimer(self):
+    return False

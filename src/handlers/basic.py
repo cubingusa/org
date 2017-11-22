@@ -3,7 +3,7 @@ from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 
 # A mostly-static handler that renders a given template name.
-def BasicHandler(template_path, permitted_roles=[]):
+def BasicHandler(template_path, permitted_roles=[], include_wca_disclaimer=False):
   class Handler(BaseHandler):
     def get(self):
       template = JINJA_ENVIRONMENT.get_template(template_path)
@@ -16,5 +16,8 @@ def BasicHandler(template_path, permitted_roles=[]):
 
     def PermittedRoles(self):
       return permitted_roles
+
+    def IncludeWcaDisclaimer(self):
+      return include_wca_disclaimer
 
   return Handler
