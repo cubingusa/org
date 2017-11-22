@@ -12,8 +12,6 @@ skip_files:
 libraries:
  - name: webapp2
    version: latest
- - name: jinja2
-   version: latest
 
 handlers:
  - url: /static
