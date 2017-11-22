@@ -8,11 +8,15 @@ from src.handlers.admin.update_states import UpdateStatesHandler
 from src.handlers.admin.upload_users import UploadUsersHandler
 from src.handlers.admin.get_wca_export import GetExportHandler
 from src.handlers.admin.app_settings import AppSettingsHandler
+from src.handlers.basic import BasicHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
 from src.handlers.login import LogoutHandler
+from src.models.user import Roles
 
 app = webapp2.WSGIApplication([
+  webapp2.Route('/', handler=BasicHandler('admin/index.html',
+                                          permitted_roles=Roles.AdminRoles())),
   webapp2.Route('/login', handler=LoginHandler, name='login'),
   webapp2.Route('/login_callback', handler=LoginCallbackHandler, name='login_callback'),
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
