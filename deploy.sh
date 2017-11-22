@@ -5,11 +5,14 @@
 # ./deploy.sh app.yaml admin.yaml -- to deploy the main website and admin handlers.
 # ./deploy.sh cron.yaml -- to modify cron jobs.
 
+set -e
+
+echo "Updating python dependencies."
+pip install -t lib -r requirements.txt --upgrade
+
 # This may clash with dev_app.sh as both write css to the same directory.  This
 # script compiles minified css, while the other does not.
 # TODO: consider fixing this by using different CSS paths for dev and prod.
-
-set -e
 
 echo "Recompiling minified CSS."
 sass --update src/scss:src/static/css --style compressed
