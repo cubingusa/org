@@ -29,6 +29,10 @@
   }  
 }
 
+.invalid-feedback {
+  padding-left: $grid-gutter-width / 2;
+}
+
 #region {
   font-weight: bold;
 

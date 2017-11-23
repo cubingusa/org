@@ -69,6 +69,12 @@
                  value="{{ user.state.get().region.get().name if user.state else ''}}"
                  readonly>
         </div>
+        <div class="invalid-feedback" id="geocoding-failed" style="display:none;">
+          Couldn't find city.  Please try again.
+        </div>
+        <div class="invalid-feedback" id="state-missing" style="display:none;">
+          If you select a city, please select a state as well.
+        </div>
         <div class="about-city-selection">
           <small id="city-help" class="form-text text-muted">
             City and state determine your eligibility for Regional Championships.  You may only represent a state where you live at least 50% of the year, and you may only change your information once per year.  We reserve the right to ask for proof of residency.
