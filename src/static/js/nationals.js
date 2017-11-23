@@ -2,14 +2,16 @@ var nationalsModule = (function() {
   return {
     setChampionsTable: function(event_id, event_name) {
       var req = new XMLHttpRequest();
+      document.getElementById('nats-spinner').style.display = 'inherit';
+      document.getElementById('champions-table').innerHTML = '';
       req.onreadystatechange = function() {
         if (req.readyState == 4) {
+          document.getElementById('nats-spinner').style.display = 'none';
           if (req.status == 200) {
             document.getElementById('nationals-evt').innerHTML = event_name;
             document.getElementById('champions-table').innerHTML = req.responseText;
           } else {
             document.getElementById('nationals-evt').innerHTML = '';
-            document.getElementById('champions-table').innerHTML = '';
           }
         }
       };
