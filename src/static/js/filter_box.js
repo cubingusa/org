@@ -4,12 +4,15 @@ filterModule = (function() {
   return {
     changeListener: function(evt) {
       var req = new XMLHttpRequest();
+      document.getElementById('filter-spinner').style.display = 'inherit';
+      document.getElementById('filter-table').innerHTML = '';
+      document.getElementById('filter-table').classList.remove('fade-in');
       req.onreadystatechange = function() {
         if (req.readyState == 4) {
+        document.getElementById('filter-spinner').style.display = 'none';
           if (req.status == 200) {
             document.getElementById('filter-table').innerHTML = req.responseText;
-          } else {
-            document.getElementById('filter-table').innerHTML = '';
+            document.getElementById('filter-table').classList.add('fade-in');
           }
         }
       };

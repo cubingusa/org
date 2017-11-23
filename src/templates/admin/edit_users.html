@@ -7,6 +7,7 @@
 {% block content %}
   <h3>Edit Users</h3>
   {{ filter_box.filter_box(c) }}
-  <div class="user-table" id="filter-table">
+  <div class="user-table" id="filter-table"></div>
+  <div class="spinner" id="filter-spinner"></div>
   <script src="/static/js/admin_edit_users.js" type="application/javascript"></script>
 {% endblock %}

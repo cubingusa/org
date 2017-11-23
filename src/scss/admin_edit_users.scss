@@ -1,5 +1,7 @@
 @import "base";
+@import "components/_fade";
 @import "components/_filter_box";
+@import "components/_spinner";
 
 .user-container {
   @extend .card;
