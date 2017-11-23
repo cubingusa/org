@@ -12,14 +12,17 @@ var stateRankingsModule = (function() {
       return;
     }
     var req = new XMLHttpRequest();
+    document.getElementById('state-rankings-spinner').style.display = 'inherit';
+    document.getElementById('state-rankings-table').innerHTML = '';
+    document.getElementById('state-rankings-table').classList.remove('fade-in');
     req.onreadystatechange = function() {
       if (req.readyState === 4) {
+        document.getElementById('state-rankings-spinner').style.display = 'none';
         if (req.status === 200) {
           document.getElementById('state-rankings-table').innerHTML = req.responseText;
           document.getElementById('header').innerHTML =
               activeStateName + ' ' + activeEventName + ' Rankings';
         } else {
-          document.getElementById('state-rankings-table').innerHTML = '';
           document.getElementById('header').innerHTML = 'State Rankings';
         }
       }
