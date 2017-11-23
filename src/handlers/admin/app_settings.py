@@ -23,6 +23,7 @@ class AppSettingsHandler(BaseHandler):
     settings.google_maps_api_key = self.request.POST['google_maps_api_key']
     settings.recaptcha_site_key = self.request.POST['recaptcha_site_key']
     settings.recaptcha_secret_key = self.request.POST['recaptcha_secret_key']
+    settings.google_analytics_tracking_id = self.request.POST['google_analytics_tracking_id']
     settings.contact_email = self.request.POST['contact_email']
     settings.put()
     template = JINJA_ENVIRONMENT.get_template('admin/app_settings.html')

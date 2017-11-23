@@ -49,6 +49,11 @@ http://localhost:8080/login_callback
     <div>
       (Optional) We use <a href="https://www.google.com/recaptcha" target="_blank">ReCAPTCHA</a> for the contact form.  To generate an API key, go to the <a href="https://www.google.com/recaptcha/admin" target="_blank">ReCAPTCHA admin page</a> and generate a V2 key.  If this is not provided, then we won't protect the contact form.
     </div>
+    <h3>Google Analytics Tracking ID</h3>
+    <p>
+      <input type="text" name="google_analytics_tracking_id" value="{{ settings.google_analytics_tracking_id or '' }}">
+      <div>(Optional) See the <a href="https://analytics.google.com/" target="_blank">Google Analytics</a> site for information on generating a tracking ID.</div>
+    </p>
     <h3>Contact Email</h3>
     <input type="email" name="contact_email" value="{{ settings.contact_email or ''}}">
     <div>

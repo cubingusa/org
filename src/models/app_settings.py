@@ -7,6 +7,7 @@ class AppSettings(ndb.Model):
   google_maps_api_key = ndb.StringProperty()
   recaptcha_site_key = ndb.StringProperty()
   recaptcha_secret_key = ndb.StringProperty()
+  google_analytics_tracking_id = ndb.StringProperty()
   contact_email = ndb.StringProperty()
 
   @staticmethod
