@@ -6,7 +6,6 @@ var geocoderModule = (function() {
   return {
     geocode: function(city, state, callback) {
       cacheKey = city + ', ' + state;
-      console.log(cacheKey);
       
       if (cacheKey in locationCache) {
         callback(locationCache[cacheKey]);
