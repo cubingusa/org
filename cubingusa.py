@@ -31,7 +31,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/supported', handler=BasicHandler('supported.html'), name='supported'),
   webapp2.Route('/state_rankings', handler=BasicHandler('state_rankings.html', include_wca_disclaimer=True),
                 name='state_rankings'),
-  webapp2.Route('/tutorial', handler=BasicHandler('index.html'), name='tutorial'),
   webapp2.Route('/about', handler=BasicHandler('about.html'), name='about'),
   webapp2.Route('/about/who', handler=BasicHandler('about_who.html'), name='about_who'),
   webapp2.Route('/about/donations', handler=BasicHandler('donations.html'), name='about_donations'),
