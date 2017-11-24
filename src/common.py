@@ -74,7 +74,9 @@ class Common(object):
                  ('State Rankings', 'state_rankings'),
                  ('Competitor Tutorial', 'tutorial'),
              ]),
-             ('Organizers', 'organizers'),
+             ('Organizers', [
+                 ('CubingUSA Supported Competitions', 'supported'),
+             ]),
              ('About', [
                  ('About CubingUSA', 'about'),
                  ('Who we are', 'about_who'),
