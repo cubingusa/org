@@ -17,8 +17,6 @@ basic_scaling:
 libraries:
  - name: webapp2
    version: latest
- - name: jinja2
-   version: latest
 
 handlers:
  - url: /_ah/queue/deferred
