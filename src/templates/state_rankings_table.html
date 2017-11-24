@@ -1,5 +1,6 @@
 {% autoescape true %}
 {% macro ranking_row(ranking, rank) %}
+  {% set person = people_by_id[ranking.person.id()] %}
   <div class="ranking-row-container">
     <div class="row">
       <div class="rank-col">

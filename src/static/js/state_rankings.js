@@ -19,6 +19,7 @@ var stateRankingsModule = (function() {
       if (req.readyState === 4) {
         document.getElementById('state-rankings-spinner').style.display = 'none';
         if (req.status === 200) {
+          document.getElementById('state-rankings-table').classList.add('fade-in');
           document.getElementById('state-rankings-table').innerHTML = req.responseText;
           document.getElementById('header').innerHTML =
               activeStateName + ' ' + activeEventName + ' Rankings';
