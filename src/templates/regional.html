@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Regional Championships{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/regional.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <p>
+      <div class="card">
+        <div class="regional-map-container">
+          <img class="regional-map"
+               src="/static/img/regionals-map.jpg"
+               alt="Map of US Regions">
+        </div>
+        <div class="card-body main-card">
+          <h1 class="card-title">CubingUSA Regional Championships</h1>
+          <div class="card-text">
+            <p>Starting in 2018, CubingUSA will be supporting Regional Championships in each of seven regions of the US.  Please take a look at the above map to see which region you live in.  We're still working to finalize the location and dates of each of these competitions, stay tuned for details!</p>
+            <p>Just like CubingUSA Nationals, our Regional Championships are open to all competitors.  However, the title of Regional Champion will be awarded to the top-ranked competitor who lives in that region.  In order to be eligible to win a title, you need to <a href="{{ c.uri_for('login') }}">log in</a> to the CubingUSA website with your WCA account and <a href="{{ c.uri_for('edit_user') }}">select</a> your home state.  You're eligible to represent the state where you live at least 50% of the year, and you can only change your home state once per year.  Please <a href="{{ c.uri_for('contact') }}">contact</a> us if you have any questions about what state you can represent.</p>
+          </div>
+        </div>
+      </div>
+    </p>
+  </div>
+{% endblock %}

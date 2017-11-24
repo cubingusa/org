@@ -29,7 +29,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/competitions/us', handler=BasicHandler('index.html'), name='competitions_us'),
   webapp2.Route('/nationals', handler=BasicHandler('nationals.html', include_wca_disclaimer=True),
                 name='competitions_nationals'),
-  webapp2.Route('/regional', handler=BasicHandler('index.html'), name='competitions_regional'),
+  webapp2.Route('/regional', handler=BasicHandler('regional.html'), name='competitions_regional'),
   webapp2.Route('/organizers', handler=BasicHandler('index.html'), name='organizers'),
   webapp2.Route('/state_rankings', handler=BasicHandler('state_rankings.html', include_wca_disclaimer=True),
                 name='state_rankings'),

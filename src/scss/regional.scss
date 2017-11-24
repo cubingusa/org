@@ -1,0 +1,16 @@
+@import "base";
+
+.regional-map-container {
+  @extend .card-img-top;
+  background-color: $gray-100;
+  text-align: center;
+
+  img.regional-map {
+    @include media-breakpoint-down(xs) {
+      width: 100%;
+    }
+    @include media-breakpoint-up(sm) {
+      width: 50%;
+    }
+  }
+}
