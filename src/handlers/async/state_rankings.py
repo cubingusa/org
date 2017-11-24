@@ -27,8 +27,12 @@ class StateRankingsHandler(BaseHandler):
         .order(ranking_class.worldRank)
         .fetch(100))
 
+    people = ndb.get_multi([ranking.person for ranking in rankings])
+    people_by_id = {person.key.id() : person for person in people}
+
     self.response.write(template.render({
         'c': common.Common(self),
         'is_average': use_average == '1',
         'rankings': rankings,
+        'people_by_id': people_by_id,
     }))
