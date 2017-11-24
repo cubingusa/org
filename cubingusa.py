@@ -3,7 +3,6 @@ import webapp2
 from src import config
 from src import handlers
 from src.handlers.async.champions_by_year import ChampionsByYearHandler
-from src.handlers.async.competitions_us import USCompetitionsHandler
 from src.handlers.async.state_rankings import StateRankingsHandler
 from src.handlers.basic import BasicHandler
 from src.handlers.contact import ContactHandler
@@ -26,7 +25,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
   webapp2.Route('/edit', handler=EditUserHandler, name='edit_user'),
   webapp2.Route('/edit/<user_id:.*>', handler=EditUserHandler, name='edit_user_by_id'),
-  webapp2.Route('/competitions/us', handler=BasicHandler('index.html'), name='competitions_us'),
   webapp2.Route('/nationals', handler=BasicHandler('nationals.html', include_wca_disclaimer=True),
                 name='competitions_nationals'),
   webapp2.Route('/regional', handler=BasicHandler('regional.html'), name='competitions_regional'),
@@ -45,7 +43,6 @@ app = webapp2.WSGIApplication([
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler),
-  webapp2.Route('/async/competitions_us/<year:.*>', handler=USCompetitionsHandler),
   webapp2.Route('/async/state_rankings/<event_id:.*>/<state_id:.*>/<use_average:\d>',
                 handler=StateRankingsHandler),
   # Admin
