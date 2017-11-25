@@ -66,6 +66,8 @@ class Common(object):
     return type(h) is str
 
   def get_nav_items(self):
+    if '/scheduling' in self.uri:
+      return [('Home', 'index')]
     items = [('Home', 'home'),
              ('Competitions', [
                  ('Nationals', 'competitions_nationals'),
@@ -92,7 +94,9 @@ class Common(object):
     return items
 
   def get_right_nav_items(self):
-    if self.user:
+    if '/scheduling' in self.uri:
+      return []
+    elif self.user:
       return [('My Settings', 'edit_user'),
               ('Log out', 'logout')]
     else:
