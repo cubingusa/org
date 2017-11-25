@@ -1,7 +1,7 @@
 {% import "components/event_icon.html" as event_icon %}
-{% macro event_selector(c, include_obsolete=True) %}
+{% macro event_selector(c, include_magic=True, include_mbo=True) %}
   <div id="event-selector">
-    {% for event in c.events(include_obsolete) %}
+    {% for event in c.events(include_magic, include_mbo) %}
       <a class="event-selector-link"
          id="event-selector-link-{{ event.key.id() }}"
          data-eventid="{{ event.key.id() }}"

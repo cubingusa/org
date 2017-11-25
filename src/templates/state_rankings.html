@@ -7,7 +7,7 @@
 {% endblock %}
 {% block content %}
   <h3 id="header">State Rankings</h3>
-  {{ event_selector.event_selector(c, include_obsolete=False) }}
+  {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}
   <div class="row">
     <div class="state-selector-container">
       {{ state_selector.state_selector(c) }}

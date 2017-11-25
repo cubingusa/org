@@ -9,7 +9,7 @@
 {% block content %}
   <h1>US Competitions</h1>
   {{ year_selector.year_selector(c, include_upcoming=True) }}
-  {{ event_selector.event_selector(c, include_obsolete=False) }}
+  {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}
   {{ region_selector.region_selector(c) }}
   <div id="us_competitions_container"></div>
   <script src="/static/js/competitions_us.js" type="application/javascript"></script>

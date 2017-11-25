@@ -51,9 +51,10 @@ class Common(object):
   def regions(self):
     return [r for r in Region.query().order(Region.name).iter()]
 
-  def events(self, include_obsolete):
+  def events(self, include_magic, include_mbo):
     return [e for e in Event.query().order(Event.rank).iter()
-            if include_obsolete or e.key.id() not in ['333mbo', 'magic', 'mmagic']]
+            if (include_magic or e.key.id() not in ['magic', 'mmagic']) and
+               (include_mbo or e.key.id() != '333mbo')]
 
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
