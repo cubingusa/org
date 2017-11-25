@@ -43,12 +43,22 @@ def UpdateChampions():
         continue
       if result.round_type not in final_round_keys:
         continue
-      events_held_with_successes.add(result.event)
-      if result.event in champions and champions[result.event][0].pos < result.pos:
+      this_event = result.event
+      # For multi blind, we only recognize pre-2009 champions in 333mbo, since
+      # that was the multi-blind event held those years.  For clarity in the
+      # champions listings, we list those champions as the 333mbf champions for
+      # those years. 
+      if championship.competition.get().year < 2009:
+        if result.event.id() == '333mbo':
+          this_event = ndb.Key(Event, '333mbf')
+        elif result.event.id() == '333mbf':
+          continue
+      events_held_with_successes.add(this_event)
+      if this_event in champions and champions[this_event][0].pos < result.pos:
         continue
       if not IsEligible(result, championship):
         continue
-      champions[result.event].append(result)
+      champions[this_event].append(result)
       if result.pos > 1 and len(champions) >= len(events_held_with_successes):
         break
     for event_key in all_event_keys:
