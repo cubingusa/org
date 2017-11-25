@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title%}Scheduling{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/scheduling/index.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>Competition Scheduling</h1>
+    {% if c.len(editable_competitions) %}
+      <h3>My Competitions</h3>
+      <ul>
+        {% for competition in editable_competitions %}
+          <li>
+            <a href="{{ c.uri_for('edit_competition', competition=competition.key.id()) }}"
+               class="competition-name">
+              {{ competition.key.id() }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <h3>Create Competition</h3>
+    <form action="{{ c.uri_for('new_competition') }}" method="POST">
+      <div class="form-group">
+        <label for="competitionid">Competition ID</label>
+        <input class="form-control {% if duplicate_competition %}is-invalid{% endif %}"
+               type="text"
+               id="competitionid"
+               name="competitionid"
+               aria-describedby="competitionid-help"
+               required>
+        <div class="invalid-feedback">
+          Competition ID is already in use.  Please try again.
+        </div>
+        <small id="competitionid-help" class="form-text text-muted">
+          This should match the WCA competition ID.
+        </small>
+      </div>
+      <button class="button" type="submit" name="btnSubmit">Submit</button>
+    </form>
+  </div>
+{% endblock %}
