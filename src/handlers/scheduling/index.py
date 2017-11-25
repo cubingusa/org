@@ -3,9 +3,9 @@ import webapp2
 
 from src import common
 from src.handlers.admin.admin_base import AdminBaseHandler
+from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.competition import ScheduleCompetition
 from src.models.user import Roles
-from src.jinja import JINJA_ENVIRONMENT
 
 
 class SchedulingIndexHandler(AdminBaseHandler):
