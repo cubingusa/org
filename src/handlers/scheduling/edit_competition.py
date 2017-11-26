@@ -5,7 +5,7 @@ import webapp2
 from src import common
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
-from src.models.scheduling.version import ScheduleVersion
+from src.models.scheduling.schedule import Schedule
 
 
 class EditCompetitionHandler(SchedulingBaseHandler):
@@ -15,8 +15,7 @@ class EditCompetitionHandler(SchedulingBaseHandler):
     timezones_and_times = [
         (timezone, datetime.datetime.now(pytz.timezone(timezone)).strftime('%I:%M %p'))
         for timezone in pytz.country_timezones('us')]
-    schedule_versions = ScheduleVersion.query(
-                            ScheduleVersion.competition == self.competition.key).fetch()
+    schedule_versions = Schedule.query(Schedule.competition == self.competition.key).fetch()
     template = JINJA_ENVIRONMENT.get_template('scheduling/edit_competition.html')
     self.response.write(template.render({
         'c': common.Common(self),

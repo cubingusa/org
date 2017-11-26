@@ -3,7 +3,7 @@ from src.handlers.base import BaseHandler
 from src import common
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.competition import ScheduleCompetition
-from src.models.scheduling.version import ScheduleVersion
+from src.models.scheduling.schedule import Schedule
 
 class SchedulingBaseHandler(BaseHandler):
   def RespondWithError(self, error_string):
@@ -27,10 +27,10 @@ class SchedulingBaseHandler(BaseHandler):
       return False
     return True
 
-  def SetScheduleVersion(self, schedule_version_id):
-    self.schedule_version = ScheduleVersion.get_by_id(schedule_version_id)
-    if not self.schedule_version:
+  def SetSchedule(self, schedule_version):
+    self.schedule = Schedule.get_by_id(schedule_version)
+    if not self.schedule:
       self.RespondWithError(
-          'Unknown schedule version %s' % schedule_version_id)
+          'Unknown schedule version %s' % schedule_version)
       return False
-    return self.SetCompetition(self.schedule_version.competition.get())
+    return self.SetCompetition(self.schedule.competition.id())
