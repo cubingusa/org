@@ -47,9 +47,14 @@
           </a>
           <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
           {% if schedule_version.is_live %}<b>(Live)</b>{% endif %}
-          {{ schedule_verison.notes }}
+          {{ schedule_version.notes or '' }}
         </li>
       {% endfor %}
+      <li>
+        <a href="{{ c.uri_for('new_schedule', competition_id=competition.key.id()) }}">
+          New Schedule
+        </a>
+      </li>
     </ul>
   </div>
 {% endblock %}

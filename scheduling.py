@@ -4,6 +4,7 @@ from src import config
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
 from src.handlers.scheduling.new_competition import NewCompetitionHandler
+from src.handlers.scheduling.new_schedule import NewScheduleHandler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling', handler=SchedulingIndexHandler, name='index'),
@@ -16,4 +17,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/edit_schedule/<schedule_version:.*>',
                 handler=SchedulingIndexHandler,
                 name='edit_schedule'),
+  webapp2.Route('/scheduling/new_schedule/<competition_id:.*>',
+                handler=NewScheduleHandler,
+                name='new_schedule')
 ], config=config.GetAppConfig())
