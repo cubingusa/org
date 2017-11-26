@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title%}Edit Schedule{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/scheduling/edit_schedule.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>{{ competition.key.id() }}</h1>
+    {% if schedule.is_live %}
+      <div class="alert alert-danger">
+        <b>Warning!</b>  Schedule {{ schedule.key.id() }} is live.  Any edits you make will immediately become visible.  <a href="{{ c.uri_for('set_live', schedule_version=schedule.key.id(), set_live=0) }}"><b>Set schedule hidden!</b></a>
+      </div>
+    {% else %}
+      <div class="alert alert-primary">
+        Schedule {{ schedule.key.id() }} is not live.  <a href="{{ c.uri_for('set_live', schedule_version=schedule.key.id(), set_live=1) }}"><b>Set it live!</b></a>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
