@@ -3,51 +3,31 @@ import pytz
 import webapp2
 
 from src import common
-from src.handlers.base import BaseHandler
+from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
-from src.models.scheduling.competition import ScheduleCompetition
 from src.models.scheduling.version import ScheduleVersion
 
 
-class EditCompetitionHandler(BaseHandler):
+class EditCompetitionHandler(SchedulingBaseHandler):
   def get(self, competition_id):
-    competition = self.GetCompetitionOrRespondWithError(competition_id)
-    if not competition:
+    if not self.SetCompetition(competition_id):
       return
     timezones_and_times = [
         (timezone, datetime.datetime.now(pytz.timezone(timezone)).strftime('%I:%M %p'))
         for timezone in pytz.country_timezones('us')]
     schedule_versions = ScheduleVersion.query(
-                            ScheduleVersion.competition == competition.key).fetch()
+                            ScheduleVersion.competition == self.competition.key).fetch()
     template = JINJA_ENVIRONMENT.get_template('scheduling/edit_competition.html')
     self.response.write(template.render({
         'c': common.Common(self),
-        'competition': competition,
+        'competition': self.competition,
         'timezones_and_times': timezones_and_times,
         'schedule_versions': schedule_versions,
     }))
 
   def post(self, competition_id):
-    competition = self.GetCompetitionOrRespondWithError(competition_id)
-    if not competition:
+    if not self.SetCompetition(competition_id):
       return
-    competition.timezone = self.request.POST['timezone']
-    competition.put()
+    self.competition.timezone = self.request.POST['timezone']
+    self.competition.put()
     self.get(competition_id)
-
-  def GetCompetitionOrRespondWithError(self, competition_id):
-    competition = ScheduleCompetition.get_by_id(competition_id)
-    if not competition:
-      self.response.write(JINJA_ENVIRONMENT.get_template('error.html').render({
-          'c': common.Common(self),
-          'error': 'Unknown competition %s.  Make sure that scheduling is '
-                   'enabled for this competition.' % competition_id,
-      }))
-      return None
-    if self.user.key not in competition.editors:
-      self.response.write(JINJA_ENVIRONMENT.get_template('error.html').render({
-          'c': common.Common(self),
-          'error': 'You don\'t have edit access to this competition.',
-      }))
-      return None
-    return competition
