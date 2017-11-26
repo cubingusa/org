@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title%}Edit {{ competition.key.id() }}{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/scheduling/edit_competition.css" type="text/css">
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>{{ competition.key.id() }}</h1>
+    <h3>Competition Time Zone</h3>
+    <form action="{{ c.uri_for('edit_competition', competition_id=competition.key.id()) }}"
+          method="POST">
+      <div class="timezone-row">
+        <select class="timezone-select" id="timezone" name="timezone">
+          <option value=""></option>
+          {% for timezone, time in timezones_and_times %}
+            <option value="{{ timezone }}"
+                    {% if timezone == competition.timezone %}selected{% endif %}>
+              {{ timezone }} ({{ time }})
+            </option>
+          {% endfor %}
+        </select>
+        <div class="timezone-submit">
+          <button class="btn btn-primary" type="submit" name="btnSubmit">Submit</button>
+        </div>
+      </div>
+    </form>
+    <h3>Schedule Editors</h3>
+    <ul>
+      {% for editor_key in competition.editors %}
+        {% set editor = editor_key.get() %}
+        <li>
+          {{ editor.name }}
+          {% if editor.wca_person %}
+            <a href="{{ editor.wca_person.get().GetWCALink() }}" target="_blank">
+              ({{ editor.wca_person.id() }})
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    <h3>Schedule Versions</h3>
+    <ul>
+      {% for schedule_version in schedule_versions %}
+        <li>
+          <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
+            {{ schedule_version.key.id() }}
+          </a>
+          <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
+          {% if schedule_version.is_live %}<b>(Live)</b>{% endif %}
+          {{ schedule_verison.notes }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

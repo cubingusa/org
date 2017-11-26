@@ -11,7 +11,8 @@
       <ul>
         {% for competition in editable_competitions %}
           <li>
-            <a href="{{ c.uri_for('edit_competition', competition=competition.key.id()) }}"
+            <a href="{{ c.uri_for('edit_competition',
+                                  competition_id=competition.key.id()) }}"
                class="competition-name">
               {{ competition.key.id() }}
             </a>
