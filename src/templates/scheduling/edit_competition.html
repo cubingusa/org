@@ -28,14 +28,16 @@
     <ul>
       {% for editor_key in competition.editors %}
         {% set editor = editor_key.get() %}
-        <li>
-          {{ editor.name }}
-          {% if editor.wca_person %}
-            <a href="{{ editor.wca_person.get().GetWCALink() }}" target="_blank">
-              ({{ editor.wca_person.id() }})
-            </a>
-          {% endif %}
-        </li>
+        {% if editor %}
+          <li>
+            {{ editor.name }}
+            {% if editor.wca_person %}
+              <a href="{{ editor.wca_person.get().GetWCALink() }}" target="_blank">
+                ({{ editor.wca_person.id() }})
+              </a>
+            {% endif %}
+          </li>
+        {% endif %}
       {% endfor %}
     </ul>
     <h3>Schedule Versions</h3>
