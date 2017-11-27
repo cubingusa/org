@@ -75,10 +75,6 @@ class OAuthBaseHandler(BaseHandler):
     conn = httplib.HTTPSConnection('www.worldcubeassociation.org' + path)
     conn.request('GET', '', '', headers)
     response = conn.getresponse()
-    if response.status != 200:
-      self.response.set_status(response.status)
-      logging.error('Error from WCA: ' + response.read())
-      return
     return response
 
 class LogoutHandler(BaseHandler):
