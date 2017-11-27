@@ -20,7 +20,7 @@ class LoginHandler(BaseHandler):
         'response_type': 'code',
         'redirect_uri': webapp2.uri_for('login_callback', _full=True),
         'state': self.request.referer if self.request.referer else '/',
-        'scope': 'public',
+        'scope': 'public email',
     }
 
     oauth_url = 'https://www.worldcubeassociation.org/oauth/authorize?' + urllib.urlencode(params)
