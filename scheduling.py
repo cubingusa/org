@@ -4,10 +4,11 @@ from src import config
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
 from src.handlers.scheduling.edit_schedule import EditScheduleHandler
+from src.handlers.scheduling.new_schedule import NewScheduleCallbackHandler
 from src.handlers.scheduling.new_schedule import NewScheduleHandler
 from src.handlers.scheduling.set_live import SetLiveHandler
-from src.handlers.scheduling.update_competition import UpdateCompetitionHandler
 from src.handlers.scheduling.update_competition import UpdateCompetitionCallbackHandler
+from src.handlers.scheduling.update_competition import UpdateCompetitionHandler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling', handler=SchedulingIndexHandler, name='index'),
@@ -26,6 +27,9 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/new_schedule/<competition_id:.*>',
                 handler=NewScheduleHandler,
                 name='new_schedule'),
+  webapp2.Route('/scheduling/new_schedule_callback',
+                handler=NewScheduleCallbackHandler,
+                name='new_schedule_callback'),
   webapp2.Route('/scheduling/set_live/<schedule_version:.*>/<set_live:\d>',
                 handler=SetLiveHandler,
                 name='set_live'),
