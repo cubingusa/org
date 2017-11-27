@@ -26,7 +26,9 @@ class LoginCallbackHandler(OAuthBaseHandler):
       return
 
     response = self.GetWcaApi('/api/v0/me')
-    if not response:
+    if response.status != 200:
+      self.response.set_status(response.status)
+      logging.error('Error from WCA: ' + self.response.read())
       return
 
     # Save the account information we need.
