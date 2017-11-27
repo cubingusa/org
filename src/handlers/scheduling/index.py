@@ -17,7 +17,7 @@ class SchedulingIndexHandler(AdminBaseHandler):
     self.response.write(template.render({
         'c': common.Common(self),
         'editable_competitions': editable_competitions,
-        'duplicate_competition': self.request.get('duplicate'),
+        'unknown_competition': self.request.get('unknown'),
     }))
 
   def PermittedRoles(self):

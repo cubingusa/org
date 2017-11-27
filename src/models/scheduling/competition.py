@@ -7,3 +7,4 @@ class ScheduleCompetition(ndb.Model):
   wca_competition = ndb.KeyProperty(kind=Competition)
   editors = ndb.KeyProperty(kind=User, repeated=True)
   timezone = ndb.StringProperty()
+  name = ndb.StringProperty()

@@ -21,10 +21,10 @@
       </ul>
     {% endif %}
     <h3>Create Competition</h3>
-    <form action="{{ c.uri_for('new_competition') }}" method="POST">
+    <form action="{{ c.uri_for('update_competition') }}" method="POST">
       <div class="form-group">
         <label for="competitionid">Competition ID</label>
-        <input class="form-control {% if duplicate_competition %}is-invalid{% endif %}"
+        <input class="form-control {% if unknown_competition %}is-invalid{% endif %}"
                type="text"
                id="competitionid"
                name="competitionid"
@@ -34,7 +34,7 @@
           Competition ID is already in use.  Please try again.
         </div>
         <small id="competitionid-help" class="form-text text-muted">
-          This should match the WCA competition ID.
+          This must match the competition's WCA competition ID, and you must have already created the competition on the WCA site.  It's okay if the competition isn't announced, but because we pull all data on events, rounds, and edit access from that site, the competition must be created already.
         </small>
       </div>
       <button class="button" type="submit" name="btnSubmit">Submit</button>
