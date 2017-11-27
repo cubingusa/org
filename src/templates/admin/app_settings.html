@@ -23,14 +23,26 @@
         WCA OAuth Client Secret:
         <input type="text" name="wca_oauth_client_secret" value="{{ settings.wca_oauth_client_secret or '' }}">
       </div>
+      <div>
+        Comp Management Client ID:
+        <input type="text" name="wca_oauth_comp_management_client_id" value="{{ settings.wca_oauth_comp_management_client_id or '' }}">
+      </div>
+      <div>
+        Comp Management Client Secret:
+        <input type="text" name="wca_oauth_comp_management_client_secret" value="{{ settings.wca_oauth_comp_management_client_secret or '' }}">
+      </div>
     </p>
     <p>
-      (Required) For dev apps, you should create an OAuth application <a href="https://www.worldcubeassociation.org/oauth/applications" target="_blank">here</a>.  You can set the callback URL to:
+      (Required) For dev apps, you should create two OAuth applications <a href="https://www.worldcubeassociation.org/oauth/applications" target="_blank">here</a>.  You can set the callback URL to:
       <pre>
 urn:ietf:wg:oauth:2.0:oob
 http://localhost:8080/login_callback
+http://localhost:8081/login_callback
       </pre>
-      You will need scopes "public email manage_competitions" (note that manage_competitions is not used yet but will be used for scheduling in the future). The prod keys are currently held by Tim Reynolds at <a href="https://www.worldcubeassociation.org/oauth/applications/122/edit" target="_blank">this link</a>.
+      For the first one, you will need scopes "public email".  For the second one, you will need scopes "public email manage_competitions".  The prod keys are currently held by Tim Reynolds <a href="https://www.worldcubeassociation.org/oauth/applications/122" target="_blank">here</a> and <a href="https://www.worldcubeassociation.org/oauth/applications/168" target="_blank">here</a>.
+    </p>
+    <p>
+      For context on why you need two apps, see <a href="https://github.com/doorkeeper-gem/doorkeeper/pull/907" target="_blank">this PR</a>.  Once this is resolved, we can collapse this into a single app.
     </p>
     <h3>Google Maps API key</h3>
     <p>

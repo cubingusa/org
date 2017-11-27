@@ -20,6 +20,8 @@ class AppSettingsHandler(BaseHandler):
     settings.session_secret_key = self.request.POST['session_secret_key']
     settings.wca_oauth_client_id = self.request.POST['wca_oauth_client_id']
     settings.wca_oauth_client_secret = self.request.POST['wca_oauth_client_secret']
+    settings.wca_oauth_comp_management_client_id = self.request.POST['wca_oauth_comp_management_client_id']
+    settings.wca_oauth_comp_management_client_secret = self.request.POST['wca_oauth_comp_management_client_secret']
     settings.google_maps_api_key = self.request.POST['google_maps_api_key']
     settings.recaptcha_site_key = self.request.POST['recaptcha_site_key']
     settings.recaptcha_secret_key = self.request.POST['recaptcha_secret_key']
