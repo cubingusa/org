@@ -8,10 +8,16 @@ from src.handlers.base import BaseHandler
 from src.models.app_settings import AppSettings
 
 def GetClientId(app_settings, scope):
-  return app_settings.wca_oauth_client_id
+  if 'manage_competitions' in scope:
+    return app_settings.wca_oauth_comp_management_client_id
+  else:
+    return app_settings.wca_oauth_client_id
 
 def GetClientSecret(app_settings, scope):
-  return app_settings.wca_oauth_client_secret
+  if 'manage_competitions' in scope:
+    return app_settings.wca_oauth_comp_management_client_secret
+  else:
+    return app_settings.wca_oauth_client_secret
 
 class AuthenticateHandler(BaseHandler):
   def get(self):
