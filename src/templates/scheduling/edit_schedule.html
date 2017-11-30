@@ -1,3 +1,4 @@
+{% import "components/event_selector.html" as event_selector %}
 {% extends "base.html" %}
 {% block title%}Edit Schedule{% endblock %}
 {% block style %}
@@ -38,6 +39,12 @@
              {% endif %}
              >
     </div>
+    <h3>Events</h3>
+    {{ event_selector.event_selector(c, events=events) }}
+    <div id="event-info"></div>
+    <small class="form-text form-muted">
+      Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
+    </small>
   </div>
   <script src="/static/external/bootstrap-datepicker.min.js" type="application/javascript"></script>
   <script src="/static/js/scheduling/edit_schedule.js" type="application/javascript"></script>

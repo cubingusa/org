@@ -14,8 +14,14 @@ var editScheduleModule = (function() {
                '/' + endDateElement.value);
       req.send();
     },
+
+    selectEvent: function(event_id, event_name) {
+      document.getElementById('event-info').innerHTML = event_name;
+    },
   };
 })();
+
+eventSelectorModule.setSelectListener(editScheduleModule.selectEvent);
 
 onloadModule.register(function() {
   $('.input-daterange').datepicker({
