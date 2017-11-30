@@ -8,3 +8,6 @@ class Schedule(ndb.Model):
   last_update_time = ndb.DateTimeProperty()
   is_live = ndb.BooleanProperty()
   notes = ndb.StringProperty()
+
+  start_date = ndb.DateProperty()
+  end_date = ndb.DateProperty()

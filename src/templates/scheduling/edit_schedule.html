@@ -2,8 +2,11 @@
 {% block title%}Edit Schedule{% endblock %}
 {% block style %}
   <link rel="stylesheet" href="/static/css/scheduling/edit_schedule.css" type="text/css">
+  <link rel="stylesheet" href="/static/external/bootstrap-datepicker3.min.css" type="text/css">
 {% endblock %}
 {% block content %}
+  <div id="schedule-id"
+       data-schedule="{{ schedule.key.id() }}"></div>
   <div class="container">
     <h1>{{ competition.key.id() }}</h1>
     {% if schedule.is_live %}
@@ -15,5 +18,27 @@
         Schedule {{ schedule.key.id() }} is not live.  <a href="{{ c.uri_for('set_live', schedule_version=schedule.key.id(), set_live=1) }}"><b>Set it live!</b></a>
       </div>
     {% endif %}
+    <h3>Dates</h3>
+    <div class="input-daterange input-group" id="datepicker">
+      <input type="text"
+             class="input-sm form-control"
+             name="start-date"
+             id="start-date"
+             {% if schedule.start_date %}
+               value="{{ schedule.start_date.strftime('%Y-%m-%d') }}"
+             {% endif %}
+             >
+      <span class="input-group-addon">to</span>
+      <input type="text"
+             class="input-sm form-control"
+             name="end-date"
+             id="end-date"
+             {% if schedule.end_date %}
+               value="{{ schedule.end_date.strftime('%Y-%m-%d') }}"
+             {% endif %}
+             >
+    </div>
   </div>
+  <script src="/static/external/bootstrap-datepicker.min.js" type="application/javascript"></script>
+  <script src="/static/js/scheduling/edit_schedule.js" type="application/javascript"></script>
 {% endblock %}
