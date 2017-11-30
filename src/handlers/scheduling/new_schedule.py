@@ -53,7 +53,7 @@ class NewScheduleCallbackHandler(OAuthBaseHandler, SchedulingBaseHandler):
         round_num += 1
         round_object = ScheduleRound(
             id=ScheduleRound.Id(schedule.key.id(), event['id'], round_num))
-        round_object.schedule_version = schedule.key
+        round_object.schedule = schedule.key
         round_object.event = event_key
         round_object.number = round_num
         round_object.is_final = len(event['rounds']) == round_num
