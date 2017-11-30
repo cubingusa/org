@@ -19,32 +19,36 @@
         Schedule {{ schedule.key.id() }} is not live.  <a href="{{ c.uri_for('set_live', schedule_version=schedule.key.id(), set_live=1) }}"><b>Set it live!</b></a>
       </div>
     {% endif %}
-    <h3>Dates</h3>
-    <div class="input-daterange input-group" id="datepicker">
-      <input type="text"
-             class="input-sm form-control"
-             name="start-date"
-             id="start-date"
-             {% if schedule.start_date %}
-               value="{{ schedule.start_date.strftime('%Y-%m-%d') }}"
-             {% endif %}
-             >
-      <span class="input-group-addon">to</span>
-      <input type="text"
-             class="input-sm form-control"
-             name="end-date"
-             id="end-date"
-             {% if schedule.end_date %}
-               value="{{ schedule.end_date.strftime('%Y-%m-%d') }}"
-             {% endif %}
-             >
+    <div class="schedule-section">
+      <h3>Dates</h3>
+      <div class="input-daterange input-group" id="datepicker">
+        <input type="text"
+               class="input-sm form-control"
+               name="start-date"
+               id="start-date"
+               {% if schedule.start_date %}
+                 value="{{ schedule.start_date.strftime('%Y-%m-%d') }}"
+               {% endif %}
+               >
+        <span class="input-group-addon">to</span>
+        <input type="text"
+               class="input-sm form-control"
+               name="end-date"
+               id="end-date"
+               {% if schedule.end_date %}
+                 value="{{ schedule.end_date.strftime('%Y-%m-%d') }}"
+               {% endif %}
+               >
+      </div>
     </div>
-    <h3>Events</h3>
-    {{ event_selector.event_selector(c, events=events) }}
-    <div id="event-info"></div>
-    <small class="form-text form-muted">
-      Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
-    </small>
+    <div class="schedule-section">
+      <h3>Events</h3>
+      {{ event_selector.event_selector(c, events=events) }}
+      <div id="event-info"></div>
+      <small class="form-text form-muted">
+        Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
+      </small>
+    </div>
   </div>
   <script src="/static/external/bootstrap-datepicker.min.js" type="application/javascript"></script>
   <script src="/static/js/scheduling/edit_schedule.js" type="application/javascript"></script>
