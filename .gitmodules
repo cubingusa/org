@@ -4,3 +4,6 @@
 [submodule "external/icons"]
 	path = external/icons
 	url = https://github.com/cubing/icons.git
+[submodule "external/bootstrap-datepicker"]
+	path = external/bootstrap-datepicker
+	url = https://github.com/uxsolutions/bootstrap-datepicker.git
