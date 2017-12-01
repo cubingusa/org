@@ -6,6 +6,9 @@ var editScheduleModule = (function() {
 
   return {
     reportDates: function() {
+      if (startDateElement.value === '' || endDateElement.value === '') {
+        return;
+      }
       var req = new XMLHttpRequest();
       
       req.open('POST',
@@ -24,11 +27,19 @@ var editScheduleModule = (function() {
 eventSelectorModule.setSelectListener(editScheduleModule.selectEvent);
 
 onloadModule.register(function() {
-  $('.input-daterange').datepicker({
-    orientation: 'bottom',
-    format: 'yyyy-mm-dd',
+  $('#start-date').datetimepicker({
+    format: 'YYYY-MM-DD',
   });
-
-  document.getElementById('start-date').onchange=editScheduleModule.reportDates;
-  document.getElementById('end-date').onchange=editScheduleModule.reportDates;
+  $('#end-date').datetimepicker({
+    useCurrent: false,
+    format: 'YYYY-MM-DD',
+  });
+  $("#start-date").on("dp.change", function (e) {
+    $('#end-date').data("DateTimePicker").minDate(e.date);
+    editScheduleModule.reportDates();
+  });
+  $("#end-date").on("dp.change", function (e) {
+    $('#start-date').data("DateTimePicker").maxDate(e.date);
+    editScheduleModule.reportDates();
+  });
 });
