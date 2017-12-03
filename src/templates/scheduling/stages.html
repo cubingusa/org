@@ -1,4 +1,4 @@
-{% macro stage_edit(stage_id, name, color_hex, timers) %}
+{% macro stage_edit(stage_id, name, colors, stage_color, timers) %}
   <form class="stage-form" data-stageid="{{ stage_id }}">
     <div class="stage-edit-row d-none" id="edit-row-{{ stage_id }}">
       <input type="hidden" name="id" value="{{ stage_id }}">
@@ -11,12 +11,18 @@
                required>
       </div>
       <div class="color-container">
-        <input type="text"
-               name="color"
-               class="form-control"
-               placeholder="Stage Color"
-               data-default="{{ color_hex }}"
-               required>
+        <select name="color" class="custom-select" id="color-select">
+          {% for color in colors %}
+            <option class="background-{{ color }}"
+                    {% if color == stage_color %}selected{% endif %}
+                    >
+              <span class="stage-chip" style="background-color: {{ color }}"></span>
+              <span class="color-name">
+                {{ color }}
+              </span>
+            </option>
+          {% endfor %}
+        </select>
       </div>
       <div class="timers-container">
         <input type="number"
@@ -40,19 +46,19 @@
 {% autoescape true %}
 {% for stage in stages %}
   <div class="stage-row" id="stage-row-{{ stage.key.id() }}">
-    <span class="stage-chip" style="background-color: #{{ stage.color_hex }};"></span>
+    <span class="stage-chip background-{{ stage.color }}"></span>
     <span class="stage-details">
       {{ stage.name }} ({{ stage.timers }} timers)
       <a href="#" data-stageid="{{ stage.key.id() }}" class="edit-link">[Edit]</a>
     </span>
   </div>
-  {{ stage_edit(stage.key.id(), stage.name, stage.color_hex, stage.timers) }}
+  {{ stage_edit(stage.key.id(), stage.name, colors, stage.color, stage.timers) }}
 {% endfor %}
 <div class="stage-row" id="stage-row-{{ new_stage_id }}">
   <div class="stage-details">
     <a href="#" data-stageid="{{ new_stage_id }}" class="edit-link">[Add new stage]</a>
   </div>
 </div>
-{{ stage_edit(new_stage_id, '', '', '') }}
+{{ stage_edit(new_stage_id, '', colors, '', '') }}
 
 {% endautoescape %}

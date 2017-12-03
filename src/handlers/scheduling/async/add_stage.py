@@ -1,6 +1,7 @@
 import random
 
 from src import common
+from src.scheduling.colors import Colors
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.round import ScheduleRound
@@ -11,16 +12,20 @@ class AddStageHandler(SchedulingBaseHandler):
   def post(self, schedule_version):
     if not self.SetSchedule(int(schedule_version)):
       return
-    old_stage = ScheduleStage.get_by_id(self.request.POST['id'])
+    stage_id = str(int(self.request.POST['id']))
+    old_stage = ScheduleStage.get_by_id(stage_id)
     is_new_stage = not old_stage
 
     if old_stage and old_stage.schedule != self.schedule.key:
       return
-    stage = old_stage or ScheduleStage(id=self.request.POST['id'])
+    stage = old_stage or ScheduleStage(id=stage_id)
 
     stage.schedule = self.schedule.key
     stage.name = self.request.POST['name']
-    stage.color_hex = self.request.POST['color']
+    if self.request.POST['color'] in Colors:
+      stage.color = self.request.POST['color']
+    else:
+      del stage.color
     stage.timers = int(self.request.POST['timers'])
     if not stage.number:
       max_stage = (ScheduleStage
@@ -44,4 +49,5 @@ class AddStageHandler(SchedulingBaseHandler):
         'c': common.Common(self),
         'stages': stages,
         'new_stage_id': random.randint(2 ** 4, 2 ** 10),
+        'colors': sorted(Colors.keys()),
     }))

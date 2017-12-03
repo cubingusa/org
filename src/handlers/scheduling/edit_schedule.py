@@ -5,6 +5,7 @@ from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.stage import ScheduleStage
+from src.scheduling.colors import Colors
 
 
 class EditScheduleHandler(SchedulingBaseHandler):
@@ -26,4 +27,5 @@ class EditScheduleHandler(SchedulingBaseHandler):
         'events': events,
         'stages': stages,
         'new_stage_id': random.randint(2 ** 4, 2 ** 10),
+        'colors': sorted(Colors.keys()),
     }))

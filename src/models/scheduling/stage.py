@@ -6,5 +6,6 @@ class ScheduleStage(ndb.Model):
   schedule = ndb.KeyProperty(kind=Schedule)
   number = ndb.IntegerProperty()
   name = ndb.StringProperty()
-  color_hex = ndb.StringProperty()
+  # The name for the css color.
+  color = ndb.StringProperty()
   timers = ndb.IntegerProperty()
