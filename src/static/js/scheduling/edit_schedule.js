@@ -45,9 +45,21 @@ var editScheduleModule = (function() {
       rowToHide.classList.add('d-none');
     },
 
+    selectColor: function(stageId) {
+      return function() {
+        selected = this.options[this.selectedIndex].value;
+        stageChip = document.getElementById('stage-chip-' + stageId);
+        stageChip.classList.remove('background-' + stageChip.dataset.color);
+        stageChip.classList.add('background-' + selected);
+        stageChip.dataset.color = selected;
+      };
+    },
+
     addListeners: function() {
       Array.prototype.forEach.call(document.getElementsByClassName('stage-form'), function(elt) {
         elt.addEventListener('submit', editScheduleModule.addStage);
+        colorSelector = elt.getElementsByClassName('color-selector')[0];
+        colorSelector.onchange = editScheduleModule.selectColor(elt.dataset.stageid);
       });
       Array.prototype.forEach.call(document.getElementsByClassName('edit-link'), function(elt) {
         elt.addEventListener('click', editScheduleModule.expandEdit);

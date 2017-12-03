@@ -11,15 +11,15 @@
                required>
       </div>
       <div class="color-container">
-        <select name="color" class="custom-select" id="color-select">
+        <span class="stage-chip background-{{ stage_color }}"
+              id="stage-chip-{{ stage_id }}"
+              data-color="{{ stage_color }}"></span>
+        <select name="color" class="custom-select color-selector">
           {% for color in colors %}
             <option class="background-{{ color }}"
                     {% if color == stage_color %}selected{% endif %}
                     >
-              <span class="stage-chip" style="background-color: {{ color }}"></span>
-              <span class="color-name">
-                {{ color }}
-              </span>
+              {{ color }}
             </option>
           {% endfor %}
         </select>
@@ -49,16 +49,16 @@
     <span class="stage-chip background-{{ stage.color }}"></span>
     <span class="stage-details">
       {{ stage.name }} ({{ stage.timers }} timers)
-      <a href="#" data-stageid="{{ stage.key.id() }}" class="edit-link">[Edit]</a>
+      <a href="javascript:void(0);" data-stageid="{{ stage.key.id() }}" class="edit-link">[Edit]</a>
     </span>
   </div>
   {{ stage_edit(stage.key.id(), stage.name, colors, stage.color, stage.timers) }}
 {% endfor %}
 <div class="stage-row" id="stage-row-{{ new_stage_id }}">
   <div class="stage-details">
-    <a href="#" data-stageid="{{ new_stage_id }}" class="edit-link">[Add new stage]</a>
+    <a href="javascript:void(0);" data-stageid="{{ new_stage_id }}" class="edit-link">[Add new stage]</a>
   </div>
 </div>
-{{ stage_edit(new_stage_id, '', colors, '', '') }}
+{{ stage_edit(new_stage_id, '', colors, colors[0], '') }}
 
 {% endautoescape %}
