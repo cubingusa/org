@@ -5,3 +5,40 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.stage-row {
+  padding: 2px;
+}
+
+.stage-chip {
+  border: 1px solid black;
+  border-radius: 2px;
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+}
+
+.stage-edit-row {
+  @include make-row();
+  padding-bottom: 10px;
+
+  .name-container {
+    @include make-col-ready();
+    @include make-col(3);
+  }
+
+  .color-container {
+    @include make-col-ready();
+    @include make-col(3);
+  }
+
+  .timers-container {
+    @include make-col-ready();
+    @include make-col(3);
+  }
+
+  .submit-container {
+    @include make-col-ready();
+    @include make-col(3);
+  }
+}

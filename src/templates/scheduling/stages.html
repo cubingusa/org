@@ -1,0 +1,58 @@
+{% macro stage_edit(stage_id, name, color_hex, timers) %}
+  <form class="stage-form" data-stageid="{{ stage_id }}">
+    <div class="stage-edit-row d-none" id="edit-row-{{ stage_id }}">
+      <input type="hidden" name="id" value="{{ stage_id }}">
+      <div class="name-container">
+        <input type="text"
+               name="name"
+               class="form-control"
+               placeholder="Stage Name"
+               value="{{ name }}"
+               required>
+      </div>
+      <div class="color-container">
+        <input type="text"
+               name="color"
+               class="form-control"
+               placeholder="Stage Color"
+               data-default="{{ color_hex }}"
+               required>
+      </div>
+      <div class="timers-container">
+        <input type="number"
+               min="0"
+               name="timers"
+               class="form-control"
+               placeholder="# Timers"
+               value="{{ timers }}"
+               required>
+      </div>
+      <div class="submit-container">
+        <button class="btn btn-primary"
+                type="submit">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+{% endmacro %}
+    
+{% autoescape true %}
+{% for stage in stages %}
+  <div class="stage-row" id="stage-row-{{ stage.key.id() }}">
+    <span class="stage-chip" style="background-color: #{{ stage.color_hex }};"></span>
+    <span class="stage-details">
+      {{ stage.name }} ({{ stage.timers }} timers)
+      <a href="#" data-stageid="{{ stage.key.id() }}" class="edit-link">[Edit]</a>
+    </span>
+  </div>
+  {{ stage_edit(stage.key.id(), stage.name, stage.color_hex, stage.timers) }}
+{% endfor %}
+<div class="stage-row" id="stage-row-{{ new_stage_id }}">
+  <div class="stage-details">
+    <a href="#" data-stageid="{{ new_stage_id }}" class="edit-link">[Add new stage]</a>
+  </div>
+</div>
+{{ stage_edit(new_stage_id, '', '', '') }}
+
+{% endautoescape %}

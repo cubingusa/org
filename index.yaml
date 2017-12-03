@@ -52,6 +52,17 @@ indexes:
   - name: pos
     direction: desc
 
+- kind: ScheduleStage
+  properties:
+  - name: schedule
+  - name: number
+
+- kind: ScheduleStage
+  properties:
+  - name: schedule
+  - name: number
+    direction: desc
+
 - kind: UserLocationUpdate
   properties:
   - name: user

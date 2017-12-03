@@ -42,6 +42,12 @@
       </div>
     </div>
     <div class="schedule-section">
+      <h3>Stages</h3>
+      <div>
+        {% include "scheduling/stages.html" %}
+      </div>
+    </div>
+    <div class="schedule-section">
       <h3>Events</h3>
       {{ event_selector.event_selector(c, events=events) }}
       <div id="event-info"></div>

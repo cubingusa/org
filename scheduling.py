@@ -1,6 +1,8 @@
 import webapp2
 
 from src import config
+from src.handlers.scheduling.async.add_stage import AddStageHandler
+from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.async.set_dates import SetDatesHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
@@ -36,4 +38,6 @@ app = webapp2.WSGIApplication([
                 name='set_live'),
   webapp2.Route('/scheduling/async/set_schedule_dates/<schedule_version:.*>/<start_date:.*>/<end_date:.*>',
                 handler=SetDatesHandler),
+  webapp2.Route('/scheduling/async/add_stage/<schedule_version:.*>',
+                handler=AddStageHandler),
 ], config=config.GetAppConfig())

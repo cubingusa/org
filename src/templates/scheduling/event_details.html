@@ -1,0 +1,10 @@
+{% autoescape true %}
+<div class="event-title">{{ event.name }} Rounds</div>
+{% for round in rounds %}
+  <div class="event-round-row">
+    Round {{ round.number }}: {{ num_competitors if num_competitors else '??' }} competitors
+  </div>
+  <div class="
+{% endfor %}
+
+{% endautoescape %}
