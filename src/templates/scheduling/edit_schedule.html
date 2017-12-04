@@ -19,6 +19,7 @@
         Schedule {{ schedule.key.id() }} is not live.  <a href="{{ c.uri_for('set_live', schedule_version=schedule.key.id(), set_live=1) }}"><b>Set it live!</b></a>
       </div>
     {% endif %}
+    <hr>
     <div class="schedule-section">
       <h3>Dates</h3>
       <div class="input-daterange input-group" id="datepicker">
@@ -41,12 +42,14 @@
                >
       </div>
     </div>
+    <hr>
     <div class="schedule-section">
       <h3>Stages</h3>
       <div>
         {% include "scheduling/stages.html" %}
       </div>
     </div>
+    <hr>
     <div class="schedule-section">
       <h3>Events</h3>
       {{ event_selector.event_selector(c, events=events) }}
