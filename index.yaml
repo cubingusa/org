@@ -52,6 +52,12 @@ indexes:
   - name: pos
     direction: desc
 
+- kind: ScheduleRound
+  properties:
+  - name: event
+  - name: schedule
+  - name: number
+
 - kind: ScheduleStage
   properties:
   - name: schedule
@@ -62,6 +68,11 @@ indexes:
   - name: schedule
   - name: number
     direction: desc
+
+- kind: ScheduleTimeBlock
+  properties:
+  - name: schedule
+  - name: start_time
 
 - kind: UserLocationUpdate
   properties:

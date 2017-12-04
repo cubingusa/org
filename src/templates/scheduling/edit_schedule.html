@@ -5,6 +5,9 @@
   <link rel="stylesheet" href="/static/css/scheduling/edit_schedule.css" type="text/css">
   <link rel="stylesheet" href="/static/external/bootstrap-datetimepicker.min.css" type="text/css">
 {% endblock %}
+{% block head %}
+  <script src="https://use.fontawesome.com/811113e9c2.js"></script>
+{% endblock %}
 {% block content %}
   <div id="schedule-id"
        data-schedule="{{ schedule.key.id() }}"></div>
@@ -31,6 +34,9 @@
                  value="{{ schedule.start_date.strftime('%Y-%m-%d') }}"
                {% endif %}
                >
+        <span class="input-group-addon">
+          <span class="fa fa-calendar"></span>
+        </span>
         <span class="input-group-addon">to</span>
         <input type="text"
                class="input-sm form-control"
@@ -40,6 +46,9 @@
                  value="{{ schedule.end_date.strftime('%Y-%m-%d') }}"
                {% endif %}
                >
+        <span class="input-group-addon">
+          <span class="fa fa-calendar"></span>
+        </span>
       </div>
     </div>
     <hr>
@@ -51,7 +60,7 @@
     </div>
     <hr>
     <div class="schedule-section">
-      <h3>Events</h3>
+      <h3>Rounds<span id="event-title"></span></h3>
       {{ event_selector.event_selector(c, events=events) }}
       <div id="event-info"></div>
       <small class="form-text form-muted">

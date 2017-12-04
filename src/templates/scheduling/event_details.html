@@ -1,10 +1,143 @@
+{% macro time_block_edit(time_block_id, time_block, round) %}
+  <form class="time-block-form" data-timeblock="{{ time_block_id }}">
+    <div class="time-block-edit-row d-none" id="edit-row-{{ time_block_id }}">
+      <input type="hidden" name="id" value="{{ time_block_id }}">
+      <input type="hidden" name="round" value="{{ round.key.id() }}">
+      <div class="stage-selector-container">
+        {% if time_block %}
+          {% set color = time_block.stage.get().color %}
+        {% elif stages %}
+          {% set color = stages[0].color %}
+        {% else %}
+          {% set color = 'white' %}
+        {% endif %}
+        <span class="stage-chip background-{{ color }}"
+              id="stage-chip-{{ time_block_id }}"
+              data-color="{{ color }}"></span>
+        <select name="stage"
+                class="custom-select color-selector"
+                data-chipid="{{ time_block_id }}">
+          {% for stage in stages %}
+            <option class="background-{{ stage.color }}"
+                    data-color="{{ stage.color }}"
+                    value="{{ stage.key.id() }}"
+                    {% if time_block and time_block.stage == stage.key %}
+                      selected
+                    {% endif %}
+                    >
+              {{ stage.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="day-container">
+        <select name="day"
+                class="custom-select">
+          {% for day in competition_days %}
+            <option value="{{ day.strftime('%Y-%m-%d') }}"
+                    {% if time_block and time_block.GetStartTime().date() == day %}
+                      selected
+                    {% endif %}
+                    >
+              {{ day.strftime('%A') }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="time-range-container">
+        <div class="input-timerange input-group"
+             data-timeblock="{{ time_block_id }}">
+          <input type="text"
+                 class="input-sm form-control"
+                 name="start-time"
+                 id="start-time-{{ time_block_id }}"
+                 {% if time_block and time_block.start_time %}
+                   value="{{ time_block.GetStartTime().strftime('%I:%M %p') }}"
+                 {% endif %}
+                 required>
+          <span class="input-group-addon">
+            <span class="fa fa-clock-o"></span>
+          </span>
+          <span class="input-group-addon">to</span>
+          <input type="text"
+                 class="input-sm form-control"
+                 name="end-time"
+                 id="end-time-{{ time_block_id }}"
+                 {% if time_block and time_block.end_time %}
+                   value="{{ time_block.GetEndTime().strftime('%I:%M %p') }}"
+                 {% endif %}
+                 required>
+          <span class="input-group-addon">
+            <span class="fa fa-clock-o"></span>
+          </span>
+        </div>
+      </div>
+      <div class="details-container">
+        <label class="custom-control custom-checkbox">
+          <input type="checkbox"
+                 class="custom-control-input"
+                 name="staff-only"
+                 {% if time_block and time_block.staff_only %}
+                   checked
+                 {% endif %}
+                 >
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">Staff-Only</span>
+        </label>
+      </div>
+      <div class="submit-container">
+        <button class="btn btn-primary"
+                type="submit">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+{% endmacro %}
 {% autoescape true %}
-<div class="event-title">{{ event.name }} Rounds</div>
 {% for round in rounds %}
-  <div class="event-round-row">
-    Round {{ round.number }}: {{ num_competitors if num_competitors else '??' }} competitors
+  <div class="round-container">
+    <h5 class="event-round-row">
+      Round {{ round.number }}: {{ num_competitors if round.num_competitors else '??' }} competitors
+    </h5>
+    {% for time_block in time_blocks[round.key] %}
+      <div class="time-block-row editable-row" id="editable-row-{{ time_block.key.id() }}">
+        <span class="stage-chip background-{{ time_block.stage.get().color }}"></span>
+        <span class="time-block-details">
+          {{ time_block.GetStartTime().strftime('%A') }}
+          {{ time_block.GetStartTime().strftime('%I:%M %p') }} &mdash;
+          {{ time_block.GetEndTime().strftime('%I:%M %p') }}
+          {% if time_block.attempt > 0 %}
+            (Attempt {{ time_block.attempt }})
+          {% endif %}
+          {% if time_block.staff_only %}
+            <b>(Staff)</b>
+          {% endif %}
+          <a href="javascript:void(0);"
+             data-editid="{{ time_block.key.id() }}"
+             class="edit-link">
+            [Edit]
+          </a>
+          <a href="javascript:void(0);"
+             data-timeblock="{{ time_block.key.id() }}"
+             class="delete-timeblock-link">
+            [Delete]
+          </a>
+        </span>
+      </div>
+      {{ time_block_edit(time_block.key.id(), time_block, round) }}
+    {% endfor %}
+    <div class="time-block-row" id="editable-row-{{ new_ids[round.key] }}">
+      <div class="time-block-details">
+        <a href="javascript:void(0);"
+           data-editid="{{ new_ids[round.key] }}"
+           class="edit-link">
+          [Add to schedule]
+        </a>
+      </div>
+    </div>
+    {{ time_block_edit(new_ids[round.key], None, round) }}
   </div>
-  <div class="
 {% endfor %}
 
 {% endautoescape %}

@@ -2,6 +2,7 @@ import webapp2
 
 from src import config
 from src.handlers.scheduling.async.add_stage import AddStageHandler
+from src.handlers.scheduling.async.add_time_block import AddTimeBlockHandler
 from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.async.set_dates import SetDatesHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
@@ -40,4 +41,9 @@ app = webapp2.WSGIApplication([
                 handler=SetDatesHandler),
   webapp2.Route('/scheduling/async/add_stage/<schedule_version:.*>',
                 handler=AddStageHandler),
+  webapp2.Route('/scheduling/async/add_time_block/<schedule_version:.*>',
+                handler=AddTimeBlockHandler),
+  webapp2.Route('/scheduling/async/get_event_details/<schedule_version:.*>/<event_id:.*>',
+                handler=EventDetailsHandler,
+                name='event_details'),
 ], config=config.GetAppConfig())

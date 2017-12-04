@@ -12,7 +12,7 @@ class AddStageHandler(SchedulingBaseHandler):
   def post(self, schedule_version):
     if not self.SetSchedule(int(schedule_version)):
       return
-    stage_id = str(int(self.request.POST['id']))
+    stage_id = self.request.POST['id']
     old_stage = ScheduleStage.get_by_id(stage_id)
     is_new_stage = not old_stage
 
@@ -48,6 +48,6 @@ class AddStageHandler(SchedulingBaseHandler):
     self.response.write(template.render({
         'c': common.Common(self),
         'stages': stages,
-        'new_stage_id': random.randint(2 ** 4, 2 ** 10),
+        'new_stage_id': '%s_%d' % (schedule_version, random.randint(2 ** 4, 2 ** 32)),
         'colors': sorted(Colors.keys()),
     }))
