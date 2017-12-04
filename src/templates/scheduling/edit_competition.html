@@ -40,23 +40,25 @@
         {% endif %}
       {% endfor %}
     </ul>
-    <h3>Schedule Versions</h3>
-    <ul>
-      {% for schedule_version in schedule_versions %}
+    {% if competition.timezone %}
+      <h3>Schedule Versions</h3>
+      <ul>
+        {% for schedule_version in schedule_versions %}
+          <li>
+            <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
+              {{ schedule_version.key.id() }}
+            </a>
+            <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
+            {% if schedule_version.is_live %}<b>(Live)</b>{% endif %}
+            {{ schedule_version.notes or '' }}
+          </li>
+        {% endfor %}
         <li>
-          <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
-            {{ schedule_version.key.id() }}
+          <a href="{{ c.uri_for('new_schedule', competition_id=competition.key.id()) }}">
+            New Schedule
           </a>
-          <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
-          {% if schedule_version.is_live %}<b>(Live)</b>{% endif %}
-          {{ schedule_version.notes or '' }}
         </li>
-      {% endfor %}
-      <li>
-        <a href="{{ c.uri_for('new_schedule', competition_id=competition.key.id()) }}">
-          New Schedule
-        </a>
-      </li>
-    </ul>
+      </ul>
+    {% endif %}
   </div>
 {% endblock %}
