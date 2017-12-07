@@ -1,11 +1,10 @@
 @import "variables";
 @import "../../external/bootstrap/scss/bootstrap";
 
-.navbar {
+.navbar-base {
+  @extend .navbar;
   @extend .navbar-expand-lg;
   @extend .fixed-top;
-  @extend .navbar-dark;
-  @extend .bg-primary;
 
   .navbar-left {
     @extend .nav;
@@ -29,6 +28,20 @@
     cursor: pointer;
   }
 }
+
+.navbar-primary {
+  @extend .navbar-base;
+  @extend .navbar-dark;
+  @extend .bg-primary;
+}
+
+.navbar-secondary {
+  @extend .navbar-base;
+  @extend .navbar-light;
+  background-color: #eeeeee;
+  margin-top: 76px;
+}
+
 
 div#content {
   padding-top: 90px;

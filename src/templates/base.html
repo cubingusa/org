@@ -1,34 +1,6 @@
 <!DOCTYPE html>
 {% autoescape true %}
-{% macro navitem(c, path) %}
-  {% set active = c.uri_matches(path) %}
-  <li>
-    <a class="navbar-item {% if active %}active{% endif %}"
-       href="{{ path }}">
-      {{ caller() }}{% if active %}<span class="sr-only"> (current)</span>{% endif %}
-    </a>
-  </li>
-{% endmacro %}
-{% macro navdropdown(c, path_list) %}
-  {% set active = c.uri_matches_any(path_list) %}
-  <div class="dropdown {% if active %}active{% endif %}">
-    <a class="navbar-dropdown"
-       data-toggle="dropdown"
-       aria-haspopup="true"
-       aria-expanded="false">
-      {{ caller() }}
-    </a>
-    <div class="dropdown-menu {% if active %}active{% endif %}"
-         role="menu">
-      {% for title, path in path_list %}
-        <a class="dropdown-item {% if c.uri_matches(path) %}active{% endif %}"
-           href="{{ path }}">
-          {{ title }}
-        </a>
-      {% endfor %}
-    </div>
-  </div>
-{% endmacro %}
+{% import "components/nav.html" as nav %}
 <html>
 <head>
   {% if c.app_settings().google_analytics_tracking_id %}
@@ -56,7 +28,7 @@
   {% block head %}{% endblock %}
 </head>
 <body>
-  <div class="navbar">
+  <div class="navbar-primary">
     <div class="container">
       <a class="navbar-brand" href="/">
         <img src="/static/img/cubingUSA_4.svg" width="50" height="50"> CubingUSA
@@ -75,24 +47,25 @@
         <ul class="navbar-left">
           {% for title, path in c.get_nav_items() %}
             {% if c.is_string(path) %}
-              {% call navitem(c, path) %} {{ title }} {% endcall %}
+              {% call nav.navitem(c, path) %} {{ title }} {% endcall %}
             {% else %}
-              {% call navdropdown(c, path) %} {{ title }} {% endcall %}
+              {% call nav.navdropdown(c, path) %} {{ title }} {% endcall %}
             {% endif %}
           {% endfor %}
         </ul>
         <ul class="navbar-right">
           {% for title, path in c.get_right_nav_items() %}
             {% if c.is_string(path) %}
-              {% call navitem(c, path) %} {{ title }} {% endcall %}
+              {% call nav.navitem(c, path) %} {{ title }} {% endcall %}
             {% else %}
-              {% call navdropdown(c, path) %} {{ title }} {% endcall %}
+              {% call nav.navdropdown(c, path) %} {{ title }} {% endcall %}
             {% endif %}
           {% endfor %}
         </ul>
       </div>
     </div>
   </div>
+  {% block navbar_secondary %}{% endblock %}
   <div class="container">
     <div id="content">
       {% block content %}{% endblock %}

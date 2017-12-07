@@ -25,8 +25,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
   webapp2.Route('/edit', handler=EditUserHandler, name='edit_user'),
   webapp2.Route('/edit/<user_id:.*>', handler=EditUserHandler, name='edit_user_by_id'),
-  webapp2.Route('/nationals', handler=BasicHandler('nationals.html', include_wca_disclaimer=True),
-                name='competitions_nationals'),
   webapp2.Route('/regional', handler=BasicHandler('regional.html'), name='competitions_regional'),
   webapp2.Route('/supported', handler=BasicHandler('supported.html'), name='supported'),
   webapp2.Route('/state_rankings', handler=BasicHandler('state_rankings.html', include_wca_disclaimer=True),
