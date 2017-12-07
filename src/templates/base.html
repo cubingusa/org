@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 {% autoescape true %}
-{% macro navitem(c, handler) %}
-  {% set active = c.uri_matches(handler) %}
+{% macro navitem(c, path) %}
+  {% set active = c.uri_matches(path) %}
   <li>
     <a class="navbar-item {% if active %}active{% endif %}"
-       href="{{ c.uri_for(handler) }}">
+       href="{{ path }}">
       {{ caller() }}{% if active %}<span class="sr-only"> (current)</span>{% endif %}
     </a>
   </li>
 {% endmacro %}
-{% macro navdropdown(c, handler_list) %}
-  {% set active = c.uri_matches_any(handler_list) %}
+{% macro navdropdown(c, path_list) %}
+  {% set active = c.uri_matches_any(path_list) %}
   <div class="dropdown {% if active %}active{% endif %}">
     <a class="navbar-dropdown"
        data-toggle="dropdown"
@@ -20,9 +20,9 @@
     </a>
     <div class="dropdown-menu {% if active %}active{% endif %}"
          role="menu">
-      {% for title, handler in handler_list %}
-        <a class="dropdown-item {% if c.uri_matches(handler) %}active{% endif %}"
-           href="{{ c.uri_for(handler) }}">
+      {% for title, path in path_list %}
+        <a class="dropdown-item {% if c.uri_matches(path) %}active{% endif %}"
+           href="{{ path }}">
           {{ title }}
         </a>
       {% endfor %}
@@ -58,7 +58,7 @@
 <body>
   <div class="navbar">
     <div class="container">
-      <a class="navbar-brand" href="{{ c.uri_for('home') }}">
+      <a class="navbar-brand" href="/">
         <img src="/static/img/cubingUSA_4.svg" width="50" height="50"> CubingUSA
       </a>
       <button class="navbar-toggler"
@@ -73,20 +73,20 @@
       </button>
       <div class="collapse navbar-collapse" id="topnav">
         <ul class="navbar-left">
-          {% for title, handler in c.get_nav_items() %}
-            {% if c.is_string(handler) %}
-              {% call navitem(c, handler) %} {{ title }} {% endcall %}
+          {% for title, path in c.get_nav_items() %}
+            {% if c.is_string(path) %}
+              {% call navitem(c, path) %} {{ title }} {% endcall %}
             {% else %}
-              {% call navdropdown(c, handler) %} {{ title }} {% endcall %}
+              {% call navdropdown(c, path) %} {{ title }} {% endcall %}
             {% endif %}
           {% endfor %}
         </ul>
         <ul class="navbar-right">
-          {% for title, handler in c.get_right_nav_items() %}
-            {% if c.is_string(handler) %}
-              {% call navitem(c, handler) %} {{ title }} {% endcall %}
+          {% for title, path in c.get_right_nav_items() %}
+            {% if c.is_string(path) %}
+              {% call navitem(c, path) %} {{ title }} {% endcall %}
             {% else %}
-              {% call navdropdown(c, handler) %} {{ title }} {% endcall %}
+              {% call navdropdown(c, path) %} {{ title }} {% endcall %}
             {% endif %}
           {% endfor %}
         </ul>
