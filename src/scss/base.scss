@@ -5,35 +5,35 @@
   @extend .navbar;
   @extend .navbar-expand-lg;
   @extend .fixed-top;
+}
 
-  .navbar-left {
-    @extend .nav;
-    @extend .navbar-nav;
-    @extend .mr-auto;
-  }
+.navbar-left {
+  @extend .nav;
+  @extend .navbar-nav;
+  @extend .mr-auto;
+}
 
-  .navbar-right {
-    @extend .nav;
-    @extend .navbar-nav;
-  }
+.navbar-right {
+  @extend .nav;
+  @extend .navbar-nav;
+}
 
-  .navbar-item {
-    @extend .nav-item;
-    @extend .nav-link;
-  }
+.navbar-item {
+  @extend .nav-item;
+  @extend .nav-link;
+}
 
-  .navbar-dropdown {
-    @extend .nav-link;
-    @extend .dropdown-toggle;
-    cursor: pointer;
-  }
+.navbar-dropdown {
+  @extend .nav-link;
+  @extend .dropdown-toggle;
+  cursor: pointer;
+}
 
-  .navbar-icon-item {
-    @extend .nav-item;
-    .navbar-icon-label {
-      @include media-breakpoint-up(sm) {
-        display: none;
-      }
+.navbar-icon-item {
+  @extend .nav-item;
+  .navbar-icon-label {
+    @include media-breakpoint-up(sm) {
+      display: none;
     }
   }
 }
