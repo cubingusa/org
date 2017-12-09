@@ -21,7 +21,7 @@
       </div>
     {% endif %}
     <hr>
-    <div class="schedule-section">
+    <div class="schedule-section" id="dates-section">
       <h3>Dates</h3>
       <div class="input-daterange input-group" id="datepicker">
         <input type="text"
@@ -50,14 +50,22 @@
       </div>
     </div>
     <hr>
-    <div class="schedule-section">
+    <div class="schedule-section"
+         id="stages-section"
+         {% if not schedule.start_date %}
+           style="display:none;"
+         {% endif %}>
       <h3>Stages</h3>
       <div>
         {% include "scheduling/stages.html" %}
       </div>
     </div>
     <hr>
-    <div class="schedule-section">
+    <div class="schedule-section"
+         id="rounds-section"
+         {% if not schedule.start_date %}
+           style="display:none;"
+         {% endif %}>
       <h3>Rounds<span id="event-title"></span></h3>
       {{ event_selector.event_selector(c, events=events) }}
       <div id="event-info"></div>
