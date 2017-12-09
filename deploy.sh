@@ -11,7 +11,7 @@ echo "Updating python dependencies."
 pip install -t lib -r requirements.txt --upgrade
 
 echo "Recompiling minified CSS."
-rm -r src/static/css/prod
+rm -r -f src/static/css/prod
 mkdir src/static/css/prod
 sass --update src/scss:src/static/css/prod --style compressed
 
