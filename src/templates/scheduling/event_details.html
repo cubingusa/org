@@ -98,7 +98,7 @@
 {% for round in rounds %}
   <div class="round-container">
     <h5 class="event-round-row">
-      Round {{ round.number }}: {{ num_competitors if round.num_competitors else '??' }} competitors
+      Round {{ round.number }}: {{ round.num_competitors if round.num_competitors else '??' }} competitors
     </h5>
     {% for time_block in time_blocks[round.key] %}
       <div class="time-block-row editable-row" id="editable-row-{{ time_block.key.id() }}">

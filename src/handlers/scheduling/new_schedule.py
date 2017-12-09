@@ -49,6 +49,7 @@ class NewScheduleCallbackHandler(OAuthBaseHandler, SchedulingBaseHandler):
     for event in response_json['events']:
       event_key = ndb.Key(Event, event['id'])
       round_num = 0
+      next_round_count = 0
       for round_json in event['rounds']:
         round_num += 1
         round_object = ScheduleRound(
@@ -58,7 +59,14 @@ class NewScheduleCallbackHandler(OAuthBaseHandler, SchedulingBaseHandler):
         round_object.number = round_num
         round_object.is_final = len(event['rounds']) == round_num
         round_object.wcif = json.dumps(round_json)
+        if next_round_count:
+          round_object.num_competitors = next_round_count
         objects_to_put.append(round_object)
+        advancement_condition = round_json['advancementCondition']
+        if advancement_condition and advancement_condition['type'] == 'ranking':
+          next_round_count = advancement_condition['level']
+        else:
+          next_round_count = 0
 
     ndb.put_multi(objects_to_put)
     self.redirect(webapp2.uri_for('edit_schedule', schedule_version=schedule.key.id()))
