@@ -25,6 +25,7 @@
   <script src="/static/external/jquery-3.2.1.slim.min.js" type="application/javascript"></script>
   <script src="/static/js/onload.js" type="application/javascript"></script>
   <script src="/static/js/hash.js" type="application/javascript"></script>
+  <script src="https://use.fontawesome.com/811113e9c2.js"></script>
   {% block head %}{% endblock %}
 </head>
 <body>
@@ -54,6 +55,16 @@
           {% endfor %}
         </ul>
         <ul class="navbar-right">
+          <li class="nav-item active">
+            <a href="https://github.com/cubingusa/cubingusa-org" target="_blank" class="nav-link">
+              <i class="fa fa-github" aria-label="CubingUSA Github"></i>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a href="https://www.facebook.com/CubingUSA/" target="_blank" class="nav-link">
+              <i class="fa fa-facebook-official" aria-label="CubingUSA Facebook"></i>
+            </a>
+          </li>
           {% for title, path in c.get_right_nav_items() %}
             {% if c.is_string(path) %}
               {% call nav.navitem(c, path) %} {{ title }} {% endcall %}
