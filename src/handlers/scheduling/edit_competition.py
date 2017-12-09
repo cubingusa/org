@@ -2,10 +2,14 @@ import datetime
 import pytz
 import webapp2
 
+from google.appengine.ext import ndb
+
 from src import common
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.schedule import Schedule
+from src.models.scheduling.staff import ScheduleStaff
+from src.models.scheduling.staff import StaffRoles
 
 
 class EditCompetitionHandler(SchedulingBaseHandler):
@@ -20,6 +24,8 @@ class EditCompetitionHandler(SchedulingBaseHandler):
     self.response.write(template.render({
         'c': common.Common(self),
         'competition': self.competition,
+        'editors': ScheduleStaff.query(ndb.AND(ScheduleStaff.competition == self.competition.key,
+                                               ScheduleStaff.roles == StaffRoles.EDITOR)).fetch(),
         'timezones_and_times': timezones_and_times,
         'schedule_versions': schedule_versions,
     }))

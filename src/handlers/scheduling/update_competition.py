@@ -7,6 +7,8 @@ from google.appengine.ext import ndb
 from src.handlers.base import BaseHandler
 from src.handlers.oauth import OAuthBaseHandler
 from src.models.scheduling.competition import ScheduleCompetition
+from src.models.scheduling.staff import ScheduleStaff
+from src.models.scheduling.staff import StaffRoles
 from src.models.user import User
 from src.models.wca.competition import Competition
 
@@ -37,11 +39,15 @@ class UpdateCompetitionCallbackHandler(OAuthBaseHandler):
                    ScheduleCompetition(id=competition_id))
     competition.name = response_json['name']
     competition.wca_competition = ndb.Key(Competition, competition_id)
-    current_editors = set(editor.id() for editor in competition.editors)
+    current_editors = ScheduleStaff.query(ndb.AND(ScheduleStaff.competition == competition.key,
+                                                  ScheduleStaff.roles == StaffRoles.EDITOR)).fetch()
     for person in response_json['persons']:
-      if str(person['wcaUserId']) in current_editors:
-        continue
-      if person['delegatesCompetition'] or person['organizesCompetition']:
-        competition.editors.append(ndb.Key(User, str(person['wcaUserId'])))
+      staff_id = ScheduleStaff.Id(competition_id, person['wcaUserId'])
+      staff = ScheduleStaff.get_by_id(staff_id) or ScheduleStaff(id=staff_id)
+      if StaffRoles.EDITOR not in staff.roles:
+        staff.competition = competition.key
+        staff.user = ndb.Key(User, str(person['wcaUserId']))
+        staff.roles.append(StaffRoles.EDITOR)
+        staff.put()
     competition.put()
     self.redirect(webapp2.uri_for('edit_competition', competition_id=competition_id))

@@ -27,14 +27,14 @@
     </form>
     <h3>Schedule Editors</h3>
     <ul>
-      {% for editor_key in competition.editors %}
-        {% set editor = editor_key.get() %}
-        {% if editor %}
+      {% for editor in editors %}
+        {% set editor_user = editor.user.get() %}
+        {% if editor_user %}
           <li>
-            {{ editor.name }}
-            {% if editor.wca_person %}
-              <a href="{{ editor.wca_person.get().GetWCALink() }}" target="_blank">
-                ({{ editor.wca_person.id() }})
+            {{ editor_user.name }}
+            {% if editor_user.wca_person %}
+              <a href="{{ editor_user.wca_person.get().GetWCALink() }}" target="_blank">
+                ({{ editor_user.wca_person.id() }})
               </a>
             {% endif %}
           </li>

@@ -4,6 +4,8 @@ from src import common
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.competition import ScheduleCompetition
 from src.models.scheduling.schedule import Schedule
+from src.models.scheduling.staff import ScheduleStaff
+from src.models.scheduling.staff import StaffRoles
 
 class SchedulingBaseHandler(BaseHandler):
   def RespondWithError(self, error_string):
@@ -21,7 +23,11 @@ class SchedulingBaseHandler(BaseHandler):
           'Unknown competition %s.  Scheduling may not be enabled for this '
           'competition.' % competition_id)
       return False
-    if not self.user or self.user.key not in self.competition.editors:
+    if not self.user:
+      self.redirect('/login')
+      return False
+    staff = ScheduleStaff.get_by_id(ScheduleStaff.Id(competition_id, self.user.key.id()))
+    if not staff or StaffRoles.EDITOR not in staff.roles:
       self.RespondWithError(
           'You don\'t have access to edit this schedule.')
       return False
