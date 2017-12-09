@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% autoescape true %}
+{% import "components/css.html" as css %}
 {% import "components/nav.html" as nav %}
 <html>
 <head>
@@ -20,7 +21,7 @@
   <link rel="icon" href="/static/img/favicon.ico">
   <title>CubingUSA - {%block title %}{% endblock %}</title>
   {% block style %}
-    <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+    {{ css.css(c, 'base') }}
   {% endblock %}
   <script src="/static/external/jquery-3.2.1.slim.min.js" type="application/javascript"></script>
   <script src="/static/js/onload.js" type="application/javascript"></script>

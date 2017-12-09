@@ -1,7 +1,8 @@
+{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}Public Documents{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/documents.css" type="text/css">
+  {{ css.css(c, 'documents') }}
 {% endblock %}
 {% block content %}
   <h1>CubingUSA Public Documents</h1>

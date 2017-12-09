@@ -1,7 +1,8 @@
+{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}About CubingUSA{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/about.css" type="text/css">
+  {{ css.css(c, 'about') }}
 {% endblock %}
 {% block content %}
   <div class="container">

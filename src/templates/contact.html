@@ -1,8 +1,9 @@
 {% import "components/contact.html" as contact %}
+{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}Contact{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/contact.css" type="text/css">
+  {{ css.css(c, 'contact') }}
 {% endblock %}
 {% block content %}
   {% call contact.contact_form(c, result) %}{% endcall %}

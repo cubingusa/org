@@ -1,10 +1,11 @@
+{% import "components/css.html" as css %}
 {% import "components/event_selector.html" as event_selector %}
 {% import "components/region_selector.html" as region_selector %}
 {% import "components/year_selector.html" as year_selector %}
 {% extends "base.html" %}
 {% block title%}US Competitions{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/competitions_us.css" type="text/css">
+  {{ css.css(c, 'competitions_us') }}
 {% endblock %}
 {% block content %}
   <h1>US Competitions</h1>

@@ -1,7 +1,8 @@
+{% import "components/css.html" as css %}
 {% import "components/nav.html" as nav %}
 {% extends "base.html" %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/nationals/2018/base.css" type="text/css">
+  {{ css.css(c, 'nationals/2018/base') }}
 {% endblock %}
 {% block navbar_secondary %}
   <div class="navbar-secondary">

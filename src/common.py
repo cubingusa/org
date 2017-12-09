@@ -1,4 +1,5 @@
 import datetime
+import os
 import webapp2
 
 from src import formatters
@@ -103,3 +104,6 @@ class Common(object):
 
   def get_wca_export(self):
     return get_latest_export().key.id()
+
+  def is_prod(self):
+    return not os.environ['SERVER_SOFTWARE'].startswith('Dev')

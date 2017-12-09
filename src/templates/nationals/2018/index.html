@@ -1,8 +1,9 @@
+{% import "components/css.html" as css %}
 {% import "components/event_selector.html" as event_selector %}
 {% extends "nationals/2018/base.html" %}
 {% block title%}Nationals 2018{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/nationals/2018/index.css" type="text/css">
+  {{ css.css(c, 'nationals/2018/index') }}
 {% endblock %}
 {% block content %}
   <div class="nats-top-row">

@@ -1,7 +1,8 @@
+{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}Who we are{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/about_who.css" type="text/css">
+  {{ css.css(c, 'about_who') }}
 {% endblock %}
 {% block content %}
 {% macro person_row(img_src, name, person_title, id, accordion_id) %}

@@ -1,10 +1,11 @@
+{% import "components/css.html" as css %}
 {% import "components/event_selector.html" as event_selector %}
 {% import "components/state_selector.html" as state_selector %}
 {% import "components/faq.html" as faq %}
 {% extends "base.html" %}
 {% block title%}State Rankings{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/state_rankings.css" type="text/css">
+  {{ css.css(c, 'state_rankings') }}
 {% endblock %}
 {% block content %}
   <h3 id="header">State Rankings</h3>

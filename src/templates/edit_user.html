@@ -1,7 +1,8 @@
+{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}Edit{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/edit_user.css" type="text/css">
+  {{ css.css(c, 'edit_user') }}
 {% endblock %}
 {% block content %}
   {% if successful %}
