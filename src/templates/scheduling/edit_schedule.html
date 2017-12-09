@@ -1,8 +1,9 @@
+{% import "components/css.html" as css %}
 {% import "components/event_selector.html" as event_selector %}
 {% extends "base.html" %}
 {% block title%}Edit Schedule{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/scheduling/edit_schedule.css" type="text/css">
+  {{ css.css(c, 'scheduling/edit_schedule') }}
   <link rel="stylesheet" href="/static/external/bootstrap-datetimepicker.min.css" type="text/css">
 {% endblock %}
 {% block content %}
