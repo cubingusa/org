@@ -1,0 +1,43 @@
+{% macro contact_form(c, result) %}
+  {% if result == 'success' %}
+    <div class="alert alert-success" role="alert">
+      <strong>Mail sent!</strong>  Check your email, you have been cc-ed.
+    </div>
+  {% endif %}
+  {% if result == 'failure' %}
+    <div class="alert alert-danger" role="alert">
+      <strong>Failed to send mail!</strong>  Please try again later.
+    </div>
+  {% endif %}
+  <form action="{{ c.uri }}" id="form" method="POST">
+    <h3>Contact Us</h3>
+    {{ caller() }}
+    <div class="form-group">
+      <label for="from-address">From</label>
+      <input type="email"
+             class="form-control"
+             name="from-address"
+             id="from-address"
+             {% if c.user %}
+               value="{{ c.user.email }}"
+               readonly
+             {% else %}
+               placeholder="name@example.com"
+             {% endif %}
+             required>
+    </div>
+    <div class="form-group">
+      <label for="contact-message">Message</label>
+      <textarea class="form-control"
+                name="contact-message"
+                id="contact-message"
+                rows="5"
+                required></textarea>
+    </div>
+    {% if c.app_settings().recaptcha_site_key %}
+      <div class="g-recaptcha" data-sitekey="{{ c.app_settings().recaptcha_site_key }}"></div>
+    {% endif %}
+    <button class="button" type="submit">Send</button>
+  </form>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endmacro %}

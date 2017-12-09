@@ -28,7 +28,11 @@ var eventSelectorModule = (function() {
         }
         this.getElementsByClassName('event-selector-icon')[0].classList.add('selected');
         selectedEvent = this.dataset.eventid;
-        hashModule.setValue('e', this.dataset.eventid);
+        if (this.dataset.eventid == defaultEvt) {
+          hashModule.deleteKey('e');
+        } else {
+          hashModule.setValue('e', this.dataset.eventid);
+        }
         selectListener(this.dataset.eventid, this.dataset.eventname);
       }
     },
