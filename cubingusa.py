@@ -16,6 +16,7 @@ from src.handlers.edit_user import EditUserHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
 from src.handlers.login import LogoutHandler
+from src.models.app_settings import AppSettings
 from src.models.user import Roles
 
 app = webapp2.WSGIApplication([
@@ -36,7 +37,9 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/get_document/<document_id:.*>/<document_name:.*>',
                 handler=GetDocumentHandler, name='get_document'),
   webapp2.Route('/about/logo', handler=BasicHandler('logo.html'), name='logo'),
-  webapp2.Route('/about/contact', handler=ContactHandler, name='contact'),
+  webapp2.Route('/about/contact',
+                handler=ContactHandler(AppSettings.Get().contact_email, 'contact.html', 'CubingUSA'),
+                name='contact'),
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler),
