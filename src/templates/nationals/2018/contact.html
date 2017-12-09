@@ -1,0 +1,9 @@
+{% import "components/contact.html" as contact %}
+{% extends "nationals/2018/base.html" %}
+{% block title%}Contact{% endblock %}
+{% block style %}
+  <link rel="stylesheet" href="/static/css/nationals/2018/contact.css" type="text/css">
+{% endblock %}
+{% block content %}
+  {{ contact.contact_form(c, result) }}
+{% endblock %}
