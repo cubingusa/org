@@ -5,5 +5,5 @@
   <link rel="stylesheet" href="/static/css/contact.css" type="text/css">
 {% endblock %}
 {% block content %}
-  {{ contact.contact_form(c, result) }}
+  {% call contact.contact_form(c, result) %}{% endcall %}
 {% endblock %}
