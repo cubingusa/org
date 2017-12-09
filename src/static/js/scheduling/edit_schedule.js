@@ -66,11 +66,7 @@ var editScheduleModule = (function() {
                '/' + startDateElement.value +
                '/' + endDateElement.value);
       req.addEventListener('load', function() {
-        document.getElementById('stages-section').style.display = 'inherit';
-        document.getElementById('rounds-section').style.display = 'inherit';
-        if (eventId !== null) {
-          editScheduleModule.selectEvent(eventId, eventName);
-        }
+        location.reload();
       });
       req.send();
     },
