@@ -1,8 +1,9 @@
+{% import "components/css.html" as css %}
 {% import "components/filter_box.html" as filter_box %}
 {% extends "base.html" %}
 {% block title%}Edit Users{% endblock %}
 {% block style %}
-  <link rel="stylesheet" href="/static/css/admin_edit_users.css" type="text/css">
+  {{ css.css(c, 'admin_edit_users') }}
 {% endblock %}
 {% block content %}
   <h3>Edit Users</h3>

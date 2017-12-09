@@ -1,0 +1,33 @@
+{% import "components/css.html" as css %}
+{% import "components/nav.html" as nav %}
+{% extends "base.html" %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/base') }}
+{% endblock %}
+{% block navbar_secondary %}
+  <div class="navbar-secondary">
+    <div class="container">
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#second_nav"
+              aria-controls="second_nav"
+              aria-expanded="false"
+              aria-label="Nationals navigation">
+        <span class="sr-only">Nationals navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="second_nav">
+        <ul class="navbar-left">
+          {% call nav.navitem(c, '/nationals/2018') %} Nationals 2018 {% endcall %}
+          {% call nav.navitem(c, '/nationals/2018/events') %} Events {% endcall %}
+          {% call nav.navitem(c, '/nationals/2018/schedule') %} Schedule {% endcall %}
+          {% call nav.navitem(c, '/nationals/2018/travel') %} Travel {% endcall %}
+          {% call nav.navitem(c, '/nationals/2018/sponsors') %} Sponsors {% endcall %}
+          {% call nav.navitem(c, 'https://www.worldcubeassociation.org/competitions/CubingUSANationals2018') %} WCA page {% endcall %}
+          {% call nav.navitem(c, '/nationals/2018/contact') %} Contact {% endcall %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

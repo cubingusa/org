@@ -1,0 +1,32 @@
+{% import "components/css.html" as css %}
+{% import "components/contact.html" as contact %}
+{% import "components/faq.html" as faq %}
+{% extends "nationals/2018/base.html" %}
+{% block title%}Contact{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/contact') }}
+{% endblock %}
+{% block content %}
+  {% call contact.contact_form(c, result) %}
+  <div>
+    Please take a look at the following frequently asked questions and see if any of them answer your question.
+  </div>
+  <p>
+    <div id="faq" role="tablist">
+      {% call faq.faq_item("What is this page?", "what") %}
+        It's a contact form.
+      {% endcall %}
+    </div>
+    <div id="faq" role="tablist">
+      {% call faq.faq_item("Why is it here?", "why") %}
+        So that you can contact us.
+      {% endcall %}
+    </div>
+    <div id="faq" role="tablist">
+      {% call faq.faq_item("Can you hold nationals in my hometown plz?", "pleasepleaseplease") %}
+        Yes!  Assuming you live in Salt Lake City.  If not, sorry.
+      {% endcall %}
+    </div>
+  </p>
+  {% endcall %}
+{% endblock %}

@@ -1,4 +1,5 @@
 import datetime
+import os
 import webapp2
 
 from src import formatters
@@ -18,12 +19,12 @@ class Common(object):
     self.formatters = formatters
     self.include_wca_disclaimer = handler.IncludeWcaDisclaimer()
 
-  def uri_matches(self, handler_name):
-    return self.uri.endswith(self.uri_for(handler_name))
+  def uri_matches(self, path):
+    return self.uri.endswith(path)
 
-  def uri_matches_any(self, handler_list):
-    for text, handler_name in handler_list:
-      if self.uri_matches(handler_name):
+  def uri_matches_any(self, path_list):
+    for text, path in path_list:
+      if self.uri_matches(path):
         return True
     return False
 
@@ -69,44 +70,43 @@ class Common(object):
     return h is None
 
   def get_nav_items(self):
-    if '/scheduling' in self.uri:
-      return [('Home', 'index')]
-    items = [('Home', 'home'),
+    items = [('Home', '/'),
              ('Competitions', [
-                 ('Nationals', 'competitions_nationals'),
-                 ('Regional Championships', 'competitions_regional'),
+                 ('Nationals', '/nationals/2018'),
+                 ('Regional Championships', '/regional'),
              ]),
              ('Competitors', [
-                 ('State Rankings', 'state_rankings'),
+                 ('State Rankings', '/state_rankings'),
              ]),
              ('Organizers', [
-                 ('CubingUSA Supported Competitions', 'supported'),
+                 ('CubingUSA Supported Competitions', '/supported'),
              ]),
              ('About', [
-                 ('About CubingUSA', 'about'),
-                 ('Who we are', 'about_who'),
-                 ('Donations', 'about_donations'),
-                 ('Contact Us', 'contact'),
-                 ('Logo', 'logo'),
-                 ('Public Documents', 'documents'),
+                 ('About CubingUSA', '/about'),
+                 ('Who we are', '/about/who'),
+                 ('Donations', '/about/donations'),
+                 ('Contact Us', '/about/contact'),
+                 ('Logo', '/about/logo'),
+                 ('Public Documents', '/about/documents'),
              ]),
             ]
     if self.user and self.user.HasAnyRole(Roles.AdminRoles()):
-      admin_list = [('Edit Users', 'admin_edit_users')]
+      admin_list = [('Edit Users', '/admin/edit_users')]
       items.append(('Admin', admin_list))
     return items
 
   def get_right_nav_items(self):
-    if '/scheduling' in self.uri:
-      return []
-    elif self.user:
-      return [('My Settings', 'edit_user'),
-              ('Log out', 'logout')]
+    if self.user:
+      return [('My Settings', '/edit_user'),
+              ('Log out', '/logout')]
     else:
-      return [('Log in with WCA', 'login')]
+      return [('Log in with WCA', '/login')]
 
   def app_settings(self):
     return AppSettings.Get()
 
   def get_wca_export(self):
     return get_latest_export().key.id()
+
+  def is_prod(self):
+    return not os.environ['SERVER_SOFTWARE'].startswith('Dev')

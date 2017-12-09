@@ -1,0 +1,98 @@
+{% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
+{% extends "nationals/2018/base.html" %}
+{% block title%}Nationals 2018{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/index') }}
+{% endblock %}
+{% block content %}
+  <div class="nats-top-row">
+    <div class="top-info">
+      <h1>CubingUSA Nationals 2018</h1>
+      <p>
+        We're pleased to announce that CubingUSA Nationals 2018 will be held <strong>July 27-29, 2018</strong> at the <a href="https://www.visitsaltlake.com/salt-palace-convention-center/" target="_blank">Salt Palace Convention Center</a> in <strong>Salt Lake City, Utah!</strong>
+      </p>
+      <p>
+        CubingUSA Nationals 2018 will be the 14th US National Championship.  Each year, the competition brings together hundreds of the top American speedcubers, as well as many international competitors, for a fun weekend of solving puzzles.
+      </p>
+      <p>
+        Nationals is the largest and most professional speedcubing competition in the USA each year, brought to you by a dedicated team of volunteers who work year-round to support our community.  This year's Nationals will be the largest speedcubing competition in the USA to date.
+      </p>
+    </div>
+    <div class="image-container">
+      <img src="/static/img/nats-logo-2018.png" alt="CubingUSA Nationals 2018 Logo">
+    </div>
+  </div>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-info-circle" aria-hidden="true"></i> Key Facts</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <div class="info-box-row">
+              <i class="fa fa-calendar" aria-hidden="true"></i> <span class="info-box-label">Dates:</span> July 27-29, 2018
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Location:</span> Salt Lake City, Utah
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Venue:</span> <a href="https://www.visitsaltlake.com/salt-palace-convention-center/" target="_blank">Salt Palace Convention Center</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-pencil" aria-hidden="true"></i> Registration</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <div class="info-box-row">
+              Registration will take place on the <a href="https://www.worldcubeassociation.org/competitions/CubingUSANationals2018" target="_blank">WCA website</a>.  There are qualifying times in all events; you must qualify in at least one event to register.  Spectators do not need to register.
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-calendar" aria-hidden="true"></i> <span class="info-box-label">Start:</span> July 1, 2018, 3:00 AM PST
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-money" aria-hidden="true"></i> <span class="info-box-label">Cost:</span> $2 for competitors
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-user-o" aria-hidden="true"></i> <span class="info-box-label">Limit:</span> 14,250 competitors
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-clock-o" aria-hidden="true"></i> <span class="info-box-label">Qualifying Times:</span> See <a href="{{ c.uri_for('events') }}">events page</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-calendar" aria-hidden="true"></i> Key Dates</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><span class="info-box-label">July 1:</span> Registration opens</li>
+          <li class="list-group-item"><span class="info-box-label">July 15:</span> Deadline for qualifying times</li>
+          <li class="list-group-item"><span class="info-box-label">July 17:</span> Deadline for modifying registration</li>
+          <li class="list-group-item"><span class="info-box-label">July 27-29:</span> Competition!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h4><i class="fa fa-trophy" aria-hidden="true"></i> Past <span id="nationals-evt"></span> National Champions</h4>
+    </div>
+    <div class="card-body">
+      {{ event_selector.event_selector(c, include_magic=True, include_mbo=False) }}
+      <div id="champions-table"></div>
+      <div class="spinner" id="nats-spinner"></div>
+    </div>
+  </div>
+  <script src="/static/js/nationals.js" type="application/javascript"></script>
+{% endblock %}

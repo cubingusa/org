@@ -10,12 +10,10 @@ set -e
 echo "Updating python dependencies."
 pip install -t lib -r requirements.txt --upgrade
 
-# This may clash with dev_app.sh as both write css to the same directory.  This
-# script compiles minified css, while the other does not.
-# TODO: consider fixing this by using different CSS paths for dev and prod.
-
 echo "Recompiling minified CSS."
-sass --update src/scss:src/static/css --style compressed
+rm -r -f src/static/css/prod
+mkdir src/static/css/prod
+sass --update src/scss:src/static/css/prod --style compressed
 
 echo "Deploying to App Engine."
 gcloud app deploy "$@"

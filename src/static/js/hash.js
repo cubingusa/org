@@ -4,13 +4,21 @@ hashModule = (function() {
 
   var updateHash = function() {
     if (singleKey) {
-      history.replaceState(null, null, '#' + valueMap[singleKey]);
+      if (valueMap[singleKey]) {
+        history.replaceState(null, null, '#' + valueMap[singleKey]);
+      } else {
+        history.replaceState(null, null, window.location.pathname);
+      }
     } else {
       segments = []
       for (var key in valueMap) {
         segments.push(key + '=' + valueMap[key]);
       }
-      history.replaceState(null, null, '#/' + segments.join('/'));
+      if (segments) {
+        history.replaceState(null, null, '#/' + segments.join('/'));
+      } else {
+        history.replaceState(null, null, window.location.pathname);
+      }
     }
   };
 

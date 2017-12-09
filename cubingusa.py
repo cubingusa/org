@@ -17,6 +17,7 @@ from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
 from src.handlers.login import LogoutHandler
 from src.handlers.oauth import AuthenticateHandler
+from src.models.app_settings import AppSettings
 from src.models.user import Roles
 
 app = webapp2.WSGIApplication([
@@ -27,8 +28,6 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
   webapp2.Route('/edit', handler=EditUserHandler, name='edit_user'),
   webapp2.Route('/edit/<user_id:.*>', handler=EditUserHandler, name='edit_user_by_id'),
-  webapp2.Route('/nationals', handler=BasicHandler('nationals.html', include_wca_disclaimer=True),
-                name='competitions_nationals'),
   webapp2.Route('/regional', handler=BasicHandler('regional.html'), name='competitions_regional'),
   webapp2.Route('/supported', handler=BasicHandler('supported.html'), name='supported'),
   webapp2.Route('/state_rankings', handler=BasicHandler('state_rankings.html', include_wca_disclaimer=True),
@@ -40,7 +39,9 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/about/get_document/<document_id:.*>/<document_name:.*>',
                 handler=GetDocumentHandler, name='get_document'),
   webapp2.Route('/about/logo', handler=BasicHandler('logo.html'), name='logo'),
-  webapp2.Route('/about/contact', handler=ContactHandler, name='contact'),
+  webapp2.Route('/about/contact',
+                handler=ContactHandler(AppSettings.Get().contact_email, 'contact.html', 'CubingUSA'),
+                name='contact'),
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsByYearHandler),

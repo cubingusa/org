@@ -1,33 +1,56 @@
 @import "variables";
 @import "../../external/bootstrap/scss/bootstrap";
 
-.navbar {
+.navbar-base {
+  @extend .navbar;
   @extend .navbar-expand-lg;
   @extend .fixed-top;
+}
+
+.navbar-left {
+  @extend .nav;
+  @extend .navbar-nav;
+  @extend .mr-auto;
+}
+
+.navbar-right {
+  @extend .nav;
+  @extend .navbar-nav;
+}
+
+.navbar-item {
+  @extend .nav-item;
+  @extend .nav-link;
+}
+
+.navbar-dropdown {
+  @extend .nav-link;
+  @extend .dropdown-toggle;
+  cursor: pointer;
+}
+
+.navbar-icon-item {
+  @extend .nav-item;
+  .navbar-icon-label {
+    @include media-breakpoint-up(sm) {
+      display: none;
+    }
+  }
+}
+
+.navbar-primary {
+  @extend .navbar-base;
   @extend .navbar-dark;
   @extend .bg-primary;
+  z-index: 200;
+}
 
-  .navbar-left {
-    @extend .nav;
-    @extend .navbar-nav;
-    @extend .mr-auto;
-  }
-
-  .navbar-right {
-    @extend .nav;
-    @extend .navbar-nav;
-  }
-
-  .navbar-item {
-    @extend .nav-item;
-    @extend .nav-link;
-  }
-
-  .navbar-dropdown {
-    @extend .nav-link;
-    @extend .dropdown-toggle;
-    cursor: pointer;
-  }
+.navbar-secondary {
+  @extend .navbar-base;
+  @extend .navbar-light;
+  background-color: #eeeeee;
+  margin-top: 76px;
+  z-index: 100;
 }
 
 div#content {

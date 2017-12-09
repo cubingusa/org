@@ -23,6 +23,12 @@ handlers:
  - url: /scheduling/.*
    script: scheduling.app
    secure: always
+ - url: /nationals/.*
+   script: nationals.app
+   secure: always
+ - url: /nationals
+   script: nationals.app
+   secure: always
  - url: /.*
    script: cubingusa.app
    secure: always
