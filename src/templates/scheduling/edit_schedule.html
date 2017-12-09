@@ -49,30 +49,24 @@
         </span>
       </div>
     </div>
-    <hr>
-    <div class="schedule-section"
-         id="stages-section"
-         {% if not schedule.start_date %}
-           style="display:none;"
-         {% endif %}>
-      <h3>Stages</h3>
-      <div>
-        {% include "scheduling/stages.html" %}
+    {% if schedule.start_date %}
+      <hr>
+      <div class="schedule-section">
+        <h3>Stages</h3>
+        <div>
+          {% include "scheduling/stages.html" %}
+        </div>
       </div>
-    </div>
-    <hr>
-    <div class="schedule-section"
-         id="rounds-section"
-         {% if not schedule.start_date %}
-           style="display:none;"
-         {% endif %}>
-      <h3>Rounds<span id="event-title"></span></h3>
-      {{ event_selector.event_selector(c, events=events) }}
-      <div id="event-info"></div>
-      <small class="form-text form-muted">
-        Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
-      </small>
-    </div>
+      <hr>
+      <div class="schedule-section">
+        <h3>Rounds<span id="event-title"></span></h3>
+        {{ event_selector.event_selector(c, events=events) }}
+        <div id="event-info"></div>
+        <small class="form-text form-muted">
+          Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
+        </small>
+      </div>
+    {% endif %}
   </div>
   <script src="/static/external/moment.js" type="application/javascript"></script>
   <script src="/static/external/bootstrap-datetimepicker.min.js" type="application/javascript"></script>
