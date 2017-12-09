@@ -27,12 +27,22 @@
     @extend .dropdown-toggle;
     cursor: pointer;
   }
+
+  .navbar-icon-item {
+    @extend .nav-item;
+    .navbar-icon-label {
+      @include media-breakpoint-up(sm) {
+        display: none;
+      }
+    }
+  }
 }
 
 .navbar-primary {
   @extend .navbar-base;
   @extend .navbar-dark;
   @extend .bg-primary;
+  z-index: 200;
 }
 
 .navbar-secondary {
@@ -40,8 +50,8 @@
   @extend .navbar-light;
   background-color: #eeeeee;
   margin-top: 76px;
+  z-index: 100;
 }
-
 
 div#content {
   padding-top: 90px;
