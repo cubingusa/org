@@ -1,8 +1,6 @@
-import datetime
-import pytz
-
 from google.appengine.ext import ndb
 
+from src import timezones
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.schedule import Schedule
 from src.models.scheduling.stage import ScheduleStage
@@ -21,9 +19,9 @@ class ScheduleTimeBlock(ndb.Model):
   attempt = ndb.IntegerProperty()
 
   def GetStartTime(self):
-    return pytz.timezone('UTC').localize(self.start_time).astimezone(
-               pytz.timezone(self.schedule.get().competition.get().timezone))
+    return timezones.ToLocalizedTime(self.start_time,
+                                     self.schedule.get().competition.get().timezone)
 
   def GetEndTime(self):
-    return pytz.timezone('UTC').localize(self.end_time).astimezone(
-               pytz.timezone(self.schedule.get().competition.get().timezone))
+    return timezones.ToLocalizedTime(self.end_time,
+                                     self.schedule.get().competition.get().timezone)
