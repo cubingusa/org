@@ -24,7 +24,7 @@
     <div class="documents-section">
       <h3>{{ section }}</h3>
       {% for document in documents %}
-        <div>
+        <div {% if document.deletion_time %} class="deleted-document" {% endif %}>
           <a href="{{ c.uri_for('get_document', document_id=document.key.id(),
                                                 document_name=document.original_filename) }}"
              target="_blank">

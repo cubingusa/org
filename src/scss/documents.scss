@@ -5,6 +5,11 @@
   padding-top: 20px;
 }
 
+.deleted-document {
+  font-style: italic;
+  color: $gray-600;
+}
+
 #upload-form {
   .label-container {
     @include make-col-ready();
