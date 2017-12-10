@@ -39,6 +39,7 @@
   @each $region, $color in $region-colors {
     &.region-#{$region} {
       background-color: $color;
+      color: color-yiq($color);
     }
   }
 }
