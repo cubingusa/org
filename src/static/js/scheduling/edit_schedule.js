@@ -1,7 +1,7 @@
 var editScheduleModule = (function() {
   var scheduleId = document.getElementById('schedule-id').dataset.schedule;
   var eventId = '';
-  var event_name = '';
+  var eventName = '';
 
   var startDateElement = document.getElementById('start-date');
   var endDateElement = document.getElementById('end-date');
