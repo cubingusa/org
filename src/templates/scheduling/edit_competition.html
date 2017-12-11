@@ -79,6 +79,17 @@
       <p>
         If you create a new schedule, it won't be visible to anyone but the organizers and delegates until you mark it as visible.  When you create a schedule, we read the events and formats from the WCA site.  If any of these change, you'll need to first change them on the WCA site, then create a new schedule here.
       </p>
+      <h3>Staff Signup</h3>
+      <p>
+        You can use the staff signup form to allow other organizers to have edit access to the schedule, and to collect a list of staff members.
+      </p>
+      {% if staff_signup_enabled %}
+        <p><a href="{{ c.uri_for('staff_signup', competition_id=competition.key.id()) }}">Link to signup form</a></p>
+      {% else %}
+        <p>
+          In order to use this feature, you must add at least one event to the WCA competition page, create a schedule, and set the start and end dates.
+        </p>
+      {% endif %}
     {% endif %}
   </div>
   <script src="/static/external/moment.js" type="application/javascript"></script>
