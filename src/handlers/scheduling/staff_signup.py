@@ -90,5 +90,7 @@ class StaffSignupHandler(SchedulingBaseHandler):
     if 'cancel' in self.request.POST or staff.attendance_probability == 0:
       staff.attendance_probability = 0
       staff.canceled = datetime.datetime.now()
+    else:
+      del staff.canceled
     staff.put()
     self.get(competition_id, successful=1)

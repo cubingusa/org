@@ -15,6 +15,11 @@
       Sorry, the deadline has passed.  Please contact the organizer if you need to make changes.
     </div>
   {% endif %}
+  {% if staff.canceled %}
+    <div class="alert alert-danger" role="alert">
+      Canceled staff application on {{ staff.canceled.strftime('%A, %B %d') }}.
+    </div>
+  {% endif %}
   <h1>Staff Application for {{ competition.name }}</h1>
   <hr>
   <form method="POST">

@@ -6,7 +6,7 @@
     @include make-col(6);
   }
   @include media-breakpoint-up(sm) {
-    @include make-col(4);
+    @include make-col(3);
   }
 }
 
@@ -16,7 +16,7 @@
     @include make-col(6);
   }
   @include media-breakpoint-up(sm) {
-    @include make-col(4);
+    @include make-col(3);
   }
 }
 
