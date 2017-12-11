@@ -8,6 +8,7 @@ from src.handlers.scheduling.async.set_dates import SetDatesHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
 from src.handlers.scheduling.edit_schedule import EditScheduleHandler
+from src.handlers.scheduling.event_display import EventDisplayHandler
 from src.handlers.scheduling.new_schedule import NewScheduleCallbackHandler
 from src.handlers.scheduling.new_schedule import NewScheduleHandler
 from src.handlers.scheduling.set_live import SetLiveHandler
@@ -53,4 +54,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/staff_signup/<competition_id:.*>',
                 handler=StaffSignupHandler,
                 name='staff_signup'),
+  webapp2.Route('/scheduling/events/<competition_id:.*>',
+                handler=EventDisplayHandler,
+                name='event_display'),
 ], config=config.GetAppConfig())

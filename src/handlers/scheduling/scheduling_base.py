@@ -16,7 +16,7 @@ class SchedulingBaseHandler(BaseHandler):
     }))
     self.response.status = 500
 
-  def SetCompetition(self, competition_id, edit_access_needed=True):
+  def SetCompetition(self, competition_id, edit_access_needed=True, login_required=True):
     self.competition = ScheduleCompetition.get_by_id(competition_id)
     if not self.competition:
       self.RespondWithError(
@@ -24,7 +24,7 @@ class SchedulingBaseHandler(BaseHandler):
           'competition.' % competition_id)
       return False
 
-    if not self.user:
+    if not self.user and login_required:
       self.redirect('/login')
       return False
 
