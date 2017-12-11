@@ -1,6 +1,8 @@
+{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}Edit {{ competition.key.id() }}{% endblock %}
 {% block style %}
+  {{ css.css(c, 'base') }}
   <link rel="stylesheet" href="/static/external/bootstrap-datetimepicker.min.css" type="text/css">
 {% endblock %}
 {% block content %}
