@@ -1,17 +1,17 @@
-{% import "components/css.html" as css %}
 {% extends "base.html" %}
 {% block title%}Edit {{ competition.key.id() }}{% endblock %}
 {% block style %}
-  {{ css.css(c, 'scheduling/edit_competition') }}
+  <link rel="stylesheet" href="/static/external/bootstrap-datetimepicker.min.css" type="text/css">
 {% endblock %}
 {% block content %}
   <div class="container">
     <h1>{{ competition.key.id() }}</h1>
-    <h3>Competition Time Zone</h3>
+    <h3>Competition Settings</h3>
     <form action="{{ c.uri_for('edit_competition', competition_id=competition.key.id()) }}"
           method="POST">
-      <div class="timezone-row">
-        <select class="timezone-select" id="timezone" name="timezone">
+      <div class="form-group">
+        <label for="timezone">Competition Timezone</label>
+        <select class="form-control custom-select" id="timezone" name="timezone">
           <option value=""></option>
           {% for timezone, time in timezones_and_times %}
             <option value="{{ timezone }}"
@@ -20,10 +20,24 @@
             </option>
           {% endfor %}
         </select>
-        <div class="timezone-submit">
-          <button class="btn btn-primary" type="submit" name="btnSubmit">Submit</button>
+      </div>
+      <div class="form-group">
+        <label for="staff-signup-deadline">Staff signup deadline</label>
+        <div class="input-group date">
+          <input type="text"
+                 class="form-control"
+                 name="signup-deadline"
+                 id="signup-deadline"
+                 {% if competition.GetStaffSignupDeadline() %}
+                   value="{{ competition.GetStaffSignupDeadline().strftime('%Y-%m-%d') }}"
+                 {% endif %}
+                 required>
+          <span class="input-group-addon">
+            <span class="fa fa-calendar"></span>
+          </span>
         </div>
       </div>
+      <button class="btn btn-primary" type="submit" name="btnSubmit">Submit</button>
     </form>
     <h3>Schedule Editors</h3>
     <ul>
@@ -65,4 +79,7 @@
       </p>
     {% endif %}
   </div>
+  <script src="/static/external/moment.js" type="application/javascript"></script>
+  <script src="/static/external/bootstrap-datetimepicker.min.js" type="application/javascript"></script>
+  <script src="/static/js/scheduling/edit_competition.js" type="application/javascript"></script>
 {% endblock %}

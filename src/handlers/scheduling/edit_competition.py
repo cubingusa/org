@@ -5,6 +5,7 @@ import webapp2
 from google.appengine.ext import ndb
 
 from src import common
+from src import timezones
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.schedule import Schedule
@@ -34,5 +35,8 @@ class EditCompetitionHandler(SchedulingBaseHandler):
     if not self.SetCompetition(competition_id):
       return
     self.competition.timezone = self.request.POST['timezone']
+    self.competition.staff_signup_deadline = timezones.ToUTCTime(
+        self.request.POST['signup-deadline'] + ' 23:59:59',
+        '%Y-%m-%d %H:%M:%S', self.competition.timezone)
     self.competition.put()
     self.get(competition_id)
