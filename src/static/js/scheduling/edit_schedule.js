@@ -162,7 +162,10 @@ var editScheduleModule = (function() {
   };
 })();
 
-eventSelectorModule.setSelectListener(editScheduleModule.selectEvent);
+// eventSelectorModule may not be defined if we didn't render the event selector.
+if (typeof eventSelectorModule !== 'undefined') {
+  eventSelectorModule.setSelectListener(editScheduleModule.selectEvent);
+}
 
 onloadModule.register(function() {
   editScheduleModule.createDatePickers();
