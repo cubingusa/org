@@ -24,17 +24,18 @@ class SchedulingBaseHandler(BaseHandler):
           'competition.' % competition_id)
       return False
 
-    if not edit_access_needed:
-      return True
-
     if not self.user:
       self.redirect('/login')
       return False
+
+    self.is_editor = True
     staff = ScheduleStaff.get_by_id(ScheduleStaff.Id(competition_id, self.user.key.id()))
     if not staff or StaffRoles.EDITOR not in staff.roles:
-      self.RespondWithError(
-          'You don\'t have access to edit this schedule.')
-      return False
+      self.is_editor = False
+      if not edit_access_needed:
+        self.RespondWithError(
+            'You don\'t have access to edit this schedule.')
+        return False
     return True
 
   def SetSchedule(self, schedule_version):

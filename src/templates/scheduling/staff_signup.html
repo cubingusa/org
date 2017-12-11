@@ -23,6 +23,17 @@
   <h1>Staff Application for {{ competition.name }}</h1>
   <hr>
   <form method="POST">
+    <h3>Basics</h3>
+    <div class="form-group row">
+      <label for="name" class="form-label">Name</label>
+      <div class="form-choice-container">
+        <input type="text"
+               name="name"
+               value="{{ staff.user.get().name }}"
+               class="form-control"
+               readonly>
+      </div>
+    </div>
     <h3>Your Availability</h3>
     <div class="form-group row">
       <label for="attendance_probability" class="form-label">Probability of Attendance</label>

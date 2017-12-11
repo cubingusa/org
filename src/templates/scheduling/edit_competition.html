@@ -53,6 +53,9 @@
                 ({{ editor_user.wca_person.id() }})
               </a>
             {% endif %}
+            <a href="{{ c.uri_for('staff_signup_with_user',
+                                  competition_id=competition.key.id(),
+                                  user_id=editor_user.key.id()) }}">[edit]</a>
           </li>
         {% endif %}
       {% endfor %}
