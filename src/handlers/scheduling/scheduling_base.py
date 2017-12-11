@@ -16,13 +16,17 @@ class SchedulingBaseHandler(BaseHandler):
     }))
     self.response.status = 500
 
-  def SetCompetition(self, competition_id):
+  def SetCompetition(self, competition_id, edit_access_needed=True):
     self.competition = ScheduleCompetition.get_by_id(competition_id)
     if not self.competition:
       self.RespondWithError(
           'Unknown competition %s.  Scheduling may not be enabled for this '
           'competition.' % competition_id)
       return False
+
+    if not edit_access_needed:
+      return True
+
     if not self.user:
       self.redirect('/login')
       return False

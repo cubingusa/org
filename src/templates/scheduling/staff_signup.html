@@ -1,0 +1,98 @@
+{% import "components/css.html" as css %}
+{% extends "base.html" %}
+{% block title%}{{ competition.name }} staff application{% endblock %}
+{% block style %}
+  {{ css.css(c, 'scheduling/staff_signup') }}
+{% endblock %}
+{% block content %}
+  {% if successful %}
+    <div class="alert alert-success" role="alert">
+      Submitted successfully!
+    </div>
+  {% endif %}
+  {% if deadline_passed %}
+    <div class="alert alert-danger" role="alert">
+      Sorry, the deadline has passed.  Please contact the organizer if you need to make changes.
+    </div>
+  {% endif %}
+  <h1>Staff Application for {{ competition.name }}</h1>
+  <hr>
+  <form method="POST">
+    <h3>Your Availability</h3>
+    <div class="form-group row">
+      <label for="attendance_probability" class="form-label">Probability of Attendance</label>
+      <div class="form-choice-container">
+        <select class="form-control custom-select"
+                id="attendance_probability"
+                name="attendance_probability"
+                {% if readonly %}readonly{% endif %}>
+          {% for p in [100, 80, 60, 40, 20, 0] %}
+            <option value="{{ p }}" {% if staff.attendance_probability == p %}selected{% endif %}>
+              {{ p }}%
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <p>
+      {% if schedule.start_date == schedule.end_date %}
+        The competition is on {{ schedule.start_date.strftime('%A, %B %d') }}.  Is there any time on this day when you won't be available?
+      {% else %}
+        The competition runs from {{ schedule.start_date.strftime('%A, %B %d') }} to {{ schedule.end_date.strftime('%A, %B %d') }}.  Is there any part of these days when you won't be available?
+      {% endif %}
+      <div id="unavailable_container"></div>
+      <a href="javascript:void(0);" id="add_unavailable">[Add times]</a>
+    </p>
+    <hr>
+    {% macro preference_chooser(preference_name, staff) %}
+      {% set pref_value = staff.GetJobPreference(preference_name) %}
+      <div class="form-group row">
+        <label for="pref_{{ preference_name }}" class="form-label">{{ caller() }}</label>
+        <div class="form-choice-container">
+          <select name="pref_{{ preference_name }}"
+                  class="form-control custom-select"
+                  {% if readonly %}readonly{% endif %}>
+            {% for choice, text in preference_choices %}
+              <option value="{{ choice }}" {% if choice == pref_value %}selected{% endif %}>
+                {{ choice }} - {{ text }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    {% endmacro %}
+    <h3>Job Preferences</h3>
+    {% call preference_chooser('j', staff) %}
+      <i class="fa fa-clock-o"></i> Judging
+    {% endcall %}
+    {% call preference_chooser('d', staff) %}
+      <i class="fa fa-forward"></i> Running
+    {% endcall %}
+    {% for e in events %}
+      {% call preference_chooser('e_' + e.key.id(), staff) %}
+        <img class="event-icon-small" src="{{ e.IconURL() }}"> {{ e.name }} Scrambling
+      {% endcall %}
+    {% endfor %}
+    {% call preference_chooser('d', staff) %}
+      <i class="fa fa-keyboard-o"></i> Data Entry
+    {% endcall %}
+    <hr>
+    <h3>Confirmation</h3>
+    <p>
+      By hitting "Submit", you are acknowledging:
+    </p>
+    <ul>
+      <li>
+        Submitting this form <strong>does not</strong> register you to compete at this competition.  Please see the competition website for information about registration.
+      </li>
+      <li>
+        You may update your details or cancel until <strong>{{ competition.GetStaffSignupDeadline().strftime('%B %d') }}</strong>.  If your plans change before this date, you agree to notify the organizers as soon as possible.
+      </li>
+      <li>
+        Filling out this form does not guarantee that you will be accepted as staff.  While we appreciate all offers for help, we may not be able to accommodate all interested staff members.
+      </li>
+    </ul>
+    <button class="btn btn-primary" type="submit" name="submit" value="submit">Submit</button>
+    <button class="btn btn-primary" type="submit" name="cancel" value="cancel">I can't go</button>
+  </form>
+{% endblock %}

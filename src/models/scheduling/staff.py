@@ -26,3 +26,9 @@ class ScheduleStaff(ndb.Model):
   @staticmethod
   def Id(competition_id, user_id):
     return '%s_%s' % (competition_id, user_id)
+
+  def GetJobPreference(self, job_name):
+    for i in range(len(self.job_list)):
+      if self.job_list[i] == job_name:
+        return self.preferences[i]
+    return 0
