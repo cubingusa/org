@@ -2,6 +2,7 @@ from google.appengine.ext import ndb
 
 from src.models.scheduling.schedule import Schedule
 from src.models.wca.event import Event
+from src.models.wca.format import Format
 
 class ScheduleRound(ndb.Model):
   schedule = ndb.KeyProperty(kind=Schedule)
@@ -9,6 +10,9 @@ class ScheduleRound(ndb.Model):
 
   number = ndb.IntegerProperty()
   is_final = ndb.BooleanProperty()
+  cutoff = ndb.IntegerProperty()
+  time_limit = ndb.IntegerProperty()
+  format = ndb.KeyProperty(kind=Format)
   wcif = ndb.StringProperty()
 
   group_length = ndb.IntegerProperty()

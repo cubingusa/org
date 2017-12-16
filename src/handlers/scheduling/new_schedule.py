@@ -10,6 +10,7 @@ from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.schedule import Schedule
 from src.models.wca.event import Event
+from src.models.wca.format import Format
 
 
 class NewScheduleHandler(SchedulingBaseHandler):
@@ -58,9 +59,15 @@ class NewScheduleCallbackHandler(OAuthBaseHandler, SchedulingBaseHandler):
         round_object.event = event_key
         round_object.number = round_num
         round_object.is_final = len(event['rounds']) == round_num
+        round_object.format = ndb.Key(Format, round_json['format'])
+        if round_json['cutoff']:
+          round_object.cutoff = round_json['cutoff']['attemptResult']
+        if round_json['timeLimit'] and round_json['timeLimit']['centiseconds']:
+          round_object.time_limit = round_json['timeLimit']['centiseconds']
         round_object.wcif = json.dumps(round_json)
         if next_round_count:
           round_object.num_competitors = next_round_count
+
         objects_to_put.append(round_object)
         advancement_condition = round_json['advancementCondition']
         if advancement_condition and advancement_condition['type'] == 'ranking':
