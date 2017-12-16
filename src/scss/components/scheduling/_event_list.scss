@@ -56,6 +56,11 @@
     padding-left: 0px;
   }
 
+  .round-details-container {
+    background-color: $gray-100;
+    padding-bottom: 10px;
+  }
+
   .round-details {
     @include make-row();
     background-color: $gray-100;

@@ -28,49 +28,51 @@
               </div>
             {% endif %}
           </div>
-          {% for r in e.GetRounds() %}
-            {% set sched_round = r.GetRound() %}
-            <div class="round-details">
-              <div class="event-icon-placeholder"></div>
-              <span class="round-number">
-                {% if sched_round.is_final %}
-                  Final:
-                {% else %}
-                  Round {{ sched_round.number }}:
+          <div class="round-details-container">
+            {% for r in e.GetRounds() %}
+              {% set sched_round = r.GetRound() %}
+              <div class="round-details">
+                <div class="event-icon-placeholder"></div>
+                <span class="round-number">
+                  {% if sched_round.is_final %}
+                    Final:
+                  {% else %}
+                    Round {{ sched_round.number }}:
+                  {% endif %}
+                </span>
+                {% if sched_round.num_competitors %}
+                  <span class="num-competitors">
+                    <i class="fa fa-hashtag" aria-hidden="true"></i>
+                    Top {{ sched_round.num_competitors }}
+                  </span>
                 {% endif %}
-              </span>
-              {% if sched_round.num_competitors %}
-                <span class="num-competitors">
-                  <i class="fa fa-hashtag" aria-hidden="true"></i>
-                  Top {{ sched_round.num_competitors }}
+                {% if sched_round.cutoff or sched_round.time_limit %}
+                  <span class="time-limit">
+                    <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                    {% if sched_round.cutoff %}
+                      {{ c.formatters.FormatTime(sched_round.cutoff,
+                                                 sched_round.event,
+                                                 is_average=False, verbose=True) }}
+                    {% else %}
+                      &ndash;
+                    {% endif %}
+                    /
+                    {% if sched_round.time_limit %}
+                      {{ c.formatters.FormatTime(sched_round.time_limit,
+                                                 sched_round.event,
+                                                 is_average=False, verbose=True) }}
+                    {% else %}
+                      &ndash;
+                    {% endif %}
+                  </span>
+                {% endif %}
+                <span class="format">
+                  <i class="fa fa-calculator" aria-hidden="true"></i>
+                  {{ sched_round.format.get().name }}
                 </span>
-              {% endif %}
-              {% if sched_round.cutoff or sched_round.time_limit %}
-                <span class="time-limit">
-                  <i class="fa fa-hourglass-end" aria-hidden="true"></i>
-                  {% if sched_round.cutoff %}
-                    {{ c.formatters.FormatTime(sched_round.cutoff,
-                                               sched_round.event,
-                                               is_average=False, verbose=True) }}
-                  {% else %}
-                    &ndash;
-                  {% endif %}
-                  /
-                  {% if sched_round.time_limit %}
-                    {{ c.formatters.FormatTime(sched_round.time_limit,
-                                               sched_round.event,
-                                               is_average=False, verbose=True) }}
-                  {% else %}
-                    &ndash;
-                  {% endif %}
-                </span>
-              {% endif %}
-              <span class="format">
-                <i class="fa fa-calculator" aria-hidden="true"></i>
-                {{ sched_round.format.get().name }}
-              </span>
-            </div>
-          {% endfor %}
+              </div>
+            {% endfor %}
+          </div>
         {% endfor %}
       </div>
       <div id="event-key">
