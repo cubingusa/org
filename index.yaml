@@ -72,6 +72,17 @@ indexes:
 - kind: ScheduleTimeBlock
   properties:
   - name: schedule
+  - name: staff_only
+  - name: start_time
+
+- kind: ScheduleTimeBlock
+  properties:
+  - name: schedule
+  - name: start_time
+
+- kind: ScheduleTimeBlock
+  properties:
+  - name: staff_only
   - name: start_time
 
 - kind: UserLocationUpdate
