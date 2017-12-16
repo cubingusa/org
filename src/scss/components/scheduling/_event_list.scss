@@ -1,7 +1,11 @@
-.event-list {
-  @extend .container;
-  border: 1px solid $gray-400;
+.event-list-container {
+  @extend .card;
   border-radius: 0.25rem;
+
+  .event-list {
+    @extend .container;
+    border: 1px solid $gray-400;
+  }
 
   .desktop-only {
     @include media-breakpoint-down(xs) {
@@ -69,11 +73,15 @@
     background-color: $info;
     @extend .desktop-only;
   }
+  .qualifying-time-chip {
+    background-color: $gray-400;
+  }
 
-  .num-competitors,.time-limit,.format {
+  .num-competitors,.time-limit,.format,.qualifying-time-chip {
     border-radius: 12px;
     padding: 5px 10px;
     margin: 0 5px;
+    font-weight: bold;
   }
 
   .round-number {
@@ -81,5 +89,13 @@
       margin-left: 45px;
     }
     margin-right: 15px;
+  }
+
+  #event-key {
+    padding: 15px;
+  }
+
+  .event-key-row {
+    padding: 5px 0px;
   }
 }

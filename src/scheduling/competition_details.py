@@ -41,7 +41,6 @@ class RoundDetails(object):
     return self._r
 
   def AddTimeBlock(self, t):
-    print 'AddTimeBlock'
     if (self._grouped_time_blocks and
         t.GetStartTime() < self._grouped_time_blocks[-1].GetEndTime()):
       self._grouped_time_blocks[-1].AddTimeBlock(t)
@@ -84,7 +83,6 @@ class CompetitionDetails(object):
                                            Schedule.is_live == True)).get()
     if not self.schedule:
       return
-    print self.schedule.key.id()
 
     self.events = {}
     self.event_keys = []
@@ -102,3 +100,15 @@ class CompetitionDetails(object):
 
   def GetEvents(self):
     return sorted(self.events.values(), key=lambda e: e.GetEvent().rank)
+
+  def HasQualifyingTimes(self):
+    for e in self.events.itervalues():
+      if e.GetQualifyingTime():
+        return True
+    return False
+
+  def HasMultipleRoundEvents(self):
+    for e in self.events.itervalues():
+      if len(e.GetRounds()) > 1:
+        return True
+    return False
