@@ -32,6 +32,8 @@ class AddTimeBlockHandler(SchedulingBaseHandler):
 
     if 'staff-only' in self.request.POST:
       time_block.staff_only = bool(self.request.POST['staff-only'])
+    else:
+      time_block.staff_only = False
     time_block.put()
 
     self.redirect_to('event_details', schedule_version=schedule_version,
