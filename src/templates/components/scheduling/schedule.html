@@ -1,0 +1,10 @@
+{% macro schedule(c, competition_details) %}
+  {% if not competition_details.schedule %}
+    <div class="alert alert-warning">
+      The organizers of {{ competition_details.competition.name }} haven't published a schedule yet.  Check back here soon!
+    </div>
+  {% else %}
+    <div class="schedule-container">
+    </div>
+  {% endif %}
+{% endmacro %}
