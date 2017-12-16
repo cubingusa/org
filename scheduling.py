@@ -54,7 +54,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/staff_signup/<competition_id:.*>',
                 handler=StaffSignupHandler,
                 name='staff_signup'),
-  webapp2.Route('/scheduling/events/<competition_id:.*>',
+  webapp2.Route('/scheduling/<competition_id:.*>/events',
                 handler=EventDisplayHandler,
                 name='event_display'),
 ], config=config.GetAppConfig())
