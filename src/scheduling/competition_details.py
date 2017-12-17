@@ -112,3 +112,10 @@ class CompetitionDetails(object):
       if len(e.GetRounds()) > 1:
         return True
     return False
+
+  def HasCutoffs(self):
+    for e in self.events.itervalues():
+      for r in e.GetRounds():
+        if r.GetRound().cutoff:
+          return True
+    return False

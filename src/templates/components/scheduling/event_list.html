@@ -49,14 +49,16 @@
                 {% if sched_round.cutoff or sched_round.time_limit %}
                   <span class="time-limit">
                     <i class="fa fa-hourglass-end" aria-hidden="true"></i>
-                    {% if sched_round.cutoff %}
-                      {{ c.formatters.FormatTime(sched_round.cutoff,
-                                                 sched_round.event,
-                                                 is_average=False, verbose=True) }}
-                    {% else %}
-                      &ndash;
+                    {% if competition_details.HasCutoffs() %}
+                      {% if sched_round.cutoff %}
+                        {{ c.formatters.FormatTime(sched_round.cutoff,
+                                                   sched_round.event,
+                                                   is_average=False, verbose=True) }}
+                      {% else %}
+                        &ndash;
+                      {% endif %}
+                      /
                     {% endif %}
-                    /
                     {% if sched_round.time_limit %}
                       {{ c.formatters.FormatTime(sched_round.time_limit,
                                                  sched_round.event,
@@ -97,9 +99,12 @@
         <div class="event-key-row">
           <span class="time-limit">
             <i class="fa fa-hourglass-end" aria-hidden="true"></i>
-            Cutoff / Time Limit
+            {% if competition_details.HasCutoffs() %}Cutoff / {% endif %}Time Limit
           </span>
-          You will need to beat the <strong>cutoff</strong> on one of your first 2 attempts (for an <strong>Average of 5</strong> event), or on your first attempt (for a <strong>Mean of 3</strong> event), to complete your average.  If any of your attempts pass the <strong>time limit</strong>, you won't be able to complete that attempt.
+          {% if competition_details.HasCutoffs() %}
+            You will need to beat the <strong>cutoff</strong> on one of your first 2 attempts (for an <strong>Average of 5</strong> event), or on your first attempt (for a <strong>Mean of 3</strong> event), to complete your average.
+          {% endif %}
+          If any of your attempts pass the <strong>time limit</strong>, you won't be able to complete that attempt.
         </div>
       </div>
     </div>
