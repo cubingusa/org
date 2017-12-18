@@ -19,7 +19,7 @@ def FormatStandard(time):
     return '%01d.%02d' % (seconds, centiseconds)
 
 def FormatVerbose(time):
-  if time > 6000:
+  if time >= 6000:
     return FormatStandard(time)
   else:
     return '%s seconds' % FormatStandard(time)
