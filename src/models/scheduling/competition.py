@@ -12,4 +12,6 @@ class ScheduleCompetition(ndb.Model):
   staff_signup_deadline = ndb.DateTimeProperty()
 
   def GetStaffSignupDeadline(self):
+    if not self.staff_signup_deadline:
+      return None
     return timezones.ToLocalizedTime(self.staff_signup_deadline, self.timezone)

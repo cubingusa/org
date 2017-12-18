@@ -19,9 +19,13 @@ class ScheduleTimeBlock(ndb.Model):
   attempt = ndb.IntegerProperty()
 
   def GetStartTime(self):
+    if not self.start_time:
+      return None
     return timezones.ToLocalizedTime(self.start_time,
                                      self.schedule.get().competition.get().timezone)
 
   def GetEndTime(self):
+    if not self.end_time:
+      return None
     return timezones.ToLocalizedTime(self.end_time,
                                      self.schedule.get().competition.get().timezone)
