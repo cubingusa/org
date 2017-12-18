@@ -11,7 +11,7 @@ def FormatStandard(time):
   hours, minutes, seconds, centiseconds = parse_time(time)
   if hours > 0:
     return '%d:%02d:%02d' % (hours, minutes, seconds)
-  elif minutes > 10:
+  elif minutes >= 10:
     return '%d:%02d' % (minutes, seconds)
   elif minutes > 0:
     return '%d:%02d.%02d' % (minutes, seconds, centiseconds)
