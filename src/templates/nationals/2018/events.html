@@ -1,12 +1,14 @@
+{% import "components/css.html" as css %}
+{% import "components/scheduling/event_list.html" as event_list %}
 {% extends "nationals/2018/base.html" %}
 {% block title%}Nationals 2018 Events{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/events') }}
+{% endblock %}
 {% block content %}
-  <div class="nats-top-row">
-    <div class="top-info">
-      <h1>Events</h1>
-      <p>
-        To be announced
-      </p>
-    </div>
-  </div>
+  <h1>CubingUSA Nationals 2018 Events</h1>
+  <p>
+    All events have <strong>qualifying times</strong>.  You must qualify for at least one event in order to register for the competition.  After registration closes, we will remove competitors from all events in which they are not qualified.  It is your responsibility to ensure that you are qualified before registering.
+  </p>
+  {{ event_list.event_list(c, competition_details) }}
 {% endblock %}
