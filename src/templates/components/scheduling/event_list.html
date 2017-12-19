@@ -56,9 +56,9 @@
                     </span>
                     {% if competition_details.user and competition_details.user.wca_person %}
                       {% if e.IsQualified() %}
-                        <i class="fa fa-check" style="color: green;"></i>
+                        <i class="fa fa-check qualified"></i>
                       {% else %}
-                        <i class="fa fa-times" style="color: red;"></i>
+                        <i class="fa fa-times not-qualified"></i>
                       {% endif %}
                     {% endif %}
                   </div>

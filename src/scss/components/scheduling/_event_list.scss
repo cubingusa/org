@@ -96,4 +96,12 @@
   .event-key-row {
     padding: 5px 0px;
   }
+
+  .qualified {
+    color: $success;
+  }
+
+  .not-qualified {
+    color: $danger;
+  }
 }
