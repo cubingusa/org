@@ -69,7 +69,7 @@ class EventDetails(object):
     return self._rounds.values()
 
   def GetQualifyingTime(self):
-    return '20.00'
+    return 2000
 
   def QualifyingTimeIsAverage(self):
     return True
