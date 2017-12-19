@@ -5,6 +5,8 @@ from google.appengine.ext import ndb
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.schedule import Schedule
 from src.models.scheduling.time_block import ScheduleTimeBlock
+from src.models.wca.rank import RankAverage
+from src.models.wca.rank import RankSingle
 
 
 class GroupedTimeBlock(object):
@@ -57,6 +59,7 @@ class EventDetails(object):
     self._rounds = {}
     self._qualifying_time = None
     self._qualifying_time_is_average = False
+    self._is_qualified = False
 
   def AddRound(self, r):
     self._rounds[r.number] = RoundDetails(r)
@@ -76,9 +79,13 @@ class EventDetails(object):
   def QualifyingTimeIsAverage(self):
     return self._qualifying_time_is_average
 
-  def SetQualifyingTime(self, time, is_average):
+  def IsQualified(self):
+    return self._is_qualified
+
+  def SetQualifyingTime(self, time, is_average, is_qualified):
     self._qualifying_time = time
     self._qualifying_time_is_average = is_average
+    self._is_qualified = is_qualified
 
 
 class CompetitionDetails(object):
@@ -103,9 +110,21 @@ class CompetitionDetails(object):
                                .order(ScheduleTimeBlock.start_time)
                                .iter()):
       self.events[t.round.get().event.id()].AddTimeBlock(t)
+    if user and user.wca_person:
+      self.ranks_single = {
+          r.event.id() : r for r in
+          RankSingle.query(RankSingle.person == user.wca_person).iter()}
+      self.ranks_average = {
+          r.event.id() : r for r in
+          RankAverage.query(RankAverage.person == user.wca_person).iter()}
+    else:
+      self.ranks_single = {}
+      self.ranks_average = {}
 
   def SetQualifyingTime(self, event_id, time, is_average):
-    self.events[event_id].SetQualifyingTime(time, is_average)
+    ranks_dict = self.ranks_average if is_average else self.ranks_single
+    is_qualified = event_id in ranks_dict and ranks_dict[event_id].best <= time
+    self.events[event_id].SetQualifyingTime(time, is_average, is_qualified)
 
   def GetEvents(self):
     return sorted(self.events.values(), key=lambda e: e.GetEvent().rank)
