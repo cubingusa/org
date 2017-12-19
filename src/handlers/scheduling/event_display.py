@@ -1,7 +1,7 @@
 from src import common
-from src.scheduling.competition_details import CompetitionDetails
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
+from src.scheduling.competition_details import CompetitionDetails
 
 
 class EventDisplayHandler(SchedulingBaseHandler):
