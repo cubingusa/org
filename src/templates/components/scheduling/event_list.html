@@ -1,14 +1,16 @@
+{% import "components/event_selector.html" as event_selector %}
 {% macro event_list(c, competition_details) %}
   {% if not competition_details.schedule %}
     <div class="alert alert-warning">
       The organizers of {{ competition_details.competition.name }} haven't published a schedule yet.  Check back here soon!
     </div>
   {% else %}
+    {{ event_selector.event_selector(c, events=competition_details.GetWcaEvents()) }}
     <div class="event-list-container">
       <div class="event-list">
         {% for e in competition_details.GetEvents() %}
           {% set wca_evt = e.GetEvent() %}
-          <div class="event-details">
+          <div class="event-details" id="eventinfo_{{ e.GetEvent().key.id() }}">
             <img src="{{ wca_evt.IconURL() }}" class="event-icon">
             <div class="event-title">
               {{ wca_evt.name }}
@@ -137,5 +139,6 @@
         </div>
       </div>
     </div>
+    <script src="/static/js/scheduling/event_list.js" type="application/javascript"></script>
   {% endif %}
 {% endmacro %}

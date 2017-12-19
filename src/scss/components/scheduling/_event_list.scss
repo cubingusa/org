@@ -1,3 +1,5 @@
+@import "../event_selector";
+
 .event-list-container {
   @extend .card;
   border-radius: 0.25rem;
@@ -25,6 +27,10 @@
     border-radius: 0.25rem;
     padding: 10px;
     font-size: 20px;
+  }
+
+  .selected-event {
+    background-color: gold;
   }
   
   .event-title {

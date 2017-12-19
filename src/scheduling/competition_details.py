@@ -110,6 +110,9 @@ class CompetitionDetails(object):
   def GetEvents(self):
     return sorted(self.events.values(), key=lambda e: e.GetEvent().rank)
 
+  def GetWcaEvents(self):
+    return [e.GetEvent() for e in self.GetEvents()]
+
   def HasQualifyingTimes(self):
     for e in self.events.itervalues():
       if e.GetQualifyingTime():
