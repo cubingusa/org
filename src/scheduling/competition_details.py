@@ -55,6 +55,8 @@ class EventDetails(object):
   def __init__(self, event_key):
     self._event_key = event_key
     self._rounds = {}
+    self._qualifying_time = None
+    self._qualifying_time_is_average = False
 
   def AddRound(self, r):
     self._rounds[r.number] = RoundDetails(r)
@@ -69,10 +71,14 @@ class EventDetails(object):
     return self._rounds.values()
 
   def GetQualifyingTime(self):
-    return 2000
+    return self._qualifying_time
 
   def QualifyingTimeIsAverage(self):
-    return True
+    return self._qualifying_time_is_average
+
+  def SetQualifyingTime(self, time, is_average):
+    self._qualifying_time = time
+    self._qualifying_time_is_average = is_average
 
 
 class CompetitionDetails(object):
@@ -97,6 +103,9 @@ class CompetitionDetails(object):
                                .order(ScheduleTimeBlock.start_time)
                                .iter()):
       self.events[t.round.get().event.id()].AddTimeBlock(t)
+
+  def SetQualifyingTime(self, event_id, time, is_average):
+    self.events[event_id].SetQualifyingTime(time, is_average)
 
   def GetEvents(self):
     return sorted(self.events.values(), key=lambda e: e.GetEvent().rank)
