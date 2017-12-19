@@ -47,13 +47,6 @@
                       {% else %}
                         (Single)
                       {% endif %}
-                      {% if competition_details.user and competition_details.user.wca_person %}
-                        {% if e.IsQualified() %}
-                          <i class="fa fa-check" style="color: green;"></i>
-                        {% else %}
-                          <i class="fa fa-times" style="color: red;"></i>
-                        {% endif %}
-                      {% endif %}
                     </span>
                     <span class="mobile-only">
                       {{ c.formatters.FormatQualifying(e.GetQualifyingTime(),
@@ -61,6 +54,13 @@
                                                        is_average=e.QualifyingTimeIsAverage(),
                                                        short_units=True) }}
                     </span>
+                    {% if competition_details.user and competition_details.user.wca_person %}
+                      {% if e.IsQualified() %}
+                        <i class="fa fa-check" style="color: green;"></i>
+                      {% else %}
+                        <i class="fa fa-times" style="color: red;"></i>
+                      {% endif %}
+                    {% endif %}
                   </div>
                 {% endif %}
                 {% if sched_round.cutoff or sched_round.time_limit %}
