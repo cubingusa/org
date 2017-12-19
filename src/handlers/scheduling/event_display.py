@@ -1,7 +1,3 @@
-import datetime
-
-from google.appengine.ext import ndb
-
 from src import common
 from src.scheduling.competition_details import CompetitionDetails
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
