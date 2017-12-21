@@ -1,3 +1,4 @@
+import collections
 import json
 
 from google.appengine.ext import ndb
@@ -32,6 +33,12 @@ class GroupedTimeBlock(object):
         self._start_time.strftime('%A'),
         self._start_time.strftime('%I:%M %p').lstrip('0'),
         self._end_time.strftime('%I:%M %p').lstrip('0'))
+
+  def GetRound(self):
+    return self._time_blocks[0].round.get()
+
+  def GetStages(self):
+    return sorted([s.get() for s in self._stage_keys], key=lambda s: s.number)
 
 
 class RoundDetails(object):
@@ -99,6 +106,7 @@ class CompetitionDetails(object):
 
     self.events = {}
     self.event_keys = []
+    self.stage_ids = set()
     for r in ScheduleRound.query(ScheduleRound.schedule == self.schedule.key).iter():
       if r.event.id() not in self.events:
         self.events[r.event.id()] = EventDetails(r.event)
@@ -110,6 +118,7 @@ class CompetitionDetails(object):
                                .order(ScheduleTimeBlock.start_time)
                                .iter()):
       self.events[t.round.get().event.id()].AddTimeBlock(t)
+      self.stage_ids.add(t.stage.id())
     if user and user.wca_person:
       self.ranks_single = {
           r.event.id() : r for r in
@@ -150,3 +159,16 @@ class CompetitionDetails(object):
         if r.GetRound().cutoff:
           return True
     return False
+
+  def TimeBlocksByDay(self):
+    time_blocks_dict = collections.defaultdict(list)
+    for e in self.events.itervalues():
+      for r in e.GetRounds():
+        for t in r.GetGroupedTimeBlocks():
+          time_blocks_dict[t.GetStartTime().date()].append(t)
+    for time_blocks in time_blocks_dict.itervalues():
+      time_blocks.sort(key=lambda t: t.GetStartTime())
+    return time_blocks_dict.items()
+
+  def HasMultipleStages(self):
+    return len(self.stage_ids) > 1

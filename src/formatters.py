@@ -104,3 +104,9 @@ def FormatResult(result, verbose=False):
     return FormatTime(result.average, result.event, True, verbose)
   else:
     return FormatTime(result.best, result.event, False, verbose)
+
+def FormatDate(date):
+  return '%s, %s %d' % (date.strftime('%A'), date.strftime('%B'), date.day)
+
+def FormatClockTime(time):
+  return time.strftime('%I:%M %p').lstrip('0')

@@ -5,6 +5,46 @@
     </div>
   {% else %}
     <div class="schedule-container">
+      {% for day, time_blocks in competition_details.TimeBlocksByDay() %}
+        <div class="day-container">
+          <h3>{{ c.formatters.FormatDate(day) }}</h3>
+          {% for time_block in time_blocks %}
+            {% set round = time_block.GetRound() %}
+            {% set event = round.event.get() %}
+            <div class="time-block {% if round.is_final %}final-round{% endif %}">
+              <div class="event-times">
+                <span class="start-time">
+                  {{ c.formatters.FormatClockTime(time_block.GetStartTime()) }}
+                </span>
+                <span class="end-time">
+                  &mdash; {{ c.formatters.FormatClockTime(time_block.GetEndTime()) }}
+                </span>
+              </div>
+              <div class="event-name">
+                <img src="{{ event.IconURL() }}">
+                {{ event.name }}
+                {% if round.is_final %}
+                  Final
+                {% else %}
+                  Round {{ round.number }}
+                {% endif %}
+              </div>
+              <div class="stages">
+                <span class="stages-label">
+                  Stages:
+                </span>
+                {% for stage in time_block.GetStages() %}
+                  <span class="stage-chip background-{{ stage.color }}">
+                    {{ stage.name }}
+                  </span>
+                {% endfor %}
+              </div>
+            </div>
+            {% if competition_details.HasMultipleStages() %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
     </div>
   {% endif %}
 {% endmacro %}
