@@ -3,3 +3,6 @@ cron:
    url: /wca/get_export
    schedule: every 6 hours
    target: admin
+ - description: Permanently delete deleted documents
+   url: /admin/permanently_delete_documents
+   schedule: every 24 hours

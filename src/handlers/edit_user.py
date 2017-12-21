@@ -36,6 +36,10 @@ class EditUserHandler(BaseHandler):
     }
 
   def get(self, user_id=-1):
+    if not self.user:
+      self.redirect('/')
+      return
+
     user = self.get_user(user_id)
     if user is None:
       self.return_error('Unrecognized user ID %s provided.' % user_id)
@@ -49,8 +53,10 @@ class EditUserHandler(BaseHandler):
     self.response.write(template.render(self.TemplateDict(user)))
 
   def post(self, user_id=-1):
-    # Users with a WCA account linked have integer IDs.
-    # Users without a WCA account linked have string IDs (their WCA ID).
+    if not self.user:
+      self.redirect('/')
+      return
+
     user = self.get_user(user_id)
     if user is None:
       self.return_error('Unrecognized user ID %s provided.' % user_id)

@@ -97,7 +97,7 @@ class Common(object):
 
   def get_right_nav_items(self):
     if self.user:
-      return [('My Settings', '/edit_user'),
+      return [('My Settings', '/edit'),
               ('Log out', '/logout')]
     else:
       return [('Log in with WCA', '/login')]

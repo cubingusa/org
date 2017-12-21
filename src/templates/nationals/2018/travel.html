@@ -1,12 +1,72 @@
 {% extends "nationals/2018/base.html" %}
 {% block title%}Nationals 2018 Travel{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/travel') }}
+{% endblock %}
 {% block content %}
+  <h1>Travel Information</h1>
   <div class="nats-top-row">
-    <div class="top-info">
-      <h1>Travel Information</h1>
-      <p>
-        To be announced
-      </p>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-building" aria-hidden="true"></i> Venue</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            The competition will be held at the <strong><a href="https://www.visitsaltlake.com/salt-palace-convention-center/" target="_blank">Salt Palace Convention Center</a> in Salt Lake City, Utah.</strong>  We're pleased to be working with the Salt Palace, which will be a great venue for our competition.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Address:</span> <a href="https://goo.gl/maps/HC19DN4ofaJ2" target="_blank">100 S W Temple, Salt Lake City, UT 84101</a>
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Main Room:</span> Exhibit Hall 2 and 3
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Long Events:</span> Meeting Room 155 A/B
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <img src="/static/img/salt-palace-001.jpg">
+    </div>
+  </div>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-bed" aria-hidden="true"></i> Hotel</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            We have reserved a block of rooms at the <strong><a href="https://www.radisson.com/salt-lake-city-hotel-ut-84101/utsaltlk" target="_blank">Radisson Hotel Salt Lake City Downtown</a></strong>, conveniently located next door to the competiion venue.  Please book using the reservation link provided to ensure the best rate.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Address:</span> <a href="https://goo.gl/maps/4sJe9J62y422" target="_blank">215 S W Temple, Salt Lake City, UT 84101</a>
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-link" aria-hidden="true"></i> <span class="info-box-label">Reservation Link:</span> <a href="https://www.radisson.com/saltlakecity/cubing" target="_blank">Radisson <i class="fa fa-external-link" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-car" aria-hidden="true"></i> Transportation</h4>
+        </div>
+        <div class="card-body">
+          <div class="info-box-row">
+            <i class="fa fa-plane" aria-hidden="true"></i> <span class="info-box-label">Nearest Airport:</span> <strong>Salt Lake City International (SLC)</strong> is eight miles from the competition venue.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-subway" aria-hidden="true"></i> <span class="info-box-label">Public transit:</span> <a href="http://www.rideuta.com/" target="_blank">UTA Trax</a> is the easiest public transit option for getting to and from the airport.  The <a href="http://www.rideuta.com/Rider-Tools/Schedules-and-Maps/704-Green-Line" target="_blank">Green Line</a> runs directly to the competition venue and hotel.  Trains run about every <strong>fifteen minutes</strong> and cost <strong>$2.50 per ride.</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d24171.46264056267!2d-111.95751198486576!3d40.77449767030145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e3!4m5!1s0x8752f3c3315402a3%3A0xf772a5ef206082c5!2sAirport+Station%2C+Salt+Lake+City%2C+UT!3m2!1d40.78328!2d-111.980172!4m5!1s0x8752f50674b2cb45%3A0x8825a80f25bb4f38!2sSalt+Palace+Convention+Center%2C+South+West+Temple%2C+Salt+Lake+City%2C+UT!3m2!1d40.767210999999996!2d-111.894173!5e0!3m2!1sen!2sus!4v1513864150300" width="100%" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
     </div>
   </div>
 {% endblock %}
