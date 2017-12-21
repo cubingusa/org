@@ -6,6 +6,7 @@ from src.handlers.basic import BasicHandler
 from src.handlers.contact import ContactHandler
 from src.models.user import Roles
 from src.handlers.nationals.eighteen.events import Events2018Handler
+from src.handlers.nationals.eighteen.schedule import Schedule2018Handler
 
 uri_base = '/nationals/2018'
 template_base = 'nationals/2018'
@@ -18,9 +19,7 @@ app = webapp2.WSGIApplication([
                                      permitted_roles=Roles.AdminRoles())),
   webapp2.Route('/nationals/2018/events', handler=Events2018Handler,
                 name='events'),
-  webapp2.Route('/nationals/2018/schedule',
-                handler=BasicHandler('/nationals/2018/schedule.html',
-                                     permitted_roles=Roles.AdminRoles())),
+  webapp2.Route('/nationals/2018/schedule', handler=Schedule2018Handler),
   webapp2.Route('/nationals/2018/travel',
                 handler=BasicHandler('/nationals/2018/travel.html',
                                      permitted_roles=Roles.AdminRoles())),

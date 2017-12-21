@@ -1,12 +1,14 @@
+{% import "components/css.html" as css %}
+{% import "components/scheduling/schedule.html" as schedule %}
 {% extends "nationals/2018/base.html" %}
 {% block title%}Nationals 2018 Schedule{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/schedule') }}
+{% endblock %}
 {% block content %}
-  <div class="nats-top-row">
-    <div class="top-info">
-      <h1>Schedule</h1>
-      <p>
-        To be announced
-      </p>
-    </div>
-  </div>
+  <h1>CubingUSA Nationals 2018 Schedule</h1>
+  <p>
+    Please note that the schedule is tentative and may change between now and the competition.  Registration will open at 8:00 AM on Friday and Saturday.  Competitors should check in at least <strong>half an hour</strong> before their first event.
+  </p>
+  {{ schedule.schedule(c, competition_details) }}
 {% endblock %}
