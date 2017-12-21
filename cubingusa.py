@@ -9,6 +9,7 @@ from src.handlers.contact import ContactHandler
 from src.handlers.documents import DocumentsHandler
 from src.handlers.documents import GetDocumentHandler
 from src.handlers.admin.documents import DeleteDocumentHandler
+from src.handlers.admin.documents import PermanentlyDeleteDocumentsHandler
 from src.handlers.admin.documents import RestoreDocumentHandler
 from src.handlers.admin.documents import UploadDocumentHandler
 from src.handlers.admin.edit_users import EditUsersHandler
@@ -56,5 +57,6 @@ app = webapp2.WSGIApplication([
                 name='delete_document'),
   webapp2.Route('/admin/restore_document/<document_id:.*>', handler=RestoreDocumentHandler,
                 name='restore_document'),
+  webapp2.Route('/admin/permanently_delete_documents', handler=PermanentlyDeleteDocumentsHandler),
   webapp2.Route('/admin/async/get_users/<filter_text:.*>', handler=EditUsersHandler),
 ], config=config.GetAppConfig())

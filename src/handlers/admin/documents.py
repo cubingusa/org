@@ -4,10 +4,12 @@ import logging
 import webapp2
 
 from google.appengine.ext import blobstore
+from google.appengine.ext import ndb
 from google.appengine.ext.webapp import blobstore_handlers
 
-from src.handlers.base import BaseHandler
+from src.handlers.admin.admin_base import AdminBaseHandler
 from src.models.document import Document
+from src.models.user import Roles
 from src.models.user import User
 
 
@@ -32,7 +34,7 @@ class UploadDocumentHandler(blobstore_handlers.BlobstoreUploadHandler):
       document.put()
     self.redirect(webapp2.uri_for('documents') + '?success=1')
 
-class DeleteDocumentHandler(BaseHandler):
+class DeleteDocumentHandler(AdminBaseHandler):
   def get(self, document_id):
     document = Document.get_by_id(int(document_id))
     if not document:
@@ -42,8 +44,11 @@ class DeleteDocumentHandler(BaseHandler):
     document.deletion_time = datetime.datetime.now()
     document.put()
     self.redirect(webapp2.uri_for('documents') + '?success=1')
+
+  def PermittedRoles(self):
+    return Roles.AdminRoles()
     
-class RestoreDocumentHandler(BaseHandler):
+class RestoreDocumentHandler(AdminBaseHandler):
   def get(self, document_id):
     document = Document.get_by_id(int(document_id))
     if not document:
@@ -53,3 +58,14 @@ class RestoreDocumentHandler(BaseHandler):
     del document.deletion_time
     document.put()
     self.redirect(webapp2.uri_for('documents') + '?success=1')
+
+  def PermittedRoles(self):
+    return Roles.AdminRoles()
+
+class PermanentlyDeleteDocumentsHandler(AdminBaseHandler):
+  def get(self):
+    deletion_cutoff = datetime.datetime.now() - datetime.timedelta(days=14)
+    for document in Document.query(ndb.AND(Document.deletion_time < deletion_cutoff,
+                                           Document.deletion_time != None)):
+      blobstore.delete(document.blob_key)
+      document.key.delete()
