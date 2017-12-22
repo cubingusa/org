@@ -168,7 +168,8 @@ class CompetitionDetails(object):
           time_blocks_dict[t.GetStartTime().date()].append(t)
     for time_blocks in time_blocks_dict.itervalues():
       time_blocks.sort(key=lambda t: t.GetStartTime())
-    return time_blocks_dict.items()
+    # Sort by day.
+    return sorted(time_blocks_dict.items(), key=lambda i: i[0])
 
   def HasMultipleStages(self):
     return len(self.stage_ids) > 1
