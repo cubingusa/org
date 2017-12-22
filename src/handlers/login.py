@@ -1,5 +1,4 @@
 import datetime
-import httplib
 import json
 import urllib
 import webapp2
@@ -7,57 +6,29 @@ import webapp2
 from google.appengine.ext import ndb
 
 from src.handlers.base import BaseHandler
-from src.models.app_settings import AppSettings
+from src.handlers.oauth import OAuthBaseHandler
 from src.models.user import Roles
 from src.models.user import User
 from src.models.wca.person import Person
 
 class LoginHandler(BaseHandler):
   def get(self):
-    app_settings = AppSettings.Get()
-    params = {
-        'client_id': app_settings.wca_oauth_client_id,
-        'response_type': 'code',
-        'redirect_uri': webapp2.uri_for('login_callback', _full=True),
-        'state': self.request.referer if self.request.referer else '/',
+    self.redirect('/authenticate?' + urllib.urlencode({
         'scope': 'public email',
-    }
+        'callback': webapp2.uri_for('login_callback', _full=True),
+        'handler_data': self.request.referer if self.request.referer else '/',
+    }))
 
-    oauth_url = 'https://www.worldcubeassociation.org/oauth/authorize?' + urllib.urlencode(params)
-    self.redirect(oauth_url)
-
-class LoginCallbackHandler(BaseHandler):
+class LoginCallbackHandler(OAuthBaseHandler):
   def get(self):
-    code = self.request.get('code')
-    if not code:
-      self.response.set_status(400)
+    OAuthBaseHandler.get(self)
+    if not self.auth_token:
       return
 
-    app_settings = AppSettings.Get()
-
-    # Get OAuth token.
-    post_data = {
-        'grant_type': 'authorization_code',
-        'code': code,
-        'redirect_uri': webapp2.uri_for('login_callback', _full=True),
-        'client_id': app_settings.wca_oauth_client_id,
-        'client_secret': app_settings.wca_oauth_client_secret,
-    }
-    conn = httplib.HTTPSConnection('www.worldcubeassociation.org/oauth/token')
-    conn.request('POST', '', urllib.urlencode(post_data), {})
-    response = conn.getresponse()
+    response = self.GetWcaApi('/api/v0/me')
     if response.status != 200:
       self.response.set_status(response.status)
-      return
-    auth_token = json.loads(response.read())['access_token']
-
-    # OAuth token obtained, now read information about the person.
-    headers = {'Authorization': 'Bearer ' + auth_token}
-    conn = httplib.HTTPSConnection('www.worldcubeassociation.org/api/v0/me')
-    conn.request('GET', '', '', headers)
-    response = conn.getresponse()
-    if response.status != 200:
-      self.response.set_status(response.status)
+      logging.error('Error from WCA: ' + self.response.read())
       return
 
     # Save the account information we need.
@@ -105,7 +76,7 @@ class LoginCallbackHandler(BaseHandler):
     user.last_login = datetime.datetime.now()
 
     user.put()
-    self.redirect(str(self.request.get('state')))
+    self.redirect(str(self.handler_data))
 
 class LogoutHandler(BaseHandler):
   def get(self):

@@ -1,0 +1,26 @@
+@import "base";
+
+.form-label {
+  @include make-col-ready();
+  @include media-breakpoint-down(xs) {
+    @include make-col(6);
+  }
+  @include media-breakpoint-up(sm) {
+    @include make-col(3);
+  }
+}
+
+.form-choice-container {
+  @include make-col-ready();
+  @include media-breakpoint-down(xs) {
+    @include make-col(6);
+  }
+  @include media-breakpoint-up(sm) {
+    @include make-col(3);
+  }
+}
+
+.event-icon-small {
+  width: 20px;
+  height: 20px;
+}

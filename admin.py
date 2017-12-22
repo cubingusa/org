@@ -12,11 +12,13 @@ from src.handlers.basic import BasicHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
 from src.handlers.login import LogoutHandler
+from src.handlers.oauth import AuthenticateHandler
 from src.models.user import Roles
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/', handler=BasicHandler('admin/index.html',
                                           permitted_roles=Roles.AdminRoles())),
+  webapp2.Route('/authenticate', handler=AuthenticateHandler),
   webapp2.Route('/login', handler=LoginHandler, name='login'),
   webapp2.Route('/login_callback', handler=LoginCallbackHandler, name='login_callback'),
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),

@@ -1,0 +1,64 @@
+@import "base";
+@import "all_colors";
+@import "components/event_selector";
+
+.schedule-section {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.stage-row {
+  padding: 2px;
+}
+
+.stage-chip {
+  border: 1px solid black;
+  border-radius: 2px;
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+}
+
+.stage-edit-row {
+  @include make-row();
+  padding-bottom: 10px;
+
+  .name-container,.color-container,.timers-container,.submit-container {
+    @include make-col-ready();
+    @include media-breakpoint-down(xs) {
+      @include make-col(6);
+    }
+    @include media-breakpoint-up(sm) {
+      @include make-col(3);
+    }
+  }
+}
+
+.submit-container .btn {
+  width: 100%;
+}
+
+.time-block-edit-row {
+  @include make-row();
+  padding-bottom: 10px;
+
+  .stage-selector-container,.day-container,.details-container,.submit-container {
+    @include make-col-ready();
+    @include media-breakpoint-down(xs) {
+      @include make-col(6);
+    }
+    @include media-breakpoint-up(sm) {
+      @include make-col(2);
+    }
+  }
+
+  .time-range-container {
+    @include make-col-ready();
+    @include media-breakpoint-down(xs) {
+      @include make-col(12);
+    }
+    @include media-breakpoint-up(sm) {
+      @include make-col(4);
+    }
+  }
+}

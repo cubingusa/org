@@ -17,6 +17,12 @@ handlers:
  - url: /static
    static_dir: src/static
    secure: always
+ - url: /scheduling
+   script: scheduling.app
+   secure: always
+ - url: /scheduling/.*
+   script: scheduling.app
+   secure: always
  - url: /nationals/.*
    script: nationals.app
    secure: always

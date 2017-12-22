@@ -66,6 +66,9 @@ class Common(object):
   def is_string(self, h):
     return type(h) is str
 
+  def is_none(self, h):
+    return h is None
+
   def get_nav_items(self):
     items = [('Home', '/'),
              ('Competitions', [

@@ -6,6 +6,7 @@ var eventSelectorModule = (function() {
   var unselectListener = null;
 
   var defaultEvt = '';
+  var enableHash = true;
   
   return {
     eventSelector: eventSelector,
@@ -13,7 +14,9 @@ var eventSelectorModule = (function() {
     eventClick: function() {
       if (this.dataset.eventid == selectedEvent) {
         if (unselectListener) {
-          hashModule.deleteKey('e');
+          if (enableHash) {
+            hashModule.deleteKey('e');
+          }
           document.getElementById('event-selector-link-' + selectedEvent)
                   .getElementsByTagName('img')[0]
                   .classList.remove('selected');
@@ -28,14 +31,18 @@ var eventSelectorModule = (function() {
         }
         this.getElementsByClassName('event-selector-icon')[0].classList.add('selected');
         selectedEvent = this.dataset.eventid;
-        if (this.dataset.eventid == defaultEvt) {
-          hashModule.deleteKey('e');
-        } else {
-          hashModule.setValue('e', this.dataset.eventid);
+        if (enableHash) {
+          if (this.dataset.eventid == defaultEvt) {
+            hashModule.deleteKey('e');
+          } else {
+            hashModule.setValue('e', this.dataset.eventid);
+          }
         }
         selectListener(this.dataset.eventid, this.dataset.eventname);
       }
     },
+
+    disableHash: function() { enableHash = false; },
 
     setSelectListener: function(listener) { selectListener = listener; },
     setUnselectListener: function(listener) { unselectListener = listener; },

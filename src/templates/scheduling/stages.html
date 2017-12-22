@@ -1,0 +1,67 @@
+{% macro stage_edit(stage_id, name, colors, stage_color, timers) %}
+  <form class="stage-form" data-stageid="{{ stage_id }}">
+    <div class="stage-edit-row d-none" id="edit-row-{{ stage_id }}">
+      <input type="hidden" name="id" value="{{ stage_id }}">
+      <div class="name-container">
+        <input type="text"
+               name="name"
+               class="form-control"
+               placeholder="Stage Name"
+               value="{{ name }}"
+               required>
+      </div>
+      <div class="color-container">
+        <span class="stage-chip background-{{ stage_color }}"
+              id="stage-chip-{{ stage_id }}"
+              data-color="{{ stage_color }}"></span>
+        <select name="color"
+                class="custom-select color-selector"
+                data-chipid="{{ stage_id }}">
+          {% for color in colors %}
+            <option class="background-{{ color }}"
+                    data-color="{{ color }}"
+                    {% if color == stage_color %}selected{% endif %}
+                    >
+              {{ color }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="timers-container">
+        <input type="number"
+               min="0"
+               name="timers"
+               class="form-control"
+               placeholder="# Timers"
+               value="{{ timers }}"
+               required>
+      </div>
+      <div class="submit-container">
+        <button class="btn btn-primary"
+                type="submit">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+{% endmacro %}
+    
+{% autoescape true %}
+{% for stage in stages %}
+  <div class="stage-row editable-row" id="editable-row-{{ stage.key.id() }}">
+    <span class="stage-chip background-{{ stage.color }}"></span>
+    <span class="stage-details">
+      {{ stage.name }} ({{ stage.timers }} timers)
+      <a href="javascript:void(0);" data-editid="{{ stage.key.id() }}" class="edit-link">[Edit]</a>
+    </span>
+  </div>
+  {{ stage_edit(stage.key.id(), stage.name, colors, stage.color, stage.timers) }}
+{% endfor %}
+<div class="stage-row editable-row" id="editable-row-{{ new_stage_id }}">
+  <div class="stage-details">
+    <a href="javascript:void(0);" data-editid="{{ new_stage_id }}" class="edit-link">[Add new stage]</a>
+  </div>
+</div>
+{{ stage_edit(new_stage_id, '', colors, colors[0], '') }}
+
+{% endautoescape %}

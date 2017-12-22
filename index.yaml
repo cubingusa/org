@@ -52,6 +52,39 @@ indexes:
   - name: pos
     direction: desc
 
+- kind: ScheduleRound
+  properties:
+  - name: event
+  - name: schedule
+  - name: number
+
+- kind: ScheduleStage
+  properties:
+  - name: schedule
+  - name: number
+
+- kind: ScheduleStage
+  properties:
+  - name: schedule
+  - name: number
+    direction: desc
+
+- kind: ScheduleTimeBlock
+  properties:
+  - name: schedule
+  - name: staff_only
+  - name: start_time
+
+- kind: ScheduleTimeBlock
+  properties:
+  - name: schedule
+  - name: start_time
+
+- kind: ScheduleTimeBlock
+  properties:
+  - name: staff_only
+  - name: start_time
+
 - kind: UserLocationUpdate
   properties:
   - name: user

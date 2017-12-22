@@ -11,3 +11,7 @@ class Format(BaseModel):
   @staticmethod
   def ColumnsUsed():
     return ['name']
+
+  def GetShortName(self):
+    # Average of 5 -> Ao5
+    return self.name[0] + 'o' + self.name[-1]
