@@ -19,7 +19,7 @@ from src.handlers.scheduling.update_competition import UpdateCompetitionHandler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling', handler=SchedulingIndexHandler, name='index'),
-  webapp2.Route('/scheduling/edit/<competition_id:.*>',
+  webapp2.Route('/scheduling/<competition_id:.*>/edit',
                 handler=EditCompetitionHandler,
                 name='edit_competition'),
   webapp2.Route('/scheduling/update_competition',
