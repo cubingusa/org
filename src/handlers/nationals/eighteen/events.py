@@ -6,7 +6,7 @@ from src.scheduling.competition_details import CompetitionDetails
 
 class Events2018Handler(SchedulingBaseHandler):
   def get(self):
-    if not self.SetCompetition('CubingUSANationals2018', edit_access_needed=True):
+    if not self.SetCompetition('CubingUSANationals2018'):
       return
 
     template = JINJA_ENVIRONMENT.get_template('nationals/2018/events.html')
