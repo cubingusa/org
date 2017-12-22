@@ -27,6 +27,9 @@ class SchedulingBaseHandler(BaseHandler):
     if not self.user and login_required:
       self.redirect('/login')
       return False
+    elif not self.user:
+      self.is_editor = False
+      return True
 
     self.is_editor = True
     staff = ScheduleStaff.get_by_id(ScheduleStaff.Id(competition_id, self.user.key.id()))
