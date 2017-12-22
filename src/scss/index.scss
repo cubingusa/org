@@ -2,8 +2,12 @@
 @import "components/button";
 @import "components/standard_block";
 
-.main-card {
+#main-card .card-body,#main-card figcaption{
   background-color: $gray-200;
+}
+
+#main-card .card-body {
+  padding-top: 10px;
 }
 
 .card-header {
@@ -12,8 +16,13 @@
   }
 }
 
-.main-card .photo-credit {
+#main-card figure {
+  margin-bottom: 0px;
+}
+
+#main-card figcaption {
+  @extend .figure-caption;
   text-align: right;
+  padding-right: 5px;
   font-style: italic;
-  margin-top: -14px;
 }
