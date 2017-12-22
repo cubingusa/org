@@ -6,5 +6,7 @@
   {{ css.css(c, 'contact') }}
 {% endblock %}
 {% block content %}
-  {% call contact.contact_form(c, result) %}{% endcall %}
+  {% call contact.contact_form(c, result) %}
+    <p>If you have questions about CubingUSA Nationals, please use the <a href="/nationals/2018/contact">Nationals contact form</a>.
+  {% endcall %}
 {% endblock %}
