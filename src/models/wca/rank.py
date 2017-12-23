@@ -1,6 +1,5 @@
 from google.appengine.ext import ndb
 
-from src.models.state import State
 from src.models.user import User
 from src.models.wca.base import BaseModel
 from src.models.wca.event import Event
@@ -10,7 +9,7 @@ class RankBase(BaseModel):
   person = ndb.KeyProperty(kind=Person)
   event = ndb.KeyProperty(kind=Event)
   best = ndb.IntegerProperty()
-  state = ndb.KeyProperty(kind=State)
+  state = ndb.ComputedProperty(lambda self: self.person.get().state)
 
   worldRank = ndb.IntegerProperty()
   continentRank = ndb.IntegerProperty()
