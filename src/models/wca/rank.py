@@ -9,11 +9,16 @@ class RankBase(BaseModel):
   person = ndb.KeyProperty(kind=Person)
   event = ndb.KeyProperty(kind=Event)
   best = ndb.IntegerProperty()
-  state = ndb.ComputedProperty(lambda self: self.person.get().state)
+  state = ndb.ComputedProperty(lambda self: self.GetState())
 
   worldRank = ndb.IntegerProperty()
   continentRank = ndb.IntegerProperty()
   countryRank = ndb.IntegerProperty()
+
+  def GetState(self):
+    if not self.person or not self.person.get():
+      return None
+    return self.person.get().state
 
   @staticmethod
   def GetId(row):
