@@ -23,7 +23,7 @@ CHUNK_SIZE = 16 * 1024 * 1024
 def fname(idx):
   return '/%s/export_tmp/WCA_export.tsv.zip.%d' % (app_identity.get_default_gcs_bucket_name(), idx)
 
-def assemble_zip(file_count):
+def assemble_zip(file_count, force):
   strio = StringIO.StringIO()
   for idx in range(file_count):
     filename = fname(idx)
@@ -46,7 +46,7 @@ def assemble_zip(file_count):
     return
 
   new_export = WcaExport.get_by_id(new_export_id) or WcaExport(id=new_export_id)
-  if get_latest_export() and new_export.key == get_latest_export().key:
+  if get_latest_export() and new_export.key == get_latest_export().key and not force:
     # We're trying to reimport the same WCA export.  Abort.
     return
   new_export.put()
@@ -56,7 +56,7 @@ def assemble_zip(file_count):
 
   export.process_export(new_export_id)
 
-def download_export_chunk(idx):
+def download_export_chunk(idx, force):
   if idx > 10:
     return
   headers = {'Range': 'bytes=%d-%d' % (idx * CHUNK_SIZE, (idx + 1) * CHUNK_SIZE - 1)}
@@ -73,14 +73,14 @@ def download_export_chunk(idx):
   logging.info('Fetched %d bytes' % len(fetch_result.content))
 
   if len(fetch_result.content) < CHUNK_SIZE:
-    deferred.defer(assemble_zip, idx + 1)
+    deferred.defer(assemble_zip, idx + 1, force)
   else:
-    deferred.defer(download_export_chunk, idx + 1)
+    deferred.defer(download_export_chunk, idx + 1, force)
   
 
 class GetExportHandler(AdminBaseHandler):
   def get(self):
-    deferred.defer(download_export_chunk, idx=0)
+    deferred.defer(download_export_chunk, idx=0, force=self.request.get('force'))
     self.response.write('Running in background.')
 
   def PermittedRoles(self):
