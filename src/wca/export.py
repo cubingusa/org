@@ -143,8 +143,8 @@ def get_tables():
           ('Formats', Format, 1),
           ('RoundTypes', RoundType, 1),
           ('Persons', Person, 3),
-          ('RanksSingle', RankSingle, 6),
-          ('RanksAverage', RankAverage, 6),
+          ('RanksSingle', RankSingle, 20),
+          ('RanksAverage', RankAverage, 20),
           ('Competitions', Competition, 1),
           ('Results', Result, 40)]
 
