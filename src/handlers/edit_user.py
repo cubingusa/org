@@ -7,18 +7,18 @@ from src import common
 from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.state import State
-from src.models.rank import RankAverage
-from src.models.rank import RankSingle
 from src.models.user import Roles
 from src.models.user import User
 from src.models.user import UserLocationUpdate
 from src.models.wca.person import Person
+from src.models.wca.rank import RankAverage
+from src.models.wca.rank import RankSingle
 
 # After updating the user's state, write the RankSingle and RankAverage to the
 # datastore again to update their states.
 def RewriteRanks(wca_person):
   for rank_class in (RankSingle, RankAverage):
-    ndb.put_multi(rank_class.query(rank_class.person == wca_person.key).fetch(keys_only=True))
+    ndb.put_multi(rank_class.query(rank_class.person == wca_person.key).fetch())
 
 class EditUserHandler(BaseHandler):
   def return_error(self, error):
