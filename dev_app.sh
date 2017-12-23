@@ -7,7 +7,7 @@ set -e
 mkdir -p .local_storage
 
 echo "Updating python dependencies."
-pip install -t lib -r requirements.txt --upgrade
+pip2.7 install -t lib -r requirements.txt --upgrade
 
 echo "Starting dev_appserver.py."
 dev_appserver.py app.yaml admin.yaml \
