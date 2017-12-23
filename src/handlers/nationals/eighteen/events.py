@@ -29,7 +29,9 @@ class Events2018Handler(SchedulingBaseHandler):
     competition_details.SetQualifyingTime('333bf', 24000, is_average=False)
     competition_details.SetQualifyingTime('444bf', 60000, is_average=False)
     competition_details.SetQualifyingTime('555bf', 120000, is_average=False)
-    competition_details.SetQualifyingTime('333mbf', 930000000, is_average=False)
+    # Multi blind qualifying standard is 6 points.  Format is documented here:
+    # https://www.worldcubeassociation.org/results/misc/export.html
+    competition_details.SetQualifyingTime('333mbf', 939999999, is_average=False)
     
     self.response.write(template.render({
         'c': common.Common(self),

@@ -8,7 +8,7 @@
 set -e
 
 echo "Updating python dependencies."
-pip install -t lib -r requirements.txt --upgrade
+pip2.7 install -t lib -r requirements.txt --upgrade
 
 echo "Recompiling minified CSS."
 rm -r -f src/static/css/prod
