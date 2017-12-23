@@ -37,7 +37,7 @@ class LoginCallbackHandler(OAuthBaseHandler):
     self.session['login_time'] = (
         datetime.datetime.now() - datetime.datetime.utcfromtimestamp(0)).total_seconds()
     user = User.get_by_id(str(wca_info['id'])) or User(id=str(wca_info['id']))
-    if 'wca_id' in wca_info:
+    if 'wca_id' in wca_info and wca_info['wca_id']:
       user.wca_person = ndb.Key(Person, wca_info['wca_id'])
     else:
       del user.wca_person
@@ -61,7 +61,10 @@ class LoginCallbackHandler(OAuthBaseHandler):
       elif wca_info['delegate_status'] == 'candidate_delegate':
         user.roles.append(Roles.CANDIDATE_DELEGATE)
 
-    wca_id_user = User.get_by_id(wca_info['wca_id'])
+    if wca_info['wca_id']:
+      wca_id_user = User.get_by_id(wca_info['wca_id'])
+    else:
+      wca_id_user = None
     if wca_id_user:
       if wca_id_user.city and not user.city:
         user.city = wca_id_user.city
