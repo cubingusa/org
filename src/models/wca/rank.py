@@ -32,6 +32,9 @@ class RankBase(BaseModel):
   def ColumnsUsed():
     return ['personId', 'eventId', 'best', 'worldRank', 'continentRank', 'countryRank']
 
+  def ObjectsToGet(self):
+    return [self.person]
+
 
 class RankAverage(RankBase):
   pass
