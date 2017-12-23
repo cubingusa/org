@@ -40,10 +40,10 @@ def FormatMultiBlindOld(time, verbose, trim_zeros, short_units):
   if verbose:
     return '%d out of %d cubes in %s' % (
                solved, attempted,
-               FormatStandard(time_in_seconds * 100, trim_zeros, short_units))
+               FormatStandard(time_in_seconds * 100, trim_zeros))
   else:
     return '%d/%d %s' % (solved, attempted,
-                         FormatStandard(time_in_seconds * 100, trim_zeros, short_units))
+                         FormatStandard(time_in_seconds * 100, trim_zeros))
 
 def FormatMultiBlind(time, verbose, trim_zeros, short_units):
   missed = time % 100
@@ -56,10 +56,10 @@ def FormatMultiBlind(time, verbose, trim_zeros, short_units):
   if verbose:
     return '%d out of %d cubes in %s' % (
                solved, attempted,
-               FormatStandard(time_in_seconds * 100, trim_zeros, short_units))
+               FormatStandard(time_in_seconds * 100, trim_zeros))
   else:
     return '%d/%d %s' % (solved, attempted,
-                         FormatStandard(time_in_seconds * 100, trim_zeros, short_units))
+                         FormatStandard(time_in_seconds * 100, trim_zeros))
 
 def FormatFewestMoves(time, is_average, verbose, short_units):
   result = str(time)
