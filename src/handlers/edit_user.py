@@ -61,14 +61,14 @@ class EditUserHandler(BaseHandler):
     if user is None:
       self.return_error('Unrecognized user ID %s provided.' % user_id)
       return
-    city = self.request.POST['city']
-    state_id = self.request.POST['state']
+    city = self.request.get('city')
+    state_id = self.request.get('state')
     if state_id == 'empty':
       state_id = ''
 
-    if self.request.POST['lat'] and self.request.POST['lng']:
-      lat = int(self.request.POST['lat'])
-      lng = int(self.request.POST['lng'])
+    if self.request.get('lat') and self.request.get('lng'):
+      lat = int(self.request.get('lat'))
+      lng = int(self.request.get('lng'))
     else:
       lat = 0
       lng = 0
@@ -78,7 +78,10 @@ class EditUserHandler(BaseHandler):
     changed_location = user.city != city or old_state_id != state_id
     user_modified = False
     if auth.CanEditLocation(user=user, editor=self.user) and changed_location:
-      user.city = city
+      if city:
+        user.city = city
+      else:
+        del user.city
       if state_id:
         user.state = ndb.Key(State, state_id)
       else:
