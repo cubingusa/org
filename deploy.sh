@@ -28,6 +28,11 @@ while getopts "psf:v:" opt; do
       ;;
     v)
       VERSION="$OPTARG"
+      if [ "$VERSION" == "admin" ]
+      then
+        echo "You can't use -v admin.  Please select another version name."
+        exit 1
+      fi
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -65,12 +70,12 @@ then
 fi
 
 echo "Updating python dependencies."
-#pip2.7 install -t lib -r requirements.txt --upgrade
+pip2.7 install -t lib -r requirements.txt --upgrade
 
 echo "Recompiling minified CSS."
-#rm -r -f src/static/css/prod
-#mkdir src/static/css/prod
-#sass --update src/scss:src/static/css/prod --style compressed
+rm -r -f src/static/css/prod
+mkdir src/static/css/prod
+sass --update src/scss:src/static/css/prod --style compressed
 
 echo "Deploying to App Engine."
 CMD="gcloud app deploy $FILES_TO_DEPLOY --project $PROJECT"
@@ -81,3 +86,11 @@ fi
 
 echo "$CMD"
 $CMD
+
+if [ ! -z "$VERSION" ]
+then
+  URI="https://${VERSION}-dot-$PROJECT.appspot.com"
+else
+  URI="https://$PROJECT.appspot.com"
+fi
+echo "Successfully uploaded to $URI."
