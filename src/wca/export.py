@@ -101,11 +101,16 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
     keys = [ndb.Key(object_type, object_id) for object_id in object_ids]
     query_result = ndb.get_multi_async(keys)
     objects_to_put = []
+    objects_to_get = []
     for object_id, query_result in zip(object_ids, query_result):
       obj = query_result.get_result() or object_type(id=object_id)
       obj.ParseFromDict(id_to_dict[object_id])
       objects_to_put.append(obj)
+      # For some objects, fetch other entities in batch to save time.  This will
+      # store them in memcache, which is faster than reading from the datastore.
+      objects_to_get.extend(obj.ObjectsToGet())
     logging.info('Starting write')
+    ndb.get_multi(objects_to_get)
     ndb.put_multi(objects_to_put)
     logging.info('Finished write')
 
@@ -146,7 +151,8 @@ def get_tables():
           ('RanksSingle', RankSingle, 20),
           ('RanksAverage', RankAverage, 20),
           ('Competitions', Competition, 1),
-          ('Results', Result, 40)]
+          ('Results', Result, 40),
+         ]
 
 
 def process_export(export_id):

@@ -1,6 +1,5 @@
 from google.appengine.ext import ndb
 
-from src.models.state import State
 from src.models.user import User
 from src.models.wca.base import BaseModel
 from src.models.wca.event import Event
@@ -10,11 +9,16 @@ class RankBase(BaseModel):
   person = ndb.KeyProperty(kind=Person)
   event = ndb.KeyProperty(kind=Event)
   best = ndb.IntegerProperty()
-  state = ndb.KeyProperty(kind=State)
+  state = ndb.ComputedProperty(lambda self: self.GetState())
 
   worldRank = ndb.IntegerProperty()
   continentRank = ndb.IntegerProperty()
   countryRank = ndb.IntegerProperty()
+
+  def GetState(self):
+    if not self.person or not self.person.get():
+      return None
+    return self.person.get().state
 
   @staticmethod
   def GetId(row):
@@ -32,6 +36,9 @@ class RankBase(BaseModel):
   @staticmethod
   def ColumnsUsed():
     return ['personId', 'eventId', 'best', 'worldRank', 'continentRank', 'countryRank']
+
+  def ObjectsToGet(self):
+    return [self.person]
 
 
 class RankAverage(RankBase):

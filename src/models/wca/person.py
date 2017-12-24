@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 
+from src.models.state import State
 from src.models.wca.country import BaseModel
 from src.models.wca.country import Country
 
@@ -13,6 +14,10 @@ class Person(BaseModel):
   all_names = ndb.StringProperty(repeated=True)
   all_countries = ndb.KeyProperty(kind=Country, repeated=True)
   all_genders = ndb.StringProperty(repeated=True)
+
+  # The person's state, if they're a US resident.  This isn't computed during
+  # the database import.
+  state = ndb.KeyProperty(kind=State)
 
   def ParseFromDict(self, rows):
     subids = sorted(rows.keys())

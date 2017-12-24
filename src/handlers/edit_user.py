@@ -10,6 +10,15 @@ from src.models.state import State
 from src.models.user import Roles
 from src.models.user import User
 from src.models.user import UserLocationUpdate
+from src.models.wca.person import Person
+from src.models.wca.rank import RankAverage
+from src.models.wca.rank import RankSingle
+
+# After updating the user's state, write the RankSingle and RankAverage to the
+# datastore again to update their states.
+def RewriteRanks(wca_person):
+  for rank_class in (RankSingle, RankAverage):
+    ndb.put_multi(rank_class.query(rank_class.person == wca_person.key).fetch())
 
 class EditUserHandler(BaseHandler):
   def return_error(self, error):
@@ -86,6 +95,11 @@ class EditUserHandler(BaseHandler):
         user.state = ndb.Key(State, state_id)
       else:
         del user.state
+      if user.wca_person and old_state_id != state_id:
+        wca_person = user.wca_person.get()
+        wca_person.state = user.state
+        wca_person.put()
+        RewriteRanks(wca_person)
       user.latitude = lat
       user.longitude = lng
       user_modified = True
