@@ -94,3 +94,9 @@ else
   URI="https://$PROJECT.appspot.com"
 fi
 echo "Successfully uploaded to $URI."
+
+if [ ! -z "$VERSION" ]
+then
+  echo "Once you're done testing, please clean up by running:"
+  echo "gcloud app versions delete $VERSION --project $PROJECT"
+fi
