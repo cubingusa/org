@@ -22,20 +22,36 @@ def GetClientSecret(app_settings, scope):
 class AuthenticateHandler(BaseHandler):
   def get(self):
     app_settings = AppSettings.Get()
+    # Always use /oauth_callback as the redirect URI, as far as the WCA oauth
+    # system is concerned.
+    # For staging, use the prod /oauth_callback endpoint.  OAuth does not allow
+    # wildcards in redirect URIs, and there will potentially be many different
+    # foo-dot-staging-cubingusa-org domains.
+    if 'staging-cubingusa-org' in self.request.host:
+      redirect_uri = 'https://cubingusa.org/oauth_callback'
+    else:
+      redirect_uri = self.request.host_url + '/oauth_callback'
     params = {
         'client_id': GetClientId(app_settings, self.request.get('scope')),
         'response_type': 'code',
-        'redirect_uri': self.request.get('callback'),
+        'redirect_uri': redirect_uri,
         'state': json.dumps({
             'handler_data': self.request.get('handler_data'),
             'scope': self.request.get('scope'),
-            'redirect_uri': self.request.get('callback'),
+            'oauth_redirect_uri': redirect_uri,
+            'actual_redirect_uri': self.request.get('callback'),
         }),
         'scope': self.request.get('scope'),
     }
 
     oauth_url = 'https://www.worldcubeassociation.org/oauth/authorize?' + urllib.urlencode(params)
     self.redirect(oauth_url)
+
+class OAuthCallbackHandler(BaseHandler):
+  def get(self):
+    state = json.loads(self.request.get('state'))
+    self.redirect(str(state['actual_redirect_uri']) + '?' +
+                  self.request.query_string)
 
 class OAuthBaseHandler(BaseHandler):
   # Subclasses should first call OAuthBaseHandler.get(self), then check if
@@ -58,7 +74,7 @@ class OAuthBaseHandler(BaseHandler):
         'code': code,
         'client_id': GetClientId(app_settings, scope),
         'client_secret': GetClientSecret(app_settings, scope),
-        'redirect_uri': state['redirect_uri'],
+        'redirect_uri': state['oauth_redirect_uri'],
     }
     conn = httplib.HTTPSConnection('www.worldcubeassociation.org/oauth/token')
     conn.request('POST', '', urllib.urlencode(post_data), {})
