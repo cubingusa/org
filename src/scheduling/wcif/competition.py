@@ -1,3 +1,5 @@
+from src.scheduling.wcif.schedule import ScheduleToWcif
+
 # Writes a ScheduleCompetition in WCIF format.
 # https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit?ts=5a3fd252#heading=h.ytob2sxb7khl
 def CompetitionToWcif(competition, schedule):
@@ -10,5 +12,6 @@ def CompetitionToWcif(competition, schedule):
 
   # TODO: add people
   # TODO: add events
-  # TODO: add schedule
+  if schedule:
+    output_dict['schedule'] = ScheduleToWcif(schedule, competition, wca_competition)
   return output_dict
