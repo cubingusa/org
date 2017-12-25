@@ -1,3 +1,7 @@
+import collections
+
+from src.models.scheduling.round import ScheduleRound
+from src.scheduling.wcif.event import EventToWcif
 from src.scheduling.wcif.schedule import ScheduleToWcif
 
 # Writes a ScheduleCompetition in WCIF format.
@@ -11,7 +15,14 @@ def CompetitionToWcif(competition, schedule):
     output_dict['name'] = competition.wca_competition.get().name
 
   # TODO: add people
-  # TODO: add events
+
+  rounds_by_event_id = collections.defaultdict(list)
+  for r in ScheduleRound.query(ScheduleRound.schedule == schedule.key):
+    rounds_by_event_id[r.event.id()].append(r)
+  output_dict['events'] = []
+  for event_id, rounds in rounds_by_event_id.iteritems():
+    output_dict['events'].append(EventToWcif(event_id, rounds))
+  
   if schedule:
     output_dict['schedule'] = ScheduleToWcif(schedule, competition, wca_competition)
   return output_dict
