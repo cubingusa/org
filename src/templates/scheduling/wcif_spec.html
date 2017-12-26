@@ -36,4 +36,12 @@
     <li><strong>colorHex:</strong> (string) The hex code of the stage's color.
     <li><strong>numTimers:</strong> (integer) The number of timers used on this stage.
   </ul>
+  <h3 id="ScheduleTimeBlock">org.cubingusa.ScheduleTimeBlock</h3>
+  <p>
+    The <strong>ScheduleTimeBlock</strong> extension is added to WCIF <strong>Activity</strong> entities.  These correspond to Activities which do not correspond to a single group.  This extension represents a <a href="https://github.com/cubingusa/cubingusa-org/blob/master/src/models/scheduling/time_block.py">ScheduleTimeBlock</a> entity in the App Engine datastore.  The extension contains the following data:
+  </p>
+  <ul>
+    <li><strong>datastoreId:</strong> (integer) The ID of the entity stored in the App Engine datastore.
+    <li><strong>staffOnly:</strong> (boolean) Whether the groups in this time block are limited to staff members only.
+  </ul>
 {% endblock %}
