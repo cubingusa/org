@@ -5,7 +5,9 @@ from src.models.scheduling.group import ScheduleGroup
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.stage import ScheduleStage
 from src.models.scheduling.time_block import ScheduleTimeBlock
+from src.scheduling.wcif.extensions import AddExtension
 from src.scheduling.wcif.stage import StageToWcif
+from src.timezones import ToLocalizedTime
 
 # Writes a Schedule in WCIF format.
 # https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit?ts=5a3fd252#heading=h.hsdqzy8dh3z8
@@ -41,6 +43,14 @@ def ScheduleToWcif(schedule, competition, wca_competition):
     venue_dict['rooms'].append(StageToWcif(
         stage, time_blocks_by_stage[stage.key.id()],
         groups_by_stage_and_time_block[stage.key.id()]))
-
   output_dict['venues'] = [venue_dict]
+
+  extension_dict = {}
+  extension_dict['datastoreId'] = schedule.key.id()
+  extension_dict['creationTime'] = (
+      ToLocalizedTime(schedule.creation_time, competition.timezone).isoformat())
+  extension_dict['lastUpdateTime'] = (
+      ToLocalizedTime(schedule.last_update_time, competition.timezone).isoformat())
+  AddExtension('Schedule', extension_dict, output_dict)
+
   return output_dict
