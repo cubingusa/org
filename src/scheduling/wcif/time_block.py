@@ -7,8 +7,10 @@ def TimeBlockToWcif(time_block, groups):
   e = r.event.get()
   output_dict['name'] = '%s %s' % (
       e.name, 'Final' if r.is_final else 'Round %d' % r.number)
-  # TODO: support activities with more than one attempt.
-  output_dict['activityCode'] = '%s-r%d' % (r.event.id(), r.number)
+  activity_code = '%s-r%d' % (r.event.id(), r.number)
+  if time_block.attempt:
+    activity_code = '%s-a%d' % (activity_code, time_block.attempt)
+  output_dict['activityCode'] = activity_code
   # TODO: include beginning and ending time.
   # TODO: pending completion of WCIF discussion, add groups as child activities.
 
