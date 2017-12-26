@@ -10,9 +10,8 @@ def CompetitionToWcif(competition, schedule):
   output_dict = {}
   output_dict['formatVersion'] = '1.0'
   output_dict['id'] = competition.key.id()
+  output_dict['name'] = competition.name
   wca_competition = competition.wca_competition.get()
-  if wca_competition:
-    output_dict['name'] = competition.wca_competition.get().name
 
   # TODO: add people
 
