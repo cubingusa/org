@@ -1,6 +1,7 @@
 import webapp2
 
 from src import config
+from src.handlers.basic import BasicHandler
 from src.handlers.scheduling.async.add_stage import AddStageHandler
 from src.handlers.scheduling.async.add_time_block import AddTimeBlockHandler
 from src.handlers.scheduling.async.event_details import EventDetailsHandler
@@ -64,4 +65,7 @@ app = webapp2.WSGIApplication([
                 name='schedule_display'),
   webapp2.Route('/scheduling/<competition_id:.*>/wcif',
                 handler=CompetitionWcifHandler),
+  webapp2.Route('/scheduling/wcif_spec',
+                handler=BasicHandler('scheduling/wcif_spec.html'),
+                name='wcif_spec'),
 ], config=config.GetAppConfig())
