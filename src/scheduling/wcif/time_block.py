@@ -13,7 +13,9 @@ def TimeBlockToWcif(time_block, groups):
   if time_block.attempt:
     activity_code = '%s-a%d' % (activity_code, time_block.attempt)
   output_dict['activityCode'] = activity_code
-  # TODO: include beginning and ending time.
+  # TODO: This does not currently match the WCIF spec.  Resolve this.
+  output_dict['startTime'] = time_block.GetStartTime().isoformat()
+  output_dict['endTime'] = time_block.GetEndTime().isoformat()
   # TODO: pending completion of WCIF discussion, add groups as child activities.
 
   extension_dict = {}
