@@ -2,6 +2,7 @@ import collections
 
 from src.models.scheduling.round import ScheduleRound
 from src.scheduling.wcif.event import EventToWcif
+from src.scheduling.wcif.extensions import AddExtension
 from src.scheduling.wcif.schedule import ScheduleToWcif
 
 # Writes a ScheduleCompetition in WCIF format.
@@ -25,4 +26,11 @@ def CompetitionToWcif(competition, schedule):
   
   if schedule:
     output_dict['schedule'] = ScheduleToWcif(schedule, competition, wca_competition)
+  
+  extension_dict = {}
+  extension_dict['datastoreId'] = competition.key.id()
+  extension_dict['staffSignupDeadline'] = (
+      competition.staff_signup_deadline.strftime('%Y-%m-%d'))
+  AddExtension('ScheduleCompetition', extension_dict, output_dict)
+  
   return output_dict
