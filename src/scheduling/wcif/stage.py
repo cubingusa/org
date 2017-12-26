@@ -8,6 +8,7 @@ from src.scheduling.wcif.time_block import TimeBlockToWcif
 # Stage is called a Room.
 # https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit?ts=5a3fd252#heading=h.cllgja7au1th
 def StageToWcif(stage, time_blocks, groups_by_time_block):
+  time_blocks.sort(key=lambda t: t.start_time)
   output_dict = {}
   output_dict['id'] = stage.number
   output_dict['name'] = stage.name
