@@ -9,3 +9,7 @@ def ToUTCTime(time_string, time_format, timezone):
 # Converts a UTC time to a localized time.
 def ToLocalizedTime(d, timezone):
   return pytz.timezone('UTC').localize(d).astimezone(pytz.timezone(timezone))
+
+# Returns a datetime at theh same moment in time without a timezone.
+def StripTimezone(d):
+  return d.astimezone(pytz.timezone('UTC')).replace(tzinfo=None)

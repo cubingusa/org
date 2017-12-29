@@ -1,8 +1,10 @@
 import datetime
+import dateutil.parser
 import re
 
 from google.appengine.ext import ndb
 
+from src import timezones
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.time_block import ScheduleTimeBlock
 from src.scheduling.wcif.activity_code import ActivityCode
@@ -22,11 +24,8 @@ def TimeBlockToWcif(time_block, groups):
   activity_code = ActivityCode(event_id=r.event.id(), round_id=r.number,
                                group=None, attempt=time_block.attempt)
   output_dict['activityCode'] = str(activity_code)
-  # TODO: This does not currently match the WCIF spec.  Resolve this.
-  output_dict['startTime'] = (
-      time_block.start_time - datetime.datetime(1970, 1, 1)).total_seconds()
-  output_dict['endTime'] = (
-      time_block.end_time - datetime.datetime(1970, 1, 1)).total_seconds()
+  output_dict['startTime'] = time_block.GetStartTime().isoformat()
+  output_dict['endTime'] = time_block.GetEndTime().isoformat()
   # TODO: pending completion of WCIF discussion, add groups as child activities.
 
   extension_dict = {}
@@ -81,8 +80,8 @@ def ImportTimeBlock(activity_data, schedule, stage, out, time_blocks, groups):
   time_block.round = ndb.Key(ScheduleRound, round_id)
   time_block.stage = stage.key
 
-  time_block.start_time = datetime.datetime.utcfromtimestamp(activity_data['startTime'])
-  time_block.end_time = datetime.datetime.utcfromtimestamp(activity_data['endTime'])
+  time_block.start_time = timezones.StripTimezone(dateutil.parser.parse(activity_data['startTime']))
+  time_block.end_time = timezones.StripTimezone(dateutil.parser.parse(activity_data['endTime']))
 
   if 'staffOnly' in extension:
     time_block.staff_only = extension['staffOnly']
