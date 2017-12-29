@@ -69,6 +69,26 @@
           Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
         </small>
       </div>
+      <hr>
+      <h3>Links</h3>
+      <ul>
+        <li>
+          <a href="{{ c.uri_for('event_display_with_version',
+                                competition_id=competition.key.id(),
+                                schedule_version=schedule.key.id()) }}"
+             target="_blank">
+            Event List
+          </a>
+        </li>
+        <li>
+          <a href="{{ c.uri_for('schedule_display_with_version',
+                                competition_id=competition.key.id(),
+                                schedule_version=schedule.key.id()) }}"
+             target="_blank">
+            Schedule
+          </a>
+        </li>
+      </ul>
     {% endif %}
   </div>
   <script src="/static/external/moment.js" type="application/javascript"></script>
