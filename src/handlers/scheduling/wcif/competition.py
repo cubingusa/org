@@ -8,11 +8,11 @@ from src.models.scheduling.schedule import Schedule
 
 
 class CompetitionWcifHandler(SchedulingBaseHandler):
-  def get(self, competition_id, schedule_id=-1):
+  def get(self, competition_id, schedule_version=-1):
     if not self.SetCompetition(competition_id, edit_access_needed=False, login_required=False):
       return
-    if schedule_id != -1:
-      if not self.SetSchedule(int(schedule_id)):
+    if schedule_version != -1:
+      if not self.SetSchedule(int(schedule_version)):
         return
       schedule = self.schedule
     else:

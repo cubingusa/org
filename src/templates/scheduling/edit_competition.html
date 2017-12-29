@@ -75,6 +75,12 @@
             Public Schedule
           </a>
         </li>
+        <li>
+          <a href="{{ c.uri_for('competition_wcif', competition_id=competition.key.id()) }}"
+             target="_blank">
+            WCIF Export
+          </a>
+        </li>
       </ul>
     {% endif %}
     {% if competition.timezone %}

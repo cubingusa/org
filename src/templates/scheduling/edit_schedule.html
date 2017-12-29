@@ -88,6 +88,14 @@
             Schedule
           </a>
         </li>
+        <li>
+          <a href="{{ c.uri_for('competition_wcif_with_version',
+                                competition_id=competition.key.id(),
+                                schedule_version=schedule.key.id()) }}"
+             target="_blank">
+            WCIF Export
+          </a>
+        </li>
       </ul>
       <hr>
       <h3>Import Data</h3>
@@ -111,10 +119,12 @@
                        type="radio"
                        name="source"
                        value="sched_{{ schedule_version.key.id() }}">
-                <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
+                <a href="{{ c.uri_for('edit_schedule',
+                                      competition_id=competition.key.id(),
+                                      schedule_version=schedule_version.key.id()) }}">
                   Schedule {{ schedule_version.key.id() }}
-                  <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
                 </a>
+                <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
               </label>
               {% if schedule_version.is_live %}<b>(Live)</b>{% endif %}
             </div>
