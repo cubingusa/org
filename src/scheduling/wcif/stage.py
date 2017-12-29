@@ -1,7 +1,9 @@
 import re
 
+from src.models.scheduling.stage import ScheduleStage
 from src.scheduling.colors import Colors
 from src.scheduling.wcif.extensions import AddExtension
+from src.scheduling.wcif.time_block import ImportTimeBlock
 from src.scheduling.wcif.time_block import TimeBlockToWcif
 
 # Writes a ScheduleStage in WCIF format.  The corresponding WCIF entity for a
@@ -24,3 +26,27 @@ def StageToWcif(stage, time_blocks, groups_by_time_block):
   AddExtension('ScheduleStage', extension_dict, output_dict)
 
   return output_dict
+
+
+def ImportStage(room_data, schedule, out, stages, time_blocks, groups):
+  if 'id' not in room_data:
+    out.errors.append('Room is missing id field.')
+    return
+  if 'name' not in room_data:
+    out.errors.append('Room %d is missing name field.' % room_data['id'])
+    return
+  stage_id = '%s_%d' % (schedule.key.id(), room_data['id'])
+  if stage_id in stages:
+    stage = stages[stage_id]
+    del stages[stage_id]
+  else:
+    stage = ScheduleStage(id=stage_id)
+
+  stage.schedule = schedule.key
+  stage.name = room_data['name']
+  stage.timers = 0
+  out.entities_to_put.append(stage)
+
+  if 'activities' in room_data:
+    for activity_data in room_data['activities']:
+      ImportTimeBlock(activity_data, schedule, stage, out, time_blocks, groups)

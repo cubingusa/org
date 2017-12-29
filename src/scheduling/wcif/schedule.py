@@ -6,6 +6,7 @@ from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.stage import ScheduleStage
 from src.models.scheduling.time_block import ScheduleTimeBlock
 from src.scheduling.wcif.extensions import AddExtension
+from src.scheduling.wcif.stage import ImportStage
 from src.scheduling.wcif.stage import StageToWcif
 from src.timezones import ToLocalizedTime
 
@@ -13,9 +14,10 @@ from src.timezones import ToLocalizedTime
 # https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit?ts=5a3fd252#heading=h.hsdqzy8dh3z8
 def ScheduleToWcif(schedule, competition, wca_competition):
   output_dict = {}
-  output_dict['startDate'] = schedule.start_date.strftime('%Y-%m-%d')
-  output_dict['numberOfDays'] = (
-      (schedule.end_date - schedule.start_date).days + 1)
+  if schedule.start_date:
+    output_dict['startDate'] = schedule.start_date.strftime('%Y-%m-%d')
+    output_dict['numberOfDays'] = (
+        (schedule.end_date - schedule.start_date).days + 1)
   # The CubingUSA scheduling system is not designed to support competitions
   # with more than one venue.
   venue_dict = {}
@@ -54,3 +56,44 @@ def ScheduleToWcif(schedule, competition, wca_competition):
   AddExtension('Schedule', extension_dict, output_dict)
 
   return output_dict
+
+def ImportSchedule(wcif_data, schedule, out):
+  if 'schedule' not in wcif_data:
+    out.errors.append('schedule field missing from WCIF data.')
+    return
+  schedule_data = wcif_data['schedule']
+  if 'startDate' not in schedule_data:
+    out.errors.append('startDate missing from WCIF data.')
+    return
+  if 'numberOfDays' not in schedule_data:
+    out.errors.append('numberOfDays missing from WCIF data.')
+    return
+  num_days = schedule_data['numberOfDays']
+  if num_days < 1:
+    out.errors.append('numberOfDays must be at least 1.')
+    return
+  try:
+    schedule.startDate = datetime.datetime.strptime(schedule_data['startDate'], '%Y-%m-%d').date()
+  except ValueError:
+    out.errors.append('startDate must be in YYYY-mm-dd format.')
+    return
+  schedule.endDate = schedule.startDate + datetime.timedelta(days=num_days)
+
+  if len(schedule_data['venues']) > 1:
+    out.errors.append('The CubingUSA scheduling system does not support ' +
+                      'competitions with multiple venues.')
+    return
+
+  stages = {s.key.id() : s for s in
+            ScheduleStage.query(ScheduleStage.schedule == schedule.key).iter()}
+  time_blocks = {t.key.id() : t for t in
+                 ScheduleTimeBlock.query(ScheduleTimeBlock.schedule == schedule.key).iter()}
+  groups = {g.key.id() : g for g in
+            ScheduleGroup.query(ScheduleGroup.schedule == schedule.key).iter()}
+
+  for venue_data in schedule_data['venues']:
+    for room_data in venue_data['rooms']:
+      ImportStage(room_data, schedule, out, stages, time_blocks, groups)
+
+  out.entities_to_delete.extend(
+      stages.values() + time_blocks.values() + groups.values())
