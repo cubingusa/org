@@ -19,11 +19,11 @@ from src.scheduling.wcif.event import ImportEvents
 
 
 class ImportBaseHandler(SchedulingBaseHandler):
-  def ImportWcif(self, wcif_data, import_events=False, deletion_confirmed=False):
+  def ImportWcif(self, wcif_data, data_to_import, deletion_confirmed=False):
     entities_to_put = []
     entities_to_delete = []
     errors = []
-    if import_events:
+    if 'events' in data_to_import:
       ImportEvents(wcif_data, self.schedule.key,
                    entities_to_put, entities_to_delete, errors)
     if errors:
@@ -39,8 +39,8 @@ class ImportBaseHandler(SchedulingBaseHandler):
           'entity_to_string': EntityToString,
           'wcif_data': json.dumps(wcif_data),
           'target_uri': webapp2.uri_for('confirm_deletion',
-                                        schedule_version=self.schedule.key.id(),
-                                        import_events=import_events),
+                                        schedule_version=self.schedule.key.id()),
+          'data_to_import': data_to_import,
       }))
     else:
       ndb.put_multi(entities_to_put)
@@ -64,7 +64,7 @@ class ImportDataHandler(ImportBaseHandler):
           'callback': webapp2.uri_for('wca_import', _full=True),
           'handler_data': json.dumps({
               'schedule_version': schedule_version,
-              'events_and_rounds': self.request.get('import_events'),
+              'data_to_import': self.request.POST.getall('data_to_import'),
           }),
       }))
     elif 'sched_' in self.request.get('source'):
@@ -72,7 +72,7 @@ class ImportDataHandler(ImportBaseHandler):
       wcif_to_import = CompetitionToWcif(self.competition,
                                          Schedule.get_by_id(schedule_to_import))
       self.ImportWcif(wcif_to_import,
-                      import_events=self.request.get('import_events'))
+                      data_to_import=self.request.POST.getall('data_to_import'))
 
 
 class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
@@ -94,7 +94,7 @@ class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
       return
     response_json = json.loads(response.read())
     self.ImportWcif(response_json,
-                    import_events=handler_data['events_and_rounds'])
+                    data_to_import=handler_data['data_to_import'])
 
 
 class ConfirmDeletionHandler(ImportBaseHandler):
@@ -102,5 +102,5 @@ class ConfirmDeletionHandler(ImportBaseHandler):
     if not self.SetSchedule(int(schedule_version)):
       return
     self.ImportWcif(json.loads(self.request.get('wcif_data')),
-                    import_events=self.request.get('import_events'),
+                    data_to_import=self.request.POST.getall('data_to_import'),
                     deletion_confirmed=True)
