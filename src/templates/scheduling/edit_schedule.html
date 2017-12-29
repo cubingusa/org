@@ -70,6 +70,26 @@
         </small>
       </div>
       <hr>
+      <h3>Links</h3>
+      <ul>
+        <li>
+          <a href="{{ c.uri_for('event_display_with_version',
+                                competition_id=competition.key.id(),
+                                schedule_version=schedule.key.id()) }}"
+             target="_blank">
+            Event List
+          </a>
+        </li>
+        <li>
+          <a href="{{ c.uri_for('schedule_display_with_version',
+                                competition_id=competition.key.id(),
+                                schedule_version=schedule.key.id()) }}"
+             target="_blank">
+            Schedule
+          </a>
+        </li>
+      </ul>
+      <hr>
       <h3>Import Data</h3>
       <form action="{{ c.uri_for('import_data', schedule_version=schedule.key.id()) }}"
             method="POST">

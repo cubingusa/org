@@ -96,11 +96,14 @@ class EventDetails(object):
 
 
 class CompetitionDetails(object):
-  def __init__(self, user, competition):
+  def __init__(self, user, competition, schedule=None):
     self.user = user
     self.competition = competition
-    self.schedule = Schedule.query(ndb.AND(Schedule.competition == competition.key,
-                                           Schedule.is_live == True)).get()
+    if schedule:
+      self.schedule = schedule
+    else:
+      self.schedule = Schedule.query(ndb.AND(Schedule.competition == competition.key,
+                                             Schedule.is_live == True)).get()
     if not self.schedule:
       return
 
