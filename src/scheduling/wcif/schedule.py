@@ -11,9 +11,10 @@ from src.scheduling.wcif.stage import StageToWcif
 # https://docs.google.com/document/d/1hnzAZizTH0XyGkSYe-PxFL5xpKVWl_cvSdTzlT_kAs8/edit?ts=5a3fd252#heading=h.hsdqzy8dh3z8
 def ScheduleToWcif(schedule, competition, wca_competition):
   output_dict = {}
-  output_dict['startDate'] = schedule.start_date.strftime('%Y-%m-%d')
-  output_dict['numberOfDays'] = (
-      (schedule.end_date - schedule.start_date).days + 1)
+  if schedule.start_date:
+    output_dict['startDate'] = schedule.start_date.strftime('%Y-%m-%d')
+    output_dict['numberOfDays'] = (
+        (schedule.end_date - schedule.start_date).days + 1)
   # The CubingUSA scheduling system is not designed to support competitions
   # with more than one venue.
   venue_dict = {}
