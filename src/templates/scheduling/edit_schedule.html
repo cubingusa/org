@@ -66,9 +66,61 @@
         {{ event_selector.event_selector(c, events=events) }}
         <div id="event-info"></div>
         <small class="form-text form-muted">
-          Events, rounds, formats, and numbers of competitors advancing are automatically pulled from the WCA site.  If you would like to change events, rounds, or formats, please modify this information on the WCA site and create a new schedule for this competition.
+          To add or modify events or rounds, you can modify this data on the WCA Website and import below.
         </small>
       </div>
+      <hr>
+      <h3>Import Data</h3>
+      <form action="{{ c.uri_for('import_data', schedule_version=schedule.key.id()) }}"
+            method="POST">
+        <div class="form-group">
+          <label class="import-title">Data Source</label>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input"
+                     type="radio"
+                     name="source"
+                     value="wca" checked>
+              WCA Website (requires authorization)
+            </label>
+          </div>
+          {% for schedule_version in schedule_versions %}
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input"
+                       type="radio"
+                       name="source"
+                       value="sched_{{ schedule_version.key.id() }}">
+                <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
+                  Schedule {{ schedule_version.key.id() }}
+                  <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
+                </a>
+              </label>
+              {% if schedule_version.is_live %}<b>(Live)</b>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="form-group">
+          <label class="import-title">Data to Import</label>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input"
+                     type="checkbox"
+                     name="import_events">
+              Events and Rounds
+            </label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input"
+                     type="checkbox"
+                     name="import_schedule">
+              Schedule
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Import</button>
+      </form>
     {% endif %}
   </div>
   <script src="/static/external/moment.js" type="application/javascript"></script>
