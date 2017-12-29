@@ -21,19 +21,25 @@ class ImportBaseHandler(SchedulingBaseHandler):
   def ImportWcif(self, wcif_data, import_events=False):
     entities_to_put = []
     entities_to_delete = []
+    errors = []
     if import_events:
-      new_to_put, new_to_delete = ImportEvents(wcif_data, self.schedule.key)
-      entities_to_put.extend(new_to_put)
-      entities_to_delete.extend(new_to_delete)
-    ndb.put_multi(entities_to_put)
-    ndb.delete_multi(entities_to_delete)
-    self.schedule.last_update_time = datetime.datetime.now()
-    self.schedule.put()
-    template = JINJA_ENVIRONMENT.get_template('success.html')
-    self.response.write(template.render({
-        'c': common.Common(self),
-        'target_uri': webapp2.uri_for('edit_schedule',
-                                      schedule_version=self.schedule.key.id())}))
+      ImportEvents(wcif_data, self.schedule.key,
+                   entities_to_put, entities_to_delete, errors)
+    if errors:
+      template = JINJA_ENVIRONMENT.get_template('scheduling/import_error.html')
+      self.response.write(template.render({
+          'c': common.Common(self),
+          'errors': errors}))
+    else:
+      ndb.put_multi(entities_to_put)
+      ndb.delete_multi(entities_to_delete)
+      self.schedule.last_update_time = datetime.datetime.now()
+      self.schedule.put()
+      template = JINJA_ENVIRONMENT.get_template('success.html')
+      self.response.write(template.render({
+          'c': common.Common(self),
+          'target_uri': webapp2.uri_for('edit_schedule',
+                                        schedule_version=self.schedule.key.id())}))
 
 
 class ImportDataHandler(ImportBaseHandler):
@@ -69,7 +75,10 @@ class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
 
     response = self.GetWcaApi('/api/v0/competitions/%s/wcif' % self.competition.key.id())
     if response.status != 200:
-      #self.redirect(webapp2.uri_for('index', unknown=1))
+      template = JINJA_ENVIRONMENT.get_template('scheduling/import_error.html')
+      self.response.write(template.render({
+          'c': common.Common(self),
+          'errors': ['Error fetching WCA import']}))
       return
     response_json = json.loads(response.read())
     self.ImportWcif(response_json)

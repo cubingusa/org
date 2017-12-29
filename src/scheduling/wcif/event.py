@@ -24,13 +24,21 @@ def EventToWcif(event_id, rounds):
 
   return output_dict
 
-def ImportEvents(wcif_data, schedule_key):
+def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, errors):
   existing_rounds = {
       e.key.id() : e
       for e in ScheduleRound.query(ScheduleRound.schedule == schedule_key).iter()}
 
-  entities_to_put = []
+  all_event_ids = set([e.key.id() for e in Event.query().iter()])
+  all_formats = set([f.key.id() for f in Format.query().iter()])
+
   for event in wcif_data['events']:
+    if 'id' not in event:
+      errors.append('Malformed WCIF: missing \'id\' field for event.')
+      continue
+    if event['id'] not in all_event_ids:
+      errors.append('Unrecognized event ID \'%s\'' % event['id'])
+      continue
     event_key = ndb.Key(Event, event['id'])
     round_num = 0
     next_round_count = 0
@@ -48,26 +56,34 @@ def ImportEvents(wcif_data, schedule_key):
       round_object.event = event_key
       round_object.number = round_num
       round_object.is_final = len(event['rounds']) == round_num
+      if 'format' not in round_json:
+        errors.append('Malformed WCIF: missing \'format\' field for %s' % round_id)
+        continue
+      if round_json['format'] not in all_formats:
+        errors.append('Unrecognized format ID \'%s\'' % round_json['format'])
+        continue
       round_object.format = ndb.Key(Format, round_json['format'])
-      if round_json['cutoff']:
+      if 'cutoff' in round_json and round_json['cutoff']:
         round_object.cutoff = round_json['cutoff']['attemptResult']
-      if round_json['timeLimit'] and round_json['timeLimit']['centiseconds']:
+      if ('timeLimit' in round_json and round_json['timeLimit'] and
+          'centiseconds' in round_json['timeLimit'] and
+          round_json['timeLimit']['centiseconds']):
         round_object.time_limit = round_json['timeLimit']['centiseconds']
       round_object.wcif = json.dumps(round_json)
       if next_round_count:
         round_object.num_competitors = next_round_count
 
+      next_round_count = 0
+      if 'advancementCondition' in round_json:
+        advancement_condition = round_json['advancementCondition']
+        if (advancement_condition and 'type' in advancement_condition and
+            advancement_condition['type'] == 'ranking'):
+          next_round_count = advancement_condition['level']
       entities_to_put.append(round_object)
-      advancement_condition = round_json['advancementCondition']
-      if advancement_condition and advancement_condition['type'] == 'ranking':
-        next_round_count = advancement_condition['level']
-      else:
-        next_round_count = 0
-  entities_to_delete = [r.key for r in existing_rounds.itervalues()]
+  entities_to_delete.extend([r.key for r in existing_rounds.itervalues()])
 
   # Also look for time blocks and groups that are now unused.
   for obj_class in (ScheduleTimeBlock, ScheduleGroup):
     for obj in obj_class.query(obj_class.schedule == schedule_key).iter():
       if obj.round.id() in existing_rounds:
         entities_to_delete.append(obj.key)
-  return entities_to_put, entities_to_delete
