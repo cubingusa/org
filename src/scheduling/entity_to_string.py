@@ -1,5 +1,6 @@
 from src.models.scheduling.group import ScheduleGroup
 from src.models.scheduling.round import ScheduleRound
+from src.models.scheduling.stage import ScheduleStage
 from src.models.scheduling.time_block import ScheduleTimeBlock
 
 def EntityToString(entity):
@@ -17,5 +18,7 @@ def EntityToString(entity):
     s = entity.stage.get()
     return '%s round %d, %s stage group %d' % (
         r.event.id(), r.number, s.name, entity.number)
+  elif type(entity) is ScheduleStage:
+    return '%s stage' % entity.name
   else:
     return entity.key

@@ -24,7 +24,7 @@ def EventToWcif(event_id, rounds):
 
   return output_dict
 
-def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, errors):
+def ImportEvents(wcif_data, schedule_key, out):
   existing_rounds = {
       e.key.id() : e
       for e in ScheduleRound.query(ScheduleRound.schedule == schedule_key).iter()}
@@ -34,10 +34,10 @@ def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, e
 
   for event in wcif_data['events']:
     if 'id' not in event:
-      errors.append('Malformed WCIF: missing \'id\' field for event.')
+      out.errors.append('Malformed WCIF: missing \'id\' field for event.')
       continue
     if event['id'] not in all_event_ids:
-      errors.append('Unrecognized event ID \'%s\'' % event['id'])
+      out.errors.append('Unrecognized event ID \'%s\'' % event['id'])
       continue
     event_key = ndb.Key(Event, event['id'])
     round_num = 0
@@ -55,10 +55,10 @@ def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, e
       round_object.number = round_num
       round_object.is_final = len(event['rounds']) == round_num
       if 'format' not in round_json:
-        errors.append('Malformed WCIF: missing \'format\' field for %s' % round_id)
+        out.errors.append('Malformed WCIF: missing \'format\' field for %s' % round_id)
         continue
       if round_json['format'] not in all_formats:
-        errors.append('Unrecognized format ID \'%s\'' % round_json['format'])
+        out.errors.append('Unrecognized format ID \'%s\'' % round_json['format'])
         continue
       round_object.format = ndb.Key(Format, round_json['format'])
       if 'cutoff' in round_json and round_json['cutoff']:
@@ -77,8 +77,8 @@ def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, e
         if (advancement_condition and 'type' in advancement_condition and
             advancement_condition['type'] == 'ranking'):
           next_round_count = advancement_condition['level']
-      entities_to_put.append(round_object)
-  entities_to_delete.extend([r for r in existing_rounds.itervalues()])
+      out.entities_to_put.append(round_object)
+  out.entities_to_delete.extend([r for r in existing_rounds.itervalues()])
 
   # Also look for time blocks and groups that are now unused.
   for obj_class in (ScheduleTimeBlock, ScheduleGroup):

@@ -17,26 +17,34 @@ from src.models.wca.event import Event
 from src.models.wca.format import Format
 from src.scheduling.wcif.competition import CompetitionToWcif
 from src.scheduling.wcif.event import ImportEvents
+from src.scheduling.wcif.schedule import ImportSchedule
+
+
+class ImportOutput:
+  def __init__(self):
+    self.entities_to_put = []
+    self.entities_to_delete = []
+    self.errors = []
 
 
 class ImportBaseHandler(SchedulingBaseHandler):
   def ImportWcif(self, wcif_data, data_to_import, deletion_confirmed=False):
-    entities_to_put = []
-    entities_to_delete = []
-    errors = []
+    out = ImportOutput()
     if 'events' in data_to_import:
-      ImportEvents(wcif_data, self.schedule.key,
-                   entities_to_put, entities_to_delete, errors)
-    if errors:
+      ImportEvents(wcif_data, self.schedule.key, out)
+    if 'schedule' in data_to_import:
+      ImportSchedule(wcif_data, self.schedule, out)
+
+    if out.errors:
       template = JINJA_ENVIRONMENT.get_template('scheduling/import_error.html')
       self.response.write(template.render({
           'c': common.Common(self),
-          'errors': errors}))
-    elif entities_to_delete and not deletion_confirmed:
+          'errors': out.errors}))
+    elif out.entities_to_delete and not deletion_confirmed:
       template = JINJA_ENVIRONMENT.get_template('scheduling/confirm_deletion.html')
       self.response.write(template.render({
           'c': common.Common(self),
-          'entities_to_delete': entities_to_delete,
+          'entities_to_delete': out.entities_to_delete,
           'entity_to_string': EntityToString,
           'wcif_data': json.dumps(wcif_data),
           'target_uri': webapp2.uri_for('confirm_deletion',
@@ -44,10 +52,10 @@ class ImportBaseHandler(SchedulingBaseHandler):
           'data_to_import': data_to_import,
       }))
     else:
-      ndb.put_multi(entities_to_put)
-      ndb.delete_multi([e.key for e in entities_to_delete])
       self.schedule.last_update_time = datetime.datetime.now()
-      self.schedule.put()
+      out.entities_to_put.append(self.schedule)
+      ndb.put_multi(out.entities_to_put)
+      ndb.delete_multi([e.key for e in out.entities_to_delete])
       template = JINJA_ENVIRONMENT.get_template('success.html')
       self.response.write(template.render({
           'c': common.Common(self),
