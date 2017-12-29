@@ -60,6 +60,7 @@ class ImportBaseHandler(SchedulingBaseHandler):
       self.response.write(template.render({
           'c': common.Common(self),
           'target_uri': webapp2.uri_for('edit_schedule',
+                                        competition_id=self.competition.key.id(),
                                         schedule_version=self.schedule.key.id())}))
 
 
