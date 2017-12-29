@@ -3,6 +3,7 @@ import json
 import urllib
 import webapp2
 
+from google.appengine.api import urlfetch
 from google.appengine.ext import ndb
 
 from src import common
@@ -72,6 +73,16 @@ class ImportDataHandler(ImportBaseHandler):
       wcif_to_import = CompetitionToWcif(self.competition,
                                          Schedule.get_by_id(schedule_to_import))
       self.ImportWcif(wcif_to_import,
+                      data_to_import=self.request.POST.getall('data_to_import'))
+    elif self.request.get('source') == 'custom':
+      result = urlfetch.fetch(self.request.get('custom_uri'))
+      if result.status_code != 200:
+        template = JINJA_ENVIRONMENT.get_template('error.html')
+        self.response.write(template.render({
+            'c': common.Common(self),
+            'error': 'Error fetching %s' % self.request.get('custom_uri')}))
+        return
+      self.ImportWcif(json.loads(result.content),
                       data_to_import=self.request.POST.getall('data_to_import'))
 
 
