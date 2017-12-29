@@ -82,7 +82,9 @@
       <ul>
         {% for schedule_version in schedule_versions %}
           <li>
-            <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
+            <a href="{{ c.uri_for('edit_schedule',
+                                  competition_id=competition.key.id(),
+                                  schedule_version=schedule_version.key.id()) }}">
               {{ schedule_version.key.id() }}
             </a>
             <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>
