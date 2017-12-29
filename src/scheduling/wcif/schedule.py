@@ -6,6 +6,7 @@ from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.stage import ScheduleStage
 from src.models.scheduling.time_block import ScheduleTimeBlock
 from src.scheduling.wcif.extensions import AddExtension
+from src.scheduling.wcif.extensions import GetExtension
 from src.scheduling.wcif.stage import ImportStage
 from src.scheduling.wcif.stage import StageToWcif
 from src.timezones import ToLocalizedTime

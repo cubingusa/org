@@ -3,6 +3,7 @@ import re
 from src.models.scheduling.stage import ScheduleStage
 from src.scheduling.colors import Colors
 from src.scheduling.wcif.extensions import AddExtension
+from src.scheduling.wcif.extensions import GetExtension
 from src.scheduling.wcif.time_block import ImportTimeBlock
 from src.scheduling.wcif.time_block import TimeBlockToWcif
 
@@ -37,14 +38,19 @@ def ImportStage(room_data, schedule, out, stages, time_blocks, groups):
     return
   stage_id = '%s_%d' % (schedule.key.id(), room_data['id'])
   if stage_id in stages:
-    stage = stages[stage_id]
-    del stages[stage_id]
+    stage = stages.pop(stage_id)
   else:
     stage = ScheduleStage(id=stage_id)
+  extension = GetExtension('ScheduleStage', room_data)
 
   stage.schedule = schedule.key
   stage.name = room_data['name']
-  stage.timers = 0
+  if 'numTimers' in extension:
+    stage.timers = extension['numTimers']
+  else:
+    stage.timers = 0
+  if 'colorCss' in extension:
+    stage.color = extension['colorCss']
   out.entities_to_put.append(stage)
 
   if 'activities' in room_data:

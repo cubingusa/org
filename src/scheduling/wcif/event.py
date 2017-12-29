@@ -46,8 +46,7 @@ def ImportEvents(wcif_data, schedule_key, out):
       round_num += 1
       round_id = ScheduleRound.Id(schedule_key.id(), event['id'], round_num)
       if round_id in existing_rounds:
-        round_object = existing_rounds[round_id]
-        del existing_rounds[round_id]
+        round_object = existing_rounds.pop(round_id)
       else:
         round_object = ScheduleRound(id=round_id)
       round_object.schedule = schedule_key
@@ -84,4 +83,4 @@ def ImportEvents(wcif_data, schedule_key, out):
   for obj_class in (ScheduleTimeBlock, ScheduleGroup):
     for obj in obj_class.query(obj_class.schedule == schedule_key).iter():
       if obj.round.id() in existing_rounds:
-        entities_to_delete.append(obj)
+        out.entities_to_delete.append(obj)
