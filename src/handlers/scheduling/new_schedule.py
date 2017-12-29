@@ -42,4 +42,6 @@ class NewScheduleCallbackHandler(OAuthBaseHandler, SchedulingBaseHandler):
     schedule.is_live = False
     schedule.put()
 
-    self.redirect(webapp2.uri_for('edit_schedule', schedule_version=schedule.key.id()))
+    self.redirect(webapp2.uri_for('edit_schedule',
+                                  competition_id=competition_id,
+                                  schedule_version=schedule.key.id()))
