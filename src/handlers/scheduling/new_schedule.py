@@ -5,6 +5,7 @@ import webapp2
 
 from src.handlers.oauth import OAuthBaseHandler
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
+from src.models.scheduling.schedule import Schedule
 
 
 class NewScheduleHandler(SchedulingBaseHandler):
