@@ -60,12 +60,37 @@
         {% endif %}
       {% endfor %}
     </ul>
+    {% if has_live_schedule %}
+      <h3>Links</h3>
+      <ul>
+        <li>
+          <a href="{{ c.uri_for('event_display', competition_id=competition.key.id()) }}"
+             target="_blank">
+            Public Event List
+          </a>
+        </li>
+        <li>
+          <a href="{{ c.uri_for('schedule_display', competition_id=competition.key.id()) }}"
+             target="_blank">
+            Public Schedule
+          </a>
+        </li>
+        <li>
+          <a href="{{ c.uri_for('competition_wcif', competition_id=competition.key.id()) }}"
+             target="_blank">
+            WCIF Export
+          </a>
+        </li>
+      </ul>
+    {% endif %}
     {% if competition.timezone %}
       <h3>Schedule Versions</h3>
       <ul>
         {% for schedule_version in schedule_versions %}
           <li>
-            <a href="{{ c.uri_for('edit_schedule', schedule_version=schedule_version.key.id()) }}">
+            <a href="{{ c.uri_for('edit_schedule',
+                                  competition_id=competition.key.id(),
+                                  schedule_version=schedule_version.key.id()) }}">
               {{ schedule_version.key.id() }}
             </a>
             <i>(Last updated: {{ schedule_version.last_update_time.strftime('%x') }})</i>

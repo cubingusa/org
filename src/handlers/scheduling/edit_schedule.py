@@ -10,7 +10,7 @@ from src.scheduling.colors import Colors
 
 
 class EditScheduleHandler(SchedulingBaseHandler):
-  def get(self, schedule_version):
+  def get(self, competition_id, schedule_version):
     if not self.SetSchedule(int(schedule_version)):
       return
     template = JINJA_ENVIRONMENT.get_template('scheduling/edit_schedule.html')
