@@ -1,5 +1,4 @@
 import datetime
-import random
 import re
 
 from google.appengine.ext import ndb
@@ -17,6 +16,7 @@ def TimeBlockToWcif(time_block, groups):
   output_dict = {}
   r = time_block.round.get()
   e = r.event.get()
+  output_dict['id'] = int(re.search('(\d+)$', time_block.key.id()).group(1))
   output_dict['name'] = '%s %s' % (
       e.name, 'Final' if r.is_final else 'Round %d' % r.number)
   activity_code = ActivityCode(event_id=r.event.id(), round_id=r.number,
@@ -37,8 +37,11 @@ def TimeBlockToWcif(time_block, groups):
   return output_dict
 
 def ImportTimeBlock(activity_data, schedule, stage, out, time_blocks, groups):
-  if 'activityCode' not in activity_data:
+  if 'id' not in activity_data:
     out.errors.append('activityCode missing from Activity.')
+    return
+  if 'activityCode' not in activity_data:
+    out.errors.append('activityCode missing from Activity %d.' % activity_data['id'])
     return
   try:
     activity_code = ActivityCode.ParseCode(activity_data['activityCode'])
@@ -65,14 +68,9 @@ def ImportTimeBlock(activity_data, schedule, stage, out, time_blocks, groups):
     return
 
   extension = GetExtension('ScheduleTimeBlock', activity_data)
-  time_block_end_id = random.randint(2 ** 4, 2 ** 32)
-  if 'datastoreId' in extension:
-    m = re.search('_(\d+)$', extension['datastoreId'])
-    if m:
-      time_block_end_id = int(m.group(1))
 
   round_id = ScheduleRound.Id(schedule.key.id(), activity_code.event_id, activity_code.round_id)
-  time_block_id = '%s_%d' % (round_id, time_block_end_id)
+  time_block_id = '%s_%d' % (round_id, activity_data['id'])
 
   if time_block_id in time_blocks:
     time_block = time_blocks.pop(time_block_id)
