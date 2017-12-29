@@ -26,10 +26,12 @@ class EditCompetitionHandler(SchedulingBaseHandler):
     # We look at the live schedule, or the most-recently updated one, and make
     # sure that it has events and start/end dates.
     schedule_for_staff_signup = None
+    has_live_schedule = False
     if schedule_versions:
       for schedule in schedule_versions:
         if schedule.is_live:
           schedule_for_staff_signup = schedule
+          has_live_schedule = True
       if not schedule_for_staff_signup:
         schedule_for_staff_signup = sorted(schedule_versions, 
                                            key=lambda s: s.last_update_time)[-1]
@@ -46,6 +48,7 @@ class EditCompetitionHandler(SchedulingBaseHandler):
         'staff_signup_enabled': schedule_for_staff_signup and
                                 schedule_for_staff_signup.start_date and
                                 has_rounds,
+        'has_live_schedule': has_live_schedule,
     }))
 
   def post(self, competition_id):

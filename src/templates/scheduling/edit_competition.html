@@ -60,6 +60,23 @@
         {% endif %}
       {% endfor %}
     </ul>
+    {% if has_live_schedule %}
+      <h3>Links</h3>
+      <ul>
+        <li>
+          <a href="{{ c.uri_for('event_display', competition_id=competition.key.id()) }}"
+             target="_blank">
+            Public Event List
+          </a>
+        </li>
+        <li>
+          <a href="{{ c.uri_for('schedule_display', competition_id=competition.key.id()) }}"
+             target="_blank">
+            Public Schedule
+          </a>
+        </li>
+      </ul>
+    {% endif %}
     {% if competition.timezone %}
       <h3>Schedule Versions</h3>
       <ul>
