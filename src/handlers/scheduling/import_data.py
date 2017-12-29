@@ -6,6 +6,7 @@ import webapp2
 from google.appengine.ext import ndb
 
 from src import common
+from src.scheduling.entity_to_string import EntityToString
 from src.handlers.oauth import OAuthBaseHandler
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
@@ -18,7 +19,7 @@ from src.scheduling.wcif.event import ImportEvents
 
 
 class ImportBaseHandler(SchedulingBaseHandler):
-  def ImportWcif(self, wcif_data, import_events=False):
+  def ImportWcif(self, wcif_data, import_events=False, deletion_confirmed=False):
     entities_to_put = []
     entities_to_delete = []
     errors = []
@@ -30,9 +31,20 @@ class ImportBaseHandler(SchedulingBaseHandler):
       self.response.write(template.render({
           'c': common.Common(self),
           'errors': errors}))
+    elif entities_to_delete and not deletion_confirmed:
+      template = JINJA_ENVIRONMENT.get_template('scheduling/confirm_deletion.html')
+      self.response.write(template.render({
+          'c': common.Common(self),
+          'entities_to_delete': entities_to_delete,
+          'entity_to_string': EntityToString,
+          'wcif_data': json.dumps(wcif_data),
+          'target_uri': webapp2.uri_for('confirm_deletion',
+                                        schedule_version=self.schedule.key.id(),
+                                        import_events=import_events),
+      }))
     else:
       ndb.put_multi(entities_to_put)
-      ndb.delete_multi(entities_to_delete)
+      ndb.delete_multi([e.key for e in entities_to_delete])
       self.schedule.last_update_time = datetime.datetime.now()
       self.schedule.put()
       template = JINJA_ENVIRONMENT.get_template('success.html')
@@ -81,4 +93,14 @@ class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
           'errors': ['Error fetching WCA import']}))
       return
     response_json = json.loads(response.read())
-    self.ImportWcif(response_json)
+    self.ImportWcif(response_json,
+                    import_events=handler_data['events_and_rounds'])
+
+
+class ConfirmDeletionHandler(ImportBaseHandler):
+  def post(self, schedule_version):
+    if not self.SetSchedule(int(schedule_version)):
+      return
+    self.ImportWcif(json.loads(self.request.get('wcif_data')),
+                    import_events=self.request.get('import_events'),
+                    deletion_confirmed=True)

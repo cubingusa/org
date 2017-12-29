@@ -5,6 +5,7 @@ from src.handlers.scheduling.async.add_stage import AddStageHandler
 from src.handlers.scheduling.async.add_time_block import AddTimeBlockHandler
 from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.async.set_dates import SetDatesHandler
+from src.handlers.scheduling.import_data import ConfirmDeletionHandler
 from src.handlers.scheduling.import_data import ImportDataHandler
 from src.handlers.scheduling.import_data import WcaImportDataHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
@@ -43,6 +44,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/import_data/<schedule_version:.*>',
                 handler=ImportDataHandler, name='import_data'),
   webapp2.Route('/scheduling/wca_import', handler=WcaImportDataHandler, name='wca_import'),
+  webapp2.Route('/scheduling/confirm_deletion/<schedule_version:.*>',
+                handler=ConfirmDeletionHandler, name='confirm_deletion'),
   webapp2.Route('/scheduling/set_live/<schedule_version:.*>/<set_live:\d>',
                 handler=SetLiveHandler,
                 name='set_live'),

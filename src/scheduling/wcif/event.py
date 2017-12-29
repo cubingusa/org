@@ -48,10 +48,8 @@ def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, e
       if round_id in existing_rounds:
         round_object = existing_rounds[round_id]
         del existing_rounds[round_id]
-        print 'reusing existing ' + round_id
       else:
         round_object = ScheduleRound(id=round_id)
-        print 'new round ' + round_id
       round_object.schedule = schedule_key
       round_object.event = event_key
       round_object.number = round_num
@@ -80,10 +78,10 @@ def ImportEvents(wcif_data, schedule_key, entities_to_put, entities_to_delete, e
             advancement_condition['type'] == 'ranking'):
           next_round_count = advancement_condition['level']
       entities_to_put.append(round_object)
-  entities_to_delete.extend([r.key for r in existing_rounds.itervalues()])
+  entities_to_delete.extend([r for r in existing_rounds.itervalues()])
 
   # Also look for time blocks and groups that are now unused.
   for obj_class in (ScheduleTimeBlock, ScheduleGroup):
     for obj in obj_class.query(obj_class.schedule == schedule_key).iter():
       if obj.round.id() in existing_rounds:
-        entities_to_delete.append(obj.key)
+        entities_to_delete.append(obj)
