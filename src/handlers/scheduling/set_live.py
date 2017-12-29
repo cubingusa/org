@@ -19,4 +19,6 @@ class SetLiveHandler(SchedulingBaseHandler):
         schedule.is_live = False
         schedule.put()
     self.schedule.put()
-    self.redirect(webapp2.uri_for('edit_schedule', schedule_version=self.schedule.key.id()))
+    self.redirect(webapp2.uri_for('edit_schedule',
+                                  competition_id=self.competition.key.id(),
+                                  schedule_version=self.schedule.key.id()))

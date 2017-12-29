@@ -76,4 +76,6 @@ class NewScheduleCallbackHandler(OAuthBaseHandler, SchedulingBaseHandler):
           next_round_count = 0
 
     ndb.put_multi(objects_to_put)
-    self.redirect(webapp2.uri_for('edit_schedule', schedule_version=schedule.key.id()))
+    self.redirect(webapp2.uri_for('edit_schedule',
+                                  competition_id=competition_id,
+                                  schedule_version=schedule.key.id()))
