@@ -70,6 +70,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/<competition_id:.*>/schedule',
                 handler=ScheduleDisplayHandler,
                 name='schedule_display'),
+  webapp2.Route('/scheduling/<competition_id:.*>/<schedule_id:.*>/wcif',
+                handler=CompetitionWcifHandler),
   webapp2.Route('/scheduling/<competition_id:.*>/wcif',
                 handler=CompetitionWcifHandler),
 ], config=config.GetAppConfig())
