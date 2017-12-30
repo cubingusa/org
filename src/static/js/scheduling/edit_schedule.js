@@ -158,6 +158,11 @@ var editScheduleModule = (function() {
       Array.prototype.forEach.call(document.getElementsByClassName('edit-link'), function(elt) {
         elt.onclick = editScheduleModule.expandEdit;
       });
+      Array.prototype.forEach.call(document.getElementsByClassName('data-source'), function(elt) {
+        elt.onclick = function(evt) {
+          document.getElementById('custom-uri').required = (elt.value === 'custom');
+        };
+      });
     },
   };
 })();

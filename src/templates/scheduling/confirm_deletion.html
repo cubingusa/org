@@ -1,0 +1,20 @@
+{% import "components/css.html" as css %}
+{% extends "base.html" %}
+{% block title%}Error{% endblock %}
+{% block content %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Warning:</strong> You're about to delete the following data.  This action cannot be undone.
+  </div>
+  <ul>
+    {% for entity in entities_to_delete %}
+      <li>{{ entity_to_string(entity) }}
+    {% endfor %}
+  </ul>
+  <form action="{{ target_uri }}" method="POST">
+    <input type="hidden" name="wcif_data" value="{{ wcif_data }}">
+    {% for data in data_to_import %}
+      <input type="hidden" name="data_to_import" value="{{ data }}">
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Confirm</button>
+  </form>
+{% endblock %}

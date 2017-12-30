@@ -1,6 +1,6 @@
 *.pyc
 *.swp
-lib/*/
+lib/*
 .sass-cache/
 src/static/css/
 .local_storage/

@@ -4,6 +4,7 @@ from src import common
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.round import ScheduleRound
+from src.models.scheduling.schedule import Schedule
 from src.models.scheduling.stage import ScheduleStage
 from src.scheduling.colors import Colors
 
@@ -20,6 +21,7 @@ class EditScheduleHandler(SchedulingBaseHandler):
                   .query(ScheduleRound.schedule == self.schedule.key)
                   .order(ScheduleRound.number)
                   .fetch())
+    schedule_versions = Schedule.query(Schedule.competition == self.competition.key).fetch()
     self.response.write(template.render({
         'c': common.Common(self),
         'competition': self.competition,
@@ -28,4 +30,5 @@ class EditScheduleHandler(SchedulingBaseHandler):
         'stages': stages,
         'new_stage_id': random.randint(2 ** 4, 2 ** 10),
         'colors': sorted(Colors.keys()),
+        'schedule_versions': schedule_versions,
     }))
