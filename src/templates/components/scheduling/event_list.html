@@ -5,6 +5,11 @@
       The organizers of {{ competition_details.competition.name }} haven't published a schedule yet.  Check back here soon!
     </div>
   {% else %}
+    {% if not competition_details.schedule.is_live %}
+      <div class="alert alert-warning" role="alert">
+        <strong>Warning!</strong>  You are looking at a non-live version of the schedule.
+      </div>
+    {% endif %}
     {{ event_selector.event_selector(c, events=competition_details.GetWcaEvents()) }}
     <div class="event-list-container">
       <div class="event-list">

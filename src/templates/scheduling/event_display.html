@@ -8,11 +8,6 @@
 {% block content %}
   <div class="container">
     <h1>{{ competition.name }} Events</h1>
-    {% if not_live_warning %}
-      <div class="alert alert-warning" role="alert">
-        <strong>Warning!</strong>  You are looking at a non-live version of the schedule.
-      </div>
-    {% endif %}
     {{ event_list.event_list(c, competition_details) }}
   </div>
 {% endblock %}
