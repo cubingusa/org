@@ -24,5 +24,4 @@ class ScheduleDisplayHandler(SchedulingBaseHandler):
         'c': common.Common(self),
         'competition': self.competition,
         'competition_details': CompetitionDetails(self.user, self.competition, schedule),
-        'not_live_warning': schedule_version != -1,
     }))
