@@ -3,10 +3,28 @@
 {% extends "base.html" %}
 {% block title%}Contact{% endblock %}
 {% block style %}
+  {{ css.css(c, 'about') }}
   {{ css.css(c, 'contact') }}
 {% endblock %}
 {% block content %}
-  {% call contact.contact_form(c, result) %}
-    <p>If you have questions about CubingUSA Nationals, please use the <a href="/nationals/2018/contact">Nationals contact form</a>.
-  {% endcall %}
+  <div class="about-row">
+    {% call contact.contact_form(c, result) %}
+      <p>If you have questions about CubingUSA Nationals, please use the <a href="/nationals/2018/contact">Nationals contact form</a>.
+    {% endcall %}
+  </div>
+  <div class="about-row">
+    <div class="standard-block">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Mailing Address</h4>
+          <address>
+            <strong>CubingUSA</strong><br>
+            851 Cherry Ave 27 PMB 502<br>
+            San Bruno, CA 94066<br>
+          </address>
+          <p class="card-text">Our EIN is 81-1056904.</p>
+        </div>
+      </div>
+    </div>
+  <div>
 {% endblock %}
