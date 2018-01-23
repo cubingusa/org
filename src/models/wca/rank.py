@@ -11,10 +11,6 @@ class RankBase(BaseModel):
   best = ndb.IntegerProperty()
   state = ndb.ComputedProperty(lambda self: self.GetState())
 
-  worldRank = ndb.IntegerProperty()
-  continentRank = ndb.IntegerProperty()
-  countryRank = ndb.IntegerProperty()
-
   def GetState(self):
     if not self.person or not self.person.get():
       return None
@@ -29,13 +25,9 @@ class RankBase(BaseModel):
     self.event = ndb.Key(Event, row['eventId'])
     self.best = int(row['best'])
 
-    self.worldRank = int(row['worldRank'])
-    self.continentRank = int(row['continentRank'])
-    self.countryRank = int(row['countryRank'])
-
   @staticmethod
   def ColumnsUsed():
-    return ['personId', 'eventId', 'best', 'worldRank', 'continentRank', 'countryRank']
+    return ['personId', 'eventId', 'best']
 
   def ObjectsToGet(self):
     return [self.person]
