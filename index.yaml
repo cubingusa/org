@@ -89,4 +89,9 @@ indexes:
   properties:
   - name: user
   - name: update_time
+
+- kind: UserLocationUpdate
+  properties:
+  - name: user
+  - name: update_time
     direction: desc

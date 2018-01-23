@@ -1,44 +1,122 @@
 import collections
+import datetime
 import logging
+import pytz
 
 from google.appengine.ext import ndb
 
 from src.models.champion import Champion
 from src.models.championship import Championship
+from src.models.state import State
+from src.models.user import RegionalChampionshipEligibility
+from src.models.user import StateChampionshipEligibility
 from src.models.user import User
+from src.models.user import UserLocationUpdate
 from src.models.wca.country import Country
 from src.models.wca.event import Event
 from src.models.wca.result import Result
 from src.models.wca.result import RoundType
 
 
-def IsEligible(result, championship):
+def ComputeEligibleCompetitors(championship, competition, results):
   if championship.national_championship:
-    return result.person_country == ndb.Key(Country, 'USA')
+    # We don't save this in the datastore because it's easy enough to compute.
+    return set([r.person.id() for r in results
+                if r.person_country == ndb.Key(Country, 'USA')])
+  competitors = set([r.person for r in results])
+  users = User.query(User.wca_person.IN(competitors)).fetch()
+  user_keys = [user.key for user in users]
+
+  # Load the saved eligibilities, so that one person can't be eligible for two
+  # championships of the same type.
+  if championship.region:
+    eligibility_class = RegionalChampionshipEligibility
+    eligibilities = RegionalChampionshipEligibility.query(
+                        ndb.AND(RegionalChampionshipEligibility.user.IN(user_keys),
+                                RegionalChampionshipEligibility.year ==
+                                competition.year)).fetch()
+    matches = lambda eligibility: eligibility.region == championship.region
+    valid_state_keys = (State.query(State.region == championship.region)
+                             .fetch(keys_only=True))
   else:
-    # TODO: people can move.  Look at the time when the championship was held.
-    user = User.query(wca_person == result.person).fetch()
-    if not user:
-      return False
-    if championship.region:
-      return user.state.get().region == championship.region
-    else:
-      return user.state == championship.state
+    eligibility_class = StateChampionshipEligibility
+    eligibilities = StateChampionshipEligibility.query(
+                        ndb.AND(StateChampionshipEligibility.user.IN(user_keys),
+                                StateChampionshipEligibility.year ==
+                                competition.year)).fetch()
+    matches = lambda eligibility: eligibility.state == championship.state
+    valid_state_keys = [championship.state]
+
+  eligibilities_by_user = {eligibility.user.id() : eligibility
+                           for eligibility in eligibilities}
+
+  # Here we don't know the competition timezone, so use 9:00 AM in New York.
+  # TODO: can we figure out what time zone a competition is being held in?
+  location_update_deadline = (datetime.datetime.combine(
+      competition.start_date, datetime.time(9, 0, 0))
+      .replace(tzinfo=pytz.timezone('America/New_York')))
+
+  person_states = {}
+  for update in (UserLocationUpdate.query(
+                      ndb.AND(UserLocationUpdate.user.IN(user_keys),
+                              UserLocationUpdate.update_time <
+                              location_update_deadline))
+                     .order(UserLocationUpdate.update_time)
+                     .iter()):
+    person_states[update.user.id()] = update.state
+
+  eligible_competitors = set()
+  eligibilities = []
+
+  for user in users:
+    if user.key.id() in eligibilities_by_user:
+      eligibility = eligibilities_by_user[user.key.id()]
+      # If this competitor was already eligible for a championship this year,
+      # they can't also be eligible for this one.
+      if matches(eligibility):
+        eligible_competitors.add(user.wca_person.id())
+    # Next, check if the person has a state, and that state is eligible to win
+    # this championship.
+    if user.key.id() in person_states and person_states[user.key.id()] in valid_state_keys:
+      eligible_competitors.add(user.wca_person.id())
+      eligibility_id = eligibility_class.Id(user.key.id(), competition.year)
+      eligibility = (eligibility_class.get_by_id(eligibility_id) or
+                     eligibility_class(id=eligibility_id))
+      eligibility.user = user.key
+      eligibility.year = competition.year
+      if championship.region:
+        eligibility.region = championship.region
+      else:
+        eligibility.state = championship.state
+      eligibilities.append(eligibility)
+  ndb.put_multi(eligibilities)
+  return eligible_competitors
 
 
 def UpdateChampions():
-  all_championships = [c for c in Championship.query().iter()]
   champions_to_write = []
   champions_to_delete = []
   final_round_keys = set(r.key for r in RoundType.query(RoundType.final == True).iter())
   all_event_keys = set(e.key for e in Event.query().iter())
-  for championship in all_championships:
+  championships_already_computed = set()
+  for champion in Champion.query().iter():
+    championships_already_computed.add(champion.championship.id())
+  for championship in Championship.query().iter():
+    competition = championship.competition.get()
+    # Only recompute champions from the last 2 weeks, in case there are result updates.
+    if (championship.key.id() in championships_already_computed and
+        datetime.date.today() - competition.end_date > datetime.timedelta(days=14)):
+      continue
+    if competition.end_date > datetime.date.today():
+      continue
     competition_id = championship.competition.id()
     logging.info('Computing champions for %s' % competition_id)
+    results = (Result.query(Result.competition == championship.competition)
+                     .order(Result.pos).fetch())
+    eligible_competitors = ComputeEligibleCompetitors(championship, competition, results)
     champions = collections.defaultdict(list)
     events_held_with_successes = set()
-    for result in (Result.query(Result.competition == championship.competition)
-                         .order(Result.pos).iter()):
+    for result in results:
       if result.best < 0:
         continue
       if result.round_type not in final_round_keys:
@@ -56,7 +134,7 @@ def UpdateChampions():
       events_held_with_successes.add(this_event)
       if this_event in champions and champions[this_event][0].pos < result.pos:
         continue
-      if not IsEligible(result, championship):
+      if result.person.id() not in eligible_competitors:
         continue
       champions[this_event].append(result)
       if result.pos > 1 and len(champions) >= len(events_held_with_successes):
