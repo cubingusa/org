@@ -25,13 +25,13 @@ indexes:
   properties:
   - name: event
   - name: state
-  - name: worldRank
+  - name: best
 
 - kind: RankSingle
   properties:
   - name: event
   - name: state
-  - name: worldRank
+  - name: best
 
 - kind: Result
   properties:

@@ -24,7 +24,7 @@ class StateRankingsHandler(BaseHandler):
     rankings = (ranking_class.query(
         ndb.AND(ranking_class.event == event.key,
                 ranking_class.state == state.key))
-        .order(ranking_class.worldRank)
+        .order(ranking_class.best)
         .fetch(100))
 
     people = ndb.get_multi([ranking.person for ranking in rankings])
