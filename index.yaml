@@ -10,6 +10,43 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Championship
+  properties:
+  - name: national_championship
+  - name: region
+  - name: year
+    direction: desc
+
+- kind: Championship
+  properties:
+  - name: national_championship
+  - name: state
+  - name: year
+    direction: desc
+
+- kind: Championship
+  properties:
+  - name: national_championship
+  - name: year
+    direction: desc
+
+- kind: Championship
+  properties:
+  - name: region
+  - name: year
+    direction: desc
+
+- kind: Championship
+  properties:
+  - name: state
+  - name: year
+    direction: desc
+
+- kind: Competition
+  properties:
+  - name: country
+  - name: name
+
 - kind: Competition
   properties:
   - name: year

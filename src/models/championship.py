@@ -11,6 +11,8 @@ class Championship(ndb.Model):
 
   competition = ndb.KeyProperty(kind=Competition)
 
+  year = ndb.ComputedProperty(lambda self: self.competition.get().year)
+
   @staticmethod
   def NationalsId(year):
     return str(year)
