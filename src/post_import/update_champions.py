@@ -7,9 +7,9 @@ from google.appengine.ext import ndb
 
 from src.models.champion import Champion
 from src.models.championship import Championship
+from src.models.eligibility import RegionalChampionshipEligibility
+from src.models.eligibility import StateChampionshipEligibility
 from src.models.state import State
-from src.models.user import RegionalChampionshipEligibility
-from src.models.user import StateChampionshipEligibility
 from src.models.user import User
 from src.models.user import UserLocationUpdate
 from src.models.wca.country import Country
