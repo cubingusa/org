@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title%}Edit Championships{% endblock %}
+{% block content %}
+  <h1>Edit Championships</h1>
+  <h3>Add New Championship</h3>
+  <div class="new-championship-container">
+    <select class="form-control" id="competition-id-dropdown">
+      <option value="_empty"></option>
+      {% for competition in all_us_competitions %}
+        <!-- Only show competitions with states.  This will drop competitions like FMC USA. -->
+        {% if competition.state %}
+          <option value="{{ competition.key.id() }}"
+                  data-state="{{ competition.state.id() }}"
+                  data-year="{{ competition.year }}">
+            {{ competition.name }}
+          </option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    <div class="new-championship-row" id="national-row" style="display:none;">
+      <strong>National Championship:</strong>
+      <a class="new-championship-link"></a>
+    </div>
+    <div class="new-championship-row" id="regional-row" style="display:none;">
+      <strong>Regional Championship (<span class="championship-name"></span>):</strong>
+      <a class="new-championship-link"></a>
+    </div>
+    <div class="new-championship-row" id="state-row" style="display:none;">
+      <strong>State Championship (<span class="championship-name"></span>):</strong>
+      <a class="new-championship-link"></a>
+    </div>
+  </div>
+  <hr>
+  <h3>National Championships</h3>
+  {% for championship in national_championships %}
+    <div class="championship-row">
+      {% set competition = championship.competition.get() %}
+      <strong>{{ competition.year }}:</strong>
+      <a href="{{ competition.GetWCALink() }}" target="_blank">
+        {{ competition.name }}
+      </a>
+      &ndash;
+      <a href="{{ c.uri_for('delete_championship', championship_id=championship.key.id()) }}">
+        delete
+      </a>
+      <div class="existing-championship-data"
+           data-competitionid="{{ competition.key.id() }}"
+           data-championshipid="{{ championship.key.id() }}">
+    </div>
+  {% endfor %}
+  <hr>
+  <h3>Regional Championships</h3>
+  {% for championship in regional_championships %}
+    <div class="championship-row">
+      {% set competition = championship.competition.get() %}
+      <strong>{{ competition.year }} {{ competition.state.get().region.get().name }}:</strong>
+      <a href="{{ competition.GetWCALink() }}" target="_blank">
+        {{ competition.name }}
+      </a>
+      &ndash;
+      <a href="{{ c.uri_for('delete_championship', championship_id=championship.key.id()) }}">
+        delete
+      </a>
+      <div class="existing-championship-data"
+           data-competitionid="{{ competition.key.id() }}"
+           data-championshipid="{{ championship.key.id() }}">
+    </div>
+  {% endfor %}
+  <hr>
+  <h3>State Championships</h3>
+  {% for championship in state_championships %}
+    <div class="championship-row">
+      {% set competition = championship.competition.get() %}
+      <strong>{{ competition.year }} {{ competition.state.get().name }}:</strong>
+      <a href="{{ competition.GetWCALink() }}" target="_blank">
+        {{ competition.name }}
+      </a>
+      &ndash;
+      <a href="{{ c.uri_for('delete_championship', championship_id=championship.key.id()) }}">
+        delete
+      </a>
+      <div class="existing-championship-data"
+           data-competitionid="{{ competition.key.id() }}"
+           data-championshipid="{{ championship.key.id() }}">
+    </div>
+  {% endfor %}
+  <div id="data-container">
+    {% for state in states %}
+      <div class="state-data"
+           data-stateid="{{ state.key.id() }}"
+           data-regionid="{{ state.region.id() }}"
+           data-statename="{{ state.name }}">
+    {% endfor %}
+    {% for region in regions %}
+      <div class="region-data"
+           data-regionid="{{ region.key.id() }}"
+           data-regionname="{{ region.name }}">
+    {% endfor %}
+  </div>
+  <script src="/static/js/admin_edit_championships.js" type="application/javascript"></script>
+{% endblock %}

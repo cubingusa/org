@@ -12,6 +12,9 @@ from src.handlers.admin.documents import DeleteDocumentHandler
 from src.handlers.admin.documents import PermanentlyDeleteDocumentsHandler
 from src.handlers.admin.documents import RestoreDocumentHandler
 from src.handlers.admin.documents import UploadDocumentHandler
+from src.handlers.admin.edit_championships import AddChampionshipHandler
+from src.handlers.admin.edit_championships import DeleteChampionshipHandler
+from src.handlers.admin.edit_championships import EditChampionshipsHandler
 from src.handlers.admin.edit_users import EditUsersHandler
 from src.handlers.edit_user import EditUserHandler
 from src.handlers.login import LoginHandler
@@ -62,5 +65,14 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/admin/restore_document/<document_id:.*>', handler=RestoreDocumentHandler,
                 name='restore_document'),
   webapp2.Route('/admin/permanently_delete_documents', handler=PermanentlyDeleteDocumentsHandler),
+  webapp2.Route('/admin/edit_championships',
+                handler=EditChampionshipsHandler,
+                name='edit_championships'),
+  webapp2.Route('/admin/delete_championship/<championship_id:.*>',
+                handler=DeleteChampionshipHandler,
+                name='delete_championship'),
+  webapp2.Route('/admin/add_championship/<competition_id:.*>/<championship_type:.*>',
+                handler=AddChampionshipHandler,
+                name='add_championship'),
   webapp2.Route('/admin/async/get_users/<filter_text:.*>', handler=EditUsersHandler),
 ], config=config.GetAppConfig())
