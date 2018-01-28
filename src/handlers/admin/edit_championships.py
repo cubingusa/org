@@ -27,7 +27,7 @@ class AddChampionshipHandler(AdminBaseHandler):
     if championship_type == 'national':
       championship.national_championship = True
     elif championship_type == 'regional':
-      championship.region = competiiton.state.get().region
+      championship.region = competition.state.get().region
     elif championship_type == 'state':
       championship.state = competition.state
     championship.competition = competition.key
