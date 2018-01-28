@@ -42,6 +42,11 @@ indexes:
   - name: year
     direction: desc
 
+- kind: Championship
+  properties:
+  - name: year
+  - name: region
+
 - kind: Competition
   properties:
   - name: country

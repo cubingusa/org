@@ -14,3 +14,12 @@
     }
   }
 }
+
+.competition-date-range,.competition-name {
+  font-weight: bold;
+}
+
+.missing-region {
+  color: $gray-600;
+  font-style: italic;
+}
