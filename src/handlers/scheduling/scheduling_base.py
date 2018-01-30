@@ -3,9 +3,9 @@ from src.handlers.base import BaseHandler
 from src import common
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.competition import ScheduleCompetition
+from src.models.scheduling.person import SchedulePerson
+from src.models.scheduling.person import SchedulePersonRoles
 from src.models.scheduling.schedule import Schedule
-from src.models.scheduling.staff import ScheduleStaff
-from src.models.scheduling.staff import StaffRoles
 
 class SchedulingBaseHandler(BaseHandler):
   def RespondWithError(self, error_string):
@@ -32,8 +32,8 @@ class SchedulingBaseHandler(BaseHandler):
       return True
 
     self.is_editor = True
-    staff = ScheduleStaff.get_by_id(ScheduleStaff.Id(competition_id, self.user.key.id()))
-    if not staff or StaffRoles.EDITOR not in staff.roles:
+    person = SchedulePerson.get_by_id(SchedulePerson.Id(competition_id, self.user.key.id()))
+    if not person or SchedulePersonRoles.EDITOR not in person.roles:
       self.is_editor = False
       if not edit_access_needed:
         self.RespondWithError(

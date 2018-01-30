@@ -8,6 +8,7 @@ from src import common
 from src import timezones
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
+from src.models.scheduling.competition import ScheduleCompetition
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.schedule import Schedule
 from src.models.scheduling.staff import ScheduleStaff
@@ -16,6 +17,12 @@ from src.models.scheduling.staff import StaffRoles
 
 class EditCompetitionHandler(SchedulingBaseHandler):
   def get(self, competition_id):
+    # Unlike most scheduling handlers, it's okay here if the competition doesn't
+    # exist, because that may just mean the user is creating the competition
+    # here for the first time.  In this case redirect to /update.
+    if not ScheduleCompetition.get_by_id(competition_id):
+      self.redirect_to('update_competition', competition_id=competition_id)
+      return
     if not self.SetCompetition(competition_id):
       return
     timezones_and_times = [

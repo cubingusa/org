@@ -17,8 +17,7 @@ from src.scheduling.wcif.person import ImportPerson
 
 
 class UpdateCompetitionHandler(BaseHandler):
-  def post(self):
-    competition_id = self.request.POST['competitionid']
+  def get(self, competition_id):
     self.redirect('/authenticate?' + urllib.urlencode({
         'scope': 'public email manage_competitions',
         'callback': webapp2.uri_for('update_competition_callback', _full=True),
