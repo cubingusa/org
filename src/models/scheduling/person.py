@@ -23,4 +23,4 @@ class SchedulePerson(ndb.Model):
 
   @staticmethod
   def Id(competition_id, user_id):
-    return '%s_%d' % (competition_id, user_id)
+    return '%s_%s' % (competition_id, user_id)

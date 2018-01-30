@@ -34,7 +34,7 @@ def ImportPerson(person_data, competition, out, people, countries):
     out.errors.append('Unrecognized country %s for %s.' % (
                           person_data['countryIso2'], person_data['name']))
     return
-  person_id = SchedulePerson.Id(competition.key.id(), person_data['wcaUserId'])
+  person_id = SchedulePerson.Id(competition.key.id(), str(person_data['wcaUserId']))
   if person_id in people:
     person = people.pop(person_id)
   else:
