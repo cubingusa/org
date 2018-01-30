@@ -4,13 +4,16 @@ import webapp2
 
 from google.appengine.ext import ndb
 
+from src import common
 from src.handlers.base import BaseHandler
 from src.handlers.oauth import OAuthBaseHandler
+from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.competition import ScheduleCompetition
-from src.models.scheduling.staff import ScheduleStaff
-from src.models.scheduling.staff import StaffRoles
+from src.models.scheduling.person import SchedulePerson
 from src.models.user import User
 from src.models.wca.competition import Competition
+from src.models.wca.country import Country
+from src.scheduling.wcif.person import ImportPerson
 
 
 class UpdateCompetitionHandler(BaseHandler):
@@ -21,6 +24,13 @@ class UpdateCompetitionHandler(BaseHandler):
         'callback': webapp2.uri_for('update_competition_callback', _full=True),
         'handler_data': competition_id,
     }))
+
+
+class ImportOutput:
+  def __init__(self):
+    self.entities_to_put = []
+    self.entities_to_delete = []
+    self.errors = []
 
 
 class UpdateCompetitionCallbackHandler(OAuthBaseHandler):
@@ -39,15 +49,21 @@ class UpdateCompetitionCallbackHandler(OAuthBaseHandler):
                    ScheduleCompetition(id=competition_id))
     competition.name = response_json['name']
     competition.wca_competition = ndb.Key(Competition, competition_id)
-    current_editors = ScheduleStaff.query(ndb.AND(ScheduleStaff.competition == competition.key,
-                                                  ScheduleStaff.roles == StaffRoles.EDITOR)).fetch()
-    for person in response_json['persons']:
-      staff_id = ScheduleStaff.Id(competition_id, person['wcaUserId'])
-      staff = ScheduleStaff.get_by_id(staff_id) or ScheduleStaff(id=staff_id)
-      if StaffRoles.EDITOR not in staff.roles:
-        staff.competition = competition.key
-        staff.user = ndb.Key(User, str(person['wcaUserId']))
-        staff.roles.append(StaffRoles.EDITOR)
-        staff.put()
-    competition.put()
+
+    people = SchedulePerson.query(SchedulePerson.competition == competition.key).fetch()
+    country_iso2s = set(person_data['countryIso2'] for person_data in response_json['persons'])
+    countries = {country.iso2 : country.key.id()
+                 for country in Country.query(Country.iso2.IN(country_iso2s))}
+    out = ImportOutput()
+
+    for person_data in response_json['persons']:
+      ImportPerson(person_data, competition, out, people, countries)
+    if out.errors:
+      template = JINJA_ENVIRONMENT.get_template('scheduling/import_error.html')
+      self.response.write(template.render({
+          'c': common.Common(self),
+          'errors': out.errors}))
+      return
+    ndb.put_multi(out.entities_to_put)
+    ndb.delete_multi(out.entities_to_delete)
     self.redirect(webapp2.uri_for('edit_competition', competition_id=competition_id))
