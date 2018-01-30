@@ -41,25 +41,6 @@
       </div>
       <button class="btn btn-primary" type="submit" name="btnSubmit">Submit</button>
     </form>
-    <h3>Schedule Editors</h3>
-    <ul>
-      {% for editor in editors %}
-        {% set editor_user = editor.user.get() %}
-        {% if editor_user %}
-          <li>
-            {{ editor_user.name }}
-            {% if editor_user.wca_person %}
-              <a href="{{ editor_user.wca_person.get().GetWCALink() }}" target="_blank">
-                ({{ editor_user.wca_person.id() }})
-              </a>
-            {% endif %}
-            <a href="{{ c.uri_for('staff_signup_with_user',
-                                  competition_id=competition.key.id(),
-                                  user_id=editor_user.key.id()) }}">[edit]</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
     {% if has_live_schedule %}
       <h3>Links</h3>
       <ul>

@@ -9,8 +9,6 @@ from src import timezones
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.competition import ScheduleCompetition
-from src.models.scheduling.person import SchedulePerson
-from src.models.scheduling.person import SchedulePersonRoles
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.schedule import Schedule
 
@@ -48,9 +46,6 @@ class EditCompetitionHandler(SchedulingBaseHandler):
     self.response.write(template.render({
         'c': common.Common(self),
         'competition': self.competition,
-        'editors': SchedulePerson.query(
-            ndb.AND(SchedulePerson.competition == self.competition.key,
-                    SchedulePerson.roles == SchedulePersonRoles.EDITOR)).fetch(),
         'timezones_and_times': timezones_and_times,
         'schedule_versions': schedule_versions,
         'staff_signup_enabled': schedule_for_staff_signup and
