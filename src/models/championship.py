@@ -13,6 +13,9 @@ class Championship(ndb.Model):
 
   year = ndb.ComputedProperty(lambda self: self.competition.get().year)
 
+  residency_deadline = ndb.DateTimeProperty()
+  residency_timezone = ndb.StringProperty()
+
   @staticmethod
   def NationalsId(year):
     return str(year)
