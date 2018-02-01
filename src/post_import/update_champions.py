@@ -1,7 +1,6 @@
 import collections
 import datetime
 import logging
-import pytz
 
 from google.appengine.ext import ndb
 
@@ -50,17 +49,11 @@ def ComputeEligibleCompetitors(championship, competition, results):
   eligibilities_by_user = {eligibility.user.id() : eligibility
                            for eligibility in eligibilities}
 
-  # Here we don't know the competition timezone, so use 9:00 AM in New York.
-  # TODO: can we figure out what time zone a competition is being held in?
-  location_update_deadline = (datetime.datetime.combine(
-      competition.start_date, datetime.time(9, 0, 0))
-      .replace(tzinfo=pytz.timezone('America/New_York')))
-
   person_states = {}
   for update in (UserLocationUpdate.query(
                       ndb.AND(UserLocationUpdate.user.IN(user_keys),
                               UserLocationUpdate.update_time <
-                              location_update_deadline))
+                              championship.residency_deadline))
                      .order(UserLocationUpdate.update_time)
                      .iter()):
     person_states[update.user.id()] = update.state
