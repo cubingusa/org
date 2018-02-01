@@ -34,17 +34,13 @@ def ComputeEligibleCompetitors(championship, competition, results):
                         ndb.AND(RegionalChampionshipEligibility.user.IN(user_keys),
                                 RegionalChampionshipEligibility.year ==
                                 competition.year)).fetch()
-    matches = lambda eligibility: eligibility.region == championship.region
-    valid_state_keys = (State.query(State.region == championship.region)
-                             .fetch(keys_only=True))
   else:
     eligibility_class = StateChampionshipEligibility
     eligibilities = StateChampionshipEligibility.query(
                         ndb.AND(StateChampionshipEligibility.user.IN(user_keys),
                                 StateChampionshipEligibility.year ==
                                 competition.year)).fetch()
-    matches = lambda eligibility: eligibility.state == championship.state
-    valid_state_keys = [championship.state]
+  valid_state_keys = championship.GetEligibleStateKeys()
 
   eligibilities_by_user = {eligibility.user.id() : eligibility
                            for eligibility in eligibilities}
@@ -66,7 +62,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
       eligibility = eligibilities_by_user[user.key.id()]
       # If this competitor was already eligible for a championship this year,
       # they can't also be eligible for this one.
-      if matches(eligibility):
+      if eligibility.championship == championship.key:
         eligible_competitors.add(user.wca_person.id())
     # Next, check if the person has a state, and that state is eligible to win
     # this championship.
@@ -76,11 +72,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
       eligibility = (eligibility_class.get_by_id(eligibility_id) or
                      eligibility_class(id=eligibility_id))
       eligibility.user = user.key
-      eligibility.year = competition.year
-      if championship.region:
-        eligibility.region = championship.region
-      else:
-        eligibility.state = championship.state
+      eligibility.championship = championship.key
       eligibilities.append(eligibility)
   ndb.put_multi(eligibilities)
   return eligible_competitors

@@ -1,14 +1,13 @@
 from google.appengine.ext import ndb
 
-from src.models.region import Region
-from src.models.state import State
+from src.models.championship import Championship
 from src.models.user import User
-
 
 class RegionalChampionshipEligibility(ndb.Model):
   user = ndb.KeyProperty(kind=User)
-  year = ndb.IntegerProperty()
-  region = ndb.KeyProperty(kind=Region)
+  championship = ndb.KeyProperty(kind=Championship)
+  year = ndb.ComputedProperty(lambda self: self.championship.get().year)
+  region = ndb.ComputedProperty(lambda self: self.championship.get().region)
 
   @staticmethod
   def Id(user_id, year):
@@ -17,8 +16,9 @@ class RegionalChampionshipEligibility(ndb.Model):
 
 class StateChampionshipEligibility(ndb.Model):
   user = ndb.KeyProperty(kind=User)
-  year = ndb.IntegerProperty()
-  state = ndb.KeyProperty(kind=State)
+  championship = ndb.KeyProperty(kind=Championship)
+  year = ndb.ComputedProperty(lambda self: self.championship.get().year)
+  state = ndb.ComputedProperty(lambda self: self.championship.get().state)
 
   @staticmethod
   def Id(user_id, year):

@@ -27,3 +27,12 @@ class Championship(ndb.Model):
   @staticmethod
   def StateChampionshipId(year, state):
     return '%s_%d' % (state.key.id(), year)
+
+  def GetEligibleStateKeys(self):
+    if self.state:
+      return [self.state]
+    if self.region:
+      return State.query(State.region == self.region).fetch(keys_only=True)
+    # National championships are not based on residence, they're based on
+    # citizenship.
+    return None
