@@ -55,6 +55,7 @@ class ChampionshipPsychHandler(BaseHandler):
         'championship': championship,
         'competition': championship.competition.get(),
         'championship_title': championship_title,
+        'championship_id': championship_id,
         'state_list': state_list,
         'events': events,
         'deadline': deadline,
