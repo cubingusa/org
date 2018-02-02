@@ -1,7 +1,6 @@
 import collections
 import datetime
 import logging
-import pytz
 
 from google.appengine.ext import ndb
 
@@ -30,59 +29,56 @@ def ComputeEligibleCompetitors(championship, competition, results):
   # championships of the same type.
   if championship.region:
     eligibility_class = RegionalChampionshipEligibility
-    eligibilities = RegionalChampionshipEligibility.query(
-                        ndb.AND(RegionalChampionshipEligibility.user.IN(user_keys),
-                                RegionalChampionshipEligibility.year ==
-                                competition.year)).fetch()
-    matches = lambda eligibility: eligibility.region == championship.region
-    valid_state_keys = (State.query(State.region == championship.region)
-                             .fetch(keys_only=True))
+    def eligibility_field(user):
+      if not user.regional_eligibilities:
+        user.regional_eligibilities = []
+      return user.regional_eligibilities
   else:
     eligibility_class = StateChampionshipEligibility
-    eligibilities = StateChampionshipEligibility.query(
-                        ndb.AND(StateChampionshipEligibility.user.IN(user_keys),
-                                StateChampionshipEligibility.year ==
-                                competition.year)).fetch()
-    matches = lambda eligibility: eligibility.state == championship.state
-    valid_state_keys = [championship.state]
+    def eligibility_field(user):
+      if not user.state_eligibilities:
+        user.state_eligibilities = []
+      return user.state_eligibilities
 
-  eligibilities_by_user = {eligibility.user.id() : eligibility
-                           for eligibility in eligibilities}
-
-  # Here we don't know the competition timezone, so use 9:00 AM in New York.
-  # TODO: can we figure out what time zone a competition is being held in?
-  location_update_deadline = (datetime.datetime.combine(
-      competition.start_date, datetime.time(9, 0, 0)))
+  valid_state_keys = championship.GetEligibleStateKeys()
+  residency_deadline = (championship.residency_deadline or
+      datetime.datetime.combine(competition.start_date, datetime.time(0, 0, 0)))
 
   eligible_competitors = set()
-  eligibilities = []
+  competitors_to_put = []
+
+  class Resolution:
+    ELIGIBLE = 0
+    INELIGIBLE = 1
+    UNRESOLVED = 2
 
   for user in users:
-    if user.key.id() in eligibilities_by_user:
-      eligibility = eligibilities_by_user[user.key.id()]
-      # If this competitor was already eligible for a championship this year,
-      # they can't also be eligible for this one.
-      if matches(eligibility):
-        eligible_competitors.add(user.wca_person.id())
-    # Next, check if the person has a state, and that state is eligible to win
-    # this championship.
-    state = None
-    for update in user.updates:
-      if update.update_time < location_update_deadline:
-        state = update.state
-    if state and state in valid_state_keys:
-      eligible_competitors.add(user.wca_person.id())
-      eligibility_id = eligibility_class.Id(user.key.id(), competition.year)
-      eligibility = (eligibility_class.get_by_id(eligibility_id) or
-                     eligibility_class(id=eligibility_id))
-      eligibility.user = user.key
-      eligibility.year = competition.year
-      if championship.region:
-        eligibility.region = championship.region
+    resolution = Resolution.UNRESOLVED
+    for eligibility in eligibility_field(user):
+      if eligibility.year != championship.year:
+        continue
+      if eligibility.championship == championship.key:
+        resolution = Resolution.ELIGIBLE
       else:
-        eligibility.state = championship.state
-      eligibilities.append(eligibility)
-  ndb.put_multi(eligibilities)
+        resolution = Resolution.INELIGIBLE
+    # If the competitor hasn't already used their eligibility, check their state.
+    if resolution == Resolution.UNRESOLVED:
+      state = None
+      for update in user.updates or None:
+        if update.update_time < residency_deadline:
+          state = update.state
+      if state and state in valid_state_keys:
+        # This competitor is eligible, so save this on their User.
+        resolution = Resolution.ELIGIBLE
+        eligibility = eligibility_class()
+        eligibility.championship = championship.key
+        eligibility_field(user).append(eligibility)
+        competitors_to_put.append(user)
+      else:
+        resolution = Resolution.INELIGIBLE
+    if resolution == Resolution.ELIGIBLE:
+      eligible_competitors.add(user.wca_person.id())
+  ndb.put_multi(competitors_to_put)
   return eligible_competitors
 
 

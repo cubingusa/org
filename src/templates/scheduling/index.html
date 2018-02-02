@@ -6,39 +6,37 @@
 {% endblock %}
 {% block content %}
   <div class="container">
-    <h1>Competition Scheduling</h1>
-    {% if c.len(editable_competitions) %}
+    <h1>CubingUSA Competition Management</h1>
+    <p>
+      The CubingUSA Competition Management system is under development.  Once completed, organizers will be able to use it to:
+    </p>
+    <ul>
+      <li>Create a schedule
+      <li>Assign competitors to groups
+      <li>Manage competition staff
+      <li>Create staff schedules
+    </ul>
+    {% if logged_out %}
+      <div class="alert alert-warning" role="alert">
+        You need to <a href="/login">log in</a> to manage competitions using this system.
+      </div>
+    {% endif %}
+    {% if c.len(competition_id_to_name) %}
       <h3>My Competitions</h3>
       <ul>
-        {% for competition in editable_competitions %}
+        {% for competition_id, competition_name in competition_id_to_name.iteritems() %}
           <li>
             <a href="{{ c.uri_for('edit_competition',
-                                  competition_id=competition.key.id()) }}"
+                                  competition_id=competition_id) }}"
                class="competition-name">
-              {{ competition.key.id() }}
+              {{ competition_name }}
             </a>
           </li>
         {% endfor %}
       </ul>
     {% endif %}
-    <h3>Create Competition</h3>
-    <form action="{{ c.uri_for('update_competition') }}" method="POST">
-      <div class="form-group">
-        <label for="competitionid">Competition ID</label>
-        <input class="form-control {% if unknown_competition %}is-invalid{% endif %}"
-               type="text"
-               id="competitionid"
-               name="competitionid"
-               aria-describedby="competitionid-help"
-               required>
-        <div class="invalid-feedback">
-          Unrecognized competition ID.  Maybe you don't have access on the WCA site?
-        </div>
-        <small id="competitionid-help" class="form-text text-muted">
-          This must match the competition's WCA competition ID, and you must have already created the competition on the WCA site.  It's okay if the competition isn't announced, but because we pull all data on events, rounds, and edit access from that site, the competition must be created already.
-        </small>
-      </div>
-      <button class="button" type="submit" name="btnSubmit">Submit</button>
-    </form>
   </div>
+  <script type="application/javascript">
+    window.history.pushState("", "", "{{ c.uri_for('index') }}");
+  </script>
 {% endblock %}

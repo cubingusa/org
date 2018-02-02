@@ -1,0 +1,24 @@
+{% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
+{% import "components/faq.html" as faq %}
+{% extends "base.html" %}
+{% block title%}{{ competition.name }} Psych Sheet{% endblock %}
+{% block style %}
+  {{ css.css(c, 'championship_psych') }}
+{% endblock %}
+{% block content %}
+  <h3 id="header">{{ competition.name }} Psych Sheet</h3>
+  <p>
+     Only competitors who are residents of {{ state_list }} are eligible to win {{ championship_title }} Championship titles.
+    {% if deadline_passed %}
+      The deadline to update residency for championship titles has already passed.
+    {% else %}
+      Competitors wishing to be eligible for titles must <a href="{{ c.uri_for('login') }}">log in</a> to the CubingUSA website and <a href="{{ c.uri_for('edit_user') }}">edit</a> their account to select their home state.  The deadline to do so is {{ deadline.strftime('%B %-d, %Y at %-I:%M:%S %p %Z') }}.
+    {% endif %}
+  </p>
+  {{ event_selector.event_selector(c, events=events) }}
+  <div id="championship-id" data-championshipid="{{ championship_id }}"></div>
+  <div id="championship-psych-table"></div>
+  <div id="championship-psych-spinner" class="spinner"></div>
+  <script src="/static/js/championship_psych.js" type="application/javascript"></script>
+{% endblock %}

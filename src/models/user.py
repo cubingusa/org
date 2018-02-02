@@ -1,6 +1,8 @@
 from google.appengine.api import search
 from google.appengine.ext import ndb
 
+from src.models.eligibility import RegionalChampionshipEligibility
+from src.models.eligibility import StateChampionshipEligibility
 from src.models.state import State
 from src.models.wca.person import Person
 
@@ -50,6 +52,8 @@ class User(ndb.Model):
   last_login = ndb.DateTimeProperty()
 
   updates = ndb.StructuredProperty(UserLocationUpdate, repeated=True)
+  regional_eligibilities = ndb.StructuredProperty(RegionalChampionshipEligibility, repeated=True)
+  state_eligibilities = ndb.StructuredProperty(StateChampionshipEligibility, repeated=True)
 
   def HasAnyRole(self, roles):
     for role in self.roles:

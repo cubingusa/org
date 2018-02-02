@@ -23,8 +23,24 @@
           {% endfor %}
         </select>
       </div>
+      {% if residency_deadline %}
+        <div class="form-group">
+          <label for="residency-deadline">Residency reporting deadline for championships (23:59:59 local time)</label>
+          <div class="input-group date">
+            <input type="text"
+                   class="form-control"
+                   name="residency-deadline"
+                   id="residency-deadline"
+                   value="{{ residency_deadline.strftime('%Y-%m-%d') }}"
+                   required>
+            <span class="input-group-addon">
+              <span class="fa fa-calendar"></span>
+            </span>
+          </div>
+        </div>
+      {% endif %}
       <div class="form-group">
-        <label for="staff-signup-deadline">Staff signup deadline</label>
+        <label for="staff-signup-deadline">Staff signup deadline (if using CubingUSA scheduling)</label>
         <div class="input-group date">
           <input type="text"
                  class="form-control"
@@ -33,7 +49,7 @@
                  {% if competition.GetStaffSignupDeadline() %}
                    value="{{ competition.GetStaffSignupDeadline().strftime('%Y-%m-%d') }}"
                  {% endif %}
-                 required>
+                 >
           <span class="input-group-addon">
             <span class="fa fa-calendar"></span>
           </span>
@@ -41,28 +57,14 @@
       </div>
       <button class="btn btn-primary" type="submit" name="btnSubmit">Submit</button>
     </form>
-    <h3>Schedule Editors</h3>
+    <h3>Links</h3>
     <ul>
-      {% for editor in editors %}
-        {% set editor_user = editor.user.get() %}
-        {% if editor_user %}
-          <li>
-            {{ editor_user.name }}
-            {% if editor_user.wca_person %}
-              <a href="{{ editor_user.wca_person.get().GetWCALink() }}" target="_blank">
-                ({{ editor_user.wca_person.id() }})
-              </a>
-            {% endif %}
-            <a href="{{ c.uri_for('staff_signup_with_user',
-                                  competition_id=competition.key.id(),
-                                  user_id=editor_user.key.id()) }}">[edit]</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-    {% if has_live_schedule %}
-      <h3>Links</h3>
-      <ul>
+      <li>
+        <a href="{{ c.uri_for('update_competition', competition_id=competition.key.id()) }}">
+          Update Competitor List
+        </a>
+      </li>
+      {% if has_live_schedule %}
         <li>
           <a href="{{ c.uri_for('event_display', competition_id=competition.key.id()) }}"
              target="_blank">
@@ -81,8 +83,8 @@
             WCIF Export
           </a>
         </li>
-      </ul>
-    {% endif %}
+      {% endif %}
+    </ul>
     {% if competition.timezone %}
       <h3>Schedule Versions</h3>
       <ul>

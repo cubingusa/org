@@ -9,6 +9,7 @@ from src.handlers.scheduling.async.set_dates import SetDatesHandler
 from src.handlers.scheduling.import_data import ConfirmDeletionHandler
 from src.handlers.scheduling.import_data import ImportDataHandler
 from src.handlers.scheduling.import_data import WcaImportDataHandler
+from src.handlers.scheduling.index import SchedulingIndexCallbackHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
 from src.handlers.scheduling.edit_schedule import EditScheduleHandler
@@ -24,13 +25,15 @@ from src.handlers.scheduling.wcif.competition import CompetitionWcifHandler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling', handler=SchedulingIndexHandler, name='index'),
+  webapp2.Route('/scheduling/index_callback', handler=SchedulingIndexCallbackHandler,
+                name='index_callback'),
   webapp2.Route('/scheduling/<competition_id:.*>/edit',
                 handler=EditCompetitionHandler,
                 name='edit_competition'),
-  webapp2.Route('/scheduling/update_competition',
+  webapp2.Route('/scheduling/<competition_id:.*>/update',
                 handler=UpdateCompetitionHandler,
                 name='update_competition'),
-  webapp2.Route('/scheduling/update_competition_callback',
+  webapp2.Route('/scheduling/update_callback',
                 handler=UpdateCompetitionCallbackHandler,
                 name='update_competition_callback'),
   webapp2.Route('/scheduling/<competition_id:.*>/new_schedule',

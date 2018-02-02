@@ -1,0 +1,57 @@
+{% autoescape true %}
+{% macro ranking_row(competitor, rank) %}
+  <div class="ranking-row-container">
+    <div class="row">
+      <div class="rank-col">
+        {{ rank }}
+      </div>
+      <div class="person-col">
+        {% if competitor.competitor.wca_person %}
+          <a href="{{ competitor.competitor.wca_person.get().GetWCALink() }}"
+             target="_blank">
+            {{ competitor.competitor.name }}
+          </a>
+        {% else %}
+          {{ competitor.competitor.name }}
+        {% endif %}
+        {% if competitor.state_key %}
+          ({{ competitor.state_key.id().upper() }})
+        {% else %}
+          (no state set)
+        {% endif %}
+      </div>
+      <div class="time-col">
+        {% if competitor.best == NO_TIME %}
+          &mdash;
+        {% else %}
+          {{ c.formatters.FormatTime(competitor.best, event.key, is_average) }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+<p>
+  {% set ns = namespace(last_time=0, rank=0) %}
+  <h3>Competitors Eligible for Titles</h3>
+  {% for competitor in eligible_competitors %}
+    {% if competitor.best != ns.last_time %}
+      {% set ns.rank = loop.index %}
+      {% set ns.last_time = competitor.best %}
+    {% endif %}
+    {{ ranking_row(competitor, ns.rank) }}
+  {% endfor %}
+</p>
+
+<p>
+  {% set ns = namespace(last_time=0, rank=0) %}
+  <h3>Competitors Ineligible for Titles</h3>
+  {% for competitor in ineligible_competitors %}
+    {% if competitor.best != ns.last_time %}
+      {% set ns.rank = loop.index %}
+      {% set ns.last_time = competitor.best %}
+    {% endif %}
+    {{ ranking_row(competitor, ns.rank) }}
+  {% endfor %}
+  {% endautoescape %}
+</p>
