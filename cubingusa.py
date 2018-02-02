@@ -17,6 +17,7 @@ from src.handlers.admin.edit_championships import DeleteChampionshipHandler
 from src.handlers.admin.edit_championships import EditChampionshipsHandler
 from src.handlers.admin.edit_users import EditUsersHandler
 from src.handlers.championship_psych import ChampionshipPsychHandler
+from src.handlers.championship_psych import ChampionshipPsychAsyncHandler
 from src.handlers.edit_user import EditUserHandler
 from src.handlers.login import LoginHandler
 from src.handlers.login import LoginCallbackHandler
@@ -57,6 +58,8 @@ app = webapp2.WSGIApplication([
                 handler=ChampionsByYearHandler),
   webapp2.Route('/async/state_rankings/<event_id:.*>/<state_id:.*>/<use_average:\d>',
                 handler=StateRankingsHandler),
+  webapp2.Route('/async/championship_psych/<championship_id:.*>/<event_id:.*>',
+                handler=ChampionshipPsychAsyncHandler),
   # Admin
   webapp2.Route('/admin/edit_users',
                 handler=BasicHandler('admin/edit_users.html',
