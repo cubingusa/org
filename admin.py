@@ -5,7 +5,6 @@ from src.handlers.admin.app_settings import AppSettingsHandler
 from src.handlers.admin.assign_role import AssignRoleHandler
 from src.handlers.admin.get_wca_export import GetExportHandler
 from src.handlers.admin.copy_user_states import CopyUserStatesHandler
-from src.handlers.admin.move_user_location_updates import MoveUserLocationUpdatesHandler
 from src.handlers.admin.post_import_mutations import PostImportMutationsHandler
 from src.handlers.admin.update_states import UpdateStatesHandler
 from src.handlers.admin.upload_users import UploadUsersHandler
@@ -32,5 +31,4 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/wca/get_export', handler=GetExportHandler),
   webapp2.Route('/assign_role/<user_id:.*>/<role:.*>', handler=AssignRoleHandler),
   webapp2.Route('/app_settings', handler=AppSettingsHandler, name='app_settings'),
-  webapp2.Route('/move_user_location_updates', handler=MoveUserLocationUpdatesHandler),
 ], config=config.GetAppConfig())
