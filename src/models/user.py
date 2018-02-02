@@ -93,6 +93,4 @@ class User(ndb.Model):
 
 
 UserLocationUpdate.updater = ndb.KeyProperty(kind=User)
-# TODO: delete this field post-migration.
-UserLocationUpdate.user = ndb.KeyProperty(kind=User)
 UserLocationUpdate._fix_up_properties()
