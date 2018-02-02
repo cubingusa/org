@@ -54,6 +54,7 @@ class UpdateCompetitionCallbackHandler(OAuthBaseHandler):
     countries = {country.iso2 : country.key.id()
                  for country in Country.query(Country.iso2.IN(country_iso2s))}
     out = ImportOutput()
+    out.entities_to_put.append(competition)
 
     for person_data in response_json['persons']:
       ImportPerson(person_data, competition, out, people, countries)
