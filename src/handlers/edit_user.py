@@ -107,13 +107,14 @@ class EditUserHandler(BaseHandler):
       if changed_location:
         # Also save the Update.
         update = UserLocationUpdate()
-        update.user = user.key
         update.updater = self.user.key
-        update.city = city
+        if city:
+          update.city = city
         update.update_time = datetime.datetime.now()
         if state_id:
           update.state = ndb.Key(State, state_id)
-        update.put()
+        user.updates.append(update)
+
     elif changed_location:
       template_dict['unauthorized'] = True
 

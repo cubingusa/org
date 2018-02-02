@@ -10,7 +10,6 @@ from src.models.eligibility import RegionalChampionshipEligibility
 from src.models.eligibility import StateChampionshipEligibility
 from src.models.state import State
 from src.models.user import User
-from src.models.user import UserLocationUpdate
 from src.models.wca.country import Country
 from src.models.wca.event import Event
 from src.models.wca.result import Result
@@ -45,15 +44,6 @@ def ComputeEligibleCompetitors(championship, competition, results):
   eligibilities_by_user = {eligibility.user.id() : eligibility
                            for eligibility in eligibilities}
 
-  person_states = {}
-  for update in (UserLocationUpdate.query(
-                      ndb.AND(UserLocationUpdate.user.IN(user_keys),
-                              UserLocationUpdate.update_time <
-                              championship.residency_deadline))
-                     .order(UserLocationUpdate.update_time)
-                     .iter()):
-    person_states[update.user.id()] = update.state
-
   eligible_competitors = set()
   eligibilities = []
 
@@ -66,7 +56,11 @@ def ComputeEligibleCompetitors(championship, competition, results):
         eligible_competitors.add(user.wca_person.id())
     # Next, check if the person has a state, and that state is eligible to win
     # this championship.
-    if user.key.id() in person_states and person_states[user.key.id()] in valid_state_keys:
+    state = None
+    for update in user.updates:
+      if update.update_time < championship.residency_deadline:
+        state = update.state
+    if state and state in valid_state_keys:
       eligible_competitors.add(user.wca_person.id())
       eligibility_id = eligibility_class.Id(user.key.id(), competition.year)
       eligibility = (eligibility_class.get_by_id(eligibility_id) or
