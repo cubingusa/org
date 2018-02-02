@@ -1,7 +1,6 @@
 import datetime
 
 from src.models.user import Roles
-from src.models.user import UserLocationUpdate
 
 def CanEditLocation(user, editor):
   if not editor:
