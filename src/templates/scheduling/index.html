@@ -7,6 +7,20 @@
 {% block content %}
   <div class="container">
     <h1>CubingUSA Competition Management</h1>
+    <p>
+      The CubingUSA Competition Management system is under development.  Once completed, organizers will be able to use it to:
+    </p>
+    <ul>
+      <li>Create a schedule
+      <li>Assign competitors to groups
+      <li>Manage competition staff
+      <li>Create staff schedules
+    </ul>
+    {% if logged_out %}
+      <div class="alert alert-warning" role="alert">
+        You need to <a href="/login">log in</a> to manage competitions using this system.
+      </div>
+    {% endif %}
     {% if c.len(competition_id_to_name) %}
       <h3>My Competitions</h3>
       <ul>

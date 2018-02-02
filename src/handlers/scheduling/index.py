@@ -16,8 +16,6 @@ class SchedulingIndexHandler(BaseHandler):
       self.response.write(template.render({
           'c': common.Common(self),
           'logged_out': True,
-          'editable_competitions': editable_competitions,
-          'unknown_competition': self.request.get('unknown'),
       }))
       return
     self.redirect('/authenticate?' + urllib.urlencode({
