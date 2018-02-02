@@ -1,5 +1,4 @@
 import datetime
-import logging
 
 from google.appengine.ext import ndb
 
@@ -87,7 +86,6 @@ class CompetitorInfo(object):
 
 class ChampionshipPsychAsyncHandler(BaseHandler):
   def get(self, championship_id, event_id):
-    logging.info('start')
     championship = Championship.get_by_id(championship_id)
     if not championship:
       self.response.status = 404
@@ -108,19 +106,24 @@ class ChampionshipPsychAsyncHandler(BaseHandler):
       if competitor.wca_person:
         competitors_by_wca_id[competitor_info.wca_id] = competitor_info
         wca_person_keys.append(competitor.wca_person)
-    logging.info('got competitors')
 
     wca_people = ndb.get_multi(wca_person_keys)
 
+    eligibility_field = lambda user: (user.regional_eligibilities if championship.region
+                                      else user.state_eligibilities)
     residency_deadline = championship.residency_deadline or datetime.datetime.now()
-    # First look up residency for accounts keyed by person WCA id.
+    # First look up residency and eligibility for accounts keyed by person WCA id.
     user_wca_id_keys = [ndb.Key(User, wca_person.id()) for wca_person in wca_person_keys]
-    for user in ndb.get_multi(user_wca_id_keys):
+    for user in ndb.get_multi(user_wca_id_keys) :
       if not user:
         continue
       for update in user.updates or []:
         if update.update_time < residency_deadline:
           competitors_by_wca_id[user.key.id()].state_key = update.state
+      for eligibility in eligibility_field(user) or []:
+        if (eligibility.year == championship.year and
+            eligibility.championship != championship.key):
+          competitors_by_wca_id[user.key.id()].eligibility = eligibility
 
     # Next look up residency for accounts keyed by user id.
     # We do this second to override accounts keyed by WCA ID, since user ID
@@ -131,27 +134,16 @@ class ChampionshipPsychAsyncHandler(BaseHandler):
       for update in user.updates or []:
         if update.update_time < residency_deadline:
           competitors_by_user_id[user.key.id()].state_key = update.state
-    logging.info('got locations')
-
-    # Next, look up eligibilities that have already been used for this year.
-    eligibility_class = (RegionalChampionshipEligibility if championship.region
-                         else StateChampionshipEligibility)
-    for eligibility in eligibility_class.query(ndb.AND(
-                           eligibility_class.user.IN(user_wca_id_keys + user_keys),
-                           eligibility_class.year == championship.year)).iter():
-      if eligibility.championship != championship.key:
-        if eligibility.user.id() in competitors_by_wca_id:
-          competitors_by_wca_id[eligibility.user.id()].eligibility = eligibility
-        if eligibility.user.id() in competitors_by_user_id:
-          competitors_by_user_id[eligibility.user.id()].eligibility = eligibility
-    logging.info('got eligibilities')
+      for eligibility in eligibility_field(user) or []:
+        if (eligibility.year == championship.year and
+            eligibility.championship != championship.key):
+          competitors_by_user_id[user.key.id()].eligibility = eligibility
 
     # Finally look up personal bests.
     rank_class = RankSingle if 'bf' in event_id else RankAverage
     for rank in rank_class.query(ndb.AND(rank_class.event == ndb.Key(Event, event_id),
                                          rank_class.person.IN(wca_person_keys))).iter():
       competitors_by_wca_id[rank.person.id()].best = rank.best
-    logging.info('got ranks')
 
     # Now break competitors into those who are eligible and those who aren't.
     eligible_competitors = []
@@ -166,7 +158,6 @@ class ChampionshipPsychAsyncHandler(BaseHandler):
 
     eligible_competitors.sort(key=lambda c: c.best)
     ineligible_competitors.sort(key=lambda c: c.best)
-    logging.info('sorted')
 
     template = JINJA_ENVIRONMENT.get_template('championship_psych_table.html')
     self.response.write(template.render({
@@ -176,4 +167,3 @@ class ChampionshipPsychAsyncHandler(BaseHandler):
         'ineligible_competitors': ineligible_competitors,
         'is_average': 'bf' not in event_id,
     }))
-    logging.info('done')
