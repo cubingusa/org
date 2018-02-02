@@ -76,13 +76,12 @@ class UploadUsersHandler(AdminBaseHandler):
       # Also make a back-dated UserLocationUpdate.  We make it in the past so
       # that the user can immediately modify their location on the new site.
       update = UserLocationUpdate()
-      update.user = user.key
       update.updater = user.key
       update.city = user.city
       update.state = user.state
       update.update_time = datetime.datetime(2016, 1, 1)
+      user.updates = [update]
       futures.append(user.put_async())
-      futures.append(update.put_async())
     for future in futures:
       future.wait()
 

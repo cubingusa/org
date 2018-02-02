@@ -25,6 +25,16 @@ class Roles:
   def AdminRoles():
     return [Roles.GLOBAL_ADMIN, Roles.DIRECTOR, Roles.WEBMASTER]
 
+
+class UserLocationUpdate(ndb.Model):
+  city = ndb.StringProperty()
+  state = ndb.KeyProperty(kind=State)
+
+  update_time = ndb.DateTimeProperty()
+  # Defined at end of file (it's a circular reference so we can't define here)
+  # updater = ndb.KeyProperty(kind=User)
+ 
+
 class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
   name = ndb.StringProperty()
@@ -38,6 +48,8 @@ class User(ndb.Model):
   longitude = ndb.IntegerProperty()
 
   last_login = ndb.DateTimeProperty()
+
+  updates = ndb.StructuredProperty(UserLocationUpdate, repeated=True)
 
   def HasAnyRole(self, roles):
     for role in self.roles:
@@ -78,12 +90,9 @@ class User(ndb.Model):
   def DeleteUser(self):
     User.GetSearchIndex().delete(str(self.key.id()))
     self.key.delete()
- 
 
-class UserLocationUpdate(ndb.Model):
-  city = ndb.StringProperty()
-  state = ndb.KeyProperty(kind=State)
 
-  update_time = ndb.DateTimeProperty()
-  user = ndb.KeyProperty(kind=User)
-  updater = ndb.KeyProperty(kind=User)
+UserLocationUpdate.updater = ndb.KeyProperty(kind=User)
+# TODO: delete this field post-migration.
+UserLocationUpdate.user = ndb.KeyProperty(kind=User)
+UserLocationUpdate._fix_up_properties()

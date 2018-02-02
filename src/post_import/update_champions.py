@@ -11,7 +11,6 @@ from src.models.eligibility import RegionalChampionshipEligibility
 from src.models.eligibility import StateChampionshipEligibility
 from src.models.state import State
 from src.models.user import User
-from src.models.user import UserLocationUpdate
 from src.models.wca.country import Country
 from src.models.wca.event import Event
 from src.models.wca.result import Result
@@ -53,17 +52,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
   # Here we don't know the competition timezone, so use 9:00 AM in New York.
   # TODO: can we figure out what time zone a competition is being held in?
   location_update_deadline = (datetime.datetime.combine(
-      competition.start_date, datetime.time(9, 0, 0))
-      .replace(tzinfo=pytz.timezone('America/New_York')))
-
-  person_states = {}
-  for update in (UserLocationUpdate.query(
-                      ndb.AND(UserLocationUpdate.user.IN(user_keys),
-                              UserLocationUpdate.update_time <
-                              location_update_deadline))
-                     .order(UserLocationUpdate.update_time)
-                     .iter()):
-    person_states[update.user.id()] = update.state
+      competition.start_date, datetime.time(9, 0, 0)))
 
   eligible_competitors = set()
   eligibilities = []
@@ -77,7 +66,11 @@ def ComputeEligibleCompetitors(championship, competition, results):
         eligible_competitors.add(user.wca_person.id())
     # Next, check if the person has a state, and that state is eligible to win
     # this championship.
-    if user.key.id() in person_states and person_states[user.key.id()] in valid_state_keys:
+    state = None
+    for update in user.updates:
+      if update.update_time < location_update_deadline:
+        state = update.state
+    if state and state in valid_state_keys:
       eligible_competitors.add(user.wca_person.id())
       eligibility_id = eligibility_class.Id(user.key.id(), competition.year)
       eligibility = (eligibility_class.get_by_id(eligibility_id) or
