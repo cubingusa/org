@@ -73,13 +73,16 @@ class ChampionshipPsychHandler(BaseHandler):
     return True
 
 
+NO_TIME = 999999999
+
+
 class CompetitorInfo(object):
   def __init__(self, competitor):
     self.competitor = competitor
     self.user_id = competitor.user.id()
     if competitor.wca_person:
       self.wca_id = competitor.wca_person.id()
-    self.best = 999999999
+    self.best = NO_TIME
     self.state_key = None
     self.eligibility = None
 
@@ -166,4 +169,5 @@ class ChampionshipPsychAsyncHandler(BaseHandler):
         'eligible_competitors': eligible_competitors,
         'ineligible_competitors': ineligible_competitors,
         'is_average': 'bf' not in event_id,
+        'NO_TIME': NO_TIME,
     }))

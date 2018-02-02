@@ -15,37 +15,43 @@
           {{ competitor.competitor.name }}
         {% endif %}
         {% if competitor.state_key %}
-          ({{ competitor.state_key.id() }})
+          ({{ competitor.state_key.id().upper() }})
         {% else %}
           (no state set)
         {% endif %}
       </div>
       <div class="time-col">
-        {{ c.formatters.FormatTime(competitor.best, event.key, is_average) }}
+        {% if competitor.best == NO_TIME %}
+          &mdash;
+        {% else %}
+          {{ c.formatters.FormatTime(competitor.best, event.key, is_average) }}
+        {% endif %}
       </div>
     </div>
   </div>
 {% endmacro %}
 
-{% set last_time = 0 %}
-{% set rank = 0 %}
-<h3>Eligible Competitors</h3>
-{% for competitor in eligible_competitors %}
-  {% if competitor.best.best != last_time %}
-    {% set rank = loop.index %}
-    {% set last_time = competitor.best.best %}
-  {% endif %}
-  {{ ranking_row(competitor, rank) }}
-{% endfor %}
+<p>
+  {% set ns = namespace(last_time=0, rank=0) %}
+  <h3>Competitors Eligible for Titles</h3>
+  {% for competitor in eligible_competitors %}
+    {% if competitor.best != ns.last_time %}
+      {% set ns.rank = loop.index %}
+      {% set ns.last_time = competitor.best %}
+    {% endif %}
+    {{ ranking_row(competitor, ns.rank) }}
+  {% endfor %}
+</p>
 
-{% set last_time = 0 %}
-{% set rank = 0 %}
-<h3>Ineligible Competitors</h3>
-{% for competitor in ineligible_competitors %}
-  {% if competitor.best.best != last_time %}
-    {% set rank = loop.index %}
-    {% set last_time = competitor.best.best %}
-  {% endif %}
-  {{ ranking_row(competitor, rank) }}
-{% endfor %}
-{% endautoescape %}
+<p>
+  {% set ns = namespace(last_time=0, rank=0) %}
+  <h3>Competitors Ineligible for Titles</h3>
+  {% for competitor in ineligible_competitors %}
+    {% if competitor.best != ns.last_time %}
+      {% set ns.rank = loop.index %}
+      {% set ns.last_time = competitor.best %}
+    {% endif %}
+    {{ ranking_row(competitor, ns.rank) }}
+  {% endfor %}
+  {% endautoescape %}
+</p>
