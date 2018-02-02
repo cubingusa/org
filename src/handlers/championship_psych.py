@@ -115,22 +115,22 @@ class ChampionshipPsychAsyncHandler(BaseHandler):
     residency_deadline = championship.residency_deadline or datetime.datetime.now()
     # First look up residency for accounts keyed by person WCA id.
     user_wca_id_keys = [ndb.Key(User, wca_person.id()) for wca_person in wca_person_keys]
-    for update in (UserLocationUpdate.query(
-                        ndb.AND(UserLocationUpdate.user.IN(user_wca_id_keys),
-                                UserLocationUpdate.update_time < residency_deadline))
-                       .order(UserLocationUpdate.update_time)
-                       .iter()):
-      competitors_by_wca_id[update.user.id()].state_key = update.state
+    for user in ndb.get_multi(user_wca_id_keys):
+      if not user:
+        continue
+      for update in user.updates or []:
+        if update.update_time < residency_deadline:
+          competitors_by_wca_id[user.key.id()].state_key = update.state
 
     # Next look up residency for accounts keyed by user id.
     # We do this second to override accounts keyed by WCA ID, since user ID
     # updates are newer.
-    for update in (UserLocationUpdate.query(
-                        ndb.AND(UserLocationUpdate.user.IN(user_keys),
-                                UserLocationUpdate.update_time < residency_deadline))
-                       .order(UserLocationUpdate.update_time)
-                       .iter()):
-      competitors_by_user_id[update.user.id()].state_key = update.state
+    for user in ndb.get_multi(user_keys):
+      if not user:
+        continue
+      for update in user.updates or []:
+        if update.update_time < residency_deadline:
+          competitors_by_user_id[user.key.id()].state_key = update.state
     logging.info('got locations')
 
     # Next, look up eligibilities that have already been used for this year.
