@@ -33,6 +33,7 @@ class ChampionshipPsychHandler(BaseHandler):
           'error': 'Sorry!  We don\'t know about that championship yet.',
       }))
       return
+    competition = championship.competition.get()
 
     event_keys = set()
     # This query is ugly because we have two separate representations of
@@ -44,8 +45,11 @@ class ChampionshipPsychHandler(BaseHandler):
       for event in competitor.registered_events:
         event_keys.add(event)
     events = sorted(ndb.get_multi(event_keys), key=lambda e: e.rank)
-    deadline = timezones.ToLocalizedTime(championship.residency_deadline,
-                                         championship.residency_timezone)
+    deadline_without_timezone = (championship.residency_deadline or
+                                 datetime.datetime.combine(competition.start_date,
+                                                           datetime.time(0, 0, 0)))
+    deadline = timezones.ToLocalizedTime(deadline_without_timezone,
+                                         championship.residency_timezone or 'America/Los_Angeles')
 
     states = ndb.get_multi(championship.GetEligibleStateKeys())
     if championship.region:
@@ -60,13 +64,13 @@ class ChampionshipPsychHandler(BaseHandler):
     self.response.write(template.render({
         'c': common.Common(self),
         'championship': championship,
-        'competition': championship.competition.get(),
+        'competition': competition,
         'championship_title': championship_title,
         'championship_id': championship_id,
         'state_list': state_list,
         'events': events,
         'deadline': deadline,
-        'deadline_passed': championship.residency_deadline < datetime.datetime.now(),
+        'deadline_passed': deadline_without_timezone < datetime.datetime.now(),
     }))
 
   def IncludeWcaDisclaimer(self):
