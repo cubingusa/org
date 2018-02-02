@@ -64,7 +64,7 @@ class ChampionshipPsychHandler(BaseHandler):
     self.response.write(template.render({
         'c': common.Common(self),
         'championship': championship,
-        'competition': championship.competition.get(),
+        'competition': competition,
         'championship_title': championship_title,
         'championship_id': championship_id,
         'state_list': state_list,
