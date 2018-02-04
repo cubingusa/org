@@ -34,17 +34,30 @@
           {% for championship in championships %}
             {% set competition = championship.competition.get() %}
             <li class="list-group-item">
-              <span class="competition-date-range">
-                {% autoescape False %}
-                  {{ c.format_date_range(competition.start_date, competition.end_date,
-                                         include_year=False) }}:
-                {% endautoescape %}
-              </span>
-              <a class="competition-name"
-                 href="{{ competition.GetWCALink() }}">
-                {{ competition.name }}
-              </a>
-              in {{ competition.city_name }}, {{ competition.state.get().name }}
+              <div class="row">
+                <div class="competition-name-col">
+                  <a href="{{ competition.GetWCALink() }}">
+                    {{ competition.name }}
+                  </a>
+                </div>
+                <div class="competition-location-col">
+                  <i class="fa fa-map-marker" aria-hidden="true"></i>
+                  {{ competition.city_name }}, {{ competition.state.get().name }}
+                </div>
+                <div class="competition-date-col">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  {% autoescape False %}
+                    {{ c.format_date_range(competition.start_date, competition.end_date,
+                                           include_year=False, full_months=True) }}
+                  {% endautoescape %}
+                </div>
+                <div class="competition-psych-sheet-col">
+                  <a href={{ c.uri_for('regional_psych', region_or_state=championship.region.id(),
+                                       year=championship.year) }}>
+                    <i class="fa fa-users" aria-hidden="true"></i> Psych Sheet
+                  </a>
+                </div>
+              </div>
             </li>
           {% endfor %}
           {% for region in regions_missing_championships %}

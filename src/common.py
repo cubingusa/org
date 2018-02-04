@@ -31,16 +31,17 @@ class Common(object):
   def wca_profile(self, wca_id):
     return 'https://www.worldcubeassociation.org/persons/%s' % wca_id
 
-  def format_date_range(self, start_date, end_date, include_year=True):
+  def format_date_range(self, start_date, end_date, include_year=True, full_months=False):
     year_chunk = ', %d' % start_date.year if include_year else ''
+    month_format = lambda date: date.strftime('%B' if full_months else '%b')
     if start_date == end_date:
-      return '%s %d%s' % (start_date.strftime('%b'), start_date.day, year_chunk)
+      return '%s %d%s' % (month_format(start_date), start_date.day, year_chunk)
     elif start_date.month == end_date.month:
-      return '%s %d &ndash; %d%s' % (start_date.strftime('%b'), start_date.day,
+      return '%s %d &ndash; %d%s' % (month_format(start_date), start_date.day,
                                      end_date.day, year_chunk)
     else:
-      return '%s %d &ndash; %s %d%s' % (start_date.strftime('%b'), start_date.day,
-                                        end_date.strftime('%b'), end_date.day,
+      return '%s %d &ndash; %s %d%s' % (month_format(start_date), start_date.day,
+                                        month_format(end_date), end_date.day,
                                         year_chunk)
 
   def sort_events(self, events):
