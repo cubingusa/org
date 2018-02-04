@@ -15,6 +15,18 @@
   }
 }
 
+.desktop-only {
+  @include media-breakpoint-down(xs) {
+    display: none;
+  }
+}
+
+.mobile-only {
+  @include media-breakpoint-up(sm) {
+    display: none;
+  }
+}
+
 .missing-region {
   color: $gray-600;
   font-style: italic;
