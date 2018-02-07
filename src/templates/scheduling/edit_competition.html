@@ -33,8 +33,10 @@
                    id="residency-deadline"
                    value="{{ residency_deadline.strftime('%Y-%m-%d') }}"
                    required>
-            <span class="input-group-addon">
-              <span class="fa fa-calendar"></span>
+            <span class="input-group-append">
+              <span class="input-group-text">
+                <span class="fa fa-calendar"></span>
+              </span>
             </span>
           </div>
         </div>
@@ -50,8 +52,10 @@
                    value="{{ competition.GetStaffSignupDeadline().strftime('%Y-%m-%d') }}"
                  {% endif %}
                  >
-          <span class="input-group-addon">
-            <span class="fa fa-calendar"></span>
+          <span class="input-group-append">
+            <span class="input-group-text">
+              <span class="fa fa-calendar"></span>
+            </span>
           </span>
         </div>
       </div>

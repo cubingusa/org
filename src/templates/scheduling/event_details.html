@@ -55,10 +55,14 @@
                    value="{{ time_block.GetStartTime().strftime('%I:%M %p') }}"
                  {% endif %}
                  required>
-          <span class="input-group-addon">
-            <span class="fa fa-clock-o"></span>
+          <span class="input-group-append">
+            <span class="input-group-text">
+              <span class="fa fa-clock-o"></span>
+            </span>
           </span>
-          <span class="input-group-addon">to</span>
+          <span class="input-group-append">
+            <span class="input-group-text">to</span>
+          </span>
           <input type="text"
                  class="input-sm form-control"
                  name="end-time"
@@ -67,8 +71,10 @@
                    value="{{ time_block.GetEndTime().strftime('%I:%M %p') }}"
                  {% endif %}
                  required>
-          <span class="input-group-addon">
-            <span class="fa fa-clock-o"></span>
+          <span class="input-group-append">
+            <span class="input-group-text">
+              <span class="fa fa-clock-o"></span>
+            </span>
           </span>
         </div>
       </div>
@@ -82,7 +88,7 @@
                  {% endif %}
                  >
           <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">Staff-Only</span>
+          <span class="custom-control-label">Staff-Only</span>
         </label>
       </div>
       <div class="submit-container">

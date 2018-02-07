@@ -10,7 +10,7 @@
   <div id="schedule-id"
        data-schedule="{{ schedule.key.id() }}"></div>
   <div class="container">
-    <h1>{{ competition.key.id() }}</h1>
+    <h1>{{ competition.name }}</h1>
     {% if schedule.is_live %}
       <div class="alert alert-danger">
         <b>Warning!</b>  Schedule {{ schedule.key.id() }} is live.  Any edits you make will immediately become visible.  <a href="{{ c.uri_for('set_live', schedule_version=schedule.key.id(), set_live=0) }}"><b>Set schedule hidden!</b></a>
@@ -32,10 +32,16 @@
                  value="{{ schedule.start_date.strftime('%Y-%m-%d') }}"
                {% endif %}
                >
-        <span class="input-group-addon">
-          <span class="fa fa-calendar"></span>
+        <span class="input-group-append">
+          <span class="input-group-text">
+            <span class="fa fa-calendar"></span>
+          </span>
         </span>
-        <span class="input-group-addon">to</span>
+        <span class="input-group-append">
+          <span class="input-group-text">
+            to
+          </span>
+        </span>
         <input type="text"
                class="input-sm form-control"
                name="end-date"
@@ -44,8 +50,10 @@
                  value="{{ schedule.end_date.strftime('%Y-%m-%d') }}"
                {% endif %}
                >
-        <span class="input-group-addon">
-          <span class="fa fa-calendar"></span>
+        <span class="input-group-append">
+          <span class="input-group-text">
+            <span class="fa fa-calendar"></span>
+          </span>
         </span>
       </div>
       <small class="form-text text-muted">
