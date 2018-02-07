@@ -137,6 +137,42 @@
       </div>
     </div>
     {{ time_block_edit(new_ids[round.key], None, round) }}
+    <form class="groups-form form-inline" data-roundid="{{ round.key.id() }}">
+      <div class="groups-input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Total Groups</div>
+        </div>
+        <input type="number"
+               class="form-control"
+               name="total-groups"
+               {% if round.total_groups %}
+                 value="{{ round.total_groups }}"
+               {% else %}
+                 value="0"
+               {% endif %}
+               min="0">
+      </div>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Staff Groups</div>
+        </div>
+        <input type="number"
+               class="input-sm form-control"
+               name="staff-groups"
+               {% if round.staff_groups %}
+                 value="{{ round.staff_groups }}"
+               {% else %}
+                 value="0"
+               {% endif %}
+               min="0">
+      </div>
+      <div class="submit-container">
+        <button class="btn btn-primary"
+                type="submit">
+          Save
+        </button>
+      </div>
+    </form>
   </div>
 {% endfor %}
 
