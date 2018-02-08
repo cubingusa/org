@@ -107,6 +107,17 @@ var editScheduleModule = (function() {
       });
     },
 
+    deleteTimeBlock: function(timeblock) {
+      var req = new XMLHttpRequest();
+      req.open('POST', '/scheduling/async/delete_time_block/' + scheduleId + '/' + timeblock);
+      req.addEventListener('load', function() {
+        document.getElementById('event-info').innerHTML = req.responseText;
+        addTimeRanges();
+        editScheduleModule.addListeners();
+      });
+      req.send();
+    },
+
     setGroups: function(e) {
       return asyncFormSubmit(e, '/scheduling/async/set_group_counts/' + scheduleId,
                              function(formElt, req) {
@@ -174,6 +185,11 @@ var editScheduleModule = (function() {
       Array.prototype.forEach.call(document.getElementsByClassName('data-source'), function(elt) {
         elt.onclick = function(evt) {
           document.getElementById('custom-uri').required = (elt.value === 'custom');
+        };
+      });
+      Array.prototype.forEach.call(document.getElementsByClassName('delete-timeblock-link'), function(elt) {
+        elt.onclick = function(evt) {
+          editScheduleModule.deleteTimeBlock(elt.dataset.timeblock);
         };
       });
     },

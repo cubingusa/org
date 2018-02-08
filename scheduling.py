@@ -4,6 +4,7 @@ from src import config
 from src.handlers.basic import BasicHandler
 from src.handlers.scheduling.async.add_stage import AddStageHandler
 from src.handlers.scheduling.async.add_time_block import AddTimeBlockHandler
+from src.handlers.scheduling.async.delete_time_block import DeleteTimeBlockHandler
 from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.async.set_dates import SetDatesHandler
 from src.handlers.scheduling.async.set_group_counts import SetGroupCountsHandler
@@ -60,6 +61,8 @@ app = webapp2.WSGIApplication([
                 handler=AddStageHandler),
   webapp2.Route('/scheduling/async/add_time_block/<schedule_version:.*>',
                 handler=AddTimeBlockHandler),
+  webapp2.Route('/scheduling/async/delete_time_block/<schedule_version:.*>/<time_block_id:.*>',
+                handler=DeleteTimeBlockHandler),
   webapp2.Route('/scheduling/async/get_event_details/<schedule_version:.*>/<event_id:.*>',
                 handler=EventDetailsHandler,
                 name='event_details'),
