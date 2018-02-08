@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
 
 from src import timezones
+from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.stage import ScheduleStage
@@ -36,6 +37,5 @@ class AddTimeBlockHandler(SchedulingBaseHandler):
       time_block.staff_only = False
     time_block.put()
 
-    self.redirect_to('event_details', schedule_version=schedule_version,
-                     event_id=time_block.round.get().event.id(),
-                     include_time_block=time_block_id)
+    self.response.write(EventDetailsHandler.GetImpl(
+                            self, self.schedule, time_block.round.get().event.get()))

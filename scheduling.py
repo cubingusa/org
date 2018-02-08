@@ -6,6 +6,7 @@ from src.handlers.scheduling.async.add_stage import AddStageHandler
 from src.handlers.scheduling.async.add_time_block import AddTimeBlockHandler
 from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.async.set_dates import SetDatesHandler
+from src.handlers.scheduling.async.set_group_counts import SetGroupCountsHandler
 from src.handlers.scheduling.import_data import ConfirmDeletionHandler
 from src.handlers.scheduling.import_data import ImportDataHandler
 from src.handlers.scheduling.import_data import WcaImportDataHandler
@@ -62,6 +63,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/async/get_event_details/<schedule_version:.*>/<event_id:.*>',
                 handler=EventDetailsHandler,
                 name='event_details'),
+  webapp2.Route('/scheduling/async/set_group_counts/<schedule_version:.*>',
+                handler=SetGroupCountsHandler),
   webapp2.Route('/scheduling/<competition_id:.*>/staff_signup/<user_id:.*>',
                 handler=StaffSignupHandler,
                 name='staff_signup_with_user'),

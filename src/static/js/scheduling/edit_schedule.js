@@ -107,6 +107,16 @@ var editScheduleModule = (function() {
       });
     },
 
+    setGroups: function(e) {
+      return asyncFormSubmit(e, '/scheduling/async/set_group_counts/' + scheduleId,
+                             function(formElt, req) {
+        var prnt = formElt.parentNode.parentNode;
+        prnt.innerHTML = req.responseText;
+        editScheduleModule.addListeners();
+        addTimeRanges();
+      });
+    },
+
     expandEdit: function(e) {
       var clickedElement = e.target;
       var rowToExpand = document.getElementById('edit-row-' + clickedElement.dataset.editid);
@@ -154,6 +164,9 @@ var editScheduleModule = (function() {
       });
       Array.prototype.forEach.call(document.getElementsByClassName('time-block-form'), function(elt) {
         elt.onsubmit = editScheduleModule.addTimeBlock;
+      });
+      Array.prototype.forEach.call(document.getElementsByClassName('groups-form'), function(elt) {
+        elt.onsubmit = editScheduleModule.setGroups;
       });
       Array.prototype.forEach.call(document.getElementsByClassName('edit-link'), function(elt) {
         elt.onclick = editScheduleModule.expandEdit;

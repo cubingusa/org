@@ -1,5 +1,5 @@
 {% macro time_block_edit(time_block_id, time_block, round) %}
-  <form class="form-inline d-none"
+  <form class="time-block-form form-inline d-none"
         id="edit-row-{{ time_block_id }}"
         data-timeblock="{{ time_block_id }}">
     <input type="hidden" name="id" value="{{ time_block_id }}">
@@ -140,15 +140,16 @@
     </div>
     {{ time_block_edit(new_ids[round.key], None, round) }}
     <form class="groups-form form-inline" data-roundid="{{ round.key.id() }}">
+      <input type="hidden" name="round-id" value="{{ round.key.id() }}">
       <div class="groups-input-group">
         <div class="input-group-prepend">
           <div class="input-group-text">Total Groups</div>
         </div>
         <input type="number"
                class="form-control"
-               name="total-groups"
-               {% if round.total_groups %}
-                 value="{{ round.total_groups }}"
+               name="num-groups"
+               {% if round.num_groups %}
+                 value="{{ round.num_groups }}"
                {% else %}
                  value="0"
                {% endif %}
@@ -160,9 +161,9 @@
         </div>
         <input type="number"
                class="input-sm form-control"
-               name="staff-groups"
-               {% if round.staff_groups %}
-                 value="{{ round.staff_groups }}"
+               name="num-staff-groups"
+               {% if round.num_staff_groups %}
+                 value="{{ round.num_staff_groups }}"
                {% else %}
                  value="0"
                {% endif %}
