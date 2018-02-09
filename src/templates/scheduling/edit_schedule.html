@@ -76,10 +76,23 @@
         <small class="form-text form-muted">
           To add or modify events or rounds, you can modify this data on the WCA Website and import below.
         </small>
+        <p>
+          <a href="{{ c.uri_for('create_groups', schedule_version=schedule.key.id()) }}">
+            Create Groups
+          </a>
+        </p>
       </div>
       <hr>
       <h3>Links</h3>
       <ul>
+        <li>
+          <a href="{{ c.uri_for('groups_display_with_version',
+                                competition_id=competition.key.id(),
+                                schedule_version=schedule.key.id()) }}"
+             target="_blank">
+            Group List
+          </a>
+        </li>
         <li>
           <a href="{{ c.uri_for('event_display_with_version',
                                 competition_id=competition.key.id(),
