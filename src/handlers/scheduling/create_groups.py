@@ -1,5 +1,6 @@
 import collections
 import datetime
+import random
 import webapp2
 
 from google.appengine.ext import ndb
@@ -55,7 +56,7 @@ def CreateGroups(schedule, time_blocks, r, count_by_stage, num_to_create):
     exact_group_length_seconds = int((t.end_time - t.start_time).total_seconds() / num)
     for i in range(num):
       rounded_offset = int((exact_group_length_seconds * i) / 300) * 300
-      group = ScheduleGroup()
+      group = ScheduleGroup(id='%s_%d' % (r.key.id(), random.randint(2 ** 4, 2 ** 32)))
       group.time_block = t.key
       count_by_stage[stage] += 1
       group.number = count_by_stage[stage]
@@ -95,6 +96,7 @@ class CreateGroupsHandler(SchedulingBaseHandler):
       round_groups = CreateGroups(self.schedule, time_blocks_by_staff_only[False],
                                   r, num_by_stage, r.num_groups - (r.num_staff_groups or 0))
       if time_blocks_by_staff_only[True]:
+        num_by_stage = collections.defaultdict(lambda: 0)
         round_groups.extend(CreateGroups(self.schedule, time_blocks_by_staff_only[True],
                                          r, num_by_stage, r.num_staff_groups))
       groups_to_put.extend(round_groups)
