@@ -33,12 +33,16 @@ def ScheduleToWcif(schedule, competition, wca_competition):
   all_rounds = ScheduleRound.query(ScheduleRound.schedule == schedule.key).fetch()
 
   time_blocks_by_stage = collections.defaultdict(list)
-  for t in ScheduleTimeBlock.query(ScheduleTimeBlock.schedule == schedule.key).iter():
+  for t in (ScheduleTimeBlock.query(ScheduleTimeBlock.schedule == schedule.key)
+                             .order(ScheduleTimeBlock.start_time)
+                             .iter()):
     time_blocks_by_stage[t.stage.id()].append(t)
 
   groups_by_stage_and_time_block = (
       collections.defaultdict(lambda: collections.defaultdict(list)))
-  for g in ScheduleGroup.query(ScheduleGroup.schedule == schedule.key).iter():
+  for g in (ScheduleGroup.query(ScheduleGroup.schedule == schedule.key)
+                         .order(ScheduleGroup.start_time)
+                         .iter()):
     groups_by_stage_and_time_block[g.stage.id()][g.time_block.id()].append(g)
 
   venue_dict['rooms'] = []
