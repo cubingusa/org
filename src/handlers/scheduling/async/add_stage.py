@@ -43,7 +43,7 @@ class AddStageHandler(SchedulingBaseHandler):
                   .query(ScheduleRound.schedule == self.schedule.key)
                   .order(ScheduleRound.number)
                   .fetch())
-    if is_new_stage:
+    if is_new_stage and stage.key not in [s.key for s in stages]:
       stages.append(stage)
     self.response.write(template.render({
         'c': common.Common(self),

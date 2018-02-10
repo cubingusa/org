@@ -1,5 +1,5 @@
 {% macro stage_edit(stage_id, name, colors, stage_color, timers) %}
-  <form class="form-inline d-none"
+  <form class="form-inline d-none stage-form"
         id="edit-row-{{ stage_id }}"
         data-stageid="{{ stage_id }}">
     <input type="hidden" name="id" value="{{ stage_id }}">
