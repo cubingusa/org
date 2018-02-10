@@ -1,97 +1,99 @@
 {% macro time_block_edit(time_block_id, time_block, round) %}
-  <form class="time-block-form" data-timeblock="{{ time_block_id }}">
-    <div class="time-block-edit-row d-none" id="edit-row-{{ time_block_id }}">
-      <input type="hidden" name="id" value="{{ time_block_id }}">
-      <input type="hidden" name="round" value="{{ round.key.id() }}">
-      <div class="stage-selector-container">
-        {% if time_block %}
-          {% set color = time_block.stage.get().color %}
-        {% elif stages %}
-          {% set color = stages[0].color %}
-        {% else %}
-          {% set color = 'white' %}
-        {% endif %}
-        <span class="stage-chip background-{{ color }}"
-              id="stage-chip-{{ time_block_id }}"
-              data-color="{{ color }}"></span>
-        <select name="stage"
-                class="custom-select color-selector"
-                data-chipid="{{ time_block_id }}">
-          {% for stage in stages %}
-            <option class="background-{{ stage.color }}"
-                    data-color="{{ stage.color }}"
-                    value="{{ stage.key.id() }}"
-                    {% if time_block and time_block.stage == stage.key %}
-                      selected
-                    {% endif %}
-                    >
-              {{ stage.name }}
-            </option>
-          {% endfor %}
-        </select>
+  <form class="time-block-form form-inline d-none"
+        id="edit-row-{{ time_block_id }}"
+        data-timeblock="{{ time_block_id }}">
+    <input type="hidden" name="id" value="{{ time_block_id }}">
+    <input type="hidden" name="round" value="{{ round.key.id() }}">
+    <div class="input-group">
+      {% if time_block %}
+        {% set color = time_block.stage.get().color %}
+      {% elif stages %}
+        {% set color = stages[0].color %}
+      {% else %}
+        {% set color = 'white' %}
+      {% endif %}
+      <div class="input-group-prepend">
+        <div class="stage-chip-large background-{{ color }} input-group-text"
+             id="stage-chip-{{ time_block_id }}"
+             data-color="{{ color }}"></div>
       </div>
-      <div class="day-container">
-        <select name="day"
-                class="custom-select">
-          {% for day in competition_days %}
-            <option value="{{ day.strftime('%Y-%m-%d') }}"
-                    {% if time_block and time_block.GetStartTime().date() == day %}
-                      selected
-                    {% endif %}
-                    >
-              {{ day.strftime('%A') }}
-            </option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="time-range-container">
-        <div class="input-timerange input-group"
-             data-timeblock="{{ time_block_id }}">
-          <input type="text"
-                 class="input-sm form-control"
-                 name="start-time"
-                 id="start-time-{{ time_block_id }}"
-                 {% if time_block and time_block.start_time %}
-                   value="{{ time_block.GetStartTime().strftime('%I:%M %p') }}"
-                 {% endif %}
-                 required>
-          <span class="input-group-addon">
-            <span class="fa fa-clock-o"></span>
-          </span>
-          <span class="input-group-addon">to</span>
-          <input type="text"
-                 class="input-sm form-control"
-                 name="end-time"
-                 id="end-time-{{ time_block_id }}"
-                 {% if time_block and time_block.end_time %}
-                   value="{{ time_block.GetEndTime().strftime('%I:%M %p') }}"
-                 {% endif %}
-                 required>
-          <span class="input-group-addon">
-            <span class="fa fa-clock-o"></span>
-          </span>
-        </div>
-      </div>
-      <div class="details-container">
-        <label class="custom-control custom-checkbox">
-          <input type="checkbox"
-                 class="custom-control-input"
-                 name="staff-only"
-                 {% if time_block and time_block.staff_only %}
-                   checked
-                 {% endif %}
-                 >
-          <span class="custom-control-indicator"></span>
-          <span class="custom-control-description">Staff-Only</span>
-        </label>
-      </div>
-      <div class="submit-container">
-        <button class="btn btn-primary"
-                type="submit">
-          Save
-        </button>
-      </div>
+      <select name="stage"
+              class="custom-select color-selector"
+              data-chipid="{{ time_block_id }}"
+              style="width: 100px;">
+        {% for stage in stages %}
+          <option class="background-{{ stage.color }}"
+                  data-color="{{ stage.color }}"
+                  value="{{ stage.key.id() }}"
+                  {% if time_block and time_block.stage == stage.key %}
+                    selected
+                  {% endif %}
+                  >
+            {{ stage.name }}
+          </option>
+        {% endfor %}
+      </select>
     </div>
+    <div class="input-group">
+      <select name="day"
+              class="custom-select">
+        {% for day in competition_days %}
+          <option value="{{ day.strftime('%Y-%m-%d') }}"
+                  {% if time_block and time_block.GetStartTime().date() == day %}
+                    selected
+                  {% endif %}
+                  >
+            {{ day.strftime('%A') }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="input-timerange input-group"
+         data-timeblock="{{ time_block_id }}">
+      <input type="text"
+             class="input-sm form-control"
+             name="start-time"
+             id="start-time-{{ time_block_id }}"
+             {% if time_block and time_block.start_time %}
+               value="{{ time_block.GetStartTime().strftime('%I:%M %p') }}"
+             {% endif %}
+             required>
+      <span class="input-group-append">
+        <span class="input-group-text">
+          <span class="fa fa-clock-o"></span>
+        </span>
+      </span>
+      <span class="input-group-append">
+        <span class="input-group-text">to</span>
+      </span>
+      <input type="text"
+             class="input-sm form-control"
+             name="end-time"
+             id="end-time-{{ time_block_id }}"
+             {% if time_block and time_block.end_time %}
+               value="{{ time_block.GetEndTime().strftime('%I:%M %p') }}"
+             {% endif %}
+             required>
+      <span class="input-group-append">
+        <span class="input-group-text">
+          <span class="fa fa-clock-o"></span>
+        </span>
+      </span>
+    </div>
+    <div class="form-check">
+      <input type="checkbox"
+             class="form-check-input"
+             name="staff-only"
+             {% if time_block and time_block.staff_only %}
+               checked
+             {% endif %}
+             >
+      <label class="form-check-label">Staff-Only</span>
+    </div>
+    <button class="btn btn-primary"
+            type="submit">
+      Save
+    </button>
   </form>
 {% endmacro %}
 {% autoescape true %}
@@ -137,6 +139,43 @@
       </div>
     </div>
     {{ time_block_edit(new_ids[round.key], None, round) }}
+    <form class="groups-form form-inline" data-roundid="{{ round.key.id() }}">
+      <input type="hidden" name="round-id" value="{{ round.key.id() }}">
+      <div class="groups-input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Total Groups</div>
+        </div>
+        <input type="number"
+               class="form-control"
+               name="num-groups"
+               {% if round.num_groups %}
+                 value="{{ round.num_groups }}"
+               {% else %}
+                 value="0"
+               {% endif %}
+               min="0">
+      </div>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Staff Groups</div>
+        </div>
+        <input type="number"
+               class="input-sm form-control"
+               name="num-staff-groups"
+               {% if round.num_staff_groups %}
+                 value="{{ round.num_staff_groups }}"
+               {% else %}
+                 value="0"
+               {% endif %}
+               min="0">
+      </div>
+      <div class="submit-container">
+        <button class="btn btn-primary"
+                type="submit">
+          Save
+        </button>
+      </div>
+    </form>
   </div>
 {% endfor %}
 

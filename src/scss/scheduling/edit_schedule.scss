@@ -7,10 +7,6 @@
   padding-bottom: 10px;
 }
 
-.stage-row {
-  padding: 2px;
-}
-
 .stage-chip {
   border: 1px solid black;
   border-radius: 2px;
@@ -19,51 +15,67 @@
   display: inline-block;
 }
 
-.stage-edit-row {
-  @include make-row();
-  padding-bottom: 10px;
-
-  .name-container,.color-container,.timers-container,.submit-container {
-    @include make-col-ready();
-    @include media-breakpoint-down(xs) {
-      @include make-col(6);
-    }
-    @include media-breakpoint-up(sm) {
-      @include make-col(3);
-    }
-  }
+.stage-chip-large {
+  @extend .stage-chip;
+  width: 38px;
+  height: 38px;
 }
 
-.submit-container .btn {
-  width: 100%;
+.groups-input-group {
+  @extend .input-group;
+  margin-right: 2px;
 }
 
-.time-block-edit-row {
+.groups-row {
   @include make-row();
-  padding-bottom: 10px;
-
-  .stage-selector-container,.day-container,.details-container,.submit-container {
-    @include make-col-ready();
-    @include media-breakpoint-down(xs) {
-      @include make-col(6);
-    }
-    @include media-breakpoint-up(sm) {
-      @include make-col(2);
-    }
-  }
-
-  .time-range-container {
+  .groups-label-container {
     @include make-col-ready();
     @include media-breakpoint-down(xs) {
       @include make-col(12);
     }
     @include media-breakpoint-up(sm) {
+      @include make-col(1);
+    }
+  }
+  .groups-number-container {
+    @include make-col-ready();
+    @include media-breakpoint-down(xs) {
+      @include make-col(6);
+    }
+    @include media-breakpoint-up(sm) {
       @include make-col(4);
     }
   }
+  .submit-container {
+    @include make-col-ready();
+    @include media-breakpoint-down(xs) {
+      @include make-col(12);
+    }
+    @include media-breakpoint-up(sm) {
+      @include make-col(2);
+    }
+  }
 }
+  
 
 .import-title {
   font-weight: bold;
   font-style: italic;
+}
+
+.round-container {
+  padding-bottom: 10px;
+}
+
+.form-inline {
+  margin-bottom: 20px;
+  @include media-breakpoint-down(xs) {
+    border: 1px solid $gray-400;
+    border-radius: 5px;
+  }
+  .input-group,.form-check {
+    @include media-breakpoint-up(sm) {
+      margin-right: 10px;
+    }
+  }
 }

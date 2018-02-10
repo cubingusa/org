@@ -10,6 +10,7 @@ from src.models.scheduling.time_block import ScheduleTimeBlock
 from src.scheduling.wcif.activity_code import ActivityCode
 from src.scheduling.wcif.extensions import AddExtension
 from src.scheduling.wcif.extensions import GetExtension
+from src.scheduling.wcif.group import GroupToWcif
 
 # Writes a ScheduleTimeBlock in WCIF format.  A TimeBlock corresponds to an
 # Activity in the WCIF spec.
@@ -26,7 +27,7 @@ def TimeBlockToWcif(time_block, groups):
   output_dict['activityCode'] = str(activity_code)
   output_dict['startTime'] = time_block.GetStartTime().isoformat()
   output_dict['endTime'] = time_block.GetEndTime().isoformat()
-  # TODO: pending completion of WCIF discussion, add groups as child activities.
+  output_dict['childActivities'] = [GroupToWcif(group) for group in groups]
 
   extension_dict = {}
   extension_dict['datastoreId'] = time_block.key.id()
@@ -85,5 +86,9 @@ def ImportTimeBlock(activity_data, schedule, stage, out, time_blocks, groups):
 
   if 'staffOnly' in extension:
     time_block.staff_only = extension['staffOnly']
+
+  if 'childActivities' in activity_data:
+    for child_activity in activity_data['childActivities']:
+      ImportData(child_activity, time_block, out, groups)
 
   out.entities_to_put.append(time_block)

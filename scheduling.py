@@ -4,8 +4,11 @@ from src import config
 from src.handlers.basic import BasicHandler
 from src.handlers.scheduling.async.add_stage import AddStageHandler
 from src.handlers.scheduling.async.add_time_block import AddTimeBlockHandler
+from src.handlers.scheduling.async.delete_time_block import DeleteTimeBlockHandler
 from src.handlers.scheduling.async.event_details import EventDetailsHandler
 from src.handlers.scheduling.async.set_dates import SetDatesHandler
+from src.handlers.scheduling.async.set_group_counts import SetGroupCountsHandler
+from src.handlers.scheduling.create_groups import CreateGroupsHandler
 from src.handlers.scheduling.import_data import ConfirmDeletionHandler
 from src.handlers.scheduling.import_data import ImportDataHandler
 from src.handlers.scheduling.import_data import WcaImportDataHandler
@@ -14,6 +17,7 @@ from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
 from src.handlers.scheduling.edit_schedule import EditScheduleHandler
 from src.handlers.scheduling.event_display import EventDisplayHandler
+from src.handlers.scheduling.groups_display import GroupsDisplayHandler
 from src.handlers.scheduling.new_schedule import NewScheduleCallbackHandler
 from src.handlers.scheduling.new_schedule import NewScheduleHandler
 from src.handlers.scheduling.schedule_display import ScheduleDisplayHandler
@@ -53,15 +57,21 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/set_live/<schedule_version:.*>/<set_live:\d>',
                 handler=SetLiveHandler,
                 name='set_live'),
+  webapp2.Route('/scheduling/create_groups/<schedule_version:.*>',
+                handler=CreateGroupsHandler, name='create_groups'),
   webapp2.Route('/scheduling/async/set_schedule_dates/<schedule_version:.*>/<start_date:.*>/<end_date:.*>',
                 handler=SetDatesHandler),
   webapp2.Route('/scheduling/async/add_stage/<schedule_version:.*>',
                 handler=AddStageHandler),
   webapp2.Route('/scheduling/async/add_time_block/<schedule_version:.*>',
                 handler=AddTimeBlockHandler),
+  webapp2.Route('/scheduling/async/delete_time_block/<schedule_version:.*>/<time_block_id:.*>',
+                handler=DeleteTimeBlockHandler),
   webapp2.Route('/scheduling/async/get_event_details/<schedule_version:.*>/<event_id:.*>',
                 handler=EventDetailsHandler,
                 name='event_details'),
+  webapp2.Route('/scheduling/async/set_group_counts/<schedule_version:.*>',
+                handler=SetGroupCountsHandler),
   webapp2.Route('/scheduling/<competition_id:.*>/staff_signup/<user_id:.*>',
                 handler=StaffSignupHandler,
                 name='staff_signup_with_user'),
@@ -80,6 +90,12 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/<competition_id:.*>/schedule',
                 handler=ScheduleDisplayHandler,
                 name='schedule_display'),
+  webapp2.Route('/scheduling/<competition_id:.*>/<schedule_version:.*>/groups',
+                handler=GroupsDisplayHandler,
+                name='groups_display_with_version'),
+  webapp2.Route('/scheduling/<competition_id:.*>/groups',
+                handler=GroupsDisplayHandler,
+                name='groups_display'),
   webapp2.Route('/scheduling/<competition_id:.*>/<schedule_version:.*>/wcif',
                 handler=CompetitionWcifHandler,
                 name='competition_wcif_with_version'),

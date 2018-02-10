@@ -94,6 +94,11 @@ indexes:
   - name: pos
     direction: desc
 
+- kind: ScheduleGroup
+  properties:
+  - name: schedule
+  - name: start_time
+
 - kind: ScheduleRound
   properties:
   - name: event
