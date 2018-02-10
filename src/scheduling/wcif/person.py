@@ -53,7 +53,7 @@ def ImportPerson(person_data, competition, out, people, countries):
   if ((person_data['delegatesCompetition'] or person_data['organizesCompetition']) and
       SchedulePersonRoles.EDITOR not in person.roles):
     person.roles.append(SchedulePersonRoles.EDITOR)
-  if ('registration' in person_data and
+  if ('registration' in person_data and person_data['registration'] and
       person_data['registration']['status'] == 'accepted'):
     person.registered_events = [
         ndb.Key(Event, event_id) for event_id in person_data['registration']['eventIds']]
