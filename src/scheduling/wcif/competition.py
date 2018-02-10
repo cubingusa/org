@@ -28,8 +28,9 @@ def CompetitionToWcif(competition, schedule):
   
   extension_dict = {}
   extension_dict['datastoreId'] = competition.key.id()
-  extension_dict['staffSignupDeadline'] = (
-      competition.staff_signup_deadline.strftime('%Y-%m-%d'))
+  if competition.staff_signup_deadline:
+    extension_dict['staffSignupDeadline'] = (
+        competition.staff_signup_deadline.strftime('%Y-%m-%d'))
   AddExtension('ScheduleCompetition', extension_dict, output_dict)
   
   return output_dict
