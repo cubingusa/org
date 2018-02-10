@@ -20,7 +20,7 @@ class ActivityCode:
     if self.round_id:
       pieces.append('r%d' % self.round_id)
     if self.group:
-      pieces.append('g%d' % self.group)
+      pieces.append('g%s' % self.group)
     if self.attempt:
       pieces.append('a%d' % self.attempt)
     return '-'.join(pieces)
@@ -41,7 +41,7 @@ class ActivityCode:
       elif piece[0] == 'r':
         out.round_id = int(piece[1:])
       elif piece[0] == 'g':
-        out.group = int(piece[1:])
+        out.group = piece[1:]
       elif piece[0] == 'a':
         out.attempt = int(piece[1:])
       else:
