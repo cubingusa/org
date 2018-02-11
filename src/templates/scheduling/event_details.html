@@ -90,6 +90,25 @@
              >
       <label class="form-check-label">Staff-Only</span>
     </div>
+    {% if round.event.id() in ('444bf', '555bf', '333fm', '333mbf') %}
+      <div class="input-group">
+        <span class="input-group-prepend">
+          <span class="input-group-text">
+            Attempt #
+          </span>
+        </span>
+        <input type="number"
+               class="input-sm form-control"
+               size="2"
+               min="0"
+               max="5"
+               name="attempt"
+               {% if time_block and time_block.attempt %}
+                 value="{{ time_block.attempt }}"
+               {% endif %}
+               >
+      </div>
+    {% endif %}
     <button class="btn btn-primary"
             type="submit">
       Save
