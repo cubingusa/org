@@ -14,7 +14,6 @@ def GroupToWcif(group):
   s = group.stage.get()
   r = group.round.get()
   e = r.event.get()
-  print group.key.id()
   output_dict['id'] = int(re.search('(\d+)$', group.key.id()).group(1))
   group_id = '%s%s%d' % (s.name[0], 'S' if group.staff_only else '', group.number)
   output_dict['name'] = '%s %s Group %s' % (
