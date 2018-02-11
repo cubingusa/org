@@ -30,6 +30,8 @@ class AddTimeBlockHandler(SchedulingBaseHandler):
     time_block.end_time = timezones.ToUTCTime(
         self.request.POST['day'] + ' ' + self.request.POST['end-time'],
         '%Y-%m-%d %I:%M %p', self.competition.timezone)
+    if 'attempt' in self.request.POST and self.request.POST['attempt']:
+      time_block.attempt = int(self.request.POST['attempt'])
 
     if 'staff-only' in self.request.POST:
       time_block.staff_only = bool(self.request.POST['staff-only'])
