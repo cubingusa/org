@@ -10,6 +10,8 @@ from src.handlers.oauth import OAuthBaseHandler
 from src.models.user import Roles
 from src.models.user import User
 from src.models.wca.person import Person
+from src.models.wca.rank import RankAverage
+from src.models.wca.rank import RankSingle
 
 class LoginHandler(BaseHandler):
   def get(self):
@@ -39,6 +41,14 @@ class LoginCallbackHandler(OAuthBaseHandler):
     user = User.get_by_id(str(wca_info['id'])) or User(id=str(wca_info['id']))
     if 'wca_id' in wca_info and wca_info['wca_id']:
       user.wca_person = ndb.Key(Person, wca_info['wca_id'])
+      # If the user has a state on their account, we should update this on the
+      # Person and Ranks as wel.
+      if user.state:
+        person = user.wca_person.get()
+        person.state = user.state
+        person.put()
+        for rank_class in (RankSingle, RankAverage):
+          ndb.put_multi(rank_class.query(rank_class.person == person.key).fetch())
     else:
       del user.wca_person
 
