@@ -80,6 +80,8 @@ def ImportTimeBlock(activity_data, schedule, stage, out, time_blocks, groups):
   time_block.schedule = schedule.key
   time_block.round = ndb.Key(ScheduleRound, round_id)
   time_block.stage = stage.key
+  if activity_code.attempt:
+    time_block.attempt = activity_code.attempt
 
   time_block.start_time = timezones.StripTimezone(dateutil.parser.parse(activity_data['startTime']))
   time_block.end_time = timezones.StripTimezone(dateutil.parser.parse(activity_data['endTime']))
