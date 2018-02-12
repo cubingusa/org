@@ -21,7 +21,7 @@ class LoginHandler(BaseHandler):
 
 class LoginCallbackHandler(OAuthBaseHandler):
   def get(self):
-    OAuthBaseHandler.get(self)
+    OAuthBaseHandler.GetTokenFromCode(self)
     if not self.auth_token:
       return
 

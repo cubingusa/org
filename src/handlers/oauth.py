@@ -54,9 +54,9 @@ class OAuthCallbackHandler(BaseHandler):
                   self.request.query_string)
 
 class OAuthBaseHandler(BaseHandler):
-  # Subclasses should first call OAuthBaseHandler.get(self), then check if
-  # self.auth_token is None.  If so, they must return early.
-  def get(self):
+  # Subclasses should first call OAuthBaseHandler.GetFromCode(self), then check
+  # if self.auth_token is None.  If so, they must return early.
+  def GetTokenFromCode(self):
     self.auth_token = None
     code = self.request.get('code')
     if not code:
@@ -83,7 +83,31 @@ class OAuthBaseHandler(BaseHandler):
       self.response.set_status(response.status)
       logging.error('Error from WCA OAuth: ' + response.read())
       return
-    self.auth_token = json.loads(response.read())['access_token']
+    response_json = json.loads(response.read())
+    self.auth_token = response_json['access_token']
+    # The handler may choose to save this for later use.
+    self.refresh_token = response_json['refresh_token']
+
+  # Subclasses may use GetFromRefreshToken instead if they're holding a
+  # RefreshToken.  This fetches an auth token and updates the refresh token.
+  def GetTokenFromRefreshToken(self, refresh_token):
+    post_data = {
+        'grant_type': 'refresh_token',
+        'refresh_token': refresh_token.token,
+        'client_id': GetClientId(app_settings, scope),
+        'client_secret': GetClientSecret(app_settings, scope),
+    }
+    conn = httplib.HTTPSConnection('www.worldcubeassociation.org/oauth/token')
+    conn.request('POST', '', urllib.urlencode(post_data), {})
+    response = conn.getresponse()
+    if response.status != 200:
+      self.response.set_status(response.status)
+      logging.error('Error from WCA OAuth: ' + response.read())
+      return
+    response_json = json.loads(response.read())
+    self.auth_token = response_json['access_token']
+    refresh_token.token = response_json['refresh_token']
+    refresh_token.put()
 
   def GetWcaApi(self, path):
     # OAuth token obtained, now read information about the person.
@@ -92,6 +116,7 @@ class OAuthBaseHandler(BaseHandler):
     conn.request('GET', '', '', headers)
     response = conn.getresponse()
     return response
+
 
 class LogoutHandler(BaseHandler):
   def get(self):

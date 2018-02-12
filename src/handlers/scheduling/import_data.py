@@ -97,7 +97,7 @@ class ImportDataHandler(ImportBaseHandler):
 
 class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
   def get(self):
-    OAuthBaseHandler.get(self)
+    OAuthBaseHandler.GetTokenFromCode(self)
     if not self.auth_token:
       return
 
