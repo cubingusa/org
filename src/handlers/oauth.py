@@ -91,11 +91,12 @@ class OAuthBaseHandler(BaseHandler):
   # Subclasses may use GetFromRefreshToken instead if they're holding a
   # RefreshToken.  This fetches an auth token and updates the refresh token.
   def GetTokenFromRefreshToken(self, refresh_token):
+    app_settings = AppSettings.Get()
     post_data = {
         'grant_type': 'refresh_token',
         'refresh_token': refresh_token.token,
-        'client_id': GetClientId(app_settings, scope),
-        'client_secret': GetClientSecret(app_settings, scope),
+        'client_id': GetClientId(app_settings, refresh_token.scope),
+        'client_secret': GetClientSecret(app_settings, refresh_token.scope),
     }
     conn = httplib.HTTPSConnection('www.worldcubeassociation.org/oauth/token')
     conn.request('POST', '', urllib.urlencode(post_data), {})

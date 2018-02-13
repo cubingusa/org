@@ -1,7 +1,11 @@
-from src.handlers.base import BaseHandler
+import datetime
+import urllib
 
 from src import common
+from src.handlers.base import BaseHandler
+from src.handlers.oauth import OAuthBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
+from src.models.refresh_token import RefreshToken
 from src.models.scheduling.competition import ScheduleCompetition
 from src.models.scheduling.person import SchedulePerson
 from src.models.scheduling.person import SchedulePersonRoles
@@ -16,13 +20,24 @@ class SchedulingBaseHandler(BaseHandler):
     }))
     self.response.status = 500
 
-  def SetCompetition(self, competition_id, edit_access_needed=True, login_required=True):
+  def SetCompetition(self, competition_id,
+                     edit_access_needed=True,
+                     login_required=True,
+                     fail_if_not_found=True):
     self.competition = ScheduleCompetition.get_by_id(competition_id)
     if not self.competition:
-      self.RespondWithError(
-          'Unknown competition %s.  Scheduling may not be enabled for this '
-          'competition.' % competition_id)
-      return False
+      if fail_if_not_found:
+        self.RespondWithError(
+            'Unknown competition %s.  Scheduling may not be enabled for this '
+            'competition.' % competition_id)
+        return False
+      else:
+        self.competition = ScheduleCompetition(id=competition_id)
+        # If we're creating a new competition, then we'll believe that the
+        # user doesn't have edit access.  So we pretend that we don't need edit
+        # access.  The only way that this can succeed is if the user has access
+        # on the WCA page.
+        edit_access_needed = False
 
     if not self.user and login_required:
       self.redirect('/login')
@@ -48,3 +63,37 @@ class SchedulingBaseHandler(BaseHandler):
           'Unknown schedule version %s' % schedule_version)
       return False
     return self.SetCompetition(self.schedule.competition.id())
+
+class SchedulingOAuthBaseHandler(SchedulingBaseHandler, OAuthBaseHandler):
+  # SetCompetition or SetSchedule must first be called if we're going to use a
+  # refresh token.
+  def GetToken(self):
+    self.auth_token = None
+    if self.competition and self.competition.refresh_token:
+      refresh_token = self.competition.refresh_token.get()
+      if refresh_token:
+        # Set the token to expire two weeks after the competition.  We do this
+        # check before GetTokenFromRefreshToken because that method writes the
+        # refresh token.
+        if not refresh_token.expiry_time and self.competition.wca_competition.get():
+          refresh_token.expiry_time = datetime.datetime.combine(
+              self.competition.wca_competition.get().end_date,
+              datetime.time()) + datetime.timedelta(days=14)
+        self.GetTokenFromRefreshToken(refresh_token)
+    elif self.request.get('state'):
+      self.GetTokenFromCode()
+      if self.refresh_token and self.competition:
+        refresh_token = RefreshToken()
+        refresh_token.user = self.user.key
+        refresh_token.token = self.refresh_token
+        refresh_token.creation_time = datetime.datetime.now()
+        refresh_token.scope = 'public email manage_competitions'
+        refresh_token.put()
+        self.competition.refresh_token = refresh_token.key
+        self.competition.put()
+    else:
+      self.redirect('/authenticate?' + urllib.urlencode({
+          'scope': 'public email manage_competitions',
+          'callback': self.request.url,
+      }))
+    return self.auth_token

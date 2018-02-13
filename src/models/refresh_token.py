@@ -11,3 +11,4 @@ class RefreshToken(ndb.Model):
   # The time that this token will no longer be needed, and CubingUSA will
   # delete it rather than continue to refresh it.
   expiry_time = ndb.DateTimeProperty()
+  scope = ndb.StringProperty()
