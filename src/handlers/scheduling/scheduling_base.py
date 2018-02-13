@@ -69,18 +69,21 @@ class SchedulingOAuthBaseHandler(SchedulingBaseHandler, OAuthBaseHandler):
   # refresh token.
   def GetToken(self):
     self.auth_token = None
-    if self.competition and self.competition.refresh_token:
+    if (self.competition and self.competition.refresh_token and
+        self.competition.refresh_token.get()):
       refresh_token = self.competition.refresh_token.get()
-      if refresh_token:
-        # Set the token to expire two weeks after the competition.  We do this
-        # check before GetTokenFromRefreshToken because that method writes the
-        # refresh token.
-        if not refresh_token.expiry_time and self.competition.wca_competition.get():
-          refresh_token.expiry_time = datetime.datetime.combine(
-              self.competition.wca_competition.get().end_date,
-              datetime.time()) + datetime.timedelta(days=14)
-        self.GetTokenFromRefreshToken(refresh_token)
+      # Set the token to expire two weeks after the competition.  We do this
+      # check before GetTokenFromRefreshToken because that method writes the
+      # refresh token.
+      if not refresh_token.expiry_time and self.competition.wca_competition.get():
+        refresh_token.expiry_time = datetime.datetime.combine(
+            self.competition.wca_competition.get().end_date,
+            datetime.time()) + datetime.timedelta(days=14)
+      self.GetTokenFromRefreshToken(refresh_token)
     elif self.request.get('state'):
+      # If we don't have a refresh token, or if it's expired, check the URL for
+      # a &state parameter.  This indicates that the authentication flow has
+      # run.
       self.GetTokenFromCode()
       if self.refresh_token and self.competition:
         refresh_token = RefreshToken(id=self.competition.key.id())
@@ -92,6 +95,9 @@ class SchedulingOAuthBaseHandler(SchedulingBaseHandler, OAuthBaseHandler):
         self.competition.refresh_token = refresh_token.key
         self.competition.put()
     else:
+      # We have no token.  Redirect to /authenticate, which triggers the WCA
+      # OAuth flow.  When it comes back to this URL, we'll have a token in the
+      # state parameter.
       self.redirect('/authenticate?' + urllib.urlencode({
           'scope': 'public email manage_competitions',
           'callback': self.request.url,
