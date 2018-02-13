@@ -67,6 +67,9 @@
         <a href="{{ c.uri_for('update_competition', competition_id=competition.key.id()) }}">
           Update Competitor List
         </a>
+        {% if competition.refresh_token and competition.refresh_token.get() %}
+          (runs automatically every 6 hours)
+        {% endif %}
       </li>
       {% if has_live_schedule %}
         <li>

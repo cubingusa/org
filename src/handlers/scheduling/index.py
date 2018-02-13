@@ -26,7 +26,7 @@ class SchedulingIndexHandler(BaseHandler):
 
 class SchedulingIndexCallbackHandler(OAuthBaseHandler):
   def get(self):
-    OAuthBaseHandler.get(self)
+    OAuthBaseHandler.GetTokenFromCode(self)
     if not self.auth_token:
       return
 

@@ -6,3 +6,9 @@ cron:
  - description: Permanently delete deleted documents
    url: /admin/permanently_delete_documents
    schedule: every 24 hours
+ - description: Regenerate refresh tokens
+   url: /admin/regenerate_refresh_tokens
+   schedule: every 24 hours
+ - description: Reload competitor lists
+   url: /scheduling/admin/update_all_competitions
+   schedule: every 6 hours

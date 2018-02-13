@@ -9,7 +9,7 @@ from google.appengine.ext import ndb
 from src import common
 from src.scheduling.entity_to_string import EntityToString
 from src.handlers.oauth import OAuthBaseHandler
-from src.handlers.scheduling.scheduling_base import SchedulingBaseHandler
+from src.handlers.scheduling.scheduling_base import SchedulingOAuthBaseHandler
 from src.jinja import JINJA_ENVIRONMENT
 from src.models.scheduling.round import ScheduleRound
 from src.models.scheduling.schedule import Schedule
@@ -27,7 +27,7 @@ class ImportOutput:
     self.errors = []
 
 
-class ImportBaseHandler(SchedulingBaseHandler):
+class ImportBaseHandler(SchedulingOAuthBaseHandler):
   def ImportWcif(self, wcif_data, data_to_import, deletion_confirmed=False):
     out = ImportOutput()
     if 'events' in data_to_import:
@@ -65,18 +65,26 @@ class ImportBaseHandler(SchedulingBaseHandler):
 
 
 class ImportDataHandler(ImportBaseHandler):
+  def get(self, schedule_version):
+    # We should only have a get() when importing from the WCA site, after
+    # redirecting to the WCA site and being redirected back.
+    if not self.SetSchedule(int(schedule_version)):
+      return
+    if not self.GetToken():
+      return
+    self.ImportWcifFromWca(self.handler_data['data_to_import'])
+
+
   def post(self, schedule_version):
     if not self.SetSchedule(int(schedule_version)):
       return
     if self.request.get('source') == 'wca':
-      self.redirect('/authenticate?' + urllib.urlencode({
-          'scope': 'public email manage_competitions',
-          'callback': webapp2.uri_for('wca_import', _full=True),
-          'handler_data': json.dumps({
-              'schedule_version': schedule_version,
-              'data_to_import': self.request.POST.getall('data_to_import'),
-          }),
-      }))
+      # WCA import, pre-redirect
+      if not self.GetToken(handler_data={
+          'data_to_import': self.request.POST.getall('data_to_import'),
+      }):
+        return
+      self.ImportWcifFromWca(self.request.POST.getall('data_to_import'))
     elif 'sched_' in self.request.get('source'):
       schedule_to_import = int(self.request.get('source')[len('sched_'):])
       wcif_to_import = CompetitionToWcif(self.competition,
@@ -94,17 +102,7 @@ class ImportDataHandler(ImportBaseHandler):
       self.ImportWcif(json.loads(result.content),
                       data_to_import=self.request.POST.getall('data_to_import'))
 
-
-class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
-  def get(self):
-    OAuthBaseHandler.get(self)
-    if not self.auth_token:
-      return
-
-    handler_data = json.loads(self.handler_data)
-    if not self.SetSchedule(int(handler_data['schedule_version'])):
-      return
-
+  def ImportWcifFromWca(self, data_to_import):
     response = self.GetWcaApi('/api/v0/competitions/%s/wcif' % self.competition.key.id())
     if response.status != 200:
       template = JINJA_ENVIRONMENT.get_template('scheduling/import_error.html')
@@ -113,8 +111,7 @@ class WcaImportDataHandler(OAuthBaseHandler, ImportBaseHandler):
           'errors': ['Error fetching WCA import']}))
       return
     response_json = json.loads(response.read())
-    self.ImportWcif(response_json,
-                    data_to_import=handler_data['data_to_import'])
+    self.ImportWcif(response_json, data_to_import=data_to_import)
 
 
 class ConfirmDeletionHandler(ImportBaseHandler):

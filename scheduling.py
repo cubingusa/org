@@ -11,20 +11,18 @@ from src.handlers.scheduling.async.set_group_counts import SetGroupCountsHandler
 from src.handlers.scheduling.create_groups import CreateGroupsHandler
 from src.handlers.scheduling.import_data import ConfirmDeletionHandler
 from src.handlers.scheduling.import_data import ImportDataHandler
-from src.handlers.scheduling.import_data import WcaImportDataHandler
 from src.handlers.scheduling.index import SchedulingIndexCallbackHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
 from src.handlers.scheduling.edit_schedule import EditScheduleHandler
 from src.handlers.scheduling.event_display import EventDisplayHandler
 from src.handlers.scheduling.groups_display import GroupsDisplayHandler
-from src.handlers.scheduling.new_schedule import NewScheduleCallbackHandler
 from src.handlers.scheduling.new_schedule import NewScheduleHandler
 from src.handlers.scheduling.schedule_display import ScheduleDisplayHandler
 from src.handlers.scheduling.set_live import SetLiveHandler
 from src.handlers.scheduling.staff_signup import StaffSignupHandler
-from src.handlers.scheduling.update_competition import UpdateCompetitionCallbackHandler
 from src.handlers.scheduling.update_competition import UpdateCompetitionHandler
+from src.handlers.scheduling.update_competition import UpdateAllCompetitionsHandler
 from src.handlers.scheduling.wcif.competition import CompetitionWcifHandler
 
 app = webapp2.WSGIApplication([
@@ -37,18 +35,11 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/<competition_id:.*>/update',
                 handler=UpdateCompetitionHandler,
                 name='update_competition'),
-  webapp2.Route('/scheduling/update_callback',
-                handler=UpdateCompetitionCallbackHandler,
-                name='update_competition_callback'),
   webapp2.Route('/scheduling/<competition_id:.*>/new_schedule',
                 handler=NewScheduleHandler,
                 name='new_schedule'),
-  webapp2.Route('/scheduling/new_schedule_callback',
-                handler=NewScheduleCallbackHandler,
-                name='new_schedule_callback'),
   webapp2.Route('/scheduling/import_data/<schedule_version:.*>',
                 handler=ImportDataHandler, name='import_data'),
-  webapp2.Route('/scheduling/wca_import', handler=WcaImportDataHandler, name='wca_import'),
   webapp2.Route('/scheduling/confirm_deletion/<schedule_version:.*>',
                 handler=ConfirmDeletionHandler, name='confirm_deletion'),
   webapp2.Route('/scheduling/<competition_id:.*>/edit_schedule/<schedule_version:.*>',
@@ -105,4 +96,5 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/wcif_spec',
                 handler=BasicHandler('scheduling/wcif_spec.html'),
                 name='wcif_spec'),
+  webapp2.Route('/scheduling/admin/update_all_competitions', handler=UpdateAllCompetitionsHandler),
 ], config=config.GetAppConfig())
