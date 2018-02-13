@@ -50,7 +50,7 @@ class SchedulingBaseHandler(BaseHandler):
     person = SchedulePerson.get_by_id(SchedulePerson.Id(competition_id, self.user.key.id()))
     if not person or SchedulePersonRoles.EDITOR not in person.roles:
       self.is_editor = False
-      if not edit_access_needed:
+      if edit_access_needed:
         self.RespondWithError(
             'You don\'t have access to edit this schedule.')
         return False
