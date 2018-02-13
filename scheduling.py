@@ -22,6 +22,7 @@ from src.handlers.scheduling.schedule_display import ScheduleDisplayHandler
 from src.handlers.scheduling.set_live import SetLiveHandler
 from src.handlers.scheduling.staff_signup import StaffSignupHandler
 from src.handlers.scheduling.update_competition import UpdateCompetitionHandler
+from src.handlers.scheduling.update_competition import UpdateAllCompetitionsHandler
 from src.handlers.scheduling.wcif.competition import CompetitionWcifHandler
 
 app = webapp2.WSGIApplication([
@@ -95,4 +96,5 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/scheduling/wcif_spec',
                 handler=BasicHandler('scheduling/wcif_spec.html'),
                 name='wcif_spec'),
+  webapp2.Route('/scheduling/admin/update_all_competitions', handler=UpdateAllCompetitionsHandler),
 ], config=config.GetAppConfig())

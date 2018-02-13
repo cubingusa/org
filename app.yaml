@@ -14,6 +14,9 @@ libraries:
    version: latest
 
 handlers:
+ - url: /_ah/queue/deferred
+   script: google.appengine.ext.deferred.deferred.application
+   login: admin
  - url: /static
    static_dir: src/static
    secure: always
