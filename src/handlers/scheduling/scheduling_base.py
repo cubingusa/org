@@ -83,7 +83,7 @@ class SchedulingOAuthBaseHandler(SchedulingBaseHandler, OAuthBaseHandler):
     elif self.request.get('state'):
       self.GetTokenFromCode()
       if self.refresh_token and self.competition:
-        refresh_token = RefreshToken()
+        refresh_token = RefreshToken(id=self.competition.key.id())
         refresh_token.user = self.user.key
         refresh_token.token = self.refresh_token
         refresh_token.creation_time = datetime.datetime.now()
