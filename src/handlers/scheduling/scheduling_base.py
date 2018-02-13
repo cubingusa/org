@@ -67,7 +67,7 @@ class SchedulingBaseHandler(BaseHandler):
 class SchedulingOAuthBaseHandler(SchedulingBaseHandler, OAuthBaseHandler):
   # SetCompetition or SetSchedule must first be called if we're going to use a
   # refresh token.
-  def GetToken(self):
+  def GetToken(self, handler_data={}):
     self.auth_token = None
     if (self.competition and self.competition.refresh_token and
         self.competition.refresh_token.get()):
@@ -101,5 +101,6 @@ class SchedulingOAuthBaseHandler(SchedulingBaseHandler, OAuthBaseHandler):
       self.redirect('/authenticate?' + urllib.urlencode({
           'scope': 'public email manage_competitions',
           'callback': self.request.url,
+          'handler_data': handler_data,
       }))
     return self.auth_token

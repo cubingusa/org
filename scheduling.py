@@ -11,7 +11,6 @@ from src.handlers.scheduling.async.set_group_counts import SetGroupCountsHandler
 from src.handlers.scheduling.create_groups import CreateGroupsHandler
 from src.handlers.scheduling.import_data import ConfirmDeletionHandler
 from src.handlers.scheduling.import_data import ImportDataHandler
-from src.handlers.scheduling.import_data import WcaImportDataHandler
 from src.handlers.scheduling.index import SchedulingIndexCallbackHandler
 from src.handlers.scheduling.index import SchedulingIndexHandler
 from src.handlers.scheduling.edit_competition import EditCompetitionHandler
@@ -40,7 +39,6 @@ app = webapp2.WSGIApplication([
                 name='new_schedule'),
   webapp2.Route('/scheduling/import_data/<schedule_version:.*>',
                 handler=ImportDataHandler, name='import_data'),
-  webapp2.Route('/scheduling/wca_import', handler=WcaImportDataHandler, name='wca_import'),
   webapp2.Route('/scheduling/confirm_deletion/<schedule_version:.*>',
                 handler=ConfirmDeletionHandler, name='confirm_deletion'),
   webapp2.Route('/scheduling/<competition_id:.*>/edit_schedule/<schedule_version:.*>',
