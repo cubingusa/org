@@ -39,7 +39,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/edit', handler=EditUserHandler, name='edit_user'),
   webapp2.Route('/edit/<user_id:.*>', handler=EditUserHandler, name='edit_user_by_id'),
   webapp2.Route('/regional', handler=RegionalsHandler, name='competitions_regional'),
-  webapp2.Route('/regional/psych/<region_or_state:..>/<year:\d*>',
+  webapp2.Route('/regional/psych/<region_or_state:..?>/<year:\d*>',
                 handler=ChampionshipPsychHandler, name='regional_psych'),
   webapp2.Route('/supported', handler=BasicHandler('supported.html'), name='supported'),
   webapp2.Route('/state_rankings', handler=BasicHandler('state_rankings.html', include_wca_disclaimer=True),
