@@ -50,15 +50,17 @@ def ArchiveCompetitionPages(queue):
       gcs_filename = '/%s/archive/%s/%s' % (app_identity.get_default_gcs_bucket_name(), site, page)
       with gcs.open(gcs_filename, 'w') as gcs_file:
         gcs_file.write(result.content)
-      parser = CompSiteParser(site)
-      parser.feed(result.content)
       length += len(result.content)
-      for path in parser.paths:
-        if path not in pages_added:
-          pages_added.add(path)
-          pages_to_fetch.append(path)
+      if '.php' in page:
+        parser = CompSiteParser(site)
+        parser.feed(result.content.decode('utf-8'))
+        for path in parser.paths:
+          if path not in pages_added:
+            pages_added.add(path)
+            pages_to_fetch.append(path)
     else:
-      with gcs.open('/archive/errors/%s/%s' % (site, page), 'w') as gcs_file:
+      with gcs.open('/%s/archive/errors/%s/%s' %
+                    (app_identity.get_default_gcs_bucket_name(), site, page), 'w') as gcs_file:
         gcs_file.write(result.content)
         gcs_file.write(str(result.status_code))
       logging.warning('%s: %d' % (cubingusa_url, result.status_code))
