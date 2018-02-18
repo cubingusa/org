@@ -1,0 +1,5 @@
+dispatch:
+  - url: "admin.cubingusa.org/*"
+    service: admin
+  - url: "archive.cubingusa.org/*"
+    service: archive
