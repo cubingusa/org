@@ -23,19 +23,25 @@ class CompSiteParser(HTMLParser, object):
       if attr[0] not in ('src', 'href'):
         continue
       path = attr[1]
-      if self.site not in path:
-        continue
-      self.paths.add(path[path.find(self.site) + len(self.site) + 1:])
+      if path.startswith('assets'):
+        self.paths.add(path)
+      elif self.site in path:
+        self.paths.add(path[path.find(self.site) + len(self.site) + 1:])
 
 
 def ArchiveCompetitionPages(queue):
-  pages_to_fetch = ['index.php']
+  pages_to_fetch = ['index.php',
+                    'assets/styles/fonts/entsans.ttf',
+                    'assets/styles/fonts/gilliesgothicboldregular.ttf']
+  pages_to_ignore = set(['mapper.php', 'contact.php', 'psych.php?e=3x3']
   pages_added = set(pages_to_fetch)
   site = queue[0].strip()
   length = 0
 
   while pages_to_fetch:
     page = pages_to_fetch.pop()
+    if page in pages_to_ignore:
+      continue
     cubingusa_url = 'https://www.cubingusa.com/%s/%s' % (site, page)
     result = urlfetch.fetch(cubingusa_url)
     if result.status_code == 200:
