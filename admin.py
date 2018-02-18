@@ -2,6 +2,7 @@ import webapp2
 
 from src import config
 from src.handlers.admin.app_settings import AppSettingsHandler
+from src.handlers.admin.archive_old_pages import ArchivePagesHandler
 from src.handlers.admin.assign_role import AssignRoleHandler
 from src.handlers.admin.get_wca_export import GetExportHandler
 from src.handlers.admin.copy_user_states import CopyUserStatesHandler
@@ -31,4 +32,5 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/wca/get_export', handler=GetExportHandler),
   webapp2.Route('/assign_role/<user_id:.*>/<role:.*>', handler=AssignRoleHandler),
   webapp2.Route('/app_settings', handler=AppSettingsHandler, name='app_settings'),
+  webapp2.Route('/archive_old_pages', handler=ArchivePagesHandler, name='archive_old_pages'),
 ], config=config.GetAppConfig())
