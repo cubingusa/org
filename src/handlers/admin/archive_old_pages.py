@@ -64,7 +64,7 @@ def ArchiveCompetitionPages(queue):
 
   logging.info('Total bytes fetched: %d' % length)
   if len(queue) > 1:
-    deferred.defer(ArchiveCompetitionPages, queue[1:], pages_to_fetch, _countdown=15)
+    deferred.defer(ArchiveCompetitionPages, queue[1:], _countdown=15)
 
 
 class ArchivePagesHandler(AdminBaseHandler):
