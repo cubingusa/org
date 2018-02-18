@@ -1,6 +1,8 @@
 import cloudstorage as gcs
 import webapp2
 
+from google.appengine.api import app_identity
+
 from src.handlers.base import BaseHandler
 
 class ArchiveHandler(webapp2.RequestHandler):
@@ -22,7 +24,8 @@ class ArchiveHandler(webapp2.RequestHandler):
     if path.endswith('/'):
       path = path + 'index.php'
     try:
-      with gcs.open('/archive/' + path, 'r') as f:
+      with gcs.open('/%s/archive/%s' % (app_identity.get_default_gcs_bucket_name(), path),
+                    'r') as f:
         self.response.write(f.read())
     except:
       self.response.set_status(404)

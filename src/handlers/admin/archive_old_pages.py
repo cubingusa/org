@@ -3,6 +3,7 @@ import re
 from HTMLParser import HTMLParser
 
 import cloudstorage as gcs
+from google.appengine.api import app_identity
 from google.appengine.api import urlfetch
 from google.appengine.ext import deferred
 
@@ -37,6 +38,7 @@ def ArchiveCompetitionPages(queue):
   pages_added = set(pages_to_fetch)
   site = queue[0].strip()
   length = 0
+  logging.info('Fetching from https://www.cubingusa.com/%s' % site)
 
   while pages_to_fetch:
     page = pages_to_fetch.pop()
@@ -45,7 +47,7 @@ def ArchiveCompetitionPages(queue):
     cubingusa_url = 'https://www.cubingusa.com/%s/%s' % (site, page)
     result = urlfetch.fetch(cubingusa_url)
     if result.status_code == 200:
-      gcs_filename = '/archive/%s/%s' % (site, page)
+      gcs_filename = '/%s/archive/%s/%s' % (app_identity.get_default_gcs_bucket_name(), site, page)
       with gcs.open(gcs_filename, 'w') as gcs_file:
         gcs_file.write(result.content)
       parser = CompSiteParser(site)
