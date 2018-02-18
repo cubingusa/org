@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Archive Old Pages</title>
+</head>
+<body>
+  <h3>Archive cubingusa.com pages</h3>
+  <form action="{{ c.uri_for('archive_old_pages') }}" method="POST">
+    <div>
+      Competition sites:<br>
+      <textarea name="competition_sites" rows="20" cols="50"></textarea>
+    </div>
+    <div>
+      Pages to fetch on each site:<br>
+      <textarea name="pages_to_fetch" rows="10" cols="50"></textarea>
+    </div>
+    <div>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</body>
+</html>
