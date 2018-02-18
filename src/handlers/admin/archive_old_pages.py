@@ -33,7 +33,7 @@ def ArchiveCompetitionPages(queue):
   pages_to_fetch = ['index.php',
                     'assets/styles/fonts/entsans.ttf',
                     'assets/styles/fonts/gilliesgothicboldregular.ttf']
-  pages_to_ignore = set(['mapper.php', 'contact.php', 'psych.php?e=3x3'])
+  pages_to_ignore = set(['mapper.php', 'contact.php', 'psych.php?e=3x3', 'login.php'])
   pages_added = set(pages_to_fetch)
   site = queue[0].strip()
   length = 0
