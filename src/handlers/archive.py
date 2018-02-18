@@ -18,6 +18,11 @@ class ArchiveHandler(webapp2.RequestHandler):
     if path == 'alerts.css':
       return
 
+    # Redirect contact.php to the cubingusa.org contact page.
+    if path.endswith('contact.php'):
+      self.redirect('https://cubingusa.org/about/contact')
+      return
+
     # Map /comp_id and /comp_id/ to /comp_id/index.php.
     if '/' not in path:
       path = path + '/'
