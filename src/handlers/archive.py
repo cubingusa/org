@@ -1,4 +1,5 @@
 import cloudstorage as gcs
+import urlparse
 import webapp2
 
 from google.appengine.api import app_identity
@@ -7,6 +8,12 @@ from src.handlers.base import BaseHandler
 
 class ArchiveHandler(webapp2.RequestHandler):
   def get(self, path):
+    url_parsed = urlparse.urlparse(self.request.url)
+    # Redirect old cubingusa domain to archive.cubingusa.org.
+    if 'cubingusa.com' in url_parsed.netloc:
+      self.redirect('https://archive.cubingusa.org' + url_parsed.path)
+      return
+
     if '.css' in path:
       self.response.headers['Content-Type'] = 'text/css'
     elif '.js' in path:
