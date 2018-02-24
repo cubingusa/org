@@ -3,3 +3,7 @@ dispatch:
     service: admin
   - url: "archive.cubingusa.org/*"
     service: archive
+  - url: "www.cubingusa.com/*"
+    service: archive
+  - url: "cubingusa.com/*"
+    service: archive
