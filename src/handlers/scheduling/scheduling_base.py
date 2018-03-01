@@ -26,6 +26,9 @@ class SchedulingBaseHandler(BaseHandler):
                      edit_access_needed=True,
                      login_required=True,
                      fail_if_not_found=True):
+    # login_required = True and edit_access_needed = False doesn't make sense.
+    if not login_required:
+      edit_access_needed = False
     self.competition = ScheduleCompetition.get_by_id(competition_id)
     if not self.competition:
       if fail_if_not_found:
