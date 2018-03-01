@@ -15,7 +15,7 @@ from src.models.scheduling.schedule import Schedule
 class SchedulingBaseHandler(BaseHandler):
   def RespondWithError(self, error_string):
     template = JINJA_ENVIRONMENT.get_template('error.html')
-    logging.error('Responding with error: %s' % error_string)
+    logging.warning('Responding with error: %s' % error_string)
     self.response.write(template.render({
         'c': common.Common(self),
         'error': error_string,
