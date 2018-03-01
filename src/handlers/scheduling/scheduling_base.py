@@ -1,4 +1,5 @@
 import datetime
+import logging
 import urllib
 
 from src import common
@@ -14,6 +15,7 @@ from src.models.scheduling.schedule import Schedule
 class SchedulingBaseHandler(BaseHandler):
   def RespondWithError(self, error_string):
     template = JINJA_ENVIRONMENT.get_template('error.html')
+    logging.warning('Responding with error: %s' % error_string)
     self.response.write(template.render({
         'c': common.Common(self),
         'error': error_string,
@@ -24,6 +26,9 @@ class SchedulingBaseHandler(BaseHandler):
                      edit_access_needed=True,
                      login_required=True,
                      fail_if_not_found=True):
+    # login_required = True and edit_access_needed = False doesn't make sense.
+    if not login_required:
+      edit_access_needed = False
     self.competition = ScheduleCompetition.get_by_id(competition_id)
     if not self.competition:
       if fail_if_not_found:
