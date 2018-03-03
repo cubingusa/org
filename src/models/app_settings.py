@@ -11,6 +11,7 @@ class AppSettings(ndb.Model):
   recaptcha_secret_key = ndb.StringProperty()
   google_analytics_tracking_id = ndb.StringProperty()
   contact_email = ndb.StringProperty()
+  service_account_credentials = ndb.TextProperty()
 
   @staticmethod
   def Get():

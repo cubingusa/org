@@ -70,7 +70,13 @@ http://localhost:8081/oauth_callback
     <input type="email" name="contact_email" value="{{ settings.contact_email or ''}}">
     <div>
       (Not used for dev) Email to send and receive contact form submissions.  When run locally, uses your email address.
-    </div>  
+    </div>
+    <h3>Service Account Credentials</h3>
+    <p>
+      <textarea name="service_account_credentials" rows="12" cols="50">
+        {{ settings.service_account_credentials }}
+      </textarea>
+    </p>
     <button type="submit">Submit</button>
   </form>
 </body>
