@@ -29,7 +29,7 @@ def clean_email(email):
   return email
 
 
-class UpdateMailingListHandler(AdminBaseHandler):
+class UpdateMailingListsHandler(AdminBaseHandler):
   def get(self):
     credentials = service_account.Credentials.from_service_account_info(
                       json.loads(AppSettings.Get().mailing_list_service_account_credentials),

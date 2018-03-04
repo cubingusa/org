@@ -12,6 +12,6 @@ cron:
  - description: Reload competitor lists
    url: /scheduling/admin/update_all_competitions
    schedule: every 6 hours
- - description: Update delegates@cubingusa.org
-   url: /admin/update_mailing_list
+ - description: Update various mailing lists.
+   url: /admin/update_mailing_lists
    schedule: every 24 hours
