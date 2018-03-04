@@ -27,9 +27,13 @@ def clean_email(email):
 
 
 def UpdateMailingList(expected_emails, directory_service, mailing_list):
+  if not directory_service:
+    logging.info('Not configured to use Groups API.  Not updating %s to contain %s',
+                 mailing_list, str(expected_emails))
+    return
   current_emails = set()
 
-  for member in service.members().list(groupKey=mailing_list).execute()['members']:
+  for member in directory_service.members().list(groupKey=mailing_list).execute()['members']:
     current_emails.add(clean_email(member['email']))
 
   emails_to_remove = current_emails - expected_emails
@@ -45,13 +49,18 @@ def UpdateMailingList(expected_emails, directory_service, mailing_list):
 
 class UpdateMailingListsHandler(AdminBaseHandler):
   def get(self):
-    credentials = service_account.Credentials.from_service_account_info(
-                      json.loads(AppSettings.Get().mailing_list_service_account_credentials),
-                      scopes=['https://www.googleapis.com/auth/admin.directory.group.member'],
-                      subject='adminbot@cubingusa.org')
+    app_settings = AppSettings.Get()
+    if app_settings.mailing_list_service_account_credentials:
+      credentials = service_account.Credentials.from_service_account_info(
+                        json.loads(app_settings.mailing_list_service_account_credentials),
+                        scopes=['https://www.googleapis.com/auth/admin.directory.group.member'],
+                        subject='adminbot@cubingusa.org')
 
-    directory_service = googleapiclient.discovery.build('admin', 'directory_v1',
-                                                        credentials=credentials)
+      directory_service = googleapiclient.discovery.build('admin', 'directory_v1',
+                                                          credentials=credentials)
+    else:
+      credentials = None
+      directory_service = None
 
     # First update delegates@cubingusa.org.
     all_delegate_email_addresses = set()
