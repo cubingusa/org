@@ -1,10 +1,8 @@
-import httplib2
 import json
 import logging
 import requests
 import urllib
 
-from google.appengine.api import memcache
 from google.appengine.api import urlfetch
 from google.oauth2 import service_account
 import googleapiclient.discovery
