@@ -70,7 +70,12 @@ http://localhost:8081/oauth_callback
     <input type="email" name="contact_email" value="{{ settings.contact_email or ''}}">
     <div>
       (Not used for dev) Email to send and receive contact form submissions.  When run locally, uses your email address.
-    </div>  
+    </div>
+    <h3>Mailing List Updater Credentials</h3>
+    <p>
+      <textarea name="mailing_list_service_account_credentials" rows="12" cols="50">{{ settings.mailing_list_service_account_credentials }}</textarea>
+      <div>(Optional) Credentials for service account to update mailing lists on cubingusa.org.</div>
+    </p>
     <button type="submit">Submit</button>
   </form>
 </body>

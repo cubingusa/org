@@ -4,10 +4,11 @@ import requests
 import urllib
 
 from google.appengine.api import urlfetch
-from google.auth import app_engine
+from google.oauth2 import service_account
 import googleapiclient.discovery
 
 from src.handlers.admin.admin_base import AdminBaseHandler
+from src.models.app_settings import AppSettings
 from src.models.user import Roles
 from src.models.user import User
 from src.models.wca.person import Person
@@ -30,7 +31,10 @@ def clean_email(email):
 
 class UpdateMailingListHandler(AdminBaseHandler):
   def get(self):
-    credentials = app_engine.Credentials()
+    credentials = service_account.Credentials.from_service_account_info(
+                      json.loads(AppSettings.Get().mailing_list_service_account_credentials),
+                      scopes=['https://www.googleapis.com/auth/admin.directory.group.member'],
+                      subject='adminbot@cubingusa.org')
 
     service = googleapiclient.discovery.build('admin', 'directory_v1', credentials=credentials)
 
