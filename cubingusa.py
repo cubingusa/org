@@ -56,7 +56,7 @@ app = webapp2.WSGIApplication([
                 handler=ContactHandler(AppSettings.Get().contact_email, 'contact.html', 'CubingUSA'),
                 name='contact'),
   # Async
-  webapp2.Route('/async/champions_table/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
+  webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsTableHandler),
   webapp2.Route('/async/state_rankings/<event_id:.*>/<state_id:.*>/<use_average:\d>',
                 handler=StateRankingsHandler),

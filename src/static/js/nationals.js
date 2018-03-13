@@ -17,7 +17,7 @@ var nationalsModule = (function() {
           }
         }
       };
-      var uri = '/async/champions_table/' + event_id + '/national/us';
+      var uri = '/async/champions_by_year/' + event_id + '/national/us';
       req.open('GET', uri);
       req.send();
     },
