@@ -23,7 +23,7 @@ class ChampionsTableHandler(BaseHandler):
     if is_national:
       filters.append(Champion.national_champion == True)
     elif year:
-      filters.append(Champion.year == year)
+      filters.append(Champion.year == int(year))
       if is_regional:
         filters.append(Champion.region != None)
       elif is_state:

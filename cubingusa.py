@@ -58,6 +58,8 @@ app = webapp2.WSGIApplication([
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsTableHandler),
+  webapp2.Route('/async/champions_by_region/<event_id:.*>/<championship_type:.*>/<year:\d*>',
+                handler=ChampionsTableHandler),
   webapp2.Route('/async/state_rankings/<event_id:.*>/<state_id:.*>/<use_average:\d>',
                 handler=StateRankingsHandler),
   webapp2.Route('/async/championship_psych/<championship_id:.*>/<event_id:.*>',
