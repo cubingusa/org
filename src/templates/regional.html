@@ -1,4 +1,5 @@
 {% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
 {% extends "base.html" %}
 {% block title %}Regional Championships{% endblock %}
 {% block style %}
@@ -77,5 +78,18 @@
         </ul>
       </div>
     </p>
+    <p>
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-trophy" aria-hidden="true"></i> {{ year }} <span id="regionals-evt"></span> Regional Champions</h4>
+        </div>
+        <div class="card-body">
+          {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}
+          <div id="champions-table"></div>
+          <div class="spinner" id="regionals-spinner"></div>
+        </div>
+      </div>
+    </p>
   </div>
+  <script src="/static/js/regionals.js" type="application/javascript"></script>
 {% endblock %}

@@ -27,6 +27,7 @@ class AppSettingsHandler(BaseHandler):
     settings.recaptcha_secret_key = self.request.POST['recaptcha_secret_key']
     settings.google_analytics_tracking_id = self.request.POST['google_analytics_tracking_id']
     settings.contact_email = self.request.POST['contact_email']
+    settings.mailing_list_service_account_credentials = self.request.POST['mailing_list_service_account_credentials']
     settings.put()
     template = JINJA_ENVIRONMENT.get_template('admin/app_settings.html')
     self.response.write(template.render({
