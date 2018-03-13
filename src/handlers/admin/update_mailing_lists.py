@@ -23,17 +23,17 @@ def clean_email(email):
       address = address[:address.find('+')]
     address = address.replace('.', '')
     email = address + '@gmail.com'
-  return email
+  return email.lower()
 
 
-def UpdateMailingList(expected_emails, directory_service, mailing_list):
-  if not directory_service:
+def UpdateMailingList(expected_emails, service, mailing_list):
+  if not service:
     logging.info('Not configured to use Groups API.  Not updating %s to contain %s',
                  mailing_list, str(expected_emails))
     return
   current_emails = set()
 
-  for member in directory_service.members().list(groupKey=mailing_list).execute()['members']:
+  for member in service.members().list(groupKey=mailing_list).execute().get('members', []):
     current_emails.add(clean_email(member['email']))
 
   emails_to_remove = current_emails - expected_emails
@@ -53,7 +53,8 @@ class UpdateMailingListsHandler(AdminBaseHandler):
     if app_settings.mailing_list_service_account_credentials:
       credentials = service_account.Credentials.from_service_account_info(
                         json.loads(app_settings.mailing_list_service_account_credentials),
-                        scopes=['https://www.googleapis.com/auth/admin.directory.group.member'],
+                        scopes=['https://www.googleapis.com/auth/admin.directory.group.member',
+                                'https://www.googleapis.com/auth/spreadsheets.readonly'],
                         subject='adminbot@cubingusa.org')
 
       directory_service = googleapiclient.discovery.build('admin', 'directory_v1',
@@ -83,6 +84,37 @@ class UpdateMailingListsHandler(AdminBaseHandler):
           url_to_fetch = link['url']
     UpdateMailingList(all_delegate_email_addresses, directory_service, 'delegates@cubingusa.org')
 
+    # Next update nats-staff@cubingusa.org.
+    all_staff_email_addresses = set()
+    sheets_service = googleapiclient.discovery.build('sheets', 'v4', credentials=credentials)
+
+    # Nats 2018 staff spreadsheet.
+    spreadsheet_id = '1e6SC0zrn24el-6gVJ0DxByy5JfSw_13tczVFDMcIneQ'
+
+    # First find the column containing emails.
+    selected_column = 0
+    for i, value in enumerate(sheets_service.spreadsheets().values().get(
+                        spreadsheetId=spreadsheet_id, range='1:1',
+                        majorDimension='ROWS').execute()['values'][0]):
+      if 'email' in value.lower():
+        selected_column = i + 1
+
+    # Convert column number to name
+    column_name = ''
+    num = selected_column
+    while num > 0:
+      num, remainder = divmod(num - 1, 26)
+      column_name = chr(65 + remainder) + column_name
+    # Ignore the first two rows (the header, and the nats-organizers header):
+    for value in sheets_service.spreadsheets().values().get(
+                     spreadsheetId=spreadsheet_id, range='%s:%s' % (column_name, column_name),
+                     majorDimension='COLUMNS').execute()['values'][0][2:]:
+      if value == 'END_IMPORT':
+        break
+      if value:
+        all_staff_email_addresses.add(clean_email(value))
+
+    UpdateMailingList(all_staff_email_addresses, directory_service, 'nats-staff@cubingusa.org')
     self.response.write('ok')
 
   def PermittedRoles(self):
