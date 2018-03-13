@@ -7,6 +7,7 @@ from src.handlers.admin.assign_role import AssignRoleHandler
 from src.handlers.admin.get_wca_export import GetExportHandler
 from src.handlers.admin.copy_user_states import CopyUserStatesHandler
 from src.handlers.admin.post_import_mutations import PostImportMutationsHandler
+from src.handlers.admin.rewrite_champions import RewriteChampionsHandler
 from src.handlers.admin.update_states import UpdateStatesHandler
 from src.handlers.admin.upload_users import UploadUsersHandler
 from src.handlers.basic import BasicHandler
@@ -23,6 +24,7 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/authenticate', handler=AuthenticateHandler),
   webapp2.Route('/oauth_callback', handler=OAuthCallbackHandler),
   webapp2.Route('/copy_user_states', handler=CopyUserStatesHandler),
+  webapp2.Route('/rewrite_champions', handler=RewriteChampionsHandler),
   webapp2.Route('/login', handler=LoginHandler, name='login'),
   webapp2.Route('/login_callback', handler=LoginCallbackHandler, name='login_callback'),
   webapp2.Route('/logout', handler=LogoutHandler, name='logout'),
