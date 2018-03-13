@@ -17,7 +17,7 @@ from src.handlers.admin.edit_championships import DeleteChampionshipHandler
 from src.handlers.admin.edit_championships import EditChampionshipsHandler
 from src.handlers.admin.edit_users import EditUsersHandler
 from src.handlers.admin.regenerate_refresh_tokens import RegenerateRefreshTokensHandler
-from src.handlers.admin.update_mailing_list import UpdateMailingListHandler
+from src.handlers.admin.update_mailing_lists import UpdateMailingListsHandler
 from src.handlers.championship_psych import ChampionshipPsychHandler
 from src.handlers.championship_psych import ChampionshipPsychAsyncHandler
 from src.handlers.edit_user import EditUserHandler
@@ -85,5 +85,5 @@ app = webapp2.WSGIApplication([
                 name='add_championship'),
   webapp2.Route('/admin/async/get_users/<filter_text:.*>', handler=EditUsersHandler),
   webapp2.Route('/admin/regenerate_refresh_tokens', handler=RegenerateRefreshTokensHandler),
-  webapp2.Route('/admin/update_mailing_list', handler=UpdateMailingListHandler),
+  webapp2.Route('/admin/update_mailing_lists', handler=UpdateMailingListsHandler),
 ], config=config.GetAppConfig())
