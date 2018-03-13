@@ -64,7 +64,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
     # If the competitor hasn't already used their eligibility, check their state.
     if resolution == Resolution.UNRESOLVED:
       state = None
-      for update in user.updates or None:
+      for update in user.updates or []:
         if update.update_time < residency_deadline:
           state = update.state
       if state and state in valid_state_keys:
@@ -102,6 +102,9 @@ def UpdateChampions():
     logging.info('Computing champions for %s' % competition_id)
     results = (Result.query(Result.competition == championship.competition)
                      .order(Result.pos).fetch())
+    if not results:
+      logging.info('Results are not uploaded yet.  Not computing champions yet.')
+      continue
     eligible_competitors = ComputeEligibleCompetitors(championship, competition, results)
     champions = collections.defaultdict(list)
     events_held_with_successes = set()

@@ -41,10 +41,7 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
     for row in reader:
       if not row_filter(row):
         continue
-      if table == 'Persons':
-        id_to_dict[object_type.GetId(row)][int(row['subid'])] = row
-      else:
-        id_to_dict[object_type.GetId(row)] = row
+      id_to_dict[object_type.GetId(row)] = row
     logging.info('Finished reading file.  Found %d entries' % len(id_to_dict))
 
     keys_to_delete = []
@@ -58,34 +55,15 @@ def process_file(table, object_type, shard, total_shards, queue, export_id):
           row_id = object_type.GetId(old_row)
           if row_id in id_to_dict:
             new_row = id_to_dict[row_id]
-            if table == 'Persons':
-              new_row = id_to_dict[row_id][int(row['subid'])]
             is_diff = False
             for col in columns_to_diff:
               if new_row[col] != old_row[col]:
                 is_diff = True
-            if table == 'Persons':
-              new_row['changed'] = is_diff
-            elif not is_diff:
+            if not is_diff:
               del id_to_dict[row_id]
           else:
             # This entry has been deleted, so we delete it.
             keys_to_delete.append(ndb.Key(object_type, row_id))
-      if table == 'Persons':
-        # A Person is split across a few rows with a common personId.  If any of them
-        # have changed, then we need to update the Person.  This includes rows that
-        # are missing on the base side: this means that this is a new person or a new
-        # subid.
-        unchanged_keys = []
-        for key, rows in id_to_dict.iteritems():
-          for row in rows.itervalues():
-            changed = False
-            if ('changed' not in row) or row['changed']:
-              changed = True
-          if not changed:
-            unchanged_keys.append(key)
-        for key in unchanged_keys:
-          del id_to_dict[key]
     except gcs.NotFoundError:
       # This is fine, it just means we can't diff the new file against the old one.
       pass

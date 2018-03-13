@@ -5,37 +5,27 @@ from src.models.wca.country import BaseModel
 from src.models.wca.country import Country
 
 class Person(BaseModel):
-  # Most recent details
+  # Details from row with subid 1 (i.e. most recent updates)
   name = ndb.StringProperty()
   country = ndb.KeyProperty(kind=Country)
   gender = ndb.StringProperty()
-
-  # All details
-  all_names = ndb.StringProperty(repeated=True)
-  all_countries = ndb.KeyProperty(kind=Country, repeated=True)
-  all_genders = ndb.StringProperty(repeated=True)
 
   # The person's state, if they're a US resident.  This isn't computed during
   # the database import.
   state = ndb.KeyProperty(kind=State)
 
-  def ParseFromDict(self, rows):
-    subids = sorted(rows.keys())
-    self.all_names = []
-    self.all_countries = []
-    self.all_genders = []
-    for subid in subids:
-      if subid == 1:
-        self.name = rows[subid]['name']
-        self.country = ndb.Key(Country, rows[subid]['countryId'])
-        self.gender = rows[subid]['gender']
-      self.all_names.append(rows[subid]['name'])
-      self.all_countries.append(ndb.Key(Country, rows[subid]['countryId']))
-      self.all_genders.append(rows[subid]['gender'])
+  def ParseFromDict(self, row):
+    self.name = row['name']
+    self.country = ndb.Key(Country, row['countryId'])
+    self.gender = row['gender']
+
+  @staticmethod
+  def Filter():
+    return lambda row: row['subid'] == '1'
 
   @staticmethod
   def ColumnsUsed():
-    return ['name', 'countryId', 'gender', 'subid']
+    return ['name', 'countryId', 'gender']
 
   def GetWCALink(self):
     return 'https://worldcubeassociation.org/persons/%s' % self.key.id()
