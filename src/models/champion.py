@@ -12,6 +12,7 @@ class Champion(ndb.Model):
   national_champion = ndb.ComputedProperty(lambda e: e.championship.get().national_championship)
   region = ndb.ComputedProperty(lambda e: e.championship.get().region)
   state = ndb.ComputedProperty(lambda e: e.championship.get().state)
+  year = ndb.ComputedProperty(lambda e: e.championship.get().year)
 
   @staticmethod
   def Id(championship_id, event_id):
