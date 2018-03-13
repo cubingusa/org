@@ -37,12 +37,18 @@ class ChampionsTableHandler(BaseHandler):
     all_champions = Champion.query(ndb.AND(*filters)).fetch()
     if year and is_regional:
       all_champions.sort(key = lambda c: c.region.id())
+      championship_formatter = lambda c: c.region.get().name
+      all_regions = Region.query().fetch()
     elif year and is_state:
       all_champions.sort(key = lambda c: c.state.id())
+      championship_formatter = lambda c: c.state.get().name
+      all_states = State.query().fetch()
     else:
       all_champions.sort(key = lambda c: c.championship.id(), reverse = True)
+      championship_formatter = lambda c: c.year
 
     self.response.write(template.render({
         'c': common.Common(self),
         'champions': all_champions,
+        'championship_formatter': championship_formatter,
     }))
