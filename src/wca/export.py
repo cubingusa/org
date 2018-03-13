@@ -125,7 +125,7 @@ def get_tables():
           ('Events', Event, 1),
           ('Formats', Format, 1),
           ('RoundTypes', RoundType, 1),
-          ('Persons', Person, 3),
+          ('Persons', Person, 6),
           ('RanksSingle', RankSingle, 20),
           ('RanksAverage', RankAverage, 20),
           ('Competitions', Competition, 1),
