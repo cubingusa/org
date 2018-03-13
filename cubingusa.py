@@ -2,7 +2,7 @@ import webapp2
 
 from src import config
 from src import handlers
-from src.handlers.async.champions_by_year import ChampionsByYearHandler
+from src.handlers.async.champions_table import ChampionsTableHandler
 from src.handlers.async.state_rankings import StateRankingsHandler
 from src.handlers.basic import BasicHandler
 from src.handlers.contact import ContactHandler
@@ -56,8 +56,8 @@ app = webapp2.WSGIApplication([
                 handler=ContactHandler(AppSettings.Get().contact_email, 'contact.html', 'CubingUSA'),
                 name='contact'),
   # Async
-  webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
-                handler=ChampionsByYearHandler),
+  webapp2.Route('/async/champions_table/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
+                handler=ChampionsTableHandler),
   webapp2.Route('/async/state_rankings/<event_id:.*>/<state_id:.*>/<use_average:\d>',
                 handler=StateRankingsHandler),
   webapp2.Route('/async/championship_psych/<championship_id:.*>/<event_id:.*>',
