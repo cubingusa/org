@@ -64,7 +64,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
     # If the competitor hasn't already used their eligibility, check their state.
     if resolution == Resolution.UNRESOLVED:
       state = None
-      for update in user.updates or None:
+      for update in user.updates or []:
         if update.update_time < residency_deadline:
           state = update.state
       if state and state in valid_state_keys:
