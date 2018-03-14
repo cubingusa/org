@@ -6,7 +6,7 @@
         {{ rank }}
       </div>
       <div class="person-col">
-        {% if competitor.competitor.wca_person and competitior.competitor.wca_person.get() %}
+        {% if competitor.competitor.wca_person and competitor.competitor.wca_person.get() %}
           <a href="{{ competitor.competitor.wca_person.get().GetWCALink() }}"
              target="_blank">
             {{ competitor.competitor.name }}
