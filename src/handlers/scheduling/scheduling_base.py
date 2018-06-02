@@ -2,6 +2,8 @@ import datetime
 import logging
 import urllib
 
+from google.appengine.ext import ndb
+
 from src import common
 from src.handlers.base import BaseHandler
 from src.handlers.oauth import OAuthBaseHandler
@@ -11,6 +13,8 @@ from src.models.scheduling.competition import ScheduleCompetition
 from src.models.scheduling.person import SchedulePerson
 from src.models.scheduling.person import SchedulePersonRoles
 from src.models.scheduling.schedule import Schedule
+from src.models.user import Roles
+from src.models.wca.competition import Competition
 
 class SchedulingBaseHandler(BaseHandler):
   def RespondWithError(self, error_string):
@@ -53,7 +57,8 @@ class SchedulingBaseHandler(BaseHandler):
 
     self.is_editor = True
     person = SchedulePerson.get_by_id(SchedulePerson.Id(competition_id, self.user.key.id()))
-    if not person or SchedulePersonRoles.EDITOR not in person.roles:
+    if ((not person or SchedulePersonRoles.EDITOR not in person.roles) and
+        (not self.user.HasAnyRole([Roles.GLOBAL_ADMIN, Roles.WEBMASTER]))):
       self.is_editor = False
       if edit_access_needed:
         self.RespondWithError(
