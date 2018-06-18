@@ -9,7 +9,7 @@ Please ask webmaster@cubingusa.org to add you as an editor to the staging app: h
 You can use `deploy.sh` to deploy to staging:
 
 ```sh
-./deploy.sh -s -f *.yaml -v $YOUR_VERSION_NAME
+./deploy.sh -s -v $YOUR_VERSION_NAME -f *.yaml
 ```
 
 Please select a unique version name which includes your name.  Be aware that all staging versions of the app share the same datastore, so please be careful to avoid breaking other people!
