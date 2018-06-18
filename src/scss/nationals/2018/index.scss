@@ -17,6 +17,19 @@
       @include make-col(12);
       order: 2;
     }
+    
+    h5 {
+      padding-top: 20px;
+    }
+    
+    .cubicle-logo {
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .partner-links {
+      padding-top: 5px;
+    }
   }
 
   .image-container {
