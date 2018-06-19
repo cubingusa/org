@@ -29,12 +29,15 @@
       @include make-col(12);
       order: 1;
     }
+
+    padding-bottom: 15px;
+
     img {
       width: 100%;
     }
     
     .partner-label {
-      padding-top: 10px;
+      padding-top: 15px;
     }
     
     #cubicle-logo {
