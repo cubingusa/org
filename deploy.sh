@@ -74,7 +74,7 @@ pip2.7 install -t lib -r requirements.txt --upgrade
 
 echo "Recompiling minified CSS."
 rm -r -f src/static/css/prod
-mkdir src/static/css/prod
+mkdir -p src/static/css/prod
 sass --update src/scss:src/static/css/prod --style compressed
 
 echo "Deploying to App Engine."
