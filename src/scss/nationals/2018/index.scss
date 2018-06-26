@@ -29,8 +29,21 @@
       @include make-col(12);
       order: 1;
     }
+
+    padding-bottom: 10px;
+
     img {
       width: 100%;
+    }
+    
+    .partner-label {
+      padding-top: 15px;
+      margin-bottom: 5px;
+    }
+    
+    #cubicle-logo {
+      width: 100%;
+      max-width: 400px;
     }
   }
 }
