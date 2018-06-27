@@ -21,6 +21,8 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/nationals/2018/schedule', handler=Schedule2018Handler),
   webapp2.Route('/nationals/2018/travel',
                 handler=BasicHandler('/nationals/2018/travel.html')),
+  webapp2.Route('/nationals/2018/unofficial',
+                handler=BasicHandler('/nationals/2018/unofficial.html')),
   webapp2.Route('/nationals/2018/contact',
                 handler=ContactHandler('nats-organizers@cubingusa.org',
                                        '/nationals/2018/contact.html',

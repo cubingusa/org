@@ -1,0 +1,34 @@
+{% extends "nationals/2018/base.html" %}
+{% block title%}Nationals 2018 Unofficial Events{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/unofficial') }}
+{% endblock %}
+{% block content %}
+  <h1>Unofficial Events and Seminars</h1>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-microphone" aria-hidden="true"></i> Seminars</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            We're planning to host a series of seminars in the evening.  If you're interested in giving a seminar, please fill out <a href="https://docs.google.com/forms/d/e/1FAIpQLSe0qaJPqUzR9Pb5j1hzdz1QczO9Kdy8zUfCd_nmI8QLRVIBgg/viewform">this form</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-cube" aria-hidden="true"></i> Unofficial Events</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            We're also planning to hold unofficial events.  We're still finalizing the list of events and schedule, check back here for more information!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
