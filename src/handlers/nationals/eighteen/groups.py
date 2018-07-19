@@ -53,7 +53,7 @@ class Groups2018Handler(BaseHandler):
     competitors_by_id = {c['wca_id'] : c for c in competitors}
 
     # If the person is logged in, redirect them to their groups.
-    if not person_id and self.user and self.user.wca_person and self.user.wca_person.id() in competitors_by_id:
+    if not person_id and self.user and self.user.wca_person and self.user.wca_person.id() in competitors_by_id and not event_id:
       self.redirect_to('groups_2018_person', person_id=self.user.wca_person.id())
       return
 
