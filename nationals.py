@@ -6,6 +6,7 @@ from src.handlers.basic import BasicHandler
 from src.handlers.contact import ContactHandler
 from src.models.user import Roles
 from src.handlers.nationals.eighteen.events import Events2018Handler
+from src.handlers.nationals.eighteen.groups import Groups2018Handler
 from src.handlers.nationals.eighteen.schedule import Schedule2018Handler
 
 uri_base = '/nationals/2018'
@@ -27,4 +28,10 @@ app = webapp2.WSGIApplication([
                 handler=ContactHandler('nats-organizers@cubingusa.org',
                                        '/nationals/2018/contact.html',
                                        'Nationals 2018')),
+  webapp2.Route('/nationals/2018/groups', handler=Groups2018Handler,
+                name='groups_2018'),
+  webapp2.Route('/nationals/2018/groups/<person_id:\d\d\d\d\w\w\w\w\d\d>',
+                handler=Groups2018Handler, name='groups_2018_person'),
+  webapp2.Route('/nationals/2018/groups/<event_id:.*>/<round_num:\d>/<stage:.>/<group:\d*>',
+                handler=Groups2018Handler, name='groups_2018_group'),
 ], config=config.GetAppConfig())

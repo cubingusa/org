@@ -1,0 +1,90 @@
+{% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
+{% extends "nationals/2018/base.html" %}
+{% block title%}Nationals 2018 Groups{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/index') }}
+{% endblock %}
+{% block content %}
+  <h2>CubingUSA Nationals 2018 Groups</h2>
+  <p>
+    <div class="form-group">
+      <label for="competitor-select">
+        Select a Competitor
+      </label>
+      <select class="form-control" id="competitor-select">
+        <option>
+        {% for competitor in competitors %}
+          <option data-wcaid="{{ competitor['wca_id'] }}"
+                  {% if active_competitor and competitor['id'] == active_competitor['id'] %}
+                    selected
+                  {% endif %}>
+            {{ competitor['name'] }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </p>
+  {% if schedule %}
+    <h4>{{ active_competitor['name']}}</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            Time
+          </th>
+          <th>
+            Event
+          </th>
+          <th>
+            Group
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set ns = namespace(activeday=-1) %}
+        {% for item in schedule %}
+          {% if 'competing' in item %}
+            {% set group = item['competing'] %}
+            {% if ns.activeday != group['start_time']['weekday'] %}
+              {% set ns.activeday = group['start_time']['weekday'] %}
+              <tr class="table-secondary">
+                <td colspan="4">
+                  <b>{{ f.format_day_of_week(ns.activeday) }}</b>
+                </td>
+              </tr>
+            {% endif %}
+            <tr>
+              <td>
+                {{ f.format_time(group['start_time']) }}
+              </td>
+              <td>
+                {{ group['round']['event']['name'] }}
+                {% if group['round']['event']['id'] in ('333mbf', '333fm') %}
+                  Attempt {{ group['round']['number'] }}
+                {% elif group['round']['is_final'] %}
+                  Final
+                {% else %}
+                  Round {{ group['round']['number'] }}
+                {% endif %}
+              </td>
+              <td>
+                <a href="{{ c.uri_for('groups_2018_group',
+                                      event_id=group['round']['event']['id'],
+                                      round_num=group['round']['number'],
+                                      stage=group['stage']['id'],
+                                      group=group['number']) }}">
+                  {{ group['stage']['name'] }} {{ group['number'] }}
+                </a>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+  <p>
+    Groups and times are subject to change.  Please be ready to compete 10 minutes before your group is scheduled to start, and please listen for announcements.
+  </p>
+  <script src="/static/js/nationals-groups-2018.js" type="application/javascript"></script>
+{% endblock %}
