@@ -59,14 +59,7 @@
                 {{ f.format_time(group['start_time']) }}
               </td>
               <td>
-                {{ group['round']['event']['name'] }}
-                {% if group['round']['event']['id'] in ('333mbf', '333fm') %}
-                  Attempt {{ group['round']['number'] }}
-                {% elif group['round']['is_final'] %}
-                  Final
-                {% else %}
-                  Round {{ group['round']['number'] }}
-                {% endif %}
+                {{ f.format_event_round(group['round']) }}
               </td>
               <td>
                 <a href="{{ c.uri_for('groups_2018_group',
@@ -83,6 +76,52 @@
       </tbody>
     </table>
   {% endif %}
+  {% if group %}
+    <h4>{{ f.format_event_round(group['group']['round']) }} &mdash; {{ group['group']['stage']['name'] }} {{ group['group']['number'] }}</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            WCA ID
+          </th>
+          <th>
+            Seed Time
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-secondary">
+          <td colspan="4">
+            <b>Competitors</b>
+          </td>
+        </tr>
+        {% for competitor in group['competitors'] %}
+          <tr>
+            <td>
+              <a href="{{ c.uri_for('groups_2018_person', person_id=competitor['wca_id']) }}">
+                {{ competitor['name'] }}
+              </a>
+            </td>
+            <td>
+              <a href="https://worldcubeassociation.org/persons/{{ competitor['wca_id'] }}"
+                 target="_blank">
+                {{ competitor['wca_id'] }}
+              </a>
+            </td>
+            <td>
+              {% if competitor['wca_id'] in seed_times %}
+                {{ c.formatters.FormatTime(seed_times[competitor['wca_id']].best, event_key, True) }}
+              {% else %}
+                &ndash;
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
   <p>
     Groups and times are subject to change.  Please be ready to compete 10 minutes before your group is scheduled to start, and please listen for announcements.
   </p>

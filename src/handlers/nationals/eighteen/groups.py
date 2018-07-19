@@ -1,10 +1,14 @@
 import json
 
 from google.appengine.api import urlfetch
+from google.appengine.ext import ndb
 
 from src import common
 from src.handlers.base import BaseHandler
 from src.jinja import JINJA_ENVIRONMENT
+from src.models.wca.event import Event
+from src.models.wca.rank import RankAverage
+from src.models.wca.rank import RankSingle
 
 
 SCHEDULING_BASE_PATH='https://usnationals2018.appspot.com'
@@ -19,9 +23,18 @@ class Formatters:
   def format_day_of_week(day_of_week_int):
     return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][day_of_week_int]
 
+  @staticmethod
+  def format_event_round(round_dict):
+    if round_dict['event']['id'] in ('333mbf', '333fm'):
+      return '%s Attempt %d' % (round_dict['event']['name'], round_dict['number'])
+    if round_dict['is_final']:
+      return '%s Final' % round_dict['event']['name']
+    return '%s Round %d' % (round_dict['event']['name'], round_dict['number'])
+      
+
 
 class Groups2018Handler(BaseHandler):
-  def get(self, person_id='', event_id='', round_num='', stage='', group_num=''):
+  def get(self, person_id='', event_id='', round_num='', stage='', group=''):
     # Common stuff: get a list of all competitors.
     error_template = JINJA_ENVIRONMENT.get_template('error.html')
     template = JINJA_ENVIRONMENT.get_template('nationals/2018/groups.html')
@@ -64,11 +77,11 @@ class Groups2018Handler(BaseHandler):
       }))
       return
 
-    if event_id and round_num and stage and group_num:
+    if event_id and round_num and stage and group:
       try:
         result = urlfetch.fetch(SCHEDULING_BASE_PATH +
                                 '/get_group_info/%s/%s/%s/%s' %
-                                    (event_id, round_num, stage, group_num))
+                                    (event_id, round_num, stage, group))
       except urlfetch.Error as e:
         self.response.write(error_template.render({
             'c': common.Common(self),
@@ -76,11 +89,21 @@ class Groups2018Handler(BaseHandler):
         logging.error(str(e))
         return
       group = json.loads(result.content)
+      event_key = ndb.Key(Event, event_id)
+
+      rank_class = RankSingle if 'bf' in event_id else RankAverage
+      rank_keys = [ndb.Key(rank_class, '%s_%s' % (competitor['wca_id'], event_id))
+                   for competitor in group['competitors']]
+      ranks = ndb.get_multi(rank_keys)
+      seed_times = {rank.key.id()[:rank.key.id().find('_')] : rank for rank in ranks if rank}
+
       self.response.write(template.render({
           'c': common.Common(self),
           'f': Formatters,
           'competitors': competitors,
           'group': group,
+          'event_key': event_key,
+          'seed_times': seed_times,
       }))
       return
     self.response.write(template.render({
