@@ -17,7 +17,8 @@ SCHEDULING_BASE_PATH='https://usnationals2018.appspot.com'
 class Formatters:
   @staticmethod
   def format_time(time_dict):
-    return '%d:%02d' % (time_dict['hour'], time_dict['minute'])
+    return '%d:%02d %s' % ((time_dict['hour'] - 1) % 12 + 1, time_dict['minute'],
+                           'PM' if time_dict['hour'] >= 12 else 'AM')
 
   @staticmethod
   def format_day_of_week(day_of_week_int):
@@ -30,7 +31,59 @@ class Formatters:
     if round_dict['is_final']:
       return '%s Final' % round_dict['event']['name']
     return '%s Round %d' % (round_dict['event']['name'], round_dict['number'])
-      
+
+  @staticmethod
+  def job_text(staff):
+    if staff['job'] == 'J':
+      return 'Judge station %d' % staff['station']
+    elif staff['job'] == 'S':
+      return 'Scramble'
+    elif staff['job'] == 'R':
+      return 'Run'
+    elif staff['job'] == 'L':
+      return 'Judge (Long Room)'
+    elif staff['job'] == 'U':
+      return 'Scramble (Long Room)'
+    elif staff['job'] == 'Y':
+      return staff['misc']
+    elif staff['job'] == 'H':
+      return 'Help Desk'
+
+
+def BuildSchedule(schedule, staff_view):
+  new_schedule = []
+  active_staff_job = None
+  for item in schedule['groups']:
+    if 'competing' in item:
+      if active_staff_job:
+        new_schedule.append({'staff': active_staff_job})
+        active_staff_job = None
+      new_schedule.append(item)
+      continue
+    if not staff_view:
+      continue
+
+    staff = item['staff']
+    station = staff['station'] if 'station' in staff else None
+    if active_staff_job:
+      if (active_staff_job['groups'][-1]['end_time'] == staff['group']['start_time'] and
+          active_staff_job['job'] == staff['job'] and
+          station == active_staff_job['station']):
+        active_staff_job['groups'].append(staff['group'])
+        continue
+      else:
+        new_schedule.append({'staff': active_staff_job})
+    active_staff_job = {
+        'job': staff['job'],
+        'station': staff['station'] if 'station' in staff else None,
+        'groups': [staff['group']],
+    }
+    for key in ('misc', 'long_event'):
+      if key in staff:
+        active_staff_job[key] = staff[key]
+  if active_staff_job:
+    new_schedule.append({'staff': active_staff_job})
+  return new_schedule
 
 
 class Groups2018Handler(BaseHandler):
@@ -38,6 +91,7 @@ class Groups2018Handler(BaseHandler):
     # Common stuff: get a list of all competitors.
     error_template = JINJA_ENVIRONMENT.get_template('error.html')
     template = JINJA_ENVIRONMENT.get_template('nationals/2018/groups.html')
+    staff_view = self.request.get('staff_view')
 
     try:
       result = urlfetch.fetch(SCHEDULING_BASE_PATH + '/get_competitors')
@@ -67,13 +121,14 @@ class Groups2018Handler(BaseHandler):
             'error': 'Failed to load schedule!'}))
         logging.error(str(e))
         return
-      schedule = json.loads(result.content)
+      schedule = BuildSchedule(json.loads(result.content), staff_view)
       self.response.write(template.render({
           'c': common.Common(self),
           'f': Formatters,
           'competitors': competitors,
           'active_competitor': person,
-          'schedule': schedule['groups'],
+          'schedule': schedule,
+          'staff_view': self.request.get('staff_view'),
       }))
       return
 
