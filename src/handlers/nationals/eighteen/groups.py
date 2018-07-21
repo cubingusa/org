@@ -97,6 +97,18 @@ class Groups2018Handler(BaseHandler):
       ranks = ndb.get_multi(rank_keys)
       seed_times = {rank.key.id()[:rank.key.id().find('_')] : rank for rank in ranks if rank}
 
+      judges = [{}] * 10
+      scramblers = []
+      runners = []
+      for staff_assignment in group['staff']:
+        job = staff_assignment['job']
+        if job == 'J':
+          judges[staff_assignment['station'] - 1] = staff_assignment['staff_member']
+        elif job == 'R':
+          runners.append(staff_assignment['staff_member'])
+        elif job == 'S':
+          scramblers.append(staff_assignment['staff_member'])
+
       self.response.write(template.render({
           'c': common.Common(self),
           'f': Formatters,
@@ -104,6 +116,9 @@ class Groups2018Handler(BaseHandler):
           'group': group,
           'event_key': event_key,
           'seed_times': seed_times,
+          'judges': judges,
+          'scramblers': scramblers,
+          'runners': runners,
       }))
       return
     self.response.write(template.render({

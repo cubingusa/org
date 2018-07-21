@@ -119,6 +119,41 @@
               {% endif %}
             </td>
           {% endfor %}
+          {% if judges or scramblers or runners %}
+            <tr class="table-secondary">
+              <td colspan="4">
+                <b>Staff</b>
+              </td>
+            </tr>
+            {% for staff_list, job_name in [(judges, 'Judge'), (scramblers, 'Scrambler'), (runners, 'Runner')] %}
+              {% for staff in staff_list %}
+                {% if staff %}
+                  <tr>
+                    <td>
+                      <a href="{{ c.uri_for('groups_2018_person', person_id=staff['wca_id']) }}">
+                        {{ staff['name'] }}
+                      </a>
+                    </td>
+                    <td>
+                      {% if 'XXXX' not in staff['wca_id'] %}
+                        <a href="{{ c.uri_for('groups_2018_person', person_id=staff['wca_id']) }}">
+                          {{ staff['wca_id'] }}
+                        </a>
+                      {% else %}
+                        &nbsp;
+                      {% endif %}
+                    </td>
+                    <td>
+                      {{ job_name }}
+                      {% if job_name == 'Judge' %}
+                        Station {{ loop.index }}
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          {% endif %}
         </tbody>
       </table>
     {% endif %}
