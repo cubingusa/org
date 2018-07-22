@@ -50,7 +50,7 @@ def ImportPerson(person_data, competition, out, people, countries):
     person.wca_person = None
   if not person.roles:
     person.roles = []
-  if ((person_data['delegatesCompetition'] or person_data['organizesCompetition']) and
+  if (('delegate' in person_data['roles'] or 'organizer' in person_data['roles']) and
       SchedulePersonRoles.EDITOR not in person.roles):
     person.roles.append(SchedulePersonRoles.EDITOR)
   if ('registration' in person_data and person_data['registration'] and
