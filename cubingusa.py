@@ -58,6 +58,8 @@ app = webapp2.WSGIApplication([
                 handler=ContactHandler(AppSettings.Get().contact_email, 'contact.html', 'CubingUSA'),
                 name='contact'),
   webapp2.Route('/newengland', handler=BasicHandler('newengland.html'), name='newengland'),
+  webapp2.Route('/app', handler=webapp2.RedirectHandler(
+                    'https://play.google.com/store/apps/details?id=org.cubingusa.usnationals')),
   # Async
   webapp2.Route('/async/champions_by_year/<event_id:.*>/<championship_type:.*>/<championship_region:.*>',
                 handler=ChampionsTableHandler),
