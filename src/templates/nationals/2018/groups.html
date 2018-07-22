@@ -5,6 +5,19 @@
 {% block style %}
   {{ css.css(c, 'nationals/2018/index') }}
 {% endblock %}
+
+{% macro display_groups(active_round, active_groups) %}
+  {{ active_round['event']['name'] }}
+  {% for active_group in active_groups %}
+    <a href="{{ c.uri_for('groups_2018_group',
+                          event_id=active_group['round']['event']['id'],
+                          round_num=active_group['round']['number'],
+                          stage=active_group['stage']['id'],
+                          group=active_group['number']) }}">
+      {{ active_group['stage']['name'] }} {{ active_group['number'] }}</a>{% if c.len(active_groups) > loop.index %},{% endif %}
+  {% endfor %}<br>
+{% endmacro %}
+
 {% block content %}
   <h2>CubingUSA Nationals 2018 Groups</h2>
   <p>
@@ -34,7 +47,11 @@
             Time
           </th>
           <th>
-            Event
+            {% if staff_view %}
+              Job
+            {% else %}
+              Event
+            {% endif %}
           </th>
           <th>
             Group
@@ -49,7 +66,7 @@
             {% if ns.activeday != group['start_time']['weekday'] %}
               {% set ns.activeday = group['start_time']['weekday'] %}
               <tr class="table-secondary">
-                <td colspan="4">
+                <td colspan="3">
                   <b>{{ f.format_day_of_week(ns.activeday) }}</b>
                 </td>
               </tr>
@@ -57,11 +74,21 @@
             <tr>
               <td>
                 {{ f.format_time(group['start_time']) }}
+                {% if staff_view %}
+                  &ndash; {{ f.format_time(group['end_time']) }}
+                {% endif %}
               </td>
               <td>
-                {{ f.format_event_round(group['round']) }}
+                {% if staff_view %}
+                  Compete
+                {% else %}
+                  {{ f.format_event_round(group['round']) }}
+                {% endif %}
               </td>
               <td>
+                {% if staff_view %}
+                  {{ f.format_event_round(group['round']) }}
+                {% endif %}
                 <a href="{{ c.uri_for('groups_2018_group',
                                       event_id=group['round']['event']['id'],
                                       round_num=group['round']['number'],
@@ -71,10 +98,63 @@
                 </a>
               </td>
             </tr>
+          {% elif 'staff' in item %}
+            {% set staff = item['staff'] %}
+            {% if ns.activeday != staff['groups'][0]['start_time']['weekday'] %}
+              {% set ns.activeday = staff['groups'][0]['start_time']['weekday'] %}
+              <tr class="table-secondary">
+                <td colspan="4">
+                  <b>{{ f.format_day_of_week(ns.activeday) }}</b>
+                </td>
+              </tr>
+            {% endif %}
+            <tr class="staff-job">
+              <td>
+                {{ f.format_time(staff['groups'][0]['start_time']) }} &ndash;
+                {{ f.format_time(staff['groups'][-1]['end_time']) }}
+              </td>
+              <td>
+                {{ f.job_text(staff) }}
+              </td>
+              <td>
+                {% if staff['job'] in ('J', 'S', 'R') %}
+                  {% set ns.active_round = {} %}
+                  {% set ns.active_groups = [] %}
+                  {% for group in staff['groups'] %}
+                    {% if not ns.active_round %}
+                      {% set ns.active_round = group['round'] %}
+                      {% set ns.active_groups = [] %}
+                    {% elif ns.active_round['event']['id'] != group['round']['event']['id'] %}
+                      {{ display_groups(ns.active_round, ns.active_groups) }}
+                      {% set ns.active_round = group['round'] %}
+                      {% set ns.active_groups = [] %}
+                    {% endif %}
+                    {% set ns.active_groups = ns.active_groups + [group] %}
+                  {% endfor %}
+                  {{ display_groups(ns.active_round, ns.active_groups) }}
+                {% elif staff['job'] in ('U', 'L') %}
+                  {{ staff['long_event']['event']['name'] }}
+                {% endif %}
+              </td>
+            </tr>
           {% endif %}
         {% endfor %}
       </tbody>
     </table>
+    {% if active_competitor['is_staff'] %}
+      <p>
+        {{ active_competitor['name'] }} is on staff.
+        {% if staff_view %}
+          <a href="{{ c.uri_for('groups_2018_person', person_id=active_competitor['wca_id']) }}">
+            Hide staff jobs
+          </a>
+        {% else %}
+          <a href="{{ c.uri_for('groups_2018_person', person_id=active_competitor['wca_id'], staff_view=1) }}">
+            Show staff jobs
+          </a>
+        {% endif %}
+      </p>
+    {% endif %}
   {% endif %}
   {% if group %}
     <h4>{{ f.format_event_round(group['group']['round']) }} &mdash; {{ group['group']['stage']['name'] }} {{ group['group']['number'] }}</h4>
@@ -118,45 +198,44 @@
                 &ndash;
               {% endif %}
             </td>
-          {% endfor %}
-          {% if judges or scramblers or runners %}
-            <tr class="table-secondary">
-              <td colspan="4">
-                <b>Staff</b>
-              </td>
-            </tr>
-            {% for staff_list, job_name in [(judges, 'Judge'), (scramblers, 'Scrambler'), (runners, 'Runner')] %}
-              {% for staff in staff_list %}
-                {% if staff %}
-                  <tr>
-                    <td>
+          </tr>
+        {% endfor %}
+        {% if judges or scramblers or runners %}
+          <tr class="table-secondary">
+            <td colspan="4">
+              <b>Staff</b>
+            </td>
+          </tr>
+          {% for staff_list, job_name in [(judges, 'Judge'), (scramblers, 'Scrambler'), (runners, 'Runner')] %}
+            {% for staff in staff_list %}
+              {% if staff %}
+                <tr>
+                  <td>
+                    <a href="{{ c.uri_for('groups_2018_person', person_id=staff['wca_id']) }}">
+                      {{ staff['name'] }}
+                    </a>
+                  </td>
+                  <td>
+                    {% if 'XXXX' not in staff['wca_id'] %}
                       <a href="{{ c.uri_for('groups_2018_person', person_id=staff['wca_id']) }}">
-                        {{ staff['name'] }}
+                        {{ staff['wca_id'] }}
                       </a>
-                    </td>
-                    <td>
-                      {% if 'XXXX' not in staff['wca_id'] %}
-                        <a href="{{ c.uri_for('groups_2018_person', person_id=staff['wca_id']) }}">
-                          {{ staff['wca_id'] }}
-                        </a>
-                      {% else %}
-                        &nbsp;
-                      {% endif %}
-                    </td>
-                    <td>
-                      {{ job_name }}
-                      {% if job_name == 'Judge' %}
-                        Station {{ loop.index }}
-                      {% endif %}
-                    </td>
-                  </tr>
-                {% endif %}
-              {% endfor %}
+                    {% endif %}
+                  </td>
+                  <td>
+                    {{ job_name }}
+                    {% if job_name == 'Judge' %}
+                      Station {{ loop.index }}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
             {% endfor %}
-          {% endif %}
-        </tbody>
-      </table>
-    {% endif %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  {% endif %}
   <p>
     Groups and times are subject to change.  Please be ready to compete 10 minutes before your group is scheduled to start, and please listen for announcements.
   </p>
