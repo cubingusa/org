@@ -6,8 +6,7 @@ from src.models.scheduling.schedule import Schedule
 
 
 class NewScheduleHandler(SchedulingBaseHandler):
-  def get(self):
-    competition_id = self.handler_data
+  def get(self, competition_id):
     if not self.SetCompetition(competition_id):
       return
 
