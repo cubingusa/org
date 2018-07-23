@@ -141,6 +141,8 @@
         {% endfor %}
       </tbody>
     </table>
+  {% endif %}
+  {% if active_competitor %}
     {% if active_competitor['is_staff'] %}
       <p>
         {{ active_competitor['name'] }} is on staff.
