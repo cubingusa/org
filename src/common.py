@@ -18,6 +18,7 @@ class Common(object):
     self.len = len
     self.formatters = formatters
     self.include_wca_disclaimer = handler.IncludeWcaDisclaimer()
+    self.year = datetime.date.today().year
 
   def uri_matches(self, path):
     return self.uri.endswith(path)
