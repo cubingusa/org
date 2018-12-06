@@ -4,7 +4,6 @@
 
 You will need to install the following:
 * [Google App Engine Python SDK](https://cloud.google.com/appengine/docs/flexible/python/download)
-* [SASS](http://sass-lang.com/install)
 * [pip](https://pip.pypa.io/en/stable/)
 
 ## Running app locally
