@@ -35,7 +35,7 @@ def assemble_zip(file_count, force):
   new_export_id = None
   date_regex = re.compile('Date:\s*(.*)')
 
-  with export_zip.open('README.txt') as readme_file:
+  with export_zip.open('README.md') as readme_file:
     for line in readme_file:
       m = date_regex.search(line)
       if m:
