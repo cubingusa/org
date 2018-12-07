@@ -1,0 +1,111 @@
+{% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
+{% extends "nationals/2019/base.html" %}
+{% block title%}Nationals 2019{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2019/index') }}
+{% endblock %}
+{% block content %}
+  <div class="nats-top-row">
+    <div class="top-info">
+      <h2 class="d-none d-xs-block">CubingUSA Nationals 2019</h2>
+      <p>
+        We're pleased to announce that CubingUSA Nationals 2019 will be held <strong>July 27-29, 2019</strong> at the <a href="https://www.visitsaltlake.com/salt-palace-convention-center/" target="_blank">Salt Palace Convention Center</a> in <strong>Salt Lake City, Utah!</strong>
+      </p>
+      <p>
+        CubingUSA Nationals 2019 will be the 14th US National Championship.  Each year, the competition brings together hundreds of the top American speedcubers, as well as many international competitors, for a fun weekend of solving puzzles.
+      </p>
+      <p>
+        Nationals is the largest and most professional speedcubing competition in the USA each year, brought to you by a dedicated team of volunteers who work year-round to support our community.  This year's Nationals will be the largest speedcubing competition in the USA to date.
+      </p>
+    </div>
+    <div class="image-container">
+      <img src="/static/img/nats-logo-2019.png" alt="CubingUSA Nationals 2019 Logo">
+      <h5 class="partner-label">Special Partner</h5>
+      <a href="http://www.thecubicle.us">
+        <img id="cubicle-logo" alt="[TheCubicle.us]" src="/static/img/cubicle-small.png">
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-info-circle" aria-hidden="true"></i> Key Facts</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <div class="info-box-row">
+              <i class="fa fa-calendar" aria-hidden="true"></i> <span class="info-box-label">Dates:</span> July 27-29, 2019
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Location:</span> Salt Lake City, Utah
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Venue:</span> <a href="https://www.visitsaltlake.com/salt-palace-convention-center/" target="_blank">Salt Palace Convention Center</a>
+            </div>
+            <div class="info-box-row">
+              <i class="fa fa-pencil" aria-hidden="true"></i> <span class="info-box-label">Registration:</span> The last day to make changes to your registration was June 25.  We cannot make any more changes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-link" aria-hidden="true"></i> Follow all the action!</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <div class="info-box-row">
+              <span class="info-box-label">Live Results:</span> <a href="https://cubecomps.cubing.net/live.php" target="_blank">Cubecomps</a>
+            </div>
+            <div class="info-box-row">
+              <span class="info-box-label">Live Streaming:</span> <a href="http://mentalblock.tv" target="_blank">MentalBlock.tv</a>
+            </div>
+            <div class="info-box-row">
+              <span class="info-box-label">Social Media:</span> <a href="https://www.facebook.com/CubingUSA/" target="_blank">Facebook</a>, <a href="https://www.instagram.com/cubingusa/" target="_blank">Instagram</a>
+            </div>
+            <div class="info-box-row">
+              <span class="info-box-label">Competition Site:</span> <a href="https://www.worldcubeassociation.org/competitions/CubingUSANationals2019" target="_blank">World Cube Association</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-trophy" aria-hidden="true"></i> Prizes</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">There will be a prize pool of <strong>$23,200</strong> provided by <a href="https://www.thecubicle.us/">TheCubicle.us</a>.</li>
+          <li class="list-group-item">
+            <b>3x3 Speedsolve:</b><br>
+            <span class="info-box-label">First Place:</span> $2,500<br>
+            <span class="info-box-label">Second Place:</span> $1,200<br>
+            <span class="info-box-label">Third Place:</span> $800<br>
+          </li>
+          <li class="list-group-item">
+            <b>Other Events:</b><br>
+            <span class="info-box-label">First Place:</span> $500<br>
+            <span class="info-box-label">Second Place:</span> $350<br>
+            <span class="info-box-label">Third Place:</span> $250<br>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <h4><i class="fa fa-trophy" aria-hidden="true"></i> Past <span id="nationals-evt"></span> National Champions</h4>
+    </div>
+    <div class="card-body">
+      <!-- {{ event_selector.event_selector(c, include_magic=True, include_mbo=False) }} -->
+      <div id="champions-table"></div>
+      <div class="spinner" id="nats-spinner"></div>
+    </div>
+  </div>
+  <script src="/static/js/nationals.js" type="application/javascript"></script>
+{% endblock %}

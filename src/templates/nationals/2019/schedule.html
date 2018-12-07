@@ -1,0 +1,20 @@
+{% import "components/css.html" as css %}
+{% import "components/scheduling/schedule.html" as schedule %}
+{% extends "nationals/2019/base.html" %}
+{% block title%}Nationals 2019 Schedule{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2019/schedule') }}
+{% endblock %}
+{% block content %}
+  <h1>CubingUSA Nationals 2019 Schedule</h1>
+  <p>
+    Please note that the schedule is tentative and may change between now and the competition.  Check-in will open at 9:00 AM on Friday and 8:30 AM on Saturday.  Competitors should check in at least <strong>half an hour</strong> before their first event.
+  </p>
+  <p>
+    All times are Mountain Daylight Time (MDT) (UTC-6).
+  </p>
+  <p>
+    Events with borders are final rounds.
+  </p>
+  {{ schedule.schedule(c, competition_details) }}
+{% endblock %}
