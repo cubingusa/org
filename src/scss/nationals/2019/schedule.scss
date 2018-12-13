@@ -106,4 +106,10 @@ $grid-gutter-width: 18px;
       display: none;
     }
   }
+
+  .key {
+    @include media-breakpoint-up(sm) {
+      display: none;
+    }
+  }
 }
