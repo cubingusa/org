@@ -59,6 +59,9 @@ class Common(object):
             if (include_magic or e.key.id() not in ['magic', 'mmagic']) and
                (include_mbo or e.key.id() != '333mbo')]
 
+  def event(self, event_id):
+    return Event.get_by_id(event_id)
+
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
 
