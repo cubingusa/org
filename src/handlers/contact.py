@@ -42,11 +42,16 @@ def ContactHandler(contact_email, template_path, subject_prefix):
       subject = '[%s] Contact form -- %s' % (
           subject_prefix,
           self.user.name if self.user else self.request.get('from-address'))
+      if self.request.get('wcaid'):
+        body = 'WCA ID: %s\n%s' % (self.request.get('wcaid'),
+                                   self.request.get('contact-message'))
+      else:
+        body = self.request.get('contact-message')
       mail.send_mail(sender=contact_email,
                      to=contact_email,
                      cc=self.request.get('from-address'),
                      subject=subject,
-                     body=self.request.get('contact-message'))
+                     body=body)
       self.redirect(self.request.url + '?success=1')
 
   return Handler
