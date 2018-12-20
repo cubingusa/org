@@ -12,32 +12,43 @@
   <form action="{{ c.uri }}" id="form" method="POST">
     <h3>Contact Us</h3>
     {{ caller() }}
-    <div class="form-group">
-      <label for="from-address">From</label>
-      <input type="email"
-             class="form-control"
-             name="from-address"
-             id="from-address"
-             {% if c.user %}
-               value="{{ c.user.email }}"
-               readonly
-             {% else %}
-               placeholder="name@example.com"
-             {% endif %}
-             required>
-    </div>
-    <div class="form-group">
-      <label for="contact-message">Message</label>
-      <textarea class="form-control"
-                name="contact-message"
-                id="contact-message"
-                rows="5"
-                required></textarea>
-    </div>
-    {% if c.app_settings().recaptcha_site_key %}
-      <div class="g-recaptcha" data-sitekey="{{ c.app_settings().recaptcha_site_key }}"></div>
+    {% if not c.user %}
+      <div id="noid-container">
+        <p>If you have a WCA account, please <a href="/login">log in</a></p>
+        <a id="noid" href="#">I don't have a WCA account.</a>
+      </div>
     {% endif %}
-    <button class="button" type="submit">Send</button>
+    <div id="form-content-container"
+         {% if not c.user %}
+         style="display: none;"
+         {% endif %}>
+      <div class="form-group">
+        <label for="from-address">From</label>
+        <input type="email"
+               class="form-control"
+               name="from-address"
+               id="from-address"
+               {% if c.user %}
+                 value="{{ c.user.email }}"
+                 readonly
+               {% else %}
+                 placeholder="name@example.com"
+               {% endif %}
+               required>
+      </div>
+      <div class="form-group">
+        <label for="contact-message">Message</label>
+        <textarea class="form-control"
+                  name="contact-message"
+                  id="contact-message"
+                  rows="5"
+                  required></textarea>
+      </div>
+      {% if c.app_settings().recaptcha_site_key %}
+        <div class="g-recaptcha" data-sitekey="{{ c.app_settings().recaptcha_site_key }}"></div>
+      {% endif %}
+      <button class="button" type="submit">Send</button>
+    </div>
   </form>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endmacro %}
