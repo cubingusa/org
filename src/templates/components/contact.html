@@ -12,7 +12,11 @@
   <form action="{{ c.uri }}" id="form" method="POST">
     <h3>Contact Us</h3>
     {{ caller() }}
-    {% if not c.user %}
+    {% if c.user %}
+      <p>
+        You're logged in with your WCA account.  If you'd like to change your email address, you can do so <a href="https://www.worldcubeassociation.org/profile/edit?section=email" target="_blank">here</a>.
+      </p>
+    {% else %}
       <div id="noid-container">
         <p>If you have a WCA account, please <a href="/login">log in</a></p>
         <a id="noid" href="#">I don't have a WCA account.</a>
