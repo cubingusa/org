@@ -39,9 +39,7 @@ def ContactHandler(contact_email, template_path, subject_prefix):
               'result': 'failure',
           }))
           return
-      subject = '[%s] Contact form -- %s' % (
-          subject_prefix,
-          self.user.name if self.user else self.request.get('from-address'))
+      subject = '[%s] Contact form -- %s' % (subject_prefix, self.request.get('name'))
       if self.request.get('wcaid'):
         body = 'WCA ID: %s\n%s' % (self.request.get('wcaid'),
                                    self.request.get('contact-message'))
