@@ -1,7 +1,7 @@
 .contact-from-line {
   @include make-row();
 
-  .email-container {
+  .contact-from-col {
     @include make-col-ready();
 
     @include media-breakpoint-down(xs) {
@@ -9,19 +9,7 @@
     }
 
     @include media-breakpoint-up(sm) {
-      @include make-col(6);
-    }
-  }
-
-  .wcaid-container {
-    @include make-col-ready();
-
-    @include media-breakpoint-down(xs) {
-      @include make-col(12);
-    }
-
-    @include media-breakpoint-up(sm) {
-      @include make-col(6);
+      @include make-col(4);
     }
   }
 }

@@ -23,9 +23,25 @@
          style="display: none;"
          {% endif %}>
       <div class="contact-from-line">
-        <div class="email-container">
+        <div class="contact-from-col">
           <div class="form-group">
-            <label for="from-address">From</label>
+            <label for="from-address">Name</label>
+            <input type="email"
+                   class="form-control"
+                   name="from-address"
+                   id="from-address"
+                   {% if c.user %}
+                     value="{{ c.user.name }}"
+                     readonly
+                   {% else %}
+                     placeholder="Your Name"
+                   {% endif %}
+                   required>
+          </div>
+        </div>
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="from-address">Email</label>
             <input type="email"
                    class="form-control"
                    name="from-address"
@@ -39,7 +55,7 @@
                    required>
           </div>
         </div>
-        <div class="wcaid-container">
+        <div class="contact-from-col">
           <div class="form-group">
             <label for="wcaid">WCA ID</label>
             <input type="text"
