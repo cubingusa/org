@@ -26,10 +26,9 @@
         <div class="contact-from-col">
           <div class="form-group">
             <label for="from-address">Name</label>
-            <input type="email"
-                   class="form-control"
-                   name="from-address"
-                   id="from-address"
+            <input class="form-control"
+                   name="name"
+                   id="name"
                    {% if c.user %}
                      value="{{ c.user.name }}"
                      readonly
