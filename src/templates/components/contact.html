@@ -22,19 +22,38 @@
          {% if not c.user %}
          style="display: none;"
          {% endif %}>
-      <div class="form-group">
-        <label for="from-address">From</label>
-        <input type="email"
-               class="form-control"
-               name="from-address"
-               id="from-address"
-               {% if c.user %}
-                 value="{{ c.user.email }}"
-                 readonly
-               {% else %}
-                 placeholder="name@example.com"
-               {% endif %}
-               required>
+      <div class="contact-from-line">
+        <div class="email-container">
+          <div class="form-group">
+            <label for="from-address">From</label>
+            <input type="email"
+                   class="form-control"
+                   name="from-address"
+                   id="from-address"
+                   {% if c.user %}
+                     value="{{ c.user.email }}"
+                     readonly
+                   {% else %}
+                     placeholder="name@example.com"
+                   {% endif %}
+                   required>
+          </div>
+        </div>
+        <div class="wcaid-container">
+          <div class="form-group">
+            <label for="wcaid">WCA ID</label>
+            <input type="text"
+                   class="form-control"
+                   name="wcaid"
+                   id="wcaid"
+                   {% if c.user and c.user.wca_person %}
+                     value="{{ c.user.wca_person.id() }}"
+                     readonly
+                   {% else %}
+                     placeholder="Leave blank if you've never competed officially."
+                   {% endif %}>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label for="contact-message">Message</label>
