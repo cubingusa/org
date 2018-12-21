@@ -6,8 +6,8 @@ from webapp2_extras import sessions
 from src.models.user import Roles
 from src.models.user import User
 
-# Log out every week.
-LOGOUT_INTERVAL = datetime.timedelta(days=7)
+# Log out every four weeks.
+LOGOUT_INTERVAL = datetime.timedelta(days=28)
 
 class BaseHandler(webapp2.RequestHandler):
   def dispatch(self):
