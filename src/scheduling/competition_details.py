@@ -135,7 +135,7 @@ class CompetitionDetails(object):
 
   def SetQualifyingTime(self, event_id, time, is_average):
     ranks_dict = self.ranks_average if is_average else self.ranks_single
-    is_qualified = event_id in ranks_dict and ranks_dict[event_id].best <= time
+    is_qualified = event_id in ranks_dict and ranks_dict[event_id].best < time
     self.events[event_id].SetQualifyingTime(time, is_average, is_qualified)
 
   def GetEvents(self):
