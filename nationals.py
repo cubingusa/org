@@ -12,7 +12,7 @@ from src.handlers.nationals.nineteen.events import Events2019Handler
 from src.handlers.nationals.nineteen.schedule import Schedule2019Handler
 
 app = webapp2.WSGIApplication([
-  webapp2.Route('/nationals', webapp2.RedirectHandler, defaults={'_uri': '/nationals/2018'}),
+  webapp2.Route('/nationals', webapp2.RedirectHandler, defaults={'_uri': '/nationals/2019'}),
   # 2018
   webapp2.Route('/nationals/2018',
                 handler=BasicHandler('/nationals/2018/index.html',
