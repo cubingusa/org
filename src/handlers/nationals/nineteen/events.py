@@ -13,7 +13,7 @@ class Events2019Handler(SchedulingBaseHandler):
     template = JINJA_ENVIRONMENT.get_template('nationals/2019/events.html')
     competition_details = CompetitionDetails(self.user, self.competition)
 
-    competition_details.SetQualifyingTime('333', 3000, is_average=True)
+    competition_details.SetQualifyingTime('333', 4000, is_average=True)
     competition_details.SetQualifyingTime('222', 1100, is_average=True)
     competition_details.SetQualifyingTime('444', 6000, is_average=True)
     competition_details.SetQualifyingTime('555', 10000, is_average=True)
