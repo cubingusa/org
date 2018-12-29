@@ -1,0 +1,15 @@
+.contact-from-line {
+  @include make-row();
+
+  .contact-from-col {
+    @include make-col-ready();
+
+    @include media-breakpoint-down(xs) {
+      @include make-col(12);
+    }
+
+    @include media-breakpoint-up(sm) {
+      @include make-col(4);
+    }
+  }
+}

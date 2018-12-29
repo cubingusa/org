@@ -7,11 +7,9 @@
   {{ css.css(c, 'contact') }}
 {% endblock %}
 {% block content %}
-  <div class="about-row">
-    {% call contact.contact_form(c, result) %}
-      <p>If you have questions about CubingUSA Nationals, please use the <a href="/nationals/2018/contact">Nationals contact form</a>.
-    {% endcall %}
-  </div>
+  {% call contact.contact_form(c, result) %}
+    <p>If you have questions about CubingUSA Nationals, please use the <a href="/nationals/2018/contact">Nationals contact form</a>.
+  {% endcall %}
   <div class="about-row">
     <div class="standard-block">
       <div class="card">
@@ -25,5 +23,6 @@
         </div>
       </div>
     </div>
-  <div>
+  </div>
+  <script src="/static/js/contact.js" type="application/javascript"></script>
 {% endblock %}
