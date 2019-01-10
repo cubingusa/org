@@ -12,7 +12,7 @@ from src.models.wca.export import get_latest_export
 
 class Common(object):
   
-  currentDate = datetime.datetime.now()
+  current_date = datetime.datetime.now()
   
   def __init__(self, handler):
     self.uri_for = webapp2.uri_for
