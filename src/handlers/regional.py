@@ -12,7 +12,7 @@ class RegionalsHandler(BaseHandler):
   def get(self):
     # The year we want to display championships for.  We should update this
     # once we're ready to start announcing the next year's championships.
-    year = 2018
+    year = 2019
 
     championships = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()
