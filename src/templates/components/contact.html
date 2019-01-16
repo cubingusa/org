@@ -89,7 +89,11 @@
       {% if c.app_settings().recaptcha_site_key %}
         <div class="g-recaptcha" data-sitekey="{{ c.app_settings().recaptcha_site_key }}"></div>
       {% endif %}
-      <button class="button" type="submit">Send</button>
+      <button class="button" type="submit"
+      {% if not c.user %}
+        disabled
+      {% endif %}
+      >Send</button>
     </div>
   </form>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
