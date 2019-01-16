@@ -18,14 +18,11 @@
       </p>
     {% else %}
       <div id="noid-container">
-        <p>If you have a WCA account, please <a href="/login">log in</a></p>
+        <p>In order to contact us, you will need to login in with your WCA account <a href="/login">here</a>.</p>
         <a id="noid" href="#">I don't have a WCA account.</a>
       </div>
     {% endif %}
-    <div id="form-content-container"
-         {% if not c.user %}
-         style="display: none;"
-         {% endif %}>
+    <div id="form-content-container">
       <div class="contact-from-line">
         <div class="contact-from-col">
           <div class="form-group">
@@ -38,6 +35,7 @@
                      readonly
                    {% else %}
                      placeholder="Your Name"
+                     disabled
                    {% endif %}
                    required>
           </div>
@@ -54,6 +52,7 @@
                      readonly
                    {% else %}
                      placeholder="name@example.com"
+                     disabled
                    {% endif %}
                    required>
           </div>
@@ -70,6 +69,7 @@
                      readonly
                    {% else %}
                      placeholder="Leave blank if you've never competed officially."
+                     disabled
                    {% endif %}>
           </div>
         </div>
@@ -80,7 +80,11 @@
                   name="contact-message"
                   id="contact-message"
                   rows="5"
-                  required></textarea>
+                  required
+                  {% if not c.user %}
+                    disabled
+                  {% endif %}
+                  ></textarea>
       </div>
       {% if c.app_settings().recaptcha_site_key %}
         <div class="g-recaptcha" data-sitekey="{{ c.app_settings().recaptcha_site_key }}"></div>
