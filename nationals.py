@@ -9,7 +9,6 @@ from src.handlers.nationals.eighteen.events import Events2018Handler
 from src.handlers.nationals.eighteen.groups import Groups2018Handler
 from src.handlers.nationals.eighteen.schedule import Schedule2018Handler
 from src.handlers.nationals.nineteen.events import Events2019Handler
-from src.handlers.nationals.nineteen.schedule import Schedule2019Handler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/nationals', webapp2.RedirectHandler, defaults={'_uri': '/nationals/2019'}),
@@ -40,7 +39,8 @@ app = webapp2.WSGIApplication([
                                      include_wca_disclaimer=True)),
   webapp2.Route('/nationals/2019/events', handler=Events2019Handler,
                 name='events_2019'),
-  webapp2.Route('/nationals/2019/schedule', handler=Schedule2019Handler),
+  webapp2.Route('/nationals/2019/schedule',
+                handler=BasicHandler('/nationals/2019/schedule.html')),
   webapp2.Route('/nationals/2019/travel',
                 handler=BasicHandler('/nationals/2019/travel.html')),
   webapp2.Route('/nationals/2019/contact',
