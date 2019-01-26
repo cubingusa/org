@@ -40,11 +40,11 @@ def UpdateMailingList(expected_emails, service, mailing_list):
   emails_to_add = expected_emails - current_emails
 
   for email_to_remove in emails_to_remove:
-    service.members().delete(groupKey=mailing_list, memberKey=email_to_remove).execute()
     logging.info('Removing %s from %s' % (email_to_remove, mailing_list))
+    service.members().delete(groupKey=mailing_list, memberKey=email_to_remove).execute()
   for email_to_add in emails_to_add:
-    service.members().insert(groupKey=mailing_list, body={'email': email_to_add}).execute()
     logging.info('Adding %s to %s' % (email_to_add, mailing_list))
+    service.members().insert(groupKey=mailing_list, body={'email': email_to_add}).execute()
 
 
 class UpdateMailingListsHandler(AdminBaseHandler):
