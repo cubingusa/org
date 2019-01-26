@@ -77,7 +77,7 @@ class Common(object):
   def get_nav_items(self):
     items = [('Home', '/'),
              ('Competitions', [
-                 ('Nationals', '/nationals/2018'),
+                 ('Nationals', '/nationals'),
                  ('Regional Championships', '/regional'),
              ]),
              ('Competitors', [
