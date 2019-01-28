@@ -18,7 +18,7 @@
       </p>
     {% else %}
       <div id="noid-container">
-        <p>In order to contact us, you will need to login in with your WCA account <a href="/login">here</a>.</p>
+        <p>If you have a WCA account, please <a href="/login">log in</a></p>
         <a id="noid" href="#">I don't have a WCA account.</a>
       </div>
     {% endif %}
@@ -89,7 +89,7 @@
       {% if c.app_settings().recaptcha_site_key %}
         <div class="g-recaptcha" data-sitekey="{{ c.app_settings().recaptcha_site_key }}"></div>
       {% endif %}
-      <button class="button" type="submit"
+      <button id="send-button" class="button" type="submit"
       {% if not c.user %}
         disabled
       {% endif %}
