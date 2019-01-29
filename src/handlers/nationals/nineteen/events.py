@@ -26,7 +26,7 @@ class Events2019Handler(SchedulingBaseHandler):
     competition_details.SetQualifyingTime('skewb', 1100, is_average=True)
     competition_details.SetQualifyingTime('clock', 1300, is_average=True)
     competition_details.SetQualifyingTime('sq1', 3000, is_average=True)
-    competition_details.SetQualifyingTime('333ft', 4500, is_average=True)
+    competition_details.SetQualifyingNumber('333ft', 50)
     competition_details.SetQualifyingTime('333bf', 18000, is_average=False)
     competition_details.SetQualifyingTime('444bf', 60000, is_average=False)
     competition_details.SetQualifyingTime('555bf', 120000, is_average=False)

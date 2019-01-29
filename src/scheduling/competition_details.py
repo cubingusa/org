@@ -66,6 +66,7 @@ class EventDetails(object):
     self._rounds = {}
     self._qualifying_time = None
     self._qualifying_time_is_average = False
+    self._qualifying_number = None
     self._is_qualified = False
 
   def AddRound(self, r):
@@ -83,6 +84,9 @@ class EventDetails(object):
   def GetQualifyingTime(self):
     return self._qualifying_time
 
+  def GetQualifyingNumber(self):
+    return self._qualifying_number
+
   def QualifyingTimeIsAverage(self):
     return self._qualifying_time_is_average
 
@@ -93,6 +97,9 @@ class EventDetails(object):
     self._qualifying_time = time
     self._qualifying_time_is_average = is_average
     self._is_qualified = is_qualified
+
+  def SetQualifyingNumber(self, number):
+    self._qualifying_number = number
 
 
 class CompetitionDetails(object):
@@ -133,10 +140,16 @@ class CompetitionDetails(object):
       self.ranks_single = {}
       self.ranks_average = {}
 
+    self.has_qualifying_number = False
+
   def SetQualifyingTime(self, event_id, time, is_average):
     ranks_dict = self.ranks_average if is_average else self.ranks_single
     is_qualified = event_id in ranks_dict and ranks_dict[event_id].best < time
     self.events[event_id].SetQualifyingTime(time, is_average, is_qualified)
+
+  def SetQualifyingNumber(self, event_id, number):
+    self.events[event_id].SetQualifyingNumber(number)
+    self.has_qualifying_number = True
 
   def GetEvents(self):
     return sorted(self.events.values(), key=lambda e: e.GetEvent().rank)
@@ -149,6 +162,9 @@ class CompetitionDetails(object):
       if e.GetQualifyingTime():
         return True
     return False
+
+  def HasQualifyingNumber(self):
+    return self.has_qualifying_number
 
   def HasMultipleRoundEvents(self):
     for e in self.events.itervalues():
