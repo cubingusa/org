@@ -68,6 +68,18 @@
               <span class="navbar-icon-label">Facebook</span>
             </a>
           </li>
+          <li class="navbar-icon-item">
+            <a href="https://twitter.com/CubingUSA" target="_blank" class="nav-link">
+              <i class="fa fa-twitter" aria-label="Twitter"></i>
+              <span class="navbar-icon-label">Twitter</span>
+            </a>
+          </li>
+          <li class="navbar-icon-item">
+            <a href="https://www.instagram.com/cubingusa/" target="_blank" class="nav-link">
+              <i class="fa fa-instagram" aria-label="Instagram"></i>
+              <span class="navbar-icon-label">Instagram</span>
+            </a>
+          </li>
           {% for title, path in c.get_right_nav_items() %}
             {% if c.is_string(path) %}
               {% call nav.navitem(c, path) %} {{ title }} {% endcall %}
