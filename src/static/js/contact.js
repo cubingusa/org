@@ -4,6 +4,11 @@ onloadModule.register(function() {
     document.getElementById('noid').onclick = function() {
       document.getElementById('form-content-container').style.display = 'block';
       document.getElementById('noid-container').style.display = 'none';
+      document.getElementById('name').disabled = false;
+      document.getElementById('from-address').disabled = false;
+      document.getElementById('wcaid').disabled = false;
+      document.getElementById('contact-message').disabled = false;
+      document.getElementById('send-button').disabled = false;
     }
   }
 });
