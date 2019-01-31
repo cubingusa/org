@@ -21,6 +21,7 @@ class Common(object):
     self.len = len
     self.formatters = formatters
     self.include_wca_disclaimer = handler.IncludeWcaDisclaimer()
+    self.year = datetime.date.today().year
 
   def uri_matches(self, path):
     return self.uri.endswith(path)
@@ -61,6 +62,9 @@ class Common(object):
             if (include_magic or e.key.id() not in ['magic', 'mmagic']) and
                (include_mbo or e.key.id() != '333mbo')]
 
+  def event(self, event_id):
+    return Event.get_by_id(event_id)
+
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
 
@@ -76,7 +80,7 @@ class Common(object):
   def get_nav_items(self):
     items = [('Home', '/'),
              ('Competitions', [
-                 ('Nationals', '/nationals/2018'),
+                 ('Nationals', '/nationals'),
                  ('Regional Championships', '/regional'),
              ]),
              ('Competitors', [

@@ -67,6 +67,16 @@
                       {% endif %}
                     {% endif %}
                   </div>
+                {% elif sched_round.number == 1 and e.GetQualifyingNumber() %}
+                  <div class="qualifying-time">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    <span class="desktop-only">
+                      Qualifying: Top {{ e.GetQualifyingNumber() }}
+                    </span>
+                    <span class="mobile-only">
+                      Qualifying: Top {{ e.GetQualifyingNumber() }}
+                    </span>
+                  </div>
                 {% endif %}
                 {% if sched_round.cutoff or sched_round.time_limit %}
                   <span class="time-limit">
@@ -137,6 +147,11 @@
               Qualifying times
             </span>
             must be set in other WCA competitions in order to register for this event.
+          </div>
+          <div class="event-key-row">
+            {% if competition_details.HasQualifyingNumber() %}
+              For events with a <b>Top N</b> qualifying time, after registration closes the top N people registered for the event will be allowed to compete, and all others will be removed from the event.
+            {% endif %}
           </div>
         {% endif %}
         <div class="event-key-row">

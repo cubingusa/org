@@ -1,0 +1,115 @@
+@import "base";
+@import "../../all_colors";
+
+$grid-gutter-width: 18px;
+
+.schedule-container {  
+  h3 {
+    margin-top: 20px;
+  }
+
+  .time-block {
+    font-weight: bold;
+    @include make-row();
+    border-radius: 0.25rem;
+    padding: 5px;
+    margin: 3px 0px;
+  }
+
+  .final-round {
+    border: 3px solid #aaaaee;
+  }
+
+  .time-block:nth-child(even) {
+    @include media-breakpoint-up(sm) {
+      background-color: $gray-200;
+    }
+  }
+
+  .time-block:nth-child(odd) {
+    @include media-breakpoint-up(sm) {
+      background-color: $gray-100;
+    }
+  }
+
+  .time-block-main:nth-child(even) {
+    @include media-breakpoint-up(xs) {
+      background-color: $gray-200;
+    }
+  }
+
+  .time-block-main:nth-child(odd) {
+    @include media-breakpoint-up(xs) {
+      background-color: $gray-100;
+    }
+  }
+
+  .time-block-side {
+    @include media-breakpoint-down(xs) {
+      background-color: $cyan;
+    }
+    .stage {
+      background-color: $cyan;
+    }
+  }
+
+  .time-block-finals {
+    @include media-breakpoint-down(xs) {
+      background-color: $teal;
+    }
+    .stage {
+      background-color: $teal;
+    }
+  }
+
+  .time-block .stage {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+      @include make-col(2);
+      border-radius: 2px;
+      padding: 5px;
+      display: inline-block;
+      text-align: center;
+    }
+    @include media-breakpoint-down(xs) {
+      display: none;
+    }
+  }
+
+  .event-times {
+    @include make-col-ready();
+    @include make-col(3);
+    font-style: italic;
+  }
+
+  .time-block .events {
+    @include make-col-ready();
+    @include media-breakpoint-down(xs) {
+      @include make-col(9);
+    }
+    @include media-breakpoint-up(sm) {
+      @include make-col(5);
+    }
+    img {
+      width: 36px;
+    }
+
+    img.icon-small {
+      @include media-breakpoint-down(xs) {
+        width: 18px;
+      }
+    }
+  }
+
+  .end-time {
+    @include media-breakpoint-down(xs) {
+      display: none;
+    }
+  }
+
+  .key {
+    @include media-breakpoint-up(sm) {
+      display: none;
+    }
+  }
+}
