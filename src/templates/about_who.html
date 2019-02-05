@@ -6,6 +6,9 @@
 {% endblock %}
 {% block content %}
 {% macro person_row(img_src, name, person_title, id, accordion_id) %}
+
+<!--NOTE: Be sure to update the Last Updated line at the bottom when editing this file.-->
+
 <div class="card">
   <div class="card-header" role="tab" id="{{ id }}_heading">
     <a data-toggle="collapse"
@@ -99,5 +102,7 @@
   <hr>
   <h3>Sponsorship Development Advisory Committee</h3>
   <p>Faith Presnell, Felix Lee, Kenneth Lu, Shelley Chang</p>
+  <hr>
+  <p>Last updated: Feb 4, 2019</p>
   <script src="/static/js/about_who.js" type="application/javascript"></script>
 {% endblock %}
