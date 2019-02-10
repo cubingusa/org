@@ -1,11 +1,32 @@
 {% import "components/css.html" as css %}
 {% extends "base.html" %}
-{% block title %}Announcements{% endblock %}
-<!-- {% block style %}
-  {{ css.css(c, 'documents') }}
-{% endblock %} -->
+{% block title%}Public Documents{% endblock %}
+{% block style %}
+  {{ css.css(c, 'base') }}
+{% endblock %}
 {% block content %}
 
 <h1>CubingUSA Announcements</h1>
+
+<div>
+  <h3>Make A New Announcement</h3>
+  <form>
+    <div>
+
+      <div class="label-container">
+        <label for="title">Post title</label>
+      </div>
+      <div class="input-container">
+        <input type="text" class="form-control" name="title" placeholder="The one line that will be shown in the post feed" required>
+      </div>
+
+      <div class="form-group">
+          <label for="Post">Post Message</label>
+          <textarea class="form-control" name="Post" rows="5"></textarea>
+      </div>
+
+    </div>
+  </form>
+</div>
 
 {% endblock %}
