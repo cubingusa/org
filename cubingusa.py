@@ -72,6 +72,10 @@ app = webapp2.WSGIApplication([
   webapp2.Route('/async/championship_psych/<championship_id:.*>/<event_id:.*>',
                 handler=ChampionshipPsychAsyncHandler),
   # Admin
+  webapp2.Route('/admin/edit_announcements',
+                handler=BasicHandler('/admin/announcement.html',
+                                    permitted_roles=Roles.AllRoles()),
+                name='admin_edit_announcement'),
   webapp2.Route('/admin/edit_users',
                 handler=BasicHandler('admin/edit_users.html',
                                      permitted_roles=Roles.AllRoles()),
