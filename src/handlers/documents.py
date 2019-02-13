@@ -25,8 +25,6 @@ class DocumentsHandler(BaseHandler):
     for documents in documents_by_section.values():
       documents.sort(key=lambda x: x.upload_time, reverse=True)
 
-    print(documents_by_section)
-
     template_dict = {
         'c': common.Common(self),
         'documents_by_section':
