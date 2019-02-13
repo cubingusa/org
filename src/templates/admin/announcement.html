@@ -8,7 +8,7 @@
 
 <h1>CubingUSA Announcements</h1>
 
-<div>
+<div style="margin-top:30px;">
   <h3>Make A New Announcement</h3>
   <form>
     <div>
@@ -25,12 +25,20 @@
           <textarea placeholder="Body of the post (optional)"class="form-control" name="Post" rows="5"></textarea>
       </div>
 
-      
-
     </div>
 
-    <button class="button" type="submit">Post</button>
+    <button style="margin-bottom:30px;" class="button" type="submit">Post</button>
+
   </form>
+
+  <h3>Current Announcements</h3>
+
+  <!-- Example posts for now -->
+  <ul class="list-group">
+    <li class="list-group-item">Posts will appear here <i class="fa fa-trash float-right"></i> <i class="fa fa-edit float-right"></i></li>
+    <li class="list-group-item">Examples to test the look <i class="fa fa-trash float-right"></i> <i class="fa fa-edit float-right"></i></li>
+  </ul>
+
 </div>
 
 {% endblock %}
