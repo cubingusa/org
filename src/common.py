@@ -95,7 +95,6 @@ class Common(object):
                  ('Donations', '/about/donations'),
                  ('Contact Us', '/about/contact'),
                  ('Logo', '/about/logo'),
-                 ('Public Documents', '/about/documents'),
              ]),
             ]
     if self.user and self.user.HasAnyRole(Roles.AdminRoles()):
