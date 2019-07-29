@@ -59,7 +59,7 @@ app = webapp2.WSGIApplication([
                 name='contact'),
   webapp2.Route('/newengland', handler=BasicHandler('newengland.html'), name='newengland'),
   webapp2.Route('/app', handler=webapp2.RedirectHandler, defaults={
-                    '_uri': 'https://play.google.com/store/apps/details?id=org.cubingusa.usnationals'}),
+                    '_uri': 'https://cubingusa.org/nationals/2019/app'}),
   webapp2.Route('/results', handler=webapp2.RedirectHandler, defaults={
                     '_uri': 'https://cubecomps.cubing.net/live.php'}),
   # Async
