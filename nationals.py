@@ -9,6 +9,7 @@ from src.handlers.nationals.eighteen.events import Events2018Handler
 from src.handlers.nationals.eighteen.groups import Groups2018Handler
 from src.handlers.nationals.eighteen.schedule import Schedule2018Handler
 from src.handlers.nationals.nineteen.events import Events2019Handler
+from src.handlers.nationals.nineteen.groups import Groups2019Handler
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/nationals', webapp2.RedirectHandler, defaults={'_uri': '/nationals/2019'}),
@@ -43,10 +44,18 @@ app = webapp2.WSGIApplication([
                 handler=BasicHandler('/nationals/2019/schedule.html')),
   webapp2.Route('/nationals/2019/travel',
                 handler=BasicHandler('/nationals/2019/travel.html')),
+  webapp2.Route('/nationals/2019/app',
+                handler=BasicHandler('/nationals/2019/app.html')),
   webapp2.Route('/nationals/2019/contact',
                 handler=ContactHandler('nats-organizers@cubingusa.org',
                                        '/nationals/2019/contact.html',
                                        'Nationals 2019')),
+  webapp2.Route('/nationals/2019/groups', handler=Groups2019Handler,
+                name='groups_2019'),
+  webapp2.Route('/nationals/2019/groups/<person_id:\d\d\d\d\w\w\w\w\d\d>',
+                handler=Groups2019Handler, name='groups_2019_person'),
+  webapp2.Route('/nationals/2019/groups/<event_id:.*>/<round_num:\d>/<stage:.>/<group:.*>',
+                handler=Groups2019Handler, name='groups_2019_group'),
   webapp2.Route('/nationals/2019/unofficial',
                 handler=BasicHandler('/nationals/2019/unofficial.html')),
 ], config=config.GetAppConfig())
