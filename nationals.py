@@ -56,4 +56,6 @@ app = webapp2.WSGIApplication([
                 handler=Groups2019Handler, name='groups_2019_person'),
   webapp2.Route('/nationals/2019/groups/<event_id:.*>/<round_num:\d>/<stage:.>/<group:.*>',
                 handler=Groups2019Handler, name='groups_2019_group'),
+  webapp2.Route('/nationals/2019/unofficial',
+                handler=BasicHandler('/nationals/2019/unofficial.html')),
 ], config=config.GetAppConfig())
