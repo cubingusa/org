@@ -33,6 +33,7 @@ from src.models.user import Roles
 
 app = webapp2.WSGIApplication([
   webapp2.Route('/', handler=BasicHandler('index.html'), name='home'),
+  webapp2.Route('/groups', handler=NationalsGroupsRedirectHandler),
   webapp2.Route('/groups/<person_id:.*>', handler=NationalsGroupsRedirectHandler),
   webapp2.Route('/authenticate', handler=AuthenticateHandler),
   webapp2.Route('/oauth_callback', handler=OAuthCallbackHandler),
