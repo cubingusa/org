@@ -19,7 +19,7 @@
        data-name="{{ id }}"
        id="{{ id }}_link">
       <h5 class="mb-0">
-        <strong>{{ name }}</strong> &mdash; {{ person_title }}
+        <strong>{{ name }}</strong> {% if person_title %}&mdash; {{ person_title }}{% endif %}
       </h5>
     </a>
   </div>
