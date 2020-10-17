@@ -1,5 +1,5 @@
 # cubingusa.org
-
+welcome to our website.we will help out for running app easily,please corporate with us. 
 ## Prerequisites
 
 You will need to install the following:
@@ -19,3 +19,6 @@ You can run the app locally by running the following two shell commands:
 ## Deploying to staging
 
 Follow the instructions in `doc/staging.md` to upload your changes to the staging environment.
+
+                          HOPE YOU MAY LIKE OUR SERVICE 😊😊THANKS FOR VISTING OUR SITE💖💖
+                                
