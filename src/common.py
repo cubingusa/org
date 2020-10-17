@@ -101,6 +101,7 @@ class Common(object):
     if self.user and self.user.HasAnyRole(Roles.AdminRoles()):
       admin_list = [('Edit Users', '/admin/edit_users'),
                     ('Edit Championships', '/admin/edit_championships'),
+                    ('Edit Announcements','/admin/edit_announcements')
                    ]
       items.append(('Admin', admin_list))
     return items

@@ -1,0 +1,44 @@
+{% import "components/css.html" as css %}
+{% extends "base.html" %}
+{% block title%}Public Documents{% endblock %}
+{% block style %}
+  {{ css.css(c, 'base') }}
+{% endblock %}
+{% block content %}
+
+<h1>CubingUSA Announcements</h1>
+
+<div style="margin-top:30px;">
+  <h3>Make A New Announcement</h3>
+  <form>
+    <div>
+
+      <div class="label-container">
+        <label for="title">Post title</label>
+      </div>
+      <div class="input-container">
+        <input type="text" class="form-control" name="title" placeholder="The one line that will be shown in the post feed" required>
+      </div>
+
+      <div class="form-group">
+          <label for="Post">Post Message</label>
+          <textarea placeholder="Body of the post (optional)"class="form-control" name="Post" rows="5"></textarea>
+      </div>
+
+    </div>
+
+    <button style="margin-bottom:30px;" class="button" type="submit">Post</button>
+
+  </form>
+
+  <h3>Current Announcements</h3>
+
+  <!-- Example posts for now -->
+  <ul class="list-group">
+    <li class="list-group-item">Posts will appear here <i class="fa fa-trash float-right"></i> <i class="fa fa-edit float-right"></i></li>
+    <li class="list-group-item">Examples to test the look <i class="fa fa-trash float-right"></i> <i class="fa fa-edit float-right"></i></li>
+  </ul>
+
+</div>
+
+{% endblock %}
