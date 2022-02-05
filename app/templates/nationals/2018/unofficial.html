@@ -1,0 +1,126 @@
+{% extends "nationals/2018/base.html" %}
+{% block title%}Nationals 2018 Unofficial Events{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2018/unofficial') }}
+{% endblock %}
+{% block content %}
+  <h1>Unofficial Events and Seminars</h1>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Friday Night Schedule</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="info-box-label">7:15: 3x3 Fewest Moves ends</span>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">7:30 &ndash; 7:50: Surprise Unofficial Event</p>
+            <p class="info-box-details">Bring a 3x3 and have a random seat in the audience!</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">7:50 &ndash; 8:15: 2x2 &ndash; 7x7 Relay Race</p>
+            <p class="info-box-details">Max Park vs Dream Team</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">8:15 &ndash; 8:30: <i>The Growing Role of Technology in Cubing</i></p>
+            <p class="info-box-details">A seminar by Chris Tran</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">8:30 &ndash; 8:45: <i>How Cubing Got Us Into College</i></p>
+            <p class="info-box-details">A seminar by Daniel Goodman and Aryan Kejriwal</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">8:45 &ndash; 9:00: <i>MultiBLD: You Can Do It Too!</i></p>
+            <p class="info-box-details">A seminar by Mark Boyanowski and Graham Siggins</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">9:15 &ndash; 10:15: <i>Layer By Layer</i></p>
+            <p class="info-box-details">A Live Podcast with Kit Clement and Andrew Nathenson</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-clock-o" aria-hidden="true"></i> Saturday Night Schedule</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="info-box-label">7:15: 3x3 Fewest Moves ends</span>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">7:30 &ndash; 8:30: <i>Why We Cube</i><p>
+            <p class="info-box-details">A documentary by Chris Olson.</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">8:30 &ndash; 9:10: The Sail Challenge hosted by TheCubicle.us</p>
+            <p class="info-box-details"> The top 16 competitors who did not make 3x3 Round 2 will be invited to take part in a head-to-head competition with QiYi Sail 3x3s. Each competitor will receive one unlubed Sail and will have five minutes to prepare it using materials provided (includes lubricants and screwdrivers). After five minutes, all competitors must begin assembling their cubes immediately. Competitors will not be permitted to adjust their cubes after final assembly. Once all the cubes are finished, the competitors will compete head-to-head in a bracket format.</p>
+          </li>
+          <li class="list-group-item">
+            <p class="info-box-label">9:10 &ndash; 9:45: Head-to-Head Double Elimination 3x3 Tournament</p>
+            <p class="info-box-details">A head-to-head 3x3 tournament of the top 16 competitors from Round 1 of CubingUSA Nationals.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box-container-lg">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-pencil" aria-hidden="true"></i> Autograph Booth</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="info-box-label">Friday</span>
+          </li>
+{% macro competitor(wca_id, name) %}<a href="https://worldcubeassociation.org/persons/{{ wca_id }}" target="_blank">{{ name }}</a>{% endmacro %}
+          <li class="list-group-item">
+            <span class="info-box-label">10:30 AM &ndash; 11:00 AM</span>: {{ competitor("2010BRAD01", "Drew Brads") }}, {{ competitor("2013HUAN30", "Juan Pablo Huanqui") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">11:30 AM &ndash; 12:00 PM</span>: {{ competitor("2014RZEW01", "Michał Rzewuski") }}, {{ competitor("2010WEYE02", "Sebastian Weyer") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">1:30 PM &ndash; 2:00 PM</span>: {{ competitor("2007VALK01", "Mats Valk") }}, {{ competitor("2010WEYE01", "Philipp Weyer") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">2:30 PM &ndash; 3:00 PM</span>: {{ competitor("2009HAYS01", "Kevin Hays") }}, {{ competitor("2012PONC02", "Patrick Ponce") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">3:30 PM &ndash; 4:00 PM</span>: {{ competitor("2012MCNE01", "Jayden McNeill") }}, {{ competitor("2013HUAN29", "Gianfranco Huanqui") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">4:30 PM &ndash; 5:00 PM</span>: {{ competitor("2009OLSO01", "Christopher Olson") }}, {{ competitor("2009ZEMD01", "Feliks Zemdegs") }}, {{ competitor("2015MANS03", "Kian Mansour") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">Saturday</span>
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">10:30 AM &ndash; 11:00 AM</span>: {{ competitor("2015MANS03", "Kian Mansour") }}, {{ competitor("2014RZEW01", "Michał Rzewuski") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">11:30 AM &ndash; 12:00 PM</span>: {{ competitor("2010WEYE01", "Philipp Weyer") }}, {{ competitor("2010WEYE02", "Sebastian Weyer") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">1:30 PM &ndash; 2:00 PM</span>: {{ competitor("2007VALK01", "Mats Valk") }}, {{ competitor("2009HAYS01", "Kevin Hays") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">2:00 PM &ndash; 2:30 PM</span>: {{ competitor("2010BRAD01", "Drew Brads") }}, {{ competitor("2009OLSO01", "Christopher Olson") }}, {{ competitor("2012MCNE01", "Jayden McNeill") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">2:30 PM &ndash; 3:00 PM</span>: {{ competitor("2013HUAN30", "Juan Pablo Huanqui") }}, {{ competitor("2013HUAN29", "Gianfranco Huanqui") }}
+          </li>
+          <li class="list-group-item">
+            <span class="info-box-label">3:00 PM &ndash; 3:30 PM</span>: {{ competitor("2009ZEMD01", "Feliks Zemdegs") }}, {{ competitor("2012PONC02", "Patrick Ponce") }}
+          </li>
+        <div class="card-body">
+          <div class="card-text">
+            Please try to be polite and try to keep your autograph and picture request to these listed times. We thank all of these people for volunteering their time.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

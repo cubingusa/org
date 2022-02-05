@@ -1,0 +1,91 @@
+{% import "components/css.html" as css %}
+{% extends "base.html" %}
+{% block title%}Donate{% endblock %}
+{% block style %}
+  {{ css.css(c, 'about') }}
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>Donations</h1>
+    <div class="about-row">
+      <div class="abouttext-left">
+        CubingUSA is a 501(c)(3) tax-exempt non-profit organization entirely run by volunteers, who dedicate many hours per week to supporting our community and enriching the lives of our competitors.  We're happily accepting donations from anyone interested in contributing to our goal, and your donations are tax-deductible to the extent allowed by law.
+      </div>
+      <div class="image-right">
+        <img src="/static/img/2014_finals.jpg" width="100%">
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="abouttext-right">
+        <p>
+          Our budget each year mostly consists of CubingUSA Nationals.  In 2017, this competition cost over $30,000 to organize.  This includes expenses such as:
+        </p>
+        <ul>
+          <li>Reserving a large venue for four days</li>
+          <li>Procuring equipment such as timers and A/V</li>
+          <li>Providing hotel accommodations to the volunteer staff</li>
+        </ul>
+        <p>
+          We strive to keep the competition affordable to competitors and their families, both by keeping registration fees low and holding the competition in a city large enough to have a major airport.  We also look for opportunities to provide a better competition experience.
+        </p>
+        <p>
+          Starting in 2018, we will also be supporting a series of mid-sized Regional Championships throughout the country, as well as a number of smaller local competitions.
+        </p>
+      </div>
+      <div class="image-left">
+        <img src="/static/img/multi.jpg" width="100%">
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="abouttext-left">
+        We're actively on the lookout for opportunities to help our community in more ways.  For example, we're in the process of launching a program to purchase timing equipment for use in local competitions.  This will help communities, particularly new and growing communities, to afford equipment needed for WCA competitions.
+      </div>
+      <div class="image-right">
+        <img src="/static/img/3bld.jpg" width="100%">
+      </div>
+    </div>
+    <div class="about-row">
+      <div class="standard-block">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">PayPal</h4>
+            <p class="card-text">
+              <a href="https://paypal.me/cusa" target="_blank">
+                <img src="https://www.paypalobjects.com/digitalassets/c/website/marketing/na/us/logo-center/15_nowaccepting_blue_badge.jpg">
+              </a>
+            </p>
+            <p class="card-text">We accept donations via PayPal.  Please click the button below to make a donation.</p>
+            <a href="https://paypal.me/cusa" class="button" target="_blank">
+              Click here to donate
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="standard-block">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Check</h4>
+            <p class="card-text">Please make checks payable to "CubingUSA", and send them to:</p>
+            <address>
+              <strong>CubingUSA</strong><br>
+              18 Bartol Street #987<br>
+              San Francisco, CA 94133<br>
+            </address>
+            <p class="card-text">Our EIN is 81-1056904.</p>
+          </div>
+        </div>
+      </div>
+      <div class="standard-block">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Other Sponsorships</h4>
+            <p class="card-text">If you'd like to discuss sponsorship opportunities to increase your impact on CubingUSA and our community, please contact us directly.</p>
+            <a href="/about/contact" class="button">
+              Contact
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

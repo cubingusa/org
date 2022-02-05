@@ -1,0 +1,74 @@
+{% extends "nationals/2019/base.html" %}
+{% block title%}Nationals 2019 Travel{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2019/travel') }}
+{% endblock %}
+{% block content %}
+  <h1>Travel Information</h1>
+  <div class="nats-top-row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-building" aria-hidden="true"></i> Venue</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            The competition will be held at the <strong><a href="http://www.bccenter.org/" target="_blank">Baltimore Convention Center</a> in Baltimore, Maryland.</strong>  We're pleased to be working with the Convention Center, which will be a great venue for our competition.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Address:</span> <a href="https://goo.gl/maps/H2FC2BXLSdT2" target="_blank">One West Pratt Street, Baltimore, MD 21201</a>
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Main Room:</span> Hall G
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Long Events:</span> Rooms 337&mdash;342
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Registration:</span> Otterbein Lobby via Sharp St entrance
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <img src="/static/img/baltimore-convention-center.jpg">
+    </div>
+  </div>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-bed" aria-hidden="true"></i> Hotel</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <i>(Updated 3/18/2018!)</i> We have reserved a block of rooms at the <strong><a href="https://www.ihg.com/redirect?path=hd&brandCode=6C&localeCode=en&regionCode=1&hotelCode=BALDT&_PMID=99801505&GPC=CUS&cn=no&viewfullsite=true">Holiday Inn Baltimore-Inner Harbor</a></strong>.  Please book using the provided link to ensure the best possible rate.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Address:</span> <a href="https://goo.gl/maps/wDYWS8BBFAv" target="_blank">301 W Lombard St, Baltimore, MD 21201</a>
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-link" aria-hidden="true"></i> <span class="info-box-label">Reservations:</span> <a href="https://www.ihg.com/redirect?path=hd&brandCode=6C&localeCode=en&regionCode=1&hotelCode=BALDT&_PMID=99801505&GPC=CUS&cn=no&viewfullsite=true">Link</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-car" aria-hidden="true"></i> Transportation</h4>
+        </div>
+        <div class="card-body">
+          <div class="info-box-row">
+            <i class="fa fa-plane" aria-hidden="true"></i> <span class="info-box-label">Nearest Airport:</span> <strong>Baltimore-Washington Airport (BWI)</strong> is ten miles from the competition venue.  The easiest way to reach the city from BWI is either car or train.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-subway" aria-hidden="true"></i> <span class="info-box-label">Train:</span> <a href="http://www.amtrak.com/" target="_blank">Amtrak </a> Northeast Regional and Acela Express trains serve both BWI Airport and Baltimore.  Baltimore Penn Station is 1.6 miles from the venue.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d12350.561499182768!2d-76.6255183645571!3d39.29640557056704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x89c804953dff313b%3A0x579d11bb8a2e7410!2sPennsylvania+Station%2C+1500+N+Charles+St%2C+Baltimore%2C+MD+21201!3m2!1d39.307421!2d-76.6156702!4m5!1s0x89c80360f5a421a9%3A0xd3299969b90b590d!2sThe+Baltimore+Convention+Center%2C+West+Pratt+Street%2C+Baltimore%2C+MD!3m2!1d39.285390799999995!2d-76.6171126!5e0!3m2!1sen!2sus!4v1544794292212" width="100%" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
+    </div>
+  </div>
+{% endblock %}

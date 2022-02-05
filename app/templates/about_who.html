@@ -1,0 +1,115 @@
+{% import "components/css.html" as css %}
+{% extends "base.html" %}
+{% block title%}Who we are{% endblock %}
+{% block style %}
+  {{ css.css(c, 'about_who') }}
+{% endblock %}
+{% block content %}
+{% macro person_row(img_src, name, person_title, id, accordion_id) %}
+
+<!--NOTE: Be sure to update the Last Updated line at the bottom when editing this file.-->
+
+<div class="card">
+  <div class="card-header" role="tab" id="{{ id }}_heading">
+    <a data-toggle="collapse"
+       href="#{{ id }}"
+       aria-expanded="false"
+       aria-controls="{{ id }}"
+       class="personLink"
+       data-name="{{ id }}"
+       id="{{ id }}_link">
+      <h5 class="mb-0">
+        <strong>{{ name }}</strong> {% if person_title %}&mdash; {{ person_title }}{% endif %}
+      </h5>
+    </a>
+  </div>
+  <div id="{{ id }}"
+       class="collapse"
+       role="tabpanel"
+       aria-labelledby="{{ id }}_heading"
+       data-parent="#{{ accordion_id }}">
+    <div class="card-body">
+      <div class="person-row">
+        <div class="person-image">
+          <img src="/static/img/people/{{ img_src }}" width="100%">
+        </div>
+        <div class="person-text">
+          {{ caller() }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+  <h1>Who we are</h1>
+  <div class="row about_row">
+    <div class="col-12 col-md-12">
+      CubingUSA is run entirely by volunteers, many of whom have been involved in our community for 10 or more years.
+    </div>
+  </div>
+  <hr>
+  <h3>Board of Directors</h3>
+  <div id="directors" role="tablist">
+    {% call person_row("shelley.jpg", "Shelley Chang", "Executive Director", "shelley", "directors") %}
+      <strong><a href="{{ c.wca_profile('2004CHAN04') }}" target="_blank">Shelley Chang</a></strong> has been organizing US Nationals since 2006 and has designed the CubingUSA Nationals logos. Shelley has been competing since the Caltech competitions held in 2004, delegating competitions since 2008, and is the only person who has attended every US Nationals competition to date. Shelley is a research scientist in California.
+    {% endcall %}
+    {% call person_row("kian.jpg", "Kian Barry", "Chair", "kian", "directors") %}
+      <strong><a href="{{ c.wca_profile('2007BARR01') }}" target="_blank">Kian Barry</a></strong> began cubing in 2006 and became both a WCA Delegate and Nationals organizer in 2012. Kian also has the most podiums in a competition without a win, with 39 bronze and silver medals in competition. Kian teaches history in Millburn, NJ.
+    {% endcall %}
+    {% call person_row("zach.jpeg", "Zach Garber", "Secretary", "zach", "directors") %}
+      <strong><a href="{{ c.wca_profile('2014GARB01') }}" target="_blank">Zach Garber</a></strong> has been cubing since 2009 and attended his first official competition in 2014. Since then he has competed in over 100 competitions in more than 20 states. Zach became a delegate in early 2017 and has helped delegate more than 45 competitions. Zach does the IT Work for a local school district in Ohio. 
+    {% endcall %}
+    {% call person_row("michael.jpg", "Michael Young", "Treasurer", "michael", "directors") %}
+      <strong><a href="{{ c.wca_profile('2008YOUN02') }}" target="_blank">Michael Young</a></strong> first learned to solve the cube in 2005 and competed for the first time in 2008.  Delegating his first competition in 2009, he has since delegated over 100 competitions.  He particularly enjoys Fewest Moves and Square-1, and has held North American Records in both events.  He works as a software engineer in California.
+    {% endcall %}
+    {% call person_row("vincent.jpg", "Vincent Sheu", "General Counsel", "vincent", "directors") %}
+      <strong><a href="{{ c.wca_profile('2006SHEU01') }}" target="_blank">Vincent Sheu</a></strong> was instrumental to CubingUSA's incorporation. He began cubing in 2005 and attended his first competition in 2006. Vincent has been an organizer for Nationals since the 2011 competition and is the former president of the Berkeley Cube Club. In 2011, Vincent tied the world record for solving 2x2x2 in 0.96 seconds. In 2014, he tied the world record for 3x3x3 fewest moves with a 25.00 move average. Vincent is a lawyer in California.
+    {% endcall %}
+    {% call person_row("dickman.jpg", "Matthew Dickman", "", "dickman", "directors") %}
+      <strong><a href="{{ c.wca_profile('2013DICK01') }}" target="_blank">Matthew Dickman</a></strong> began cubing early 2013 under the YouTube name, "tehcubedude" before attending his first competition that summer, World Championships 2013. Since then, he has competed in nearly 100 competitions, organizing and delegating many of the local competitions in Washington. Along with competing he also has a cube collection of nearly 900 different puzzles. His favorite events are the blindfolded events, specifically 4x4 Blindfolded. Matthew works in health insurance in Washington State.
+    {% endcall %}
+    {% call person_row("saransh.jpg", "Saransh Grover", "", "saransh", "directors") %}
+      <strong><a href="{{ c.wca_profile('2014GROV01') }}" target="_blank">Saransh Grover</a></strong> attended his first WCA competition in 2014 and was hooked by the inclusiveness and positivity in the cubing community. He started organizing competitions because there weren't any near him and was later appointed to be a Delegate in 2018. He is also a member of the WCA Marketing Team. Saransh studies Computer Science and English at Stony Brook University in New York.
+    {% endcall %}
+    {% call person_row("lachance.jpg", "James LaChance", "", "lachance", "directors") %}
+      <strong><a href="{{ c.wca_profile('2010LACH01') }}" target="_blank">James LaChance</a></strong> has been a Director of CubingUSA since its inception. He began cubing in 2003 and attended his first competition in 2010. In 2015, James was appointed as a WCA Delegate and joined the Nationals Organizer team. He is also a member of the WCA Software Team (WST) and one of the webmasters of CubingUSA. James is a web developer in Florida.
+    {% endcall %}
+    {% call person_row("lauren.jpg", "Lauren Rose", "", "lauren", "directors") %}
+      <strong><a href="{{ c.wca_profile('2017ROSE02') }}" target="_blank">Lauren Rose</a></strong> has been cubing since 2017.  She start out as a cubing mom, and now she is a cuber herself. Lauren is a mathematics professor at Bard College in New York. She is very interested in Cubing Outreach, and has run cubing workshops for K-12 students, college students, elementary and middle school teachers, parents of cubers, and senior citizens.
+    {% endcall %}
+    {% call person_row("rosenberg.jpg", "Michael S. Rosenberg", "", "rosenberg", "directors") %}
+      <strong>Michael S. Rosenberg</strong> is the parent of a speed cuber and the Managing Director of McCarter Theatre Center in Princeton, NJ. He was the Managing Director of La Jolla Playhouse in San Diego for nine years where his son first learned to cube in the Finance Office.
+    {% endcall %}
+    {% call person_row("walker.jpg", "Walker Welch", "", "walker", "directors") %}
+      <strong><a href="{{ c.wca_profile('2011WELC01') }}" target="_blank">Walker Welch</a></strong> joined as a Director in 2018. The best part of the cubing community according to Walker is the collaboration and helpfulness cubers give to everyone, no matter what skill or speed level you are. 
+Walker works in logistics in Minnesota.
+    {% endcall %}
+  </div>
+  <hr>
+   <h3>CubingUSA Deputies</h3>
+  <p>Board of Directors, plus: <a href="{{ c.wca_profile('2010AMBR01') }}" target="_blank">Jacob Ambrose</a>, <a href="{{ c.wca_profile('2003BURT01') }}" target="_blank">Bob Burton</a>, <a href="{{ c.wca_profile('2008CLEM01') }}" target="_blank">Kit Clement</a>, <a href="{{ c.wca_profile('2011DWYE02') }}" target="_blank">Nathan Dwyer</a>, <a href="{{ c.wca_profile('2009HILD01') }}" target="_blank">James Hildreth</a>, <a href="{{ c.wca_profile('2008JEWR01') }}" target="_blank">Ryan Jew</a>, <a href="{{ c.wca_profile('2005REYN01') }}" target="_blank">Tim Reynolds</a></p>
+  <hr>
+  <h3>Nationals Organizers Leads</h3>
+  <p><a href="{{ c.wca_profile('2005REYN01') }}" target="_blank">Tim Reynolds</a> (Lead), <a href="{{ c.wca_profile('2013DICK01') }}" target="_blank">Matthew Dickman</a>, <a href="{{ c.wca_profile('2014GROV01') }}" target="_blank">Saransh Grover</a>, <a href="{{ c.wca_profile('2009HILD01') }}" target="_blank">James Hildreth</a>, <a href="{{ c.wca_profile('2003BURT01') }}" target="_blank">Bob Burton</a>, <a href="{{ c.wca_profile('2004CHAN04') }}" target="_blank">Shelley Chang</a>, <a href="{{ c.wca_profile('207BARR01') }}" target="_blank">Kian Barry</a>, <a href="{{ c.wca_profile('2017ROSE02') }}" target="_blank">Lauren Rose</a>, <a href="{{ c.wca_profile('2011WELC01') }}" target="_blank">Walker Welch</a>, <a href="{{ c.wca_profile('2014NIEL03') }}" target="_blank">Calvin Nielson</a></p>
+  <hr>
+  <h3>Digital Media Team</h3>
+  <p><a href="{{ c.wca_profile('2014NIEL03') }}" target="_blank">Calvin Nielson</a> (Lead), <a href="{{ c.wca_profile('2014GARB01') }}" target="_blank">Zachary Garber</a></p>
+  <hr>
+  <h3>Educational Outreach Team</h3>
+  <p><a href="{{ c.wca_profile('2017ROSE02') }}" target="_blank">Lauren Rose</a> (Lead), <a href="{{ c.wca_profile('2012MCMI01') }}" target="_blank">Matthew McMillan</a>, <a href="{{ c.wca_profile('2003BURT01') }}" target="_blank">Bob Burton</a>, <a href="{{ c.wca_profile('2007BARR01') }}" target="_blank">Kian Barry</a>, <a href="{{ c.wca_profile('2004CHAN04') }}" target="_blank">Shelley Chang</a></p>
+  <hr>
+  <h3>Finance Team</h3>
+  <p><a href="{{ c.wca_profile('2008YOUN02') }}" target="_blank">Michael Young</a> (Treasurer), <a href="{{ c.wca_profile('2012LUKE01') }}" target="_blank">Kenneth Lu</a>, Amy Tycksen, <a href="{{ c.wca_profile('2004CHAN04') }}" target="_blank">Shelley Chang</a></p>
+  <hr>
+  <h3>Software Team</h3>
+  <p><a href="{{ c.wca_profile('2013BULM01') }}" target="_blank">JP Bulman</a>, <a href="{{ c.wca_profile('2010LACH01') }}" target="_blank">James LaChance</a>, <a href="{{ c.wca_profile('2005REYN01') }}" target="_blank">Tim Reynolds</a></p>
+  <hr>
+  <h3>Policy Advisory Committee</h3>
+  <p><a href="{{ c.wca_profile('2003BURT01') }}" target="_blank">Bob Burton</a>, <a href="{{ c.wca_profile('2012LUKE01') }}" target="_blank">Kenneth Lu</a>, Michael S. Rosenberg, Wendy Rubas, <a href="{{ c.wca_profile('2006SHEU01') }}" target="_blank">Vincent Sheu</a></p>
+  <hr>
+  <h3>Sponsorship Development Advisory Committee</h3>
+  <p><a href="{{ c.wca_profile('2007BARR01') }}" target="_blank">Kian Barry</a>, <a href="{{ c.wca_profile('2008LEEF01') }}" target="_blank">Felix Lee</a>, Michael S. Rosenberg</p>
+  <hr>
+  <p>Last updated: Feb 5, 2022</p>
+  <script src="/static/js/about_who.js" type="application/javascript"></script>
+{% endblock %}

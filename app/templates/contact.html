@@ -1,0 +1,26 @@
+{% import "components/contact.html" as contact %}
+{% import "components/css.html" as css %}
+{% extends "base.html" %}
+{% block title%}Contact{% endblock %}
+{% block style %}
+  {{ css.css(c, 'about') }}
+  {{ css.css(c, 'contact') }}
+{% endblock %}
+{% block content %}
+  {% call contact.contact_form(c) %}
+  {% endcall %}
+  <div class="about-row">
+    <div class="standard-block">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Mailing Address</h4>
+          <address>
+            <strong>CubingUSA</strong><br>
+            18 Bartol Street #987<br>
+            San Francisco, CA 94133<br>
+          </address>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
