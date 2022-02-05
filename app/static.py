@@ -24,8 +24,7 @@ def who():
 
 @bp.route('/about/documents')
 def documents():
-  # TODO set the right folder.
-  return redirect('https://drive.google.com')
+  return redirect('https://drive.google.com/drive/folders/1UI3peKEn24pBP8CcVZp9KDQTyeNEB7xy?usp=sharing')
 
 @bp.route('/about/donations')
 def donations():
