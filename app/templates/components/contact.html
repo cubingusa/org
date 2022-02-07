@@ -1,6 +1,76 @@
-{% macro contact_form(c) %}
-  <p>
-    Unfortunately the contact form is currently unavailable.  Please contact us directly at <a href="mailto:info@cubingusa.org">info@cubingusa.org</a>.
-  </p>
-  {{ caller() }}
+{% macro contact_form(c, result) %}
+  {% if result == 'success' %}
+    <div class="alert alert-success" role="alert">
+      <strong>Mail sent!</strong>  Check your email, you have been cc-ed.
+    </div>
+  {% endif %}
+  {% if result == 'failure' %}
+    <div class="alert alert-danger" role="alert">
+      <strong>Failed to send mail!</strong>  Please try again later.
+    </div>
+  {% endif %}
+  <form action="{{ c.uri}}" id="form" method="POST">
+    <h3>Contact Us</h3>
+    {{ caller() }}
+    <div id="form-content-container">
+      <div class="contact-from-line">
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="from-address">Name</label>
+            <input class="form-control"
+                   name="name"
+                   id="name"
+                   placeholder="Your Name"
+                   required>
+          </div>
+        </div>
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="from-address">Email</label>
+            <input type="email"
+                   class="form-control"
+                   name="from-address"
+                   id="from-address"
+                   placeholder="name@example.com"
+                   required>
+          </div>
+        </div>
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="wcaid">WCA ID</label>
+            <input type="text"
+                   class="form-control"
+                   name="wcaid"
+                   id="wcaid"
+                   placeholder="Leave blank if you've never competed officially.">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="contact-message">Message</label>
+        <textarea class="form-control"
+                  name="contact-message"
+                  id="contact-message"
+                  rows="5"
+                  required
+                  ></textarea>
+      </div>
+      <input type="hidden" name="recaptcha-token" id="recaptcha-token">
+      <button id="send-button"
+              class="button g-recaptcha"
+              {% if c.env()['RECAPTCHA_SECRET_KEY'] %}
+                data-sitekey="{{ c.env()['RECAPTCHA_SECRET_KEY'] }}"
+                data-callback='onSubmit'
+                data-action='submit'
+              {% endif %}
+              type="submit">Send</button>
+    </div>
+  </form>
+  {% if c.env()['RECAPTCHA_SECRET_KEY'] %}
+    <script>
+      function onSubmit(token) {
+        document.getElementById("form").submit();
+      }
+    </script>
+  {% endif %}
 {% endmacro %}

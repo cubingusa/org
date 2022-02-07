@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect
 
+from app.lib import contact
 from app.common.common import Common
 
 bp = Blueprint('cubingusa', __name__)
@@ -14,9 +15,9 @@ def root():
 def about():
   return render_template('about.html', c=Common())
 
-@bp.route('/about/contact')
-def contact():
-  return render_template('contact.html', c=Common())
+@bp.route('/about/contact', methods=['GET', 'POST'])
+def contact_handler():
+  return contact.handle_contact_request('contact.html', 'CubingUSA Contact Form', 'info@cubingusa.org')
 
 @bp.route('/about/who')
 def who():

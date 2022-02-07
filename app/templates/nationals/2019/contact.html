@@ -7,7 +7,7 @@
   {{ css.css(c, 'nationals/2019/contact') }}
 {% endblock %}
 {% block content %}
-  {% call contact.contact_form() %}
+  {% call contact.contact_form(c, result) %}
   <div>
     Please take a look at the following frequently asked questions and see if any of them answer your question.
   </div>

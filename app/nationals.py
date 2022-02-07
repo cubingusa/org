@@ -3,6 +3,7 @@ from flask import render_template
 from flask import redirect
 
 from app.common.common import Common
+from app.lib import contact
 
 bp = Blueprint('nationals', __name__, url_prefix='/nationals')
 
@@ -14,9 +15,11 @@ def nats():
 def nats2018():
   return render_template('nationals/2018/index.html', c=Common())
 
-@bp.route('/2018/contact')
+@bp.route('/2018/contact', methods=['GET', 'POST'])
 def nats2018contact():
-  return render_template('nationals/2018/contact.html', c=Common())
+  return contact.handle_contact_request('nationals/2018/contact.html',
+                                        'Nationals 2018',
+                                        'nats-organizers@cubingusa.org')
 
 @bp.route('/2018/events')
 def nats2018events():
@@ -34,9 +37,11 @@ def nats2018unofficial():
 def nats2019():
   return render_template('nationals/2019/index.html', c=Common())
 
-@bp.route('/2019/contact')
+@bp.route('/2019/contact', methods=['GET', 'POST'])
 def nats2019contact():
-  return render_template('nationals/2019/contact.html', c=Common())
+  return contact.handle_contact_request('nationals/2019/contact.html',
+                                        'Nationals 2019',
+                                        'tim@cubingusa.org')
 
 @bp.route('/2019/events')
 def nats2019events():

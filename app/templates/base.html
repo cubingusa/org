@@ -4,15 +4,7 @@
 <html>
 <head>
   {% if c.env()['GOOGLE_ANALYTICS_TRACKING_ID'] %}
-    <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ c.env()['GOOGLE_ANALYTICS_TRACKING_ID'] }}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', '{{ c.app_settings().google_analytics_tracking_id }}');
-    </script>
   {% endif %}
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,6 +19,9 @@
   <script src="/static/js/onload.js" type="application/javascript"></script>
   <script src="/static/js/hash.js" type="application/javascript"></script>
   <script src="https://use.fontawesome.com/811113e9c2.js"></script>
+  {% if c.env()['RECAPTCHA_SECRET_KEY'] %}
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ c.env()['RECAPTCHA_SECRET_KEY'] }}"></script>
+  {% endif %}
   {% block head %}{% endblock %}
 </head>
 <body>

@@ -7,7 +7,7 @@
   {{ css.css(c, 'contact') }}
 {% endblock %}
 {% block content %}
-  {% call contact.contact_form(c) %}
+  {% call contact.contact_form(c, result) %}
   {% endcall %}
   <div class="about-row">
     <div class="standard-block">
