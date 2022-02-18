@@ -2,12 +2,12 @@ from dotenv import load_dotenv
 from flask import Flask
 import os
 
-env_file = os.environ.get('ENV_PATH') or '.env'
+env_file = os.environ.get('ENV_FILE') or '.env'
 if not os.path.exists(env_file):
   raise FileNotFoundError('Could not find environment file ' + env_file)
 
 app = Flask(__name__)
-load_dotenv(os.environ.get('ENV_PATH') or '.env')
+load_dotenv(env_file)
 
 from app.cubingusa import bp as cubingusa_bp
 from app.nationals import bp as nationals_bp
