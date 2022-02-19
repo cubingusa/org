@@ -1,3 +1,5 @@
+import os
+
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -24,7 +26,10 @@ def create_assessment(token):
   # Build the assessment request.
   request = recaptchaenterprise_v1.CreateAssessmentRequest()
   request.assessment = assessment
-  request.parent = 'projects/cubingusa-org'
+  if os.environ.get('ENV') == 'PROD':
+    request.parent = 'projects/' + os.environ.get('GOOGLE_CLOUD_PROJECT')
+  else:
+    request.parent = 'projects/cubingusa-org'
 
   response = client.create_assessment(request)
 
