@@ -1,5 +1,3 @@
-import os
-
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -8,13 +6,16 @@ from google.cloud.recaptchaenterprise_v1 import Assessment
 from mailjet_rest import Client
 
 from app.common.common import Common
+from app.common.secrets import get_secret
 
 def create_assessment(token):
   client = recaptchaenterprise_v1.RecaptchaEnterpriseServiceClient()
 
   # Set the properties of the event to be tracked.
   event = recaptchaenterprise_v1.Event()
-  event.site_key = os.environ['RECAPTCHA_SECRET_KEY']
+  event.site_key = get_secret('RECAPTCHA_SECRET_KEY')
+  if not event.site_key:
+    return 1.0
   event.token = token
 
   assessment = recaptchaenterprise_v1.Assessment()
@@ -39,12 +40,12 @@ def handle_contact_request(template, subject_base, recipient):
     return render_template(template,
                            c=Common(),
                            result=('success' if 'success' in request.args else ''))
-  if os.environ['RECAPTCHA_SECRET_KEY']:
+  if get_secret('RECAPTCHA_SECRET_KEY'):
     score = create_assessment(request.form['g-recaptcha-response'])
     if score < 0.5:
       return render_template(template, c=Common(), result='failure')
-  if os.environ['MAILJET_API_KEY'] and os.environ['MAILJET_API_SECRET']:
-    mailjet = Client(auth=(os.environ['MAILJET_API_KEY'], os.environ['MAILJET_API_SECRET']),
+  if get_secret('MAILJET_API_KEY') and get_secret('MAILJET_API_SECRET'):
+    mailjet = Client(auth=(get_secret('MAILJET_API_KEY'), get_secret('MAILJET_API_SECRET')),
                      version='v3.1')
     subject = '[' + subject_base + '] Contact form submission by ' + request.form['name']
     if request.form['wcaid']:

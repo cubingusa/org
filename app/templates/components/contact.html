@@ -58,15 +58,15 @@
       <input type="hidden" name="recaptcha-token" id="recaptcha-token">
       <button id="send-button"
               class="button g-recaptcha"
-              {% if c.env()['RECAPTCHA_SECRET_KEY'] %}
-                data-sitekey="{{ c.env()['RECAPTCHA_SECRET_KEY'] }}"
+              {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
+                data-sitekey="{{ c.get_secret('RECAPTCHA_SECRET_KEY') }}"
                 data-callback='onSubmit'
                 data-action='submit'
               {% endif %}
               type="submit">Send</button>
     </div>
   </form>
-  {% if c.env()['RECAPTCHA_SECRET_KEY'] %}
+  {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
     <script>
       function onSubmit(token) {
         document.getElementById("form").submit();

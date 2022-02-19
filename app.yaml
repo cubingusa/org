@@ -1,5 +1,8 @@
 runtime: python39
-entrypoint: ENV_FILE=.env.prod gunicorn -b :$PORT app:app
+entrypoint: gunicorn -b :$PORT app:app
+
+env_variables:
+  ENV: "PROD"
 
 handlers:
  - url: /.*

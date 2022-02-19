@@ -5,9 +5,8 @@ import logging
 import os
 import sys
 
-env_file = os.environ.get('ENV_FILE') or '.env'
-if not os.path.exists(env_file):
-  raise FileNotFoundError('Could not find environment file ' + env_file)
+if os.path.exists('.env.dev'):
+  load_dotenv('.env.dev')
 
 if os.environ.get('ENV') == 'PROD':
   client = google.cloud.logging.Client()
@@ -21,7 +20,6 @@ else:
   logger.addHandler(handler)
 
 app = Flask(__name__)
-load_dotenv(env_file)
 
 from app.cubingusa import bp as cubingusa_bp
 from app.nationals import bp as nationals_bp

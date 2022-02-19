@@ -3,6 +3,7 @@ import os
 from flask import request
 
 from app.common import formatters
+from app.common import secrets
 
 class Common(object):
   
@@ -84,8 +85,8 @@ class Common(object):
   def is_prod(self):
     return os.environ['ENV'] == 'PROD'
 
-  def env(self):
-    return os.environ
-
   def IconUrl(self, event_id):
     return '/static/img/events/%s.svg' % event_id
+
+  def get_secret(self, name):
+    return secrets.get_secret(name)

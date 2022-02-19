@@ -3,14 +3,14 @@
 {% import "components/nav.html" as nav %}
 <html>
 <head>
-  {% if c.env()['GOOGLE_ANALYTICS_TRACKING_ID'] %}
+  {% if c.get_secret('GOOGLE_ANALYTICS_TRACKING_ID') %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ c.env()['GOOGLE_ANALYTICS_TRACKING_ID'] }}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ c.get_secret('GOOGLE_ANALYTICS_TRACKING_ID') }}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '{{ c.env()["GOOGLE_ANALYTICS_TRACKING_ID"] }}');
+      gtag('config', '{{ c.get_secret("GOOGLE_ANALYTICS_TRACKING_ID") }}');
     </script>
   {% endif %}
   <meta charset="utf-8">
@@ -26,8 +26,8 @@
   <script src="/static/js/onload.js" type="application/javascript"></script>
   <script src="/static/js/hash.js" type="application/javascript"></script>
   <script src="https://use.fontawesome.com/811113e9c2.js"></script>
-  {% if c.env()['RECAPTCHA_SECRET_KEY'] %}
-    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ c.env()['RECAPTCHA_SECRET_KEY'] }}"></script>
+  {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ c.get_secret('RECAPTCHA_SECRET_KEY') }}"></script>
   {% endif %}
   {% block head %}{% endblock %}
 </head>
