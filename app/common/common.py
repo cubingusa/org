@@ -2,6 +2,7 @@ import datetime
 import os
 from flask import request
 
+from app.common import auth
 from app.common import formatters
 from app.common import secrets
 
@@ -79,8 +80,10 @@ class Common(object):
     return items
 
   def get_right_nav_items(self):
-    # TODO: re-enable login link.
-    return []
+    if self.logged_in():
+      return [('Log out', '/logout')]
+    else:
+      return [('Log in', '/login')]
 
   def is_prod(self):
     return os.environ['ENV'] == 'PROD'
@@ -90,3 +93,9 @@ class Common(object):
 
   def get_secret(self, name):
     return secrets.get_secret(name)
+
+  def logged_in(self):
+    return auth.logged_in()
+
+  def user(self):
+    return auth.user()

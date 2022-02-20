@@ -1,6 +1,16 @@
+from google.cloud import ndb
+
 from flask import Blueprint
 from flask import url_for
 from flask import redirect
+from flask import session
+
+from app.models.user import User, Roles
+from app.models.wca.person import Person
+
+import datetime
+
+client = ndb.Client()
 
 def create_bp(oauth):
   bp = Blueprint('auth', __name__)
@@ -15,7 +25,66 @@ def create_bp(oauth):
     token = oauth.wca.authorize_access_token()
     resp = oauth.wca.get('me')
     resp.raise_for_status()
-    # TODO: use resp.json["me"] to build a User object, and save ID in session.
+
+    wca_info = resp.json()['me']
+    session['wca_account_number'] = str(wca_info['id'])
+    session.permanent = True
+
+    with client.context():
+      user = User.get_by_id(str(wca_info['id'])) or User(id=str(wca_info['id']))
+      if 'wca_id' in wca_info and wca_info['wca_id']:
+        user.wca_person = ndb.Key(Person, wca_info['wca_id'])
+        # If the user has a state on their account, we should update this on the
+        # Person and Ranks as wel.
+        if user.state:
+          person = user.wca_person.get()
+          person.state = user.state
+          person.put()
+          for rank_class in (RankSingle, RankAverage):
+            ndb.put_multi(rank_class.query(rank_class.person == person.key).fetch())
+      else:
+        del user.wca_person
+
+      if 'name' in wca_info:
+        user.name = wca_info['name']
+      else:
+        del user.name
+
+      if 'email' in wca_info:
+        user.email = wca_info['email']
+      else:
+        del user.email
+
+      user.roles = [role for role in user.roles if role not in Roles.DelegateRoles()]
+      if 'delegate_status' in wca_info:
+        if wca_info['delegate_status'] == 'senior_delegate':
+          user.roles.append(Roles.SENIOR_DELEGATE)
+        elif wca_info['delegate_status'] in ('delegate', 'candidate_delegate'):
+          user.roles.append(Roles.DELEGATE)
+
+      if wca_info['wca_id']:
+        wca_id_user = User.get_by_id(wca_info['wca_id'])
+      else:
+        wca_id_user = None
+      if wca_id_user:
+        if wca_id_user.city and not user.city:
+          user.city = wca_id_user.city
+        if wca_id_user.state and not user.state:
+          user.state = wca_id_user.state
+        if wca_id_user.latitude and not user.latitude:
+          user.latitude = wca_id_user.latitude
+        if wca_id_user.longitude and not user.longitude:
+          user.longitude = wca_id_user.longitude
+        wca_id_user.key.delete()
+
+      user.last_login = datetime.datetime.now()
+
+      user.put()
+      return redirect('/')
+
+  @bp.route('/logout')
+  def logout():
+    session.pop('wca_account_number', None)
     return redirect('/')
 
   return bp

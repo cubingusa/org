@@ -7,6 +7,7 @@ import google.cloud.logging
 import logging
 import os
 import sys
+import datetime
 
 if os.path.exists('.env.dev'):
   load_dotenv('.env.dev')
@@ -25,6 +26,7 @@ else:
 
 app = Flask(__name__)
 app.secret_key = get_secret('SESSION_SECRET_KEY')
+app.permanent_session_lifetime = datetime.timedelta(days=7)
 
 wca_host = os.environ.get('WCA_HOST')
 oauth = OAuth(app)
