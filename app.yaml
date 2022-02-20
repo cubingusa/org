@@ -3,6 +3,7 @@ entrypoint: gunicorn -b :$PORT app:app
 
 env_variables:
   ENV: "PROD"
+  WCA_HOST: "https://worldcubeassociation.org"
 
 handlers:
  - url: /.*
