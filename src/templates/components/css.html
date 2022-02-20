@@ -1,7 +1,0 @@
-{% macro css(c, path) %}
-  {% if c.is_prod() %}
-    <link rel="stylesheet" href="/static/css/prod/{{ path }}.css" type="text/css">
-  {% else %}
-    <link rel="stylesheet" href="/static/css/{{ path }}.css" type="text/css">
-  {% endif %}
-{% endmacro %}
