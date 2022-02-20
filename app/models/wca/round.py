@@ -1,6 +1,6 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.wca.base import BaseModel
+from app.models.wca.base import BaseModel
 
 class RoundType(BaseModel):
   rank = ndb.IntegerProperty()

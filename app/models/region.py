@@ -1,4 +1,4 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
 class Region(ndb.Model):
   name = ndb.StringProperty()

@@ -1,12 +1,14 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.wca.base import BaseModel
-from src.models.wca.competition import Competition
-from src.models.wca.country import Country
-from src.models.wca.event import Event
-from src.models.wca.format import Format
-from src.models.wca.person import Person
-from src.models.wca.round import RoundType
+from app.models.wca.base import BaseModel
+from app.models.wca.competition import Competition
+from app.models.wca.country import Country
+from app.models.wca.event import Event
+from app.models.wca.format import Format
+from app.models.wca.person import Person
+from app.models.wca.round import RoundType
+
+client = ndb.Client()
 
 class Result(BaseModel):
   competition = ndb.KeyProperty(kind=Competition)
@@ -46,12 +48,13 @@ class Result(BaseModel):
 
   @staticmethod
   def Filter():
-    # Only include results of competitions that are in the datastore.
-    known_competitions = set([key.id() for key in Competition.query().iter(keys_only=True)])
+    with client.context():
+      # Only include results of competitions that are in the datastore.
+      known_competitions = set([key.id() for key in Competition.query().iter(keys_only=True)])
 
-    def filter_row(row):
-      return row['competitionId'] in known_competitions
-    return filter_row
+      def filter_row(row):
+        return row['competitionId'] in known_competitions
+      return filter_row
 
   @staticmethod
   def GetId(row):

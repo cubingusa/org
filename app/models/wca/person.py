@@ -1,8 +1,8 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.state import State
-from src.models.wca.country import BaseModel
-from src.models.wca.country import Country
+from app.models.state import State
+from app.models.wca.country import BaseModel
+from app.models.wca.country import Country
 
 class Person(BaseModel):
   # Details from row with subid 1 (i.e. most recent updates)

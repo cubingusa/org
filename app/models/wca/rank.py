@@ -1,9 +1,9 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.user import User
-from src.models.wca.base import BaseModel
-from src.models.wca.event import Event
-from src.models.wca.person import Person
+from app.models.user import User
+from app.models.wca.base import BaseModel
+from app.models.wca.event import Event
+from app.models.wca.person import Person
 
 class RankBase(BaseModel):
   person = ndb.KeyProperty(kind=Person)

@@ -1,8 +1,10 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.region import Region
-from src.models.state import State
-from src.models.wca.competition import Competition
+from app.models.region import Region
+from app.models.state import State
+from app.models.wca.competition import Competition
+
+client = ndb.Client()
 
 class Championship(ndb.Model):
   national_championship = ndb.BooleanProperty()
@@ -32,7 +34,8 @@ class Championship(ndb.Model):
     if self.state:
       return [self.state]
     if self.region:
-      return State.query(State.region == self.region).fetch(keys_only=True)
+      with client.context():
+        return State.query(State.region == self.region).fetch(keys_only=True)
     # National championships are not based on residence, they're based on
     # citizenship.
     return None

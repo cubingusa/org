@@ -1,6 +1,6 @@
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.championship import Championship
+from app.models.championship import Championship
 
 class RegionalChampionshipEligibility(ndb.Model):
   championship = ndb.KeyProperty(kind=Championship)

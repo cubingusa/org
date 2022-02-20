@@ -1,11 +1,11 @@
 import datetime
 
-from google.appengine.ext import ndb
+from google.cloud import ndb
 
-from src.models.state import State
-from src.models.wca.base import BaseModel
-from src.models.wca.country import Country
-from src.models.wca.event import Event
+from app.models.state import State
+from app.models.wca.base import BaseModel
+from app.models.wca.country import Country
+from app.models.wca.event import Event
 
 class Competition(BaseModel):
   start_date = ndb.DateProperty()
