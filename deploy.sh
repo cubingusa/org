@@ -3,14 +3,12 @@
 # Arguments:
 # -p: deploy to prod
 # -s: deploy to staging
-# -f <file or glob>: .yaml files to deploy
 # -v <app version>: On staging, the name of the app version to upload.
 
 set -e
 
 PROJECT=""
 IS_PROD=0
-FILES_TO_DEPLOY=""
 VERSION=""
 
 while getopts "psf:v:" opt; do
@@ -22,9 +20,6 @@ while getopts "psf:v:" opt; do
     s)
       PROJECT="staging-cubingusa-org"
       IS_PROD=0
-      ;;
-    f)
-      FILES_TO_DEPLOY="$FILES_TO_DEPLOY $OPTARG"
       ;;
     v)
       VERSION="$OPTARG"
@@ -45,15 +40,10 @@ while getopts "psf:v:" opt; do
   esac
 done
 
+
 if [ -z "$PROJECT" ]
 then
   echo "Either -p (prod) or -s (staging) must be set." >&2
-  exit 1
-fi
-
-if [ -z "$FILES_TO_DEPLOY" ]
-then
-  echo "At least one .yaml file must be specified with -f." >&2
   exit 1
 fi
 
@@ -69,13 +59,10 @@ then
   exit 1
 fi
 
-echo "Updating python dependencies."
-pip2.7 install -t lib -r requirements.txt --upgrade
-
 echo "Recompiling minified CSS."
-rm -r -f src/static/css/prod
-mkdir -p src/static/css/prod
-external/dart-sass/sass --update src/scss:src/static/css/prod --style compressed
+rm -r -f app/static/css/prod
+mkdir -p app/static/css/prod
+external/dart-sass/sass --update app/scss:app/static/css/prod --style compressed
 
 echo "Deploying to App Engine."
 CMD="gcloud app deploy $FILES_TO_DEPLOY --project $PROJECT"
