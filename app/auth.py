@@ -6,6 +6,7 @@ from app.models.user import User, Roles
 from app.models.wca.person import Person
 
 import datetime
+import os
 
 client = ndb.Client()
 
@@ -59,6 +60,12 @@ def create_bp(oauth):
           user.roles.append(Roles.SENIOR_DELEGATE)
         elif wca_info['delegate_status'] in ('delegate', 'candidate_delegate'):
           user.roles.append(Roles.DELEGATE)
+
+      # For local development, make it easier to make a user a global admin.
+      if os.environ.get('ADMIN_WCA_ID'):
+        user.roles = [role for role in user.roles if role != Roles.GLOBAL_ADMIN]
+        if wca_info['wca_id'] and wca_info['wca_id'] in os.environ.get('ADMIN_WCA_ID'):
+          user.roles.append(Roles.GLOBAL_ADMIN)
 
       if wca_info['wca_id']:
         wca_id_user = User.get_by_id(wca_info['wca_id'])

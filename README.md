@@ -48,6 +48,11 @@ Run the app:
 gunicorn -b :8083 app:app
 ```
 
+You can use the `ADMIN_WCA_ID` environment variable to make yourself an admin:
+```sh
+ADMIN_WCA_ID=2005REYN01 gunicorn -b :8083 app:app
+```
+
 ## Deploying to staging
 
 Follow the instructions in `doc/staging.md` to upload your changes to the staging environment.
