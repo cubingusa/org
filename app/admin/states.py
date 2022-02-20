@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import abort, Blueprint
 from google.cloud import ndb
 
 from app.lib import auth
@@ -31,7 +31,7 @@ def update_states():
   with client.context():
     me = auth.user()
     if not me or not me.HasAnyRole([Roles.GLOBAL_ADMIN, Roles.WEBMASTER]):
-      return render_template('error.html', c=Common(), error='You\'re not authorized!')
+      abort(403)
 
     futures = []
     all_regions = {}
