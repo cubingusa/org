@@ -6,6 +6,8 @@ from google.cloud import ndb
 from app.common import auth
 from app.common import formatters
 from app.common import secrets
+from app.models.region import Region
+from app.models.state import State
 
 client = ndb.Client()
 
@@ -48,6 +50,14 @@ class Common(object):
   def sort_events(self, events):
     return sorted(events, key=lambda evt: evt.get().rank)
 
+  def all_states(self):
+    with client.context():
+      return [state for state in State.query().order(State.name).iter()]
+
+  def regions(self):
+    with client.context():
+      return [r for r in Region.query().order(Region.name).iter()]
+
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
 
@@ -85,7 +95,8 @@ class Common(object):
 
   def get_right_nav_items(self):
     if self.user:
-      return [('Log out', '/logout')]
+      return [('My Settings', '/edit'),
+              ('Log out', '/logout')]
     else:
       return [('Log in', '/login')]
 

@@ -45,7 +45,9 @@ oauth.register(
 from app.auth import create_bp as create_auth_bp
 from app.cubingusa import bp as cubingusa_bp
 from app.nationals import bp as nationals_bp
+from app.user import bp as user_bp
 
 app.register_blueprint(create_auth_bp(oauth))
 app.register_blueprint(cubingusa_bp)
 app.register_blueprint(nationals_bp)
+app.register_blueprint(user_bp)
