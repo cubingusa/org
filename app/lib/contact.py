@@ -7,8 +7,8 @@ from google.cloud import recaptchaenterprise_v1
 from google.cloud.recaptchaenterprise_v1 import Assessment
 from mailjet_rest import Client
 
-from app.common.common import Common
-from app.common.secrets import get_secret
+from app.lib.common import Common
+from app.lib.secrets import get_secret
 
 def create_assessment(token):
   client = recaptchaenterprise_v1.RecaptchaEnterpriseServiceClient()

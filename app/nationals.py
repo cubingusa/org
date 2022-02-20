@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect
 
-from app.common.common import Common
+from app.lib.common import Common
 from app.lib import contact
 
 bp = Blueprint('nationals', __name__, url_prefix='/nationals')

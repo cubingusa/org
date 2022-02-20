@@ -1,7 +1,7 @@
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 from flask import Flask
-from app.common.secrets import get_secret
+from app.lib.secrets import get_secret
 
 import google.cloud.logging
 import logging

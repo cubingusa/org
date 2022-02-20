@@ -3,9 +3,9 @@ import os
 from flask import request
 from google.cloud import ndb
 
-from app.common import auth
-from app.common import formatters
-from app.common import secrets
+from app.lib import auth
+from app.lib import formatters
+from app.lib import secrets
 from app.models.region import Region
 from app.models.state import State
 

@@ -3,9 +3,9 @@ import datetime
 from flask import Blueprint, render_template, redirect, request
 from google.cloud import ndb
 
-from app.common import auth
-from app.common import permissions
-from app.common.common import Common
+from app.lib import auth
+from app.lib import permissions
+from app.lib.common import Common
 from app.models.user import User, Roles, UserLocationUpdate
 from app.models.wca.rank import RankAverage, RankSingle
 

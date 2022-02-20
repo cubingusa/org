@@ -3,7 +3,7 @@ from flask import render_template
 from flask import redirect
 
 from app.lib import contact
-from app.common.common import Common
+from app.lib.common import Common
 
 bp = Blueprint('cubingusa', __name__)
 
