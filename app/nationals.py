@@ -1,7 +1,7 @@
-from google.cloud import ndb
 from flask import Blueprint
 from flask import render_template
 from flask import redirect
+from google.cloud import ndb
 
 from app.lib.common import Common
 from app.lib import contact

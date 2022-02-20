@@ -6,13 +6,12 @@ from google.cloud import ndb
 from app.lib import auth
 from app.lib import permissions
 from app.lib.common import Common
-from app.models.user import User, Roles, UserLocationUpdate
 from app.models.state import State
+from app.models.user import User, Roles, UserLocationUpdate
 from app.models.wca.rank import RankAverage, RankSingle
 
-client = ndb.Client()
-
 bp = Blueprint('user', __name__)
+client = ndb.Client()
 
 # After updating the user's state, write the RankSingle and RankAverage to the
 # datastore again to update their states.

@@ -1,12 +1,11 @@
-from google.cloud import ndb
+import datetime
+import os
 
 from flask import Blueprint, url_for, redirect, request, session
+from google.cloud import ndb
 
 from app.models.user import User, Roles
 from app.models.wca.person import Person
-
-import datetime
-import os
 
 client = ndb.Client()
 

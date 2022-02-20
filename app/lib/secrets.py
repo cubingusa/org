@@ -1,4 +1,5 @@
 import os
+
 from google.cloud import secretmanager
 
 def get_secret(name):

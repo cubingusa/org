@@ -1,13 +1,14 @@
-from authlib.integrations.flask_client import OAuth
-from dotenv import load_dotenv
-from flask import Flask
-from app.lib.secrets import get_secret
-
-import google.cloud.logging
+import datetime
 import logging
 import os
 import sys
-import datetime
+
+from authlib.integrations.flask_client import OAuth
+from dotenv import load_dotenv
+from flask import Flask
+import google.cloud.logging
+
+from app.lib.secrets import get_secret
 
 if os.path.exists('.env.dev'):
   load_dotenv('.env.dev')

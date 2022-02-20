@@ -1,6 +1,5 @@
-from google.cloud import ndb
-
 from flask import session
+from google.cloud import ndb
 
 from app.models.user import User
 
