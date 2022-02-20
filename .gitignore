@@ -6,7 +6,3 @@ src/static/css/
 .local_storage/
 env/
 app/static/css/
-
-# Prod secrets
-.env.prod
-cubingusa-org.json
