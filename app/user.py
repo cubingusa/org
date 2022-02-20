@@ -7,6 +7,7 @@ from app.lib import auth
 from app.lib import permissions
 from app.lib.common import Common
 from app.models.user import User, Roles, UserLocationUpdate
+from app.models.state import State
 from app.models.wca.rank import RankAverage, RankSingle
 
 client = ndb.Client()
@@ -16,6 +17,8 @@ bp = Blueprint('user', __name__)
 # After updating the user's state, write the RankSingle and RankAverage to the
 # datastore again to update their states.
 def RewriteRanks(wca_person):
+  if not wca_person:
+    return
   with client.context():
     for rank_class in (RankSingle, RankAverage):
       ndb.put_multi(rank_class.query(rank_class.person == wca_person.key).fetch())
@@ -40,14 +43,16 @@ def edit_user(user_id=-1):
     return error('You\'re not authorized to view this user.')
 
   if request.method == 'GET':
-    return render_template('edit_user.html',
-                           c=Common(),
-                           user=user,
-                           all_roles=Roles.AllRoles(),
-                           editing_location_enabled=permissions.CanEditLocation(user, me),
-                           can_view_roles=permissions.CanViewRoles(user, me),
-                           editable_roles=permissions.EditableRoles(user, me),
-                           successful=request.args.get('successful', 0))
+    c = Common()
+    with client.context():
+      return render_template('edit_user.html',
+                             c=c,
+                             user=user,
+                             all_roles=Roles.AllRoles(),
+                             editing_location_enabled=permissions.CanEditLocation(user, me),
+                             can_view_roles=permissions.CanViewRoles(user, me),
+                             editable_roles=permissions.EditableRoles(user, me),
+                             successful=request.args.get('successful', 0))
 
   city = request.form['city']
   state_id = request.form['state']
@@ -71,7 +76,8 @@ def edit_user(user_id=-1):
     else:
       del user.city
     if state_id:
-      user.state = ndb.Key(State, state_id)
+      with client.context():
+        user.state = ndb.Key(State, state_id)
     else:
       del user.state
     if user.wca_person and old_state_id != state_id:
@@ -93,17 +99,18 @@ def edit_user(user_id=-1):
         update.city = city
       update.update_time = datetime.datetime.now()
       if state_id:
-        update.state = ndb.Key(State, state_id)
+        with client.context():
+          update.state = ndb.Key(State, state_id)
       user.updates.append(update)
 
   elif changed_location:
     return error('You\'re not authorized to edit user locations.')
 
   for role in permissions.EditableRoles(user, me):
-    if role in request.get_data() and role not in user.roles:
+    if role in request.form and role not in user.roles:
       user.roles.append(role)
       user_modified = True
-    elif role not in request.get_data() and role in user.roles:
+    elif role not in request.form and role in user.roles:
       user.roles.remove(role)
       user_modified = True
 
