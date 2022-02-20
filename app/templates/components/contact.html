@@ -12,6 +12,16 @@
   <form action="{{ c.uri}}" id="form" method="POST">
     <h3>Contact Us</h3>
     {{ caller() }}
+    {% if c.user %}
+      <p>
+        You're logged in with your WCA account.  If you'd like to change your email address, you can do so <a href="https://www.worldcubeassociation.org/profile/edit?section=email" target="_blank">here</a>.
+      </p>
+    {% else %}
+      <div id="noid-container">
+        <p>If you have a WCA account, please <a href="/login">log in</a></p>
+        <a id="noid" href="#">I don't have a WCA account.</a>
+      </div>
+    {% endif %}
     <div id="form-content-container">
       <div class="contact-from-line">
         <div class="contact-from-col">
@@ -20,7 +30,13 @@
             <input class="form-control"
                    name="name"
                    id="name"
-                   placeholder="Your Name"
+                   {% if c.user %}
+                     value="{{ c.user.name }}"
+                     readonly
+                   {% else %}
+                     placeholder="Your Name"
+                     disabled
+                   {% endif %}
                    required>
           </div>
         </div>
@@ -31,7 +47,13 @@
                    class="form-control"
                    name="from-address"
                    id="from-address"
-                   placeholder="name@example.com"
+                   {% if c.user %}
+                     value="{{ c.user.email }}"
+                     readonly
+                   {% else %}
+                     placeholder="name@example.com"
+                     disabled
+                   {% endif %}
                    required>
           </div>
         </div>
@@ -42,7 +64,13 @@
                    class="form-control"
                    name="wcaid"
                    id="wcaid"
-                   placeholder="Leave blank if you've never competed officially.">
+                   {% if c.user and c.user.wca_person %}
+                     value="{{ c.user.wca_person.id() }}"
+                     readonly
+                   {% else %}
+                     placeholder="Leave blank if you've never competed officially."
+                     disabled
+                   {% endif %}>
           </div>
         </div>
       </div>
@@ -73,4 +101,5 @@
       }
     </script>
   {% endif %}
+  <script src="/static/js/contact.js" type="application/javascript" async defer></script>
 {% endmacro %}

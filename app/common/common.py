@@ -1,10 +1,13 @@
 import datetime
 import os
 from flask import request
+from google.cloud import ndb
 
 from app.common import auth
 from app.common import formatters
 from app.common import secrets
+
+client = ndb.Client()
 
 class Common(object):
   
@@ -15,6 +18,7 @@ class Common(object):
     self.len = len
     self.formatters = formatters
     self.year = datetime.date.today().year
+    self.user = auth.user()
 
   def uri_matches(self, path):
     return self.uri.endswith(path)
@@ -80,7 +84,7 @@ class Common(object):
     return items
 
   def get_right_nav_items(self):
-    if self.logged_in():
+    if self.user:
       return [('Log out', '/logout')]
     else:
       return [('Log in', '/login')]
@@ -93,9 +97,3 @@ class Common(object):
 
   def get_secret(self, name):
     return secrets.get_secret(name)
-
-  def logged_in(self):
-    return auth.logged_in()
-
-  def user(self):
-    return auth.user()
