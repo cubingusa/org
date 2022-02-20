@@ -5,8 +5,6 @@ from app.models.eligibility import StateChampionshipEligibility
 from app.models.state import State
 from app.models.wca.person import Person
 
-client = ndb.Client()
-
 class Roles:
   GLOBAL_ADMIN = 'GLOBAL_ADMIN'
   DIRECTOR = 'DIRECTOR'

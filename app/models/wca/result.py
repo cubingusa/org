@@ -8,8 +8,6 @@ from app.models.wca.format import Format
 from app.models.wca.person import Person
 from app.models.wca.round import RoundType
 
-client = ndb.Client()
-
 class Result(BaseModel):
   competition = ndb.KeyProperty(kind=Competition)
   event = ndb.KeyProperty(kind=Event)
@@ -48,13 +46,12 @@ class Result(BaseModel):
 
   @staticmethod
   def Filter():
-    with client.context():
-      # Only include results of competitions that are in the datastore.
-      known_competitions = set([key.id() for key in Competition.query().iter(keys_only=True)])
+    # Only include results of competitions that are in the datastore.
+    known_competitions = set([key.id() for key in Competition.query().iter(keys_only=True)])
 
-      def filter_row(row):
-        return row['competitionId'] in known_competitions
-      return filter_row
+    def filter_row(row):
+      return row['competitionId'] in known_competitions
+    return filter_row
 
   @staticmethod
   def GetId(row):
