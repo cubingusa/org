@@ -9,6 +9,7 @@ from app.lib import formatters
 from app.lib import secrets
 from app.models.region import Region
 from app.models.state import State
+from app.models.user import Roles
 
 class Common(object):
   
@@ -89,6 +90,10 @@ class Common(object):
                  ('Public Documents', '/about/documents'),
              ]),
             ]
+    if self.user.HasAnyRole(Roles.AdminRoles()):
+      items += [('Admin', [
+                    ('Edit Users', '/admin/edit_users'),
+                ])]
     return items
 
   def get_right_nav_items(self):
