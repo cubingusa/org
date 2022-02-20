@@ -37,10 +37,11 @@ def create_bp(oauth):
         # Person and Ranks as wel.
         if user.state:
           person = user.wca_person.get()
-          person.state = user.state
-          person.put()
-          for rank_class in (RankSingle, RankAverage):
-            ndb.put_multi(rank_class.query(rank_class.person == person.key).fetch())
+          if person:
+            person.state = user.state
+            person.put()
+            for rank_class in (RankSingle, RankAverage):
+              ndb.put_multi(rank_class.query(rank_class.person == person.key).fetch())
       else:
         del user.wca_person
 
