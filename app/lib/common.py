@@ -78,6 +78,7 @@ class Common(object):
              ]),
              ('Organizers', [
                  ('CubingUSA Supported Competitions', '/supported'),
+                 ('WCA Organizer Guidelines', 'https://www.worldcubeassociation.org/organizer-guidelines'),
              ]),
              ('About', [
                  ('About CubingUSA', '/about'),
