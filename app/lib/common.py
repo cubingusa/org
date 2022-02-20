@@ -90,7 +90,7 @@ class Common(object):
                  ('Public Documents', '/about/documents'),
              ]),
             ]
-    if self.user.HasAnyRole(Roles.AdminRoles()):
+    if self.user and self.user.HasAnyRole(Roles.AdminRoles()):
       items += [('Admin', [
                     ('Edit Users', '/admin/edit_users'),
                 ])]
