@@ -6,9 +6,8 @@ from app.models.region import Region
 from app.models.state import State
 from app.models.user import Roles
 
-client = ndb.Client()
-
 bp = Blueprint('states', __name__)
+client = ndb.Client()
 
 def MakeRegion(region_id, region_name, championship_name, all_regions, futures):
   region = Region.get_by_id(region_id) or Region(id=region_id)
@@ -29,11 +28,11 @@ def MakeState(state_id, state_name, region, is_state, all_states, futures):
 
 @bp.route('/update_states')
 def update_states():
-  me = auth.user()
-  if not me or not me.HasAnyRole([Roles.GLOBAL_ADMIN, Roles.WEBMASTER]):
-    return render_template('error.html', c=Common(), error='You\'re not authorized!')
-
   with client.context():
+    me = auth.user()
+    if not me or not me.HasAnyRole([Roles.GLOBAL_ADMIN, Roles.WEBMASTER]):
+      return render_template('error.html', c=Common(), error='You\'re not authorized!')
+
     futures = []
     all_regions = {}
     NORTHEAST = MakeRegion('ne', 'Northeast', 'Northeastern',all_regions, futures)

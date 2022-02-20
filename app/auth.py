@@ -21,15 +21,15 @@ def create_bp(oauth):
 
   @bp.route('/oauth_callback')
   def oauth_callback():
-    token = oauth.wca.authorize_access_token()
-    resp = oauth.wca.get('me')
-    resp.raise_for_status()
-
-    wca_info = resp.json()['me']
-    session['wca_account_number'] = str(wca_info['id'])
-    session.permanent = True
-
     with client.context():
+      token = oauth.wca.authorize_access_token()
+      resp = oauth.wca.get('me')
+      resp.raise_for_status()
+
+      wca_info = resp.json()['me']
+      session['wca_account_number'] = str(wca_info['id'])
+      session.permanent = True
+
       user = User.get_by_id(str(wca_info['id'])) or User(id=str(wca_info['id']))
       if 'wca_id' in wca_info and wca_info['wca_id']:
         user.wca_person = ndb.Key(Person, wca_info['wca_id'])
