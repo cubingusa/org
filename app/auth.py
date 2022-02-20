@@ -1,9 +1,6 @@
 from google.cloud import ndb
 
-from flask import Blueprint
-from flask import url_for
-from flask import redirect
-from flask import session
+from flask import Blueprint, url_for, redirect, request, session
 
 from app.models.user import User, Roles
 from app.models.wca.person import Person
@@ -18,6 +15,7 @@ def create_bp(oauth):
   @bp.route('/login')
   def login():
     redirect_uri = url_for('auth.oauth_callback', _external=True)
+    session['referrer'] = request.referrer
     return oauth.wca.authorize_redirect(redirect_uri)
 
   @bp.route('/oauth_callback')
@@ -80,11 +78,12 @@ def create_bp(oauth):
       user.last_login = datetime.datetime.now()
 
       user.put()
-      return redirect('/')
+
+      return redirect(session.pop('referrer', None) or '/')
 
   @bp.route('/logout')
   def logout():
     session.pop('wca_account_number', None)
-    return redirect('/')
+    return redirect(request.referrer or '/')
 
   return bp
