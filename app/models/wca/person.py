@@ -21,7 +21,7 @@ class Person(BaseModel):
 
   @staticmethod
   def Filter():
-    return lambda row: row['subid'] == '1'
+    return lambda row: int(row['subid']) == 1
 
   @staticmethod
   def ColumnsUsed():
