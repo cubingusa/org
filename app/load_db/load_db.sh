@@ -1,4 +1,4 @@
-# Not using set -e because we want cleanup to happen, regardless of success.
+set -e
 
 pip install -r requirements.txt
 export PYTHONPATH=$(pwd)
@@ -38,10 +38,4 @@ then
       --old_export_id="$SAVED_EXPORT" \
       --new_export_id="$LATEST_EXPORT" \
       --export_base=exports/
-fi
-
-if [ "$CUBINGUSA_ENV" == "COMPUTE_ENGINE" ]
-then
-  echo "Shutting down."
-  # sudo shutdown -h
 fi
