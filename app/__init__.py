@@ -16,7 +16,7 @@ if os.path.exists('.env.dev'):
 if os.environ.get('ENV') == 'PROD':
   client = google.cloud.logging.Client()
   client.setup_logging()
-else:
+elif os.environ.get('ENV') == 'DEV' and 'gunicorn' in sys.argv[0]:
   logger = logging.getLogger()
   logger.setLevel(logging.DEBUG)
   handler = logging.StreamHandler(sys.stdout)
