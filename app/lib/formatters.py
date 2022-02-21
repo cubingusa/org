@@ -1,10 +1,10 @@
 def parse_time(time):
   centiseconds = time % 100
-  res = time / 100
+  res = time // 100
   seconds = res % 60
-  res = res / 60
+  res = res // 60
   minutes = res % 60
-  hours = res / 60
+  hours = res // 60
   return (hours, minutes, seconds, centiseconds)
 
 def FormatStandard(time, trim_zeros):
@@ -33,9 +33,9 @@ def FormatVerbose(time, trim_zeros, short_units):
 
 def FormatMultiBlindOld(time, verbose, trim_zeros, short_units):
   time_in_seconds = time % 100000
-  res = time / 100000
+  res = time // 100000
   attempted = res % 100
-  solved = 199 - res / 100
+  solved = 199 - res // 100
 
   if verbose:
     return '%d out of %d cubes in %s' % (
@@ -47,9 +47,9 @@ def FormatMultiBlindOld(time, verbose, trim_zeros, short_units):
 
 def FormatMultiBlind(time, verbose, trim_zeros, short_units):
   missed = time % 100
-  res = time / 100
+  res = time // 100
   time_in_seconds = res % 100000
-  delta = 99 - res / 100000
+  delta = 99 - res // 100000
   solved = missed + delta
   attempted = solved + missed
 
@@ -64,7 +64,7 @@ def FormatMultiBlind(time, verbose, trim_zeros, short_units):
 def FormatFewestMoves(time, is_average, verbose, short_units):
   result = str(time)
   if is_average:
-    result = '%d.%02d' % (time / 100, time % 100)
+    result = '%d.%02d' % (time // 100, time % 100)
   if short_units:
     return result
   if verbose:
@@ -94,7 +94,7 @@ def FormatQualifying(time, event_key, is_average, short_units=False):
   if event_key.id() == '333fm':
     return FormatFewestMoves(time, is_average, verbose=False, short_units=short_units)
   elif event_key.id() == '333mbf':
-    return '%d %s' % (99 - time / 10000000, 'pts' if short_units else 'points')
+    return '%d %s' % (99 - time // 10000000, 'pts' if short_units else 'points')
   else:
     return FormatVerbose(time, trim_zeros=True, short_units=short_units)
 
