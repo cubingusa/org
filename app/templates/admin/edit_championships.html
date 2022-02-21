@@ -40,7 +40,7 @@
         {{ competition.name }}
       </a>
       &ndash;
-      <a href="{{ c.uri_for('delete_championship', championship_id=championship.key.id()) }}">
+      <a href="/admin/delete_championship/{{ championship.key.id() }}">
         delete
       </a>
       <div class="existing-championship-data"
@@ -58,7 +58,7 @@
         {{ competition.name }}
       </a>
       &ndash;
-      <a href="{{ c.uri_for('delete_championship', championship_id=championship.key.id()) }}">
+      <a href="/admin/delete_championship/{{ championship.key.id() }}">
         delete
       </a>
       <div class="existing-championship-data"
@@ -76,7 +76,7 @@
         {{ competition.name }}
       </a>
       &ndash;
-      <a href="{{ c.uri_for('delete_championship', championship_id=championship.key.id()) }}">
+      <a href="/admin/delete_championship/{{ championship.key.id() }}">
         delete
       </a>
       <div class="existing-championship-data"
