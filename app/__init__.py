@@ -45,12 +45,14 @@ oauth.register(
 
 from app.handlers.admin import bp as admin_bp
 from app.handlers.auth import create_bp as create_auth_bp
+from app.handlers.champions_table import bp as champions_table_bp
 from app.handlers.cubingusa import bp as cubingusa_bp
 from app.handlers.nationals import bp as nationals_bp
 from app.handlers.user import bp as user_bp
 
 app.register_blueprint(admin_bp)
 app.register_blueprint(create_auth_bp(oauth))
+app.register_blueprint(champions_table_bp)
 app.register_blueprint(cubingusa_bp)
 app.register_blueprint(nationals_bp)
 app.register_blueprint(user_bp)

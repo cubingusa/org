@@ -1,0 +1,17 @@
+{% import "components/event_icon.html" as event_icon %}
+{% macro event_selector(c, include_magic=True, include_mbo=True, events=None) %}
+  <div id="event-selector">
+    {% if c.is_none(events) %}
+      {% set events = c.events(include_magic, include_mbo) %}
+    {% endif %}
+    {% for event in events %}
+      <a class="event-selector-link"
+         id="event-selector-link-{{ event.key.id() }}"
+         data-eventid="{{ event.key.id() }}"
+         data-eventname="{{ event.name }}">
+        {{ event_icon.event_icon(event, 'event-selector-icon') }}
+      </a>
+    {% endfor %}
+  </div>
+  <script src="/static/js/event_selector.js" type="application/javascript"></script>
+{% endmacro %}
