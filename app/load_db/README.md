@@ -14,6 +14,7 @@ You can create a new VM at https://console.cloud.google.com/compute/instancesAdd
 cd cubingusa
 git pull
 app/load_db/load_db.sh
+echo CUBINGUSA_ENV=COMPUTE_ENGINE | sudo tee /etc/environment
 ```
 
 Next, SSH into the instance and follow the instructions in `vm_setup.sh`.
