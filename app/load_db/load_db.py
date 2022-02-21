@@ -5,7 +5,7 @@ from absl import flags
 from absl import logging
 from google.cloud import ndb
 
-#from app.post_import import mutations
+from app.load_db.update_champions import UpdateChampions
 from app.models.wca.competition import Competition
 from app.models.wca.continent import Continent
 from app.models.wca.country import Country
@@ -125,6 +125,7 @@ def main(argv):
   with client.context():
     process_export(old_export_path, new_export_path)
     set_latest_export(FLAGS.new_export_id)
+    UpdateChampions()
 
 if __name__ == '__main__':
   app.run(main)
