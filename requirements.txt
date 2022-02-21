@@ -2,6 +2,7 @@ Flask==2.0.2
 Jinja2==3.0.3
 gunicorn==20.1.0
 python-dotenv==0.19.2
+absl-py
 google-cloud-logging
 google-cloud-ndb
 google-cloud-recaptcha-enterprise
