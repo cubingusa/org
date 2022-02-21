@@ -51,9 +51,9 @@ class Competition(BaseModel):
 
   @staticmethod
   def Filter():
-    # Only load US competitions.
+    # Only load US competitions that haven't been cancelled.
     def filter_row(row):
-      return row['countryId'] == 'USA'
+      return row['countryId'] == 'USA' and int(row['cancelled']) == 1
     return filter_row
 
   @staticmethod
