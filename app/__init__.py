@@ -43,11 +43,11 @@ oauth.register(
     client_kwargs={'scope': 'public email'},
 )
 
-from app.admin import bp as admin_bp
-from app.auth import create_bp as create_auth_bp
-from app.cubingusa import bp as cubingusa_bp
-from app.nationals import bp as nationals_bp
-from app.user import bp as user_bp
+from app.handlers.admin import bp as admin_bp
+from app.handlers.auth import create_bp as create_auth_bp
+from app.handlers.cubingusa import bp as cubingusa_bp
+from app.handlers.nationals import bp as nationals_bp
+from app.handlers.user import bp as user_bp
 
 app.register_blueprint(admin_bp)
 app.register_blueprint(create_auth_bp(oauth))
