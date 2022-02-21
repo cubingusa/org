@@ -1,17 +1,24 @@
-from google.appengine.ext import ndb
+from flask import abort, Blueprint, render_template
+from google.cloud import ndb
 
-from src import common
-from src.handlers.admin.admin_base import AdminBaseHandler
-from src.jinja import JINJA_ENVIRONMENT
-from src.models.championship import Championship
-from src.models.region import Region
-from src.models.state import State
-from src.models.user import Roles
-from src.models.wca.competition import Competition
-from src.models.wca.country import Country
+from app.lib import auth
+from app.lib import common
+from app.models.championship import Championship
+from app.models.region import Region
+from app.models.state import State
+from app.models.user import Roles
+from app.models.wca.competition import Competition
+from app.models.wca.country import Country
 
-class AddChampionshipHandler(AdminBaseHandler):
-  def get(self, competition_id, championship_type):
+bp = Blueprint('edit_championships', __name__)
+client = ndb.Client()
+
+@bp.route('/add_championship/<competition_id>/<championship_type>')
+def add_championship(competition_id, championship_type):
+  with client.context():
+    me = auth.user()
+    if not me or not me.HasAnyRole(Roles.AdminRoles()):
+      abort(403)
     competition = Competition.get_by_id(competition_id)
     if championship_type == 'national':
       championship_id = Championship.NationalsId(competition.year)
@@ -33,19 +40,28 @@ class AddChampionshipHandler(AdminBaseHandler):
     championship.competition = competition.key
     championship.put()
     # TODO: if we changed a championship we should update champions and eligibilities.
-    self.redirect_to('edit_championships')
+    return redirect('/admin/edit_championships')
     
 
-class DeleteChampionshipHandler(AdminBaseHandler):
-  def get(self, championship_id):
+@bp.route('/delete_championship/<championship_id>')
+def delete_championship(championship_id):
+  with client.context():
+    me = auth.user()
+    if not me or not me.HasAnyRole(Roles.AdminRoles()):
+      abort(403)
     championship = Championship.get_by_id(championship_id)
     championship.key.delete()
     # TODO: if we changed a championship we should update champions and eligibilities.
-    self.redirect_to('edit_championships')
+    return redirect('/admin/edit_championships')
 
 
-class EditChampionshipsHandler(AdminBaseHandler):
-  def get(self):
+@bp.route('/edit_championships')
+def edit_users():
+  with client.context():
+    me = auth.user()
+    if not me or not me.HasAnyRole(Roles.AdminRoles()):
+      abort(403)
+
     all_us_competitions = (
         Competition.query(Competition.country == ndb.Key(Country, 'USA'))
                    .order(Competition.name)
@@ -65,21 +81,16 @@ class EditChampionshipsHandler(AdminBaseHandler):
                     .order(Championship.state)
                     .order(-Championship.year)
                     .fetch())
-    print len(national_championships), len(regional_championships), len(state_championships)
+    print(len(national_championships), len(regional_championships), len(state_championships))
 
     states = State.query().fetch()
     regions = Region.query().fetch()
 
-    template = JINJA_ENVIRONMENT.get_template('admin/edit_championships.html')
-    self.response.write(template.render({
-        'c': common.Common(self),
-        'all_us_competitions': all_us_competitions,
-        'national_championships': national_championships,
-        'regional_championships': regional_championships,
-        'state_championships': state_championships,
-        'states': states,
-        'regions': regions,
-    }))
-
-  def PermittedRoles(self):
-    return Roles.AdminRoles()
+    return render_template('admin/edit_championships.html',
+                           c = common.Common(),
+                           all_us_competitions = all_us_competitions,
+                           national_championships = national_championships,
+                           regional_championships = regional_championships,
+                           state_championships = state_championships,
+                           states = states,
+                           regions = regions)

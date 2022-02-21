@@ -93,6 +93,7 @@ class Common(object):
     if self.user and self.user.HasAnyRole(Roles.AdminRoles()):
       items += [('Admin', [
                     ('Edit Users', '/admin/edit_users'),
+                    ('Edit Championships', '/admin/edit_championships'),
                 ])]
     return items
 
