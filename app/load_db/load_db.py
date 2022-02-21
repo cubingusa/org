@@ -28,13 +28,13 @@ flags.DEFINE_string('export_base', '', 'Base directory of exports.')
 
 def get_tables():
   return [('Continents', Continent),
-          #('Countries', Country),
-          #('Events', Event),
-          #('Formats', Format),
-          #('RoundTypes', RoundType),
-          #('Persons', Person),
-          #('RanksSingle', RankSingle),
-          #('RanksAverage', RankAverage),
+          ('Countries', Country),
+          ('Events', Event),
+          ('Formats', Format),
+          ('RoundTypes', RoundType),
+          ('Persons', Person),
+          ('RanksSingle', RankSingle),
+          ('RanksAverage', RankAverage),
           ('Competitions', Competition),
           ('Results', Result),
          ]
@@ -50,7 +50,14 @@ def read_table(path, cls, apply_filter):
       reader = csv.DictReader(csvfile, dialect='excel-tab')
       for row in reader:
         if filter_fn(row):
-          out[cls.GetId(row)] = row
+          fields_to_write = cls.ColumnsUsed()
+          if 'id' in row:
+            fields_to_write += ['id']
+          to_write = {}
+          for field in fields_to_write:
+            if field in row:
+              to_write[field] = row[field]
+          out[cls.GetId(row)] = to_write
   except:
     # This is fine, the file might just not exist.
     pass
@@ -93,7 +100,7 @@ def process_export(old_export_path, new_export_path):
         obj.ParseFromDict(row)
         objects_to_put += [obj]
     for key, row in old_rows.items():
-      if key in now_rows:
+      if key in new_rows:
         continue
       else:
         keys_to_delete += [ndb.Key(cls, key)]
@@ -103,7 +110,6 @@ def process_export(old_export_path, new_export_path):
       subslice = objects_to_put[:batch_size]
       objects_to_put = objects_to_put[batch_size:]
       ndb.put_multi(subslice)
-      logging.info('%d left to go' % len(objects_to_put))
     logging.info('Deleting %d objects' % len(keys_to_delete))
     ndb.delete_multi(keys_to_delete)
 
