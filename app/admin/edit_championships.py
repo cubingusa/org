@@ -1,4 +1,4 @@
-from flask import abort, Blueprint, render_template
+from flask import abort, Blueprint, redirect, render_template
 from google.cloud import ndb
 
 from app.lib import auth
@@ -81,7 +81,6 @@ def edit_users():
                     .order(Championship.state)
                     .order(-Championship.year)
                     .fetch())
-    print(len(national_championships), len(regional_championships), len(state_championships))
 
     states = State.query().fetch()
     regions = Region.query().fetch()
