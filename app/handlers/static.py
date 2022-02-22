@@ -6,7 +6,7 @@ from google.cloud import ndb
 from app.lib import contact
 from app.lib.common import Common
 
-bp = Blueprint('cubingusa', __name__)
+bp = Blueprint('static', __name__)
 client = ndb.Client()
 
 @bp.route('/')
