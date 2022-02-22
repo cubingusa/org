@@ -6,6 +6,7 @@ from google.cloud import ndb
 
 from app.models.user import User, Roles
 from app.models.wca.person import Person
+from app.models.wca.rank import RankSingle, RankAverage
 
 client = ndb.Client()
 
@@ -33,7 +34,7 @@ def create_bp(oauth):
       if 'wca_id' in wca_info and wca_info['wca_id']:
         user.wca_person = ndb.Key(Person, wca_info['wca_id'])
         # If the user has a state on their account, we should update this on the
-        # Person and Ranks as wel.
+        # Person and Ranks as well.
         if user.state:
           person = user.wca_person.get()
           if person:

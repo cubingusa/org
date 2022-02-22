@@ -49,11 +49,6 @@ def regional():
   with client.context():
     return render_template('regional.html', c=Common())
 
-@bp.route('/state_rankings')
-def state_rankings():
-  with client.context():
-    return render_template('state_rankings.html', c=Common())
-
 @bp.route('/supported')
 def supported():
     return render_template('supported.html', c=Common())
