@@ -46,4 +46,10 @@ def logo():
 
 @bp.route('/supported')
 def supported():
+  with client.context():
     return render_template('supported.html', c=Common())
+
+@bp.route('/newengland')
+def newengland():
+  with client.context():
+    return render_template('newengland.html', c=Common())
