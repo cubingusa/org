@@ -44,11 +44,6 @@ def logo():
   with client.context():
     return render_template('logo.html', c=Common())
 
-@bp.route('/regional')
-def regional():
-  with client.context():
-    return render_template('regional.html', c=Common())
-
 @bp.route('/supported')
 def supported():
     return render_template('supported.html', c=Common())

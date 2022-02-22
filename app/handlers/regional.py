@@ -1,15 +1,17 @@
-from google.appengine.ext import ndb
+from flask import Blueprint, render_template
+from google.cloud import ndb
 
-from src import common
-from src.handlers.base import BaseHandler
-from src.jinja import JINJA_ENVIRONMENT
-from src.models.championship import Championship
-from src.models.region import Region
-from src.models.state import State
+from app.lib import common
+from app.models.championship import Championship
+from app.models.region import Region
+from app.models.state import State
 
+bp = Blueprint('regional', __name__)
+client = ndb.Client()
 
-class RegionalsHandler(BaseHandler):
-  def get(self):
+@bp.route('/regional')
+def regional():
+  with client.context():
     # The year we want to display championships for.  We should update this
     # once we're ready to start announcing the next year's championships.
     year = 2019
@@ -26,10 +28,8 @@ class RegionalsHandler(BaseHandler):
     regions_missing_championships = [
         region for region in regions if region.key not in championship_regions]
 
-    template = JINJA_ENVIRONMENT.get_template('regional.html')
-    self.response.write(template.render({
-        'c': common.Common(self),
-        'year': year,
-        'championships': championships,
-        'regions_missing_championships': regions_missing_championships,
-    }))
+    return render_template('regional.html',
+                           c=common.Common(),
+                           year=year,
+                           championships=championships,
+                           regions_missing_championships=regions_missing_championships)
