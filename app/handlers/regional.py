@@ -29,7 +29,7 @@ def regional():
         region for region in regions if region.key not in championship_regions]
 
     return render_template('regional.html',
-                           c=common.Common(),
+                           c=common.Common(wca_disclaimer=True),
                            year=year,
                            championships=championships,
                            regions_missing_championships=regions_missing_championships)

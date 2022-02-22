@@ -17,7 +17,8 @@ def nats():
 @bp.route('/2018')
 def nats2018():
   with client.context():
-    return render_template('nationals/2018/index.html', c=Common())
+    return render_template('nationals/2018/index.html',
+                           c=Common(wca_disclaimer=True))
 
 @bp.route('/2018/contact', methods=['GET', 'POST'])
 def nats2018contact():
@@ -44,7 +45,8 @@ def nats2018unofficial():
 @bp.route('/2019')
 def nats2019():
   with client.context():
-    return render_template('nationals/2019/index.html', c=Common())
+    return render_template('nationals/2019/index.html',
+                           c=Common(wca_disclaimer=True))
 
 @bp.route('/2019/contact', methods=['GET', 'POST'])
 def nats2019contact():

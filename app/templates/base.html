@@ -103,8 +103,8 @@
   <div class="container">
     <footer>
       © CubingUSA {{ c.current_date.year }}.
-      {% if c.include_wca_disclaimer %}
-        Results, competition listings, and rankings shown on this page come from the <a href="https://www.worldcubeassociation.org">World Cube Association</a>, who are the source and owner of this information.  The actual information from which this page is derived can be found on the <a href="https://www.worldcubeassociation.org/results">WCA results page</a>.  This page uses the WCA export from {{ c.get_wca_export() }}.
+      {% if c.wca_disclaimer %}
+        This information is based on competition results owned and maintained by the World Cube Assocation, published <a href="https://worldcubeassociation.org/results">here</a> as of <nobr>{{ c.get_wca_export() }}</nobr>.
       {% endif %}
     </footer>
   </div>

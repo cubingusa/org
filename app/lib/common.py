@@ -11,17 +11,19 @@ from app.models.region import Region
 from app.models.state import State
 from app.models.user import Roles
 from app.models.wca.event import Event
+from app.models.wca.export import get_latest_export
 
 class Common(object):
   
   current_date = datetime.datetime.now()
   
-  def __init__(self):
+  def __init__(self, wca_disclaimer=False):
     self.uri = request.path
     self.len = len
     self.formatters = formatters
     self.year = datetime.date.today().year
     self.user = auth.user()
+    self.wca_disclaimer = wca_disclaimer
 
   def uri_matches(self, path):
     return self.uri.endswith(path)
@@ -118,3 +120,9 @@ class Common(object):
 
   def get_secret(self, name):
     return secrets.get_secret(name)
+
+  def get_wca_export(self):
+    val = get_latest_export().key.id()
+    date_part = val.split('_')[-1][:8]
+    return datetime.datetime.strptime(date_part, '%Y%m%d').strftime('%B %d, %Y').replace(' 0', ' ')
+
