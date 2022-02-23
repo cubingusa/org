@@ -2,7 +2,7 @@
 # This is a wrapper for load_db.sh; most of the logic should be in there.
 
 source env/bin/activate
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 LOGFILE=/logs/$(date +'%Y-%m-%d-%H:%M:%S')
 

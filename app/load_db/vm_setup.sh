@@ -13,17 +13,14 @@ set -e
 export PATH=$PATH:/home/$USER/.local/bin
 
 # Install dependencies.
-sudo apt install python3-distutils python3-venv build-essential python3-dev libffi-dev libssl-dev
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3 get-pip.py
-rm get-pip.py
+sudo apt install python3-distutils python3-venv build-essential python3-dev libffi-dev libssl-dev python-pip
 
 # Set up the virtualenv.
-pip install virtualenv
+pip3 install virtualenv
 python3 -m venv env
 source env/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
 
 # Set up the production environment.
 echo CUBINGUSA_ENV=COMPUTE_ENGINE | sudo tee /etc/environment
