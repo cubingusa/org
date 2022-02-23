@@ -56,7 +56,7 @@ def delete_championship(championship_id):
 
 
 @bp.route('/edit_championships')
-def edit_users():
+def edit_championships():
   with client.context():
     me = auth.user()
     if not me or not me.HasAnyRole(Roles.AdminRoles()):
