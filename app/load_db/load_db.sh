@@ -32,7 +32,6 @@ then
   unzip $ZIP_FILE -d $EXPORT_DIR
   rm $ZIP_FILE
 
-  echo python3 app/load_db/load_db.py "$SAVED_EXPORT" "$LATEST_EXPORT" exports/
   python3 app/load_db/load_db.py \
       --old_export_id="$SAVED_EXPORT" \
       --new_export_id="$LATEST_EXPORT" \
