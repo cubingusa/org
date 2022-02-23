@@ -53,13 +53,13 @@ class Competition(BaseModel):
   def Filter():
     # Only load US competitions that haven't been cancelled.
     def filter_row(row):
-      return row['countryId'] == 'USA' and int(row['cancelled']) == 1
+      return row['countryId'] == 'USA' and int(row['cancelled']) != 1
     return filter_row
 
   @staticmethod
   def ColumnsUsed():
     return ['year', 'month', 'day', 'endMonth', 'endDay', 'cellName', 'eventSpecs',
-            'latitude', 'longitude', 'cityName', 'countryId']
+            'latitude', 'longitude', 'cityName', 'countryId', 'name']
 
   def GetWCALink(self):
     return 'https://worldcubeassociation.org/competitions/%s' % self.key.id()
