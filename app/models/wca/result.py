@@ -1,5 +1,6 @@
 from google.cloud import ndb
 
+from app.models.championship import Championship
 from app.models.wca.base import BaseModel
 from app.models.wca.competition import Competition
 from app.models.wca.country import Country
@@ -46,8 +47,8 @@ class Result(BaseModel):
 
   @staticmethod
   def Filter():
-    # Only include results of competitions that are in the datastore.
-    known_competitions = set([key.id() for key in Competition.query().iter(keys_only=True)])
+    # Only include results of championships that are in the datastore.
+    known_competitions = set([championship.competition.id() for championship in Championship.query().iter()])
 
     def filter_row(row):
       return row['competitionId'] in known_competitions
