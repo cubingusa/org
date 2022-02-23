@@ -1,6 +1,5 @@
 set -e
 
-pip install -r requirements.txt
 export PYTHONPATH=$(pwd)
 
 if [ "$CUBINGUSA_ENV" != "COMPUTE_ENGINE" ]
