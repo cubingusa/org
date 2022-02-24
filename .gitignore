@@ -2,5 +2,12 @@
 *.swp
 lib/*
 .sass-cache/
-src/static/css/
 .local_storage/
+env/
+
+# Compiled CSS.
+app/static/css/
+src/static/css/
+
+# Saved DB exports.
+exports/

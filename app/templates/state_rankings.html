@@ -1,0 +1,45 @@
+{% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
+{% import "components/state_selector.html" as state_selector %}
+{% import "components/faq.html" as faq %}
+{% extends "base.html" %}
+{% block title%}State Rankings{% endblock %}
+{% block style %}
+  {{ css.css(c, 'state_rankings') }}
+{% endblock %}
+{% block content %}
+  <h3 id="header">State Rankings</h3>
+  {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}
+  <div class="row">
+    <div class="state-selector-container">
+      {{ state_selector.state_selector(c) }}
+    </div>
+    <div class="single-average-toggle">
+      <div class="single-average-button" id="single">
+        Single
+      </div>
+      <div class="single-average-button" id="average">
+        Average
+      </div>
+    </div>
+  </div>
+  <div id="state-rankings-table"></div>
+  <div id="state-rankings-spinner" class="spinner"></div>
+  <p>
+    <h3>FAQ</h3>
+    <div id="faq" role="tablist">
+      {% call faq.faq_item("Why doesn't my name appear?", "why") %}
+        State residence is self-reported, so you'll need to tell us your state:
+        <ul>
+          <li>Create an account on the <a href="https://worldcubeassociation.org">WCA website</a> and link it with your WCA ID.
+          <li><a href="/login">Log in</a> to the CubingUSA website.
+          <li><a href="/edit">Edit</a> your account and set your home state.  Since this also affects Regional Championship eligibility, you can only do this once per year.
+        </ul>
+      {% endcall %}
+      {% call faq.faq_item("Why does this person appear in my state rankings?  They don't live here!", "other") %}
+        Please <a href="/contact">contact us</a> and we'll be happy to investigate.
+      {% endcall %}
+    </div>
+  </p>
+  <script src="/static/js/state_rankings.js" type="application/javascript"></script>
+{% endblock %}

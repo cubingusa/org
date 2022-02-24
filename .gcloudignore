@@ -1,0 +1,12 @@
+^(.*/)?#.*#$
+^(.*/)?.*~$
+^(.*/)?.*\.py[co]$
+^(.*/)?\..*$
+external/bootstrap
+__pycache__/
+/src/
+/lib/
+.git/
+.gitignore
+env/
+.env.dev

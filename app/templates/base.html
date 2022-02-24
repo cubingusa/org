@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% autoescape true %}
+{% import "components/nav.html" as nav %}
+<html>
+<head>
+  {% if c.get_secret('GOOGLE_ANALYTICS_TRACKING_ID') %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ c.get_secret('GOOGLE_ANALYTICS_TRACKING_ID') }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ c.get_secret("GOOGLE_ANALYTICS_TRACKING_ID") }}');
+    </script>
+  {% endif %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/static/img/favicon.ico">
+  <title>CubingUSA - {%block title %}{% endblock %}</title>
+  {% block style %}
+    {% import "components/css.html" as css %}
+    {{ css.css(c, 'base') }}
+  {% endblock %}
+  <script src="/static/external/jquery-3.2.1.slim.min.js" type="application/javascript"></script>
+  <script src="/static/js/onload.js" type="application/javascript"></script>
+  <script src="/static/js/hash.js" type="application/javascript"></script>
+  <script src="https://use.fontawesome.com/811113e9c2.js"></script>
+  {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ c.get_secret('RECAPTCHA_SECRET_KEY') }}"></script>
+  {% endif %}
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="navbar-primary">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="/static/img/cubingUSA_4.svg" width="50" height="50"> CubingUSA
+      </a>
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#topnav"
+              aria-controls="topnav"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="topnav">
+        <ul class="navbar-left">
+          {% for title, path in c.get_nav_items() %}
+            {% if c.is_string(path) %}
+              {% call nav.navitem(c, path) %} {{ title }} {% endcall %}
+            {% else %}
+              {% call nav.navdropdown(c, path) %} {{ title }} {% endcall %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul class="navbar-right">
+          <li class="navbar-icon-item">
+            <a href="https://github.com/cubingusa/cubingusa-org" target="_blank" class="nav-link">
+              <i class="fa fa-github" aria-label="GitHub"></i>
+              <span class="navbar-icon-label">GitHub</span>
+            </a>
+          </li>
+          <li class="navbar-icon-item">
+            <a href="https://www.facebook.com/CubingUSA/" target="_blank" class="nav-link">
+              <i class="fa fa-facebook-official" aria-label="Facebook"></i>
+              <span class="navbar-icon-label">Facebook</span>
+            </a>
+          </li>
+          <li class="navbar-icon-item">
+            <a href="https://twitter.com/CubingUSA" target="_blank" class="nav-link">
+              <i class="fa fa-twitter" aria-label="Twitter"></i>
+              <span class="navbar-icon-label">Twitter</span>
+            </a>
+          </li>
+          <li class="navbar-icon-item">
+            <a href="https://www.instagram.com/cubingusa/" target="_blank" class="nav-link">
+              <i class="fa fa-instagram" aria-label="Instagram"></i>
+              <span class="navbar-icon-label">Instagram</span>
+            </a>
+          </li>
+          {% for title, path in c.get_right_nav_items() %}
+            {% if c.is_string(path) %}
+              {% call nav.navitem(c, path) %} {{ title }} {% endcall %}
+            {% else %}
+              {% call nav.navdropdown(c, path) %} {{ title }} {% endcall %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% block navbar_secondary %}{% endblock %}
+  <div class="container">
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  <hr>
+  <div class="container">
+    <footer>
+      © CubingUSA {{ c.current_date.year }}.
+      {% if c.wca_disclaimer %}
+        This information is based on competition results owned and maintained by the World Cube Assocation, published <a href="https://worldcubeassociation.org/results">here</a> as of <nobr>{{ c.get_wca_export() }}</nobr>.
+      {% endif %}
+    </footer>
+  </div>
+  <script src="/static/external/popper.min.js" type="application/javascript"></script>
+  <script src="/static/external/bootstrap.min.js" type="application/javascript"></script>
+</body>
+</html>
+{% endautoescape %}

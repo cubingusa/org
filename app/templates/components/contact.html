@@ -1,0 +1,105 @@
+{% macro contact_form(c, result) %}
+  {% if result == 'success' %}
+    <div class="alert alert-success" role="alert">
+      <strong>Mail sent!</strong>  Check your email, you have been cc-ed.
+    </div>
+  {% endif %}
+  {% if result == 'failure' %}
+    <div class="alert alert-danger" role="alert">
+      <strong>Failed to send mail!</strong>  Please try again later.
+    </div>
+  {% endif %}
+  <form action="{{ c.uri}}" id="form" method="POST">
+    <h3>Contact Us</h3>
+    {{ caller() }}
+    {% if c.user %}
+      <p>
+        You're logged in with your WCA account.  If you'd like to change your email address, you can do so <a href="https://www.worldcubeassociation.org/profile/edit?section=email" target="_blank">here</a>.
+      </p>
+    {% else %}
+      <div id="noid-container">
+        <p>If you have a WCA account, please <a href="/login">log in</a></p>
+        <a id="noid" href="#">I don't have a WCA account.</a>
+      </div>
+    {% endif %}
+    <div id="form-content-container">
+      <div class="contact-from-line">
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="from-address">Name</label>
+            <input class="form-control"
+                   name="name"
+                   id="name"
+                   {% if c.user %}
+                     value="{{ c.user.name }}"
+                     readonly
+                   {% else %}
+                     placeholder="Your Name"
+                     disabled
+                   {% endif %}
+                   required>
+          </div>
+        </div>
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="from-address">Email</label>
+            <input type="email"
+                   class="form-control"
+                   name="from-address"
+                   id="from-address"
+                   {% if c.user %}
+                     value="{{ c.user.email }}"
+                     readonly
+                   {% else %}
+                     placeholder="name@example.com"
+                     disabled
+                   {% endif %}
+                   required>
+          </div>
+        </div>
+        <div class="contact-from-col">
+          <div class="form-group">
+            <label for="wcaid">WCA ID</label>
+            <input type="text"
+                   class="form-control"
+                   name="wcaid"
+                   id="wcaid"
+                   {% if c.user and c.user.wca_person %}
+                     value="{{ c.user.wca_person.id() }}"
+                     readonly
+                   {% else %}
+                     placeholder="Leave blank if you've never competed officially."
+                     disabled
+                   {% endif %}>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="contact-message">Message</label>
+        <textarea class="form-control"
+                  name="contact-message"
+                  id="contact-message"
+                  rows="5"
+                  required
+                  ></textarea>
+      </div>
+      <input type="hidden" name="recaptcha-token" id="recaptcha-token">
+      <button id="send-button"
+              class="button g-recaptcha"
+              {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
+                data-sitekey="{{ c.get_secret('RECAPTCHA_SECRET_KEY') }}"
+                data-callback='onSubmit'
+                data-action='submit'
+              {% endif %}
+              type="submit">Send</button>
+    </div>
+  </form>
+  {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
+    <script>
+      function onSubmit(token) {
+        document.getElementById("form").submit();
+      }
+    </script>
+  {% endif %}
+  <script src="/static/js/contact.js" type="application/javascript" async defer></script>
+{% endmacro %}

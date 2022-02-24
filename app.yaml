@@ -1,37 +1,10 @@
-runtime: python27
-api_version: 1
-threadsafe: true
-skip_files:
- - ^(.*/)?#.*#$
- - ^(.*/)?.*~$
- - ^(.*/)?.*\.py[co]$
- - ^(.*/)?\..*$
- - external/bootstrap
- - src/scss
+runtime: python39
+entrypoint: gunicorn -b :$PORT app:app
 
-libraries:
- - name: webapp2
-   version: latest
+env_variables:
+  ENV: "PROD"
+  WCA_HOST: "https://www.worldcubeassociation.org"
 
 handlers:
- - url: /_ah/queue/deferred
-   script: google.appengine.ext.deferred.deferred.application
-   login: admin
- - url: /static
-   static_dir: src/static
-   secure: always
- - url: /scheduling
-   script: scheduling.app
-   secure: always
- - url: /scheduling/.*
-   script: scheduling.app
-   secure: always
- - url: /nationals/.*
-   script: nationals.app
-   secure: always
- - url: /nationals
-   script: nationals.app
-   secure: always
  - url: /.*
-   script: cubingusa.app
-   secure: always
+   script: auto

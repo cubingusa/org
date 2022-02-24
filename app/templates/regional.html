@@ -1,0 +1,89 @@
+{% import "components/css.html" as css %}
+{% import "components/event_selector.html" as event_selector %}
+{% extends "base.html" %}
+{% block title %}Regional Championships{% endblock %}
+{% block style %}
+  {{ css.css(c, 'regional') }}
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <p>
+      <div class="card">
+        <div class="regional-map-container">
+          <img class="regional-map"
+               src="/static/img/regionals-map.jpg"
+               alt="Map of US Regions">
+        </div>
+        <div class="card-body main-card">
+          <h1 class="card-title">CubingUSA Regional Championships</h1>
+          <div class="card-text">
+            <p>In addition to CubingUSA Nationals, CubingUSA supports the organization of seven <strong>Regional Championships</strong> each year.  These competitions aim to provide competitors throughout the US with a high-quality, large competition experience, and to recognize the top competitors throughout the country.
+              <a class="mobile-only"
+                 data-toggle="collapse"
+                 href="#moreRegionalsInfo"
+                 role="button">Read More...</a>
+            </p>
+            <div class="desktop-only" id="moreRegionalsInfo">
+              <p>Just like CubingUSA Nationals, our Regional Championships are open to all competitors.  However, the title of Regional Champion will be awarded to the top-ranked competitor who lives in that region.  In order to be eligible to win a title, you need to <a href="/login">log in</a> to the CubingUSA website with your WCA account and <a href="/edit">select</a> your home state before the competition. We will have more details about residency verification soon. Please <a href="/about/contact">contact</a> us if you have any questions about what state you can represent.</p>
+              {% if regions_missing_championships %}
+                <p>We're still working to finalize the location and dates of this year's championships.  Please check back here for details!</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </p>
+    <p>
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-calendar" aria-hidden="true"></i> {{ year }} Regional Championships</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% for championship in championships %}
+            {% set competition = championship.competition.get() %}
+            <li class="list-group-item">
+              <div class="row">
+                <div class="competition-name-col">
+                  <a href="{{ competition.GetWCALink() }}">
+                    {{ competition.name }}
+                  </a>
+                </div>
+                <div class="competition-location-col">
+                  <i class="fa fa-map-marker" aria-hidden="true"></i>
+                  {{ competition.city_name }}, {{ competition.state.get().name }}
+                </div>
+                <div class="competition-date-col">
+                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  {% autoescape False %}
+                    {{ c.format_date_range(competition.start_date, competition.end_date,
+                                           include_year=False, full_months=True) }}
+                  {% endautoescape %}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+          {% for region in regions_missing_championships %}
+            <li class="list-group-item">
+              <span class="missing-region">
+                CubingUSA {{ region.championship_name }} Championship {{ year }}: to be announced soon!
+              <span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </p>
+    <p>
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-trophy" aria-hidden="true"></i> {{ year }} <span id="regionals-evt"></span> Regional Champions</h4>
+        </div>
+        <div class="card-body">
+          {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}
+          <div id="champions-table"></div>
+          <div class="spinner" id="regionals-spinner"></div>
+        </div>
+      </div>
+    </p>
+  </div>
+  <script src="/static/js/regionals.js" type="application/javascript"></script>
+{% endblock %}

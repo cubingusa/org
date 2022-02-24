@@ -1,3 +1,5 @@
+# TODO: This still needs to be migrated to the new site framework.
+
 import cloudstorage as gcs
 import urlparse
 import webapp2
