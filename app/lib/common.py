@@ -84,6 +84,7 @@ class Common(object):
              ]),
              ('Competitors', [
                  ('State Rankings', '/state_rankings'),
+                 ('WCA Competitor Tutorial', 'https://www.worldcubeassociation.org/edudoc/competitor-tutorial/tutorial.pdf'),
              ]),
              ('Organizers', [
                  ('CubingUSA Supported Competitions', '/supported'),
