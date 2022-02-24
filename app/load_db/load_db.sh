@@ -36,4 +36,9 @@ then
       --old_export_id="$SAVED_EXPORT" \
       --new_export_id="$LATEST_EXPORT" \
       --export_base=exports/
+
+  if [ "$SAVED_EXPORT" != "" ]
+  then
+    rm -r exports/$SAVED_EXPORT
+  fi
 fi
