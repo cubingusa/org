@@ -34,4 +34,3 @@ pip3 install -r requirements.txt
 
 # Set up the production environment.
 echo CUBINGUSA_ENV=COMPUTE_ENGINE | tee /etc/environment
-mkdir /logs
