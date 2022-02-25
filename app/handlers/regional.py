@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, render_template
 from google.cloud import ndb
 
@@ -12,9 +14,7 @@ client = ndb.Client()
 @bp.route('/regional')
 def regional():
   with client.context():
-    # The year we want to display championships for.  We should update this
-    # once we're ready to start announcing the next year's championships.
-    year = 2019
+    year = datetime.date.today().year
 
     championships = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()
