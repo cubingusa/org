@@ -5,6 +5,7 @@ var regionalsModule = (function() {
       document.getElementById('regionals-spinner').style.display = 'inherit';
       document.getElementById('champions-table').innerHTML = '';
       document.getElementById('champions-table').classList.remove('fade-in');
+      var year = document.getElementById('year').dataset.year;
       req.onreadystatechange = function() {
         if (req.readyState == 4) {
           document.getElementById('regionals-spinner').style.display = 'none';
@@ -17,7 +18,7 @@ var regionalsModule = (function() {
           }
         }
       };
-      var uri = '/async/champions_by_region/' + event_id + '/regional/2018';
+      var uri = '/async/champions_by_region/' + event_id + '/regional/' + year;
       req.open('GET', uri);
       req.send();
     },
