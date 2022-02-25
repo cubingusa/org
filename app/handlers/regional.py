@@ -33,3 +33,8 @@ def regional():
                            year=year,
                            championships=championships,
                            regions_missing_championships=regions_missing_championships)
+
+@bp.route('/regional/title_policy')
+def title_policy():
+  with client.context():
+    return render_template('regional_title.html', c=common.Common())
