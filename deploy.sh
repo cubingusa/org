@@ -65,7 +65,7 @@ mkdir -p app/static/css/prod
 external/dart-sass/sass --update app/scss:app/static/css/prod --style compressed
 
 echo "Deploying to App Engine."
-CMD="gcloud app deploy $FILES_TO_DEPLOY --project $PROJECT"
+CMD="gcloud app deploy app.yaml --project $PROJECT"
 if [ ! -z "$VERSION" ]
 then
   CMD="$CMD --version $VERSION"
