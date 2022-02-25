@@ -6,6 +6,7 @@ from absl import logging
 from google.cloud import ndb
 
 from app.load_db.update_champions import UpdateChampions
+from app.models.user import User
 from app.models.wca.competition import Competition
 from app.models.wca.continent import Continent
 from app.models.wca.country import Country
@@ -38,6 +39,22 @@ def get_tables():
           ('Competitions', Competition),
           ('Results', Result),
          ]
+
+
+# Ideally this would live in person.py, but that would be a circular dependency
+# between Person and User.
+def modifier(table):
+  if table == 'Persons':
+    id_to_state = {}
+    for user in User.query(User.state != None):
+      if user.wca_person:
+        id_to_state[user.wca_person.id()] = user.state
+
+      def modify(person):
+        if person.key.id() in id_to_state:
+          person.state = id_to_state[person.key.id()]
+      return modify
+  return None
 
 
 def read_table(path, cls, apply_filter):
@@ -88,6 +105,7 @@ def process_export(old_export_path, new_export_path):
     logging.info('Old: %d' % len(old_rows))
     logging.info('New: %d' % len(new_rows))
     write_table(new_export_path + table_suffix, new_rows, cls)
+    modifier = get_modifier(table)
 
     objects_to_put = []
     keys_to_delete = []
@@ -98,6 +116,8 @@ def process_export(old_export_path, new_export_path):
       else:
         obj = cls(id=key)
         obj.ParseFromDict(row)
+        if modifier:
+          modifier(obj)
         objects_to_put += [obj]
     for key, row in old_rows.items():
       if key in new_rows:
