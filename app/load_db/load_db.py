@@ -43,7 +43,7 @@ def get_tables():
 
 # Ideally this would live in person.py, but that would be a circular dependency
 # between Person and User.
-def modifier(table):
+def get_modifier(table):
   if table == 'Persons':
     id_to_state = {}
     for user in User.query(User.state != None):
