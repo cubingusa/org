@@ -32,11 +32,6 @@ def nats2018events():
   with client.context():
     return redirect('https://www.worldcubeassociation.org/competitions/CubingUSANationals2018#competition-events')
 
-@bp.route('/2018/schedule')
-def nats2018schedule():
-  with client.context():
-    return render_template('nationals/2018/schedule.html', c=Common())
-
 @bp.route('/2018/unofficial')
 def nats2018unofficial():
   with client.context():
