@@ -13,7 +13,8 @@ client = ndb.Client()
 @bp.route('/state_rankings')
 def state_rankings():
   with client.context():
-    return render_template('state_rankings.html', c=common.Common())
+    return render_template('state_rankings.html',
+                           c=common.Common(wca_disclaimer=True))
 
 @bp.route('/async/state_rankings/<event_id>/<state_id>/<use_average>')
 def state_rankings_table(event_id, state_id, use_average):
@@ -37,7 +38,7 @@ def state_rankings_table(event_id, state_id, use_average):
     people_by_id = {person.key.id() : person for person in people}
 
     return render_template('state_rankings_table.html',
-                           c=common.Common(wca_disclaimer=True),
+                           c=common.Common(),
                            is_average=(use_average == '1'),
                            rankings=rankings,
                            people_by_id=people_by_id)
