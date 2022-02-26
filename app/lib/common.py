@@ -128,7 +128,7 @@ class Common(object):
     return secrets.get_secret(name)
 
   def get_wca_export(self):
-    val = get_latest_export().key.id()
+    val = get_latest_export()
     date_part = val.split('_')[-1][:8]
     return datetime.datetime.strptime(date_part, '%Y%m%d').strftime('%B %d, %Y').replace(' 0', ' ')
 
