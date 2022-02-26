@@ -11,7 +11,6 @@ from app.models.wca.competition import Competition
 from app.models.wca.continent import Continent
 from app.models.wca.country import Country
 from app.models.wca.event import Event
-from app.models.wca.export import WcaExport
 from app.models.wca.export import set_latest_export
 from app.models.wca.format import Format
 from app.models.wca.person import Person
