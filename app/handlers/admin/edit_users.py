@@ -36,6 +36,3 @@ def edit_users_table(filter_text=''):
 
     return render_template('admin/edit_users_table.html',
                            c=Common(), users=users_to_show)
-
-  def PermittedRoles(self):
-    return Roles.AdminRoles()
