@@ -49,10 +49,10 @@ def get_modifier(table):
       if user.wca_person:
         id_to_state[user.wca_person.id()] = user.state
 
-      def modify(person):
-        if person.key.id() in id_to_state:
-          person.state = id_to_state[person.key.id()]
-      return modify
+    def modify(person):
+      if person.key.id() in id_to_state:
+        person.state = id_to_state[person.key.id()]
+    return modify
   return None
 
 
