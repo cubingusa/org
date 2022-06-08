@@ -36,4 +36,7 @@ then
       --old_export_id="$SAVED_EXPORT" \
       --new_export_id="$LATEST_EXPORT" \
       --export_base=exports/
+
+  python3 app/load_db/delete_old_exports.py \
+      --export_base=exports/
 fi
