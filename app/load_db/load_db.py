@@ -96,6 +96,7 @@ def write_table(path, rows, cls):
 
 
 def process_export(old_export_path, new_export_path):
+  client = ndb.Client()
   for table, cls in get_tables():
     logging.info('Processing ' + table)
     table_suffix = '/WCA_export_' + table + '.tsv'
@@ -128,9 +129,13 @@ def process_export(old_export_path, new_export_path):
       batch_size = 500
       subslice = objects_to_put[:batch_size]
       objects_to_put = objects_to_put[batch_size:]
-      ndb.put_multi(subslice)
+      with client.context():
+        ndb.put_multi(subslice)
+
     logging.info('Deleting %d objects' % len(keys_to_delete))
-    ndb.delete_multi(keys_to_delete)
+    client = ndb.Client()
+    with client.context():
+      ndb.delete_multi(keys_to_delete)
 
 
 def main(argv):
@@ -140,9 +145,11 @@ def main(argv):
   logging.info(old_export_path)
   logging.info(new_export_path)
 
+  # A new client context is created for each write here, to avoid a memory leak.
+  process_export(old_export_path, new_export_path)
+
   client = ndb.Client()
   with client.context():
-    process_export(old_export_path, new_export_path)
     set_latest_export(FLAGS.new_export_id)
     UpdateChampions()
 
