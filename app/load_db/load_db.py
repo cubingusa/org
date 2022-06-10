@@ -105,28 +105,32 @@ def process_export(old_export_path, new_export_path):
     logging.info('Old: %d' % len(old_rows))
     logging.info('New: %d' % len(new_rows))
     write_table(new_export_path + table_suffix, new_rows, cls)
-    modifier = get_modifier(table)
 
     objects_to_put = []
     keys_to_delete = []
-    for key in new_rows:
-      row = new_rows[key]
-      if key in old_rows and old_rows[key] == row:
-        continue
-      else:
-        obj = cls(id=key)
-        obj.ParseFromDict(row)
-        if modifier:
-          modifier(obj)
-        objects_to_put += [obj]
-    for key, row in old_rows.items():
-      if key in new_rows:
-        continue
-      else:
-        keys_to_delete += [ndb.Key(cls, key)]
+
+    with client.context():
+      modifier = get_modifier(table)
+      for key in new_rows:
+        row = new_rows[key]
+        if key in old_rows and old_rows[key] == row:
+          continue
+        else:
+          obj = cls(id=key)
+          obj.ParseFromDict(row)
+          if modifier:
+            modifier(obj)
+          objects_to_put += [obj]
+      for key, row in old_rows.items():
+        if key in new_rows:
+          continue
+        else:
+          keys_to_delete += [ndb.Key(cls, key)]
+
     logging.info('Putting %d objects' % len(objects_to_put))
     while objects_to_put:
       batch_size = 500
+      logging.info('%d left' % len(objects_to_put))
       subslice = objects_to_put[:batch_size]
       objects_to_put = objects_to_put[batch_size:]
       with client.context():
