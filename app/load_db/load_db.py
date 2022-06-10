@@ -129,7 +129,7 @@ def process_export(old_export_path, new_export_path):
 
     logging.info('Putting %d objects' % len(objects_to_put))
     while objects_to_put:
-      batch_size = 500
+      batch_size = 5000
       logging.info('%d left' % len(objects_to_put))
       subslice = objects_to_put[:batch_size]
       objects_to_put = objects_to_put[batch_size:]
