@@ -100,16 +100,16 @@ def process_export(old_export_path, new_export_path):
   for table, cls in get_tables():
     logging.info('Processing ' + table)
     table_suffix = '/WCA_export_' + table + '.tsv'
-    old_rows = read_table(old_export_path + table_suffix, cls, False)
-    new_rows = read_table(new_export_path + table_suffix, cls, True)
-    logging.info('Old: %d' % len(old_rows))
-    logging.info('New: %d' % len(new_rows))
-    write_table(new_export_path + table_suffix, new_rows, cls)
-
-    objects_to_put = []
-    keys_to_delete = []
-
     with client.context():
+      old_rows = read_table(old_export_path + table_suffix, cls, False)
+      new_rows = read_table(new_export_path + table_suffix, cls, True)
+      logging.info('Old: %d' % len(old_rows))
+      logging.info('New: %d' % len(new_rows))
+      write_table(new_export_path + table_suffix, new_rows, cls)
+
+      objects_to_put = []
+      keys_to_delete = []
+
       modifier = get_modifier(table)
       for key in new_rows:
         row = new_rows[key]
