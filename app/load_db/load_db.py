@@ -96,41 +96,50 @@ def write_table(path, rows, cls):
 
 
 def process_export(old_export_path, new_export_path):
+  client = ndb.Client()
   for table, cls in get_tables():
     logging.info('Processing ' + table)
     table_suffix = '/WCA_export_' + table + '.tsv'
-    old_rows = read_table(old_export_path + table_suffix, cls, False)
-    new_rows = read_table(new_export_path + table_suffix, cls, True)
-    logging.info('Old: %d' % len(old_rows))
-    logging.info('New: %d' % len(new_rows))
-    write_table(new_export_path + table_suffix, new_rows, cls)
-    modifier = get_modifier(table)
+    with client.context():
+      old_rows = read_table(old_export_path + table_suffix, cls, False)
+      new_rows = read_table(new_export_path + table_suffix, cls, True)
+      logging.info('Old: %d' % len(old_rows))
+      logging.info('New: %d' % len(new_rows))
+      write_table(new_export_path + table_suffix, new_rows, cls)
 
-    objects_to_put = []
-    keys_to_delete = []
-    for key in new_rows:
-      row = new_rows[key]
-      if key in old_rows and old_rows[key] == row:
-        continue
-      else:
-        obj = cls(id=key)
-        obj.ParseFromDict(row)
-        if modifier:
-          modifier(obj)
-        objects_to_put += [obj]
-    for key, row in old_rows.items():
-      if key in new_rows:
-        continue
-      else:
-        keys_to_delete += [ndb.Key(cls, key)]
+      objects_to_put = []
+      keys_to_delete = []
+
+      modifier = get_modifier(table)
+      for key in new_rows:
+        row = new_rows[key]
+        if key in old_rows and old_rows[key] == row:
+          continue
+        else:
+          obj = cls(id=key)
+          obj.ParseFromDict(row)
+          if modifier:
+            modifier(obj)
+          objects_to_put += [obj]
+      for key, row in old_rows.items():
+        if key in new_rows:
+          continue
+        else:
+          keys_to_delete += [ndb.Key(cls, key)]
+
     logging.info('Putting %d objects' % len(objects_to_put))
     while objects_to_put:
-      batch_size = 500
+      batch_size = 5000
+      logging.info('%d left' % len(objects_to_put))
       subslice = objects_to_put[:batch_size]
       objects_to_put = objects_to_put[batch_size:]
-      ndb.put_multi(subslice)
+      with client.context():
+        ndb.put_multi(subslice)
+
     logging.info('Deleting %d objects' % len(keys_to_delete))
-    ndb.delete_multi(keys_to_delete)
+    client = ndb.Client()
+    with client.context():
+      ndb.delete_multi(keys_to_delete)
 
 
 def main(argv):
@@ -140,9 +149,11 @@ def main(argv):
   logging.info(old_export_path)
   logging.info(new_export_path)
 
+  # A new client context is created for each write here, to avoid a memory leak.
+  process_export(old_export_path, new_export_path)
+
   client = ndb.Client()
   with client.context():
-    process_export(old_export_path, new_export_path)
     set_latest_export(FLAGS.new_export_id)
     UpdateChampions()
 
