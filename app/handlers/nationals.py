@@ -69,3 +69,31 @@ def nats2019travel():
 def nats2019unofficial():
   with client.context():
     return render_template('nationals/2019/unofficial.html', c=Common())
+
+@bp.route('/2023')
+def nats2023():
+  with client.context():
+    return render_template('nationals/2023/index.html',
+                           c=Common(wca_disclaimer=True))
+
+@bp.route('/2023/contact', methods=['GET', 'POST'])
+def nats2023contact():
+  with client.context():
+    return contact.handle_contact_request('nationals/2023/contact.html',
+                                          'Nationals 2023',
+                                          'tim@cubingusa.org')
+
+@bp.route('/2023/events')
+def nats2023events():
+  with client.context():
+    return redirect('https://www.worldcubeassociation.org/competitions/CubingUSANationals2023#competition-events')
+
+@bp.route('/2023/schedule')
+def nats2023schedule():
+  with client.context():
+    return render_template('nationals/2023/schedule.html', c=Common())
+
+@bp.route('/2023/travel')
+def nats2023travel():
+  with client.context():
+    return render_template('nationals/2023/travel.html', c=Common())

@@ -1,0 +1,60 @@
+{% extends "nationals/2023/base.html" %}
+{% block title%}Nationals 2023 Travel{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2023/travel') }}
+{% endblock %}
+{% block content %}
+  <h1>Travel Information</h1>
+  <div class="nats-top-row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-building" aria-hidden="true"></i> Venue</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            The competition will be held at the <strong><a href="https://www.pittsburghcc.com/" target="_blank">David L. Lawrence Convention Center</a> in Pittsburgh, Pennsylvania.</strong>  We're pleased to be working with the Convention Center, which will be a great venue for our competition.
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-location-arrow" aria-hidden="true"></i> <span class="info-box-label">Address:</span> <a href="https://goo.gl/maps/H2FC2BXLSdT2" target="_blank">1000 Ft. Duquesne Blvd., Pitsburgh, PA 15222</a>
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Main Room:</span> Hall C
+          </div>
+          <div class="info-box-row">
+            <i class="fa fa-building" aria-hidden="true"></i> <span class="info-box-label">Long Events:</span> Rooms 319&mdash;321
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d97149.44299579834!2d-80.22842159152935!3d40.454905510646284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0x88345cc34ecd5b37%3A0xc812270d148d3f59!2sPittsburgh%20International%20Airport%20(PIT)%2C%20Airport%20Boulevard%2C%20Pittsburgh%2C%20PA!3m2!1d40.491920799999995!2d-80.2352233!4m5!1s0x8834f3e2eb0a8de7%3A0x36ba9693af60a61!2sDavid%20L.%20Lawrence%20Convention%20Center%2C%20Fort%20Duquesne%20Boulevard%2C%20Pittsburgh%2C%20PA!3m2!1d40.4455472!2d-79.9962844!5e0!3m2!1sen!2sus!4v1665255671505!5m2!1sen!2sus" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-bed" aria-hidden="true"></i> Hotel</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            We've arranged a room block at a local hotel, open to all attendees of the competition. We'll provide more information closer to the competition, check back here before you book your hotel!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><i class="fa fa-car" aria-hidden="true"></i> Transportation</h4>
+        </div>
+        <div class="card-body">
+          <div class="info-box-row">
+            <i class="fa fa-plane" aria-hidden="true"></i> <span class="info-box-label">Nearest Airport:</span> <strong>Pittsburgh International Airport (PIT)</strong> serves Pittsburgh and has many daily flights. There are regular buses connecting PIT to the city.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
