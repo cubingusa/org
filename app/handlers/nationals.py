@@ -12,7 +12,7 @@ client = ndb.Client()
 @bp.route('/')
 def nats():
   with client.context():
-    return redirect('/nationals/2019')
+    return redirect('/nationals/2023')
 
 @bp.route('/2018')
 def nats2018():

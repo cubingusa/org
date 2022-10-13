@@ -25,11 +25,11 @@ $grid-gutter-width: 18px;
   }
 
   .time-block-main {
-    background-color: #d2f4ea;  // teal-100 in bootstrap 5
+    background-color: #ffe5d0;  // orange-100 in bootstrap 5
   }
 
   .time-block-finals {
-    background-color: #a6e9d5;  // teal-200 in bootstrap 5
+    background-color: #fecba1;  // orange-200 in bootstrap 5
   }
 
   .time-block .stage {
@@ -79,7 +79,7 @@ $grid-gutter-width: 18px;
 
   .key {
     @include media-breakpoint-up(sm) {
-      display: none;
+      width: 50%;
     }
   }
 }
