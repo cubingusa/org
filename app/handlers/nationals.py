@@ -48,7 +48,7 @@ def nats2019contact():
   with client.context():
     return contact.handle_contact_request('nationals/2019/contact.html',
                                           'Nationals 2019',
-                                          'tim@cubingusa.org')
+                                          'nats-organizers@cubingusa.org')
 
 @bp.route('/2019/events')
 def nats2019events():
@@ -81,7 +81,7 @@ def nats2023contact():
   with client.context():
     return contact.handle_contact_request('nationals/2023/contact.html',
                                           'Nationals 2023',
-                                          'tim@cubingusa.org')
+                                          'nats-organizers@cubingusa.org')
 
 @bp.route('/2023/events')
 def nats2023events():
