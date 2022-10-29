@@ -1,6 +1,9 @@
 {% import "components/css.html" as css %}
 {% import "components/nav.html" as nav %}
 {% extends "base.html" %}
+{% block head %}
+  <meta property="og:image" content="https://www.cubingusa.org/static/img/nats-logo-2023-og-image.png"/>
+{% endblock %}
 {% block style %}
   {{ css.css(c, 'nationals/2023/base') }}
 {% endblock %}
