@@ -5,7 +5,7 @@ import sys
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, redirect, request
 import google.cloud.logging
 
 from app.lib.secrets import get_secret
@@ -28,6 +28,13 @@ elif os.environ.get('ENV') == 'DEV' and 'gunicorn' in sys.argv[0]:
 app = Flask(__name__)
 app.secret_key = get_secret('SESSION_SECRET_KEY')
 app.permanent_session_lifetime = datetime.timedelta(days=7)
+
+@app.before_request
+def before_request():
+  if os.environ.get('ENV') == 'PROD' and not request.is_secure:
+    url = request.url.replace('http://', 'https://', 1)
+    code = 301
+    return redirect(url, code=code)
 
 wca_host = os.environ.get('WCA_HOST')
 oauth = OAuth(app)
