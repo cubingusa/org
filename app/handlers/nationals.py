@@ -102,3 +102,8 @@ def nats2023travel():
 def nats2023qualifying():
   with client.context():
     return render_template('nationals/2023/qualifying.html', c=Common())
+
+@bp.route('/2023/volunteers')
+def nats2023volunteers():
+  with client.context():
+    return render_template('nationals/2023/volunteers.html', c=Common())
