@@ -31,14 +31,19 @@ def create_assessment(token):
   else:
     request.parent = 'projects/cubingusa-org'
 
-  response = client.create_assessment(request)
+  try:
+    response = client.create_assessment(request)
 
-  # Check if the token is valid.
-  if not response.token_properties.valid:
-    print('Invalid token: ' + str(response.token_properties.invalid_reason))
+    # Check if the token is valid.
+    if not response.token_properties.valid:
+      print('Invalid token: ' + str(response.token_properties.invalid_reason))
+      return 0.0
+
+    return response.risk_analysis.score
+  except e:
+    print('Error fetching assessment.')
+    print(e)
     return 0.0
-
-  return response.risk_analysis.score
 
 def handle_contact_request(template, subject_base, recipient):
   if request.method == 'GET':
