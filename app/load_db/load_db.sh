@@ -8,6 +8,10 @@ then
   $(gcloud beta emulators datastore env-init)
 fi
 
+echo "Deleting old exports"
+python3 app/load_db/delete_old_exports.py \
+    --export_base=exports/
+
 SAVED_EXPORT=$(python3 app/load_db/get_latest_export.py)
 LATEST_EXPORT=$(curl https://www.worldcubeassociation.org/results/misc/export.html \
 | grep TSV:.*WCA_export \
@@ -35,8 +39,5 @@ then
   python3 app/load_db/load_db.py \
       --old_export_id="$SAVED_EXPORT" \
       --new_export_id="$LATEST_EXPORT" \
-      --export_base=exports/
-
-  python3 app/load_db/delete_old_exports.py \
       --export_base=exports/
 fi
