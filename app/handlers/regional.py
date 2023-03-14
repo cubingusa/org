@@ -26,7 +26,7 @@ def regional():
     championships.sort(key=lambda championship: championship.competition.get().start_date)
     championship_regions = [championship.region for championship in championships]
     regions_missing_championships = [
-        region for region in regions if region.key not in championship_regions]
+        region for region in regions if region.key not in championship_regions and not region.obsolete]
 
     return render_template('regional.html',
                            c=common.Common(wca_disclaimer=True),
