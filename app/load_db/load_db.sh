@@ -13,7 +13,7 @@ python3 app/load_db/delete_old_exports.py \
     --export_base=exports/
 
 SAVED_EXPORT=$(python3 app/load_db/get_latest_export.py)
-LATEST_EXPORT=$(curl https://www.worldcubeassociation.org/results/misc/export.html \
+LATEST_EXPORT=$(curl https://www.worldcubeassociation.org/export/results \
 | grep TSV:.*WCA_export \
 | sed -s 's/.*\(WCA_export[0-9A-Za-z_]*\).tsv.zip.*/\1/')
 
@@ -25,7 +25,7 @@ fi
 if [ "$SAVED_EXPORT" != "$LATEST_EXPORT" ]
 then
   echo "Downloading $LATEST_EXPORT"
-  URL_TO_FETCH="https://www.worldcubeassociation.org/results/misc/$LATEST_EXPORT.tsv.zip"
+  URL_TO_FETCH="https://www.worldcubeassociation.org/export/results/$LATEST_EXPORT.tsv.zip"
   EXPORT_DIR="exports/$LATEST_EXPORT"
   mkdir -p exports/
   rm -rf ./$EXPORT_DIR
