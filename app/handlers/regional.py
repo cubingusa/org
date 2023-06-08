@@ -1,12 +1,16 @@
 import datetime
+import os
+import logging
+import requests
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, abort
 from google.cloud import ndb
 
 from app.lib import common
 from app.models.championship import Championship
 from app.models.region import Region
 from app.models.state import State
+from app.models.user import User
 
 bp = Blueprint('regional', __name__)
 client = ndb.Client()
@@ -38,3 +42,35 @@ def regional():
 def title_policy():
   with client.context():
     return render_template('regional_title.html', c=common.Common())
+
+@bp.route('/regional/eligibility/<region>/<year>')
+def regional_eligibility(region, year):
+  with client.context():
+    championship = Championship.get_by_id('%s_%d' % (region, int(year)))
+    if not championship:
+      abort(404)
+    competition_id = championship.competition.id()
+    wca_host = os.environ.get('WCA_HOST')
+    data = requests.get(wca_host + '/api/v0/competitions/' + competition_id + '/wcif/public')
+    if data.status_code != 200:
+      abort(data.status_code)
+    competition = data.json()
+    person_keys = [ndb.Key(User, str(person['wcaUserId'])) for person in competition['persons']]
+    users = ndb.get_multi(person_keys)
+    if championship.region:
+      region = championship.region.get()
+      eligible_states = [key.id() for key in State.query(State.region == region.key).fetch(keys_only=True)]
+    elif championship.state:
+      eligible_states = [championship.state.id()]
+    logging.info(eligible_states)
+    logging.info(person_keys)
+    logging.info(users)
+    eligible_users = [user for user in users if user and user.state and (user.state.id() in eligible_states)]
+    ineligible_users = [user for user in users if user and user.state and (user.state.id() not in eligible_states)]
+    logging.info(eligible_users)
+    logging.info(ineligible_users)
+    return render_template('regional_eligibility.html',
+                           c=common.Common(),
+                           eligible_users=eligible_users,
+                           ineligible_users=ineligible_users,
+                           competition=competition)
