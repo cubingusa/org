@@ -57,6 +57,7 @@ from app.handlers.nationals import bp as nationals_bp
 from app.handlers.regional import bp as regional_bp
 from app.handlers.state_rankings import bp as state_rankings_bp
 from app.handlers.static import bp as static_bp
+from app.handlers.status import bp as status_bp
 from app.handlers.user import bp as user_bp
 
 app.register_blueprint(admin_bp)
@@ -66,4 +67,5 @@ app.register_blueprint(nationals_bp)
 app.register_blueprint(regional_bp)
 app.register_blueprint(state_rankings_bp)
 app.register_blueprint(static_bp)
+app.register_blueprint(status_bp)
 app.register_blueprint(user_bp)
