@@ -107,3 +107,8 @@ def nats2023qualifying():
 def nats2023volunteers():
   with client.context():
     return render_template('nationals/2023/volunteers.html', c=Common())
+
+@bp.route('/2023/unofficial')
+def nats2023unofficial():
+  with client.context():
+    return render_template('nationals/2023/unofficial.html', c=Common())
