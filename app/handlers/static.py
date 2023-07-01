@@ -49,7 +49,7 @@ def supported():
   with client.context():
     return render_template('supported.html', c=Common())
 
-@bp.route('/newengland')
-def newengland():
+@bp.route('/groups')
+def nats():
   with client.context():
-    return render_template('newengland.html', c=Common())
+    return redirect('https://www.competitiongroups.com/competitions/CubingUSANationals2023')
