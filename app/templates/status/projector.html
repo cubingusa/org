@@ -1,0 +1,39 @@
+{% import "components/css.html" as css %}
+<html>
+<head>
+  <title>Projector</title>
+  {{ css.css(c, 'status/projector') }}
+  <link rel="stylesheet" href="/static/external/cubing-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
+</head>
+<body>
+  <div id="time"></div>
+  <span class="image-container">
+    <img id="main-image"></img>
+  </span>
+  <span class="block" id="current-block">
+    <div class="block-title">Right Now</div>
+    <div class="message-line">
+      <span id="current-icon"></span>
+      <span id="current-text"></span>
+    </div>
+    <div id="current-container"></div>
+  </span><span class="block" id="next-block">
+    <div class="block-title">Coming Up</div>
+    <div class="message-line">
+      <span id="next-time"></span>
+      <span id="next-icon"></span>
+      <span id="next-text"></span>
+    </div>
+    <div id="next-container"></div>
+  </span><span class="block" id="message-block">
+    <div class="block-title">More Info</div>
+    <div class="message-line" id="message"></div>
+    <div class="message-line" id="groups">Find your schedule at cubingusa.org/groups</div>
+    <div class="message-line" id="delay"></div>
+  </span>
+  <div id="data-holder"
+   data-competitionId="{{ competition_id }}"></div>
+  <script src="/static/js/status/projector.js" type="application/javascript"></script>
+</body>
+</html>

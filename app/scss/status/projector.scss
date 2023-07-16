@@ -1,0 +1,71 @@
+body {
+  margin: 0px;
+  background-color: lightyellow;
+}
+
+.image-container {
+  width: 100vw;
+}
+
+img#main-image {
+  height: 75vh;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.block {
+  display: inline-block;
+  height: 20vh;
+  width: calc(33.33vw - 5vh);
+  border-radius: 1vh;
+  margin: 2.5vh;
+  background-color: lightgray;
+  position: absolute;
+}
+
+.block-title {
+  height: 5vh;
+  font-size: 4vh;
+  padding: 0.5vh;
+  text-align: center;
+}
+
+.message-line {
+  height: 3vh;
+  font-size: 2vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+}
+
+body {
+  width: 100vw;
+}
+
+.cubing-icon {
+  padding-left: 0.2vw;
+}
+
+#current-block {
+  left: 0vh;
+  top: 75vh;
+}
+
+#next-block {
+  left: 33.33vw;
+  top: 75vh;
+}
+
+#message-block {
+  left: 66.66vw;
+  top: 75vh;
+}
+
+#time {
+  position: absolute;
+  left: 1vw;
+  top: 1vh;
+  font-size: 5vh;
+}
