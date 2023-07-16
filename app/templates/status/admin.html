@@ -2,6 +2,58 @@
 {% extends "base.html" %}
 {% block title%}Projector Admin{% endblock %}
 {% block style %}
+{{ css.css(c, 'status/admin') }}
+{% endblock %}
+{% block head %}
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
 {% endblock %}
 {% block content %}
+<h3>{{ data.name }} Admin</h3>
+<select id="stage-selector">
+  <option></option>
+  {% for room in data.schedule.venues[0].rooms %}
+    <option value="{{ room.id }}">{{ room.name }}</option>
+  {% endfor %}
+  <option value="master">Master</option>
+</select>
+<div id="current">
+  <h5>Current: <span id="current-name"></span></h5>
+  <div class="list-group">
+    <div id="current-container"></div>
+    <div class="list-group-item call-item" id="current-called"></div>
+  </div>
+  <br>
+</div>
+<div id="next">
+  <h5>Next: <span id="next-name"></span></h5>
+  <div class="list-group" id="next-list-group">
+    <div id="next-container"></div>
+  </div>
+  <div class="list-group-item call-item" id="next-called"></div>
+  <br>
+</div>
+<form action="/status/{{ data.id }}/metadata" method="POST" id="form">
+  <div class="form-group">
+    <label for="image-url">Background Image URL</label>
+    <input type="text" class="form-control" id="image-url" name="image-url" value="{{ metadata.imageUrl }}">
+  </div>
+  <div class="form-group">
+    <label for="delay-minutes">Delay in Minutes</label>
+    <input type="number" class="form-control" id="delay-minutes" name="delay-minutes" value={{ metadata.delayMinutes }}>
+  </div>
+  <div class="form-group">
+    <label for="message">Message</label>
+    <input type="text" class="form-control" id="message" name="message" value="{{ metadata.message }}">
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" value="1" id="refresh" name="refresh">
+    <label class="form-check-label" for="refresh">
+      Force Reload
+    </label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<div id="data-holder"
+ data-competitionId="{{ data.id }}"></div>
+<script src="/static/js/status/admin.js" type="application/javascript"></script>
 {% endblock %}

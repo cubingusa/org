@@ -2,7 +2,7 @@ import datetime
 import os
 import requests
 
-from flask import Blueprint, request, abort, render_template
+from flask import Blueprint, request, abort, render_template, redirect
 from google.cloud import ndb
 import pytz
 
@@ -36,6 +36,16 @@ events = {
   '333mbf': '3x3x3 Multi-Blind',
 }
 
+def get_metadata(data):
+  metadata = CompetitionMetadata.get_by_id(data['id']) or CompetitionMetadata()
+  return {
+    'delayMinutes': metadata.delay_minutes,
+    'message': metadata.message or 'Welcome to ' + data['name'] + '!',
+    'refreshTs': int((metadata.refresh_ts or ZERO).timestamp()),
+    'imageUrl': metadata.image_url or '/static/img/nats-logo-2023.png',
+    'timezone': data['schedule']['venues'][0]['timezone'],
+  }
+
 def proj(competition_id):
   return 'projector-' + competition_id
 
@@ -46,9 +56,9 @@ def adm(competition_id):
 def parse_time(time, data):
   date = datetime.datetime.fromisoformat(time).astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
   if date.minute % 5 in (1, 2):
-    date -= datetime.timedelta(minutes=date.minute)
+    date -= datetime.timedelta(minutes=date.minute % 5)
   elif date.minute % 5 in (3, 4):
-    date += datetime.timedelta(minutes=5-date.minute)
+    date += datetime.timedelta(minutes=5-(date.minute % 5))
   return date
 
 def comp_data(competition_id):
@@ -67,9 +77,11 @@ def comp_data(competition_id):
 
 def is_admin(data):
   me = auth.user()
+  if not me:
+    return False
   for person in data['persons']:
-    if person['wcaUserId'] == me.key.id():
-      return 'delegate' in person.roles or 'organizer' in person.roles
+    if int(person['wcaUserId']) == int(me.key.id()):
+      return 'delegate' in person['roles'] or 'organizer' in person['roles']
   return False
 
 class ActivityCode:
@@ -105,6 +117,21 @@ class ActivityCode:
         parts += ['Attempt %d' % self.attempt]
       return ' '.join(parts)
 
+def call_details(stage_to_activity, status_by_id):
+  out = []
+  for stage, activity in stage_to_activity.items():
+    val = {'stageId': stage, 'activityId': activity['id']}
+    if activity['id'] in status_by_id:
+      status = status_by_id[activity['id']]
+      if status.ready_time:
+        val['readyAt'] = status.ready_time.timestamp()
+        val['readyBy'] = status.ready_set_by.get().name
+      if status.called_time:
+        val['calledAt'] = status.called_time.timestamp()
+        val['calledBy'] = status.called_by.get().name
+    out += [val]
+  return out
+
 @bp.route('/<competition_id>/payload')
 def payload(competition_id):
   with client.context():
@@ -113,8 +140,8 @@ def payload(competition_id):
     current_time = pytz.timezone(data['schedule']['venues'][0]['timezone']).localize(datetime.datetime(2023,7,27,9,45))
 
     group_status = GroupStatus.query(GroupStatus.competition == ndb.Key(Competition, competition_id)).fetch()
-    called_group_ids = set([group.key.id() for group in group_status if group.called_by is not None])
-    status_by_id = {group.key.id() : group for group in group_status}
+    called_group_ids = set([group.group_id for group in group_status if group.called_by is not None])
+    status_by_id = {group.group_id : group for group in group_status}
     last_called = None
     next_called = None
     stages = {}
@@ -134,16 +161,16 @@ def payload(competition_id):
             if next_called is None or child_activity['startTime'] < next_called['startTime']:
               next_called = child_activity
 
-    stages_with_current = []
-    stages_with_next = []
+    stages_with_current = {}
+    stages_with_next = {}
 
     for room in data['schedule']['venues'][0]['rooms']:
       for activity in room['activities']:
         for child_activity in activity['childActivities']:
           if last_called and child_activity['activityCode'] == last_called['activityCode']:
-            stages_with_current.append(room['id'])
+            stages_with_current[room['id']] = child_activity
           if next_called and child_activity['activityCode'] == next_called['activityCode']:
-            stages_with_next.append(room['id'])
+            stages_with_next[room['id']] = child_activity
 
     current_by_stage = {}
     next_by_stage = {}
@@ -165,8 +192,6 @@ def payload(competition_id):
           elif activity['startTime'] < next_by_stage[room['id']]['startTime']:
             next_by_stage[room['id']] = activity
 
-    metadata = CompetitionMetadata.get_by_id(data['id']) or CompetitionMetadata()
-
     return {
       'stages': stages,
       'currentGroup': ({
@@ -175,8 +200,8 @@ def payload(competition_id):
         'name': ActivityCode(last_called).str(),
         'startTime': int(last_called['startTime'].timestamp()),
         'endTime': int(last_called['endTime'].timestamp()),
-        'stages': stages_with_current,
-        'callDetails': [], # TODO
+        'stages': list(stages_with_current.keys()),
+        'callDetails': call_details(stages_with_current, status_by_id),
       }) if last_called else {},
       'nextGroup': ({
         'id': next_called['id'],
@@ -184,8 +209,8 @@ def payload(competition_id):
         'name': ActivityCode(next_called).str(),
         'startTime': int(next_called['startTime'].timestamp()),
         'endTime': int(next_called['endTime'].timestamp()),
-        'stages': stages_with_next,
-        'callDetails': [], # TODO
+        'stages': list(stages_with_next.keys()),
+        'callDetails': call_details(stages_with_next, status_by_id),
       }) if next_called else {},
       'currentByStage': {
         k: {
@@ -205,13 +230,7 @@ def payload(competition_id):
           'endTime': int(activity['endTime'].timestamp()),
         } for k, activity in next_by_stage.items()
       },
-      'metadata': {
-        'delayMinutes': metadata.delay_minutes or 0,
-        'message': metadata.message or 'Welcome to ' + data['name'] + '!',
-        'refreshTs': int((metadata.refresh_ts or ZERO).timestamp()),
-        'imageUrl': metadata.image_url or '/static/img/nats-logo-2023.png',
-        'timezone': data['schedule']['venues'][0]['timezone'],
-      }
+      'metadata': get_metadata(data),
     }
 
 @bp.route('/<competition_id>/projector')
@@ -225,9 +244,9 @@ def comp_admin(competition_id):
     data = comp_data(competition_id)
     if not is_admin(data):
       return redirect('/login')
-    return render_template('status/admin.html', c=Common(), data=data)
+    return render_template('status/admin.html', c=Common(), data=data, metadata=get_metadata(data))
 
-@bp.route('/<competition_id>/ready/<group_id>')
+@bp.route('/<competition_id>/ready/<group_id>', methods=['POST'])
 def ready(competition_id, group_id):
   with client.context():
     group_id = int(group_id)
@@ -243,18 +262,16 @@ def ready(competition_id, group_id):
     status_obj.ready_time = datetime.datetime.now()
     status_obj.ready_set_by = auth.user().key
     status_obj.put()
-    set_last_update(adm(competition_id))
     return 'ok', 200
 
-@bp.route('/<competition_id>/call/<group_ids>')
-def call(competition_id, group_id):
+@bp.route('/<competition_id>/call/<group_ids>', methods=['POST'])
+def call(competition_id, group_ids):
   with client.context():
     for group_id in group_ids.split(','):
       group_id = int(group_id)
       data = comp_data(competition_id)
       if not is_admin(data):
         abort(401)
-      status = load_status(competition_id)
 
       status_id = GroupStatus.Id(competition_id, group_id)
       status_obj = GroupStatus.get_by_id(status_id)
@@ -262,9 +279,19 @@ def call(competition_id, group_id):
         status_obj = GroupStatus(id=status_id)
         status_obj.competition = ndb.Key(Competition, competition_id)
         status_obj.group_id = group_id
-      status_obj.call_time = datetime.datetime.now()
+      status_obj.called_time = datetime.datetime.now()
       status_obj.called_by = auth.user().key
       status_obj.put()
-    set_last_update(adm(competition_id))
-    set_last_update(proj(competition_id))
     return 'ok', 200
+
+@bp.route('/<competition_id>/metadata', methods=['POST'])
+def post_metadata(competition_id):
+  with client.context():
+    metadata = CompetitionMetadata.get_by_id(competition_id) or CompetitionMetadata(id=competition_id)
+    metadata.message = request.form.get('message')
+    metadata.delay_minutes = int(request.form.get('delay-minutes'))
+    metadata.image_url = request.form.get('image-url')
+    if request.form.get('refresh') == '1':
+      metadata.refresh_ts = datetime.datetime.now()
+    metadata.put()
+    return redirect('/status/' + competition_id + '/admin')
