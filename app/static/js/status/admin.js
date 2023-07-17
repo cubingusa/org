@@ -146,6 +146,9 @@ function load() {
       setEvents('current', xhr.response.currentGroup, xhr.response.stages, false);
       setEvents('next', xhr.response.nextGroup, xhr.response.stages, true);
 
+      if (!xhr.response.nextGroup.id) {
+        return;
+      }
       var timeTillNextGroup = luxon.DateTime.now().diff(luxon.DateTime.fromSeconds(xhr.response.nextGroup.startTime), 'minutes').minutes;
 
       if (xhr.response.nextGroup.stages.includes(+selectedRole) &&
