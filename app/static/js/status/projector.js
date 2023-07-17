@@ -28,10 +28,8 @@ function setEvents(prefix, details, byStage, stages, showTimes) {
     var eltId = prefix + '-' + activity.id;
     usedChildIds.push(eltId);
     if (childIds.includes(eltId)) {
-      console.log('already have ' + eltId);
       elt = document.getElementById(eltId);
     } else {
-      console.log('adding ' + eltId);
       elt = document.createElement('div');
       elt.className = 'message-line';
       elt.id = eltId;
@@ -42,7 +40,6 @@ function setEvents(prefix, details, byStage, stages, showTimes) {
   }
   for (const child of container.children) {
     if (!usedChildIds.includes(child.id)) {
-      console.log('destroying ' + child.id);
       child.remove();
     }
   }
@@ -54,7 +51,6 @@ function load() {
     if (this.readyState == 4 && this.status == 200) {
       time = luxon.DateTime.now();
       document.getElementById('time').innerHTML = time.toLocaleString(luxon.DateTime.TIME_SIMPLE);
-      console.log(xhr.response);
       if (lastRefresh === null) {
         lastRefresh = xhr.response.metadata.refreshTs;
       } else if (lastRefresh !== xhr.response.metadata.refreshTs) {

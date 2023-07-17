@@ -136,8 +136,8 @@ def call_details(stage_to_activity, status_by_id):
 def payload(competition_id):
   with client.context():
     data = comp_data(competition_id)
-    #current_time = datetime.datetime.now().astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
-    current_time = pytz.timezone(data['schedule']['venues'][0]['timezone']).localize(datetime.datetime(2023,7,27,9,45))
+    current_time = datetime.datetime.now().astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
+    #current_time = pytz.timezone(data['schedule']['venues'][0]['timezone']).localize(datetime.datetime(2023,7,27,9,45))
 
     group_status = GroupStatus.query(GroupStatus.competition == ndb.Key(Competition, competition_id)).fetch()
     called_group_ids = set([group.group_id for group in group_status if group.called_by is not None])

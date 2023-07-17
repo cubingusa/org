@@ -149,7 +149,7 @@ function load() {
       var timeTillNextGroup = luxon.DateTime.now().diff(luxon.DateTime.fromSeconds(xhr.response.nextGroup.startTime), 'minutes').minutes;
 
       if (xhr.response.nextGroup.stages.includes(+selectedRole) &&
-          timeTillNextGroup < 50000 &&
+          timeTillNextGroup < 5 &&
           !notifiedGroups.includes(xhr.response.nextGroup.id) &&
           xhr.response.nextGroup.callDetails.some((call) => call.stageId === +selectedRole && call.readyAt === undefined)) {
         new Notification("Less than five minutes until " + xhr.response.nextGroup.name);
