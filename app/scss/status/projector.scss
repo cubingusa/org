@@ -8,10 +8,17 @@ body {
 }
 
 img#main-image {
-  height: 75vh;
+  height: 100vh;
   margin-left: auto;
   margin-right: auto;
   display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+#spacer {
+  height: 70vh;
 }
 
 .block {
@@ -65,7 +72,9 @@ body {
 
 #time {
   position: absolute;
-  left: 1vw;
-  top: 1vh;
-  font-size: 5vh;
+  right: 2vw;
+  top: 5vh;
+  font-size: 10vh;
+  z-index: 10;
+  color: #e7a234;
 }
