@@ -14,7 +14,7 @@
   {% for room in data.schedule.venues[0].rooms %}
     <option value="{{ room.id }}">{{ room.name }}</option>
   {% endfor %}
-  <option value="master">Master</option>
+  <option value="announcer">Announcer</option>
 </select>
 <div id="current">
   <h5>Current: <span id="current-name"></span></h5>

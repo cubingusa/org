@@ -1,5 +1,10 @@
 var lastRefresh = null;
 var selectedRole = null;
+var notifiedGroups = Array();
+
+if (Notification.permission !== "granted") {
+  Notification.requestPermission();
+}
 
 function chipClasses(expected, actual) {
   expected = luxon.DateTime.fromSeconds(expected);
@@ -114,7 +119,7 @@ function setEvents(prefix, details, stages, showButton) {
   } else {
     elt.innerHTML = `Not called yet <div class="live-chip ${chipClasses(details.startTime, Date.now() / 1000)}" data-ts=${details.startTime}>${chipTime(details.startTime, Date.now() / 1000)}</div>`
   }
-  if (selectedRole === 'master') {
+  if (selectedRole === 'announcer') {
     elt.classList.add('list-group-item-action');
     elt.classList.add('active');
     elt.onclick = () => callGroups(activityIds);
@@ -140,6 +145,23 @@ function load() {
 
       setEvents('current', xhr.response.currentGroup, xhr.response.stages, false);
       setEvents('next', xhr.response.nextGroup, xhr.response.stages, true);
+
+      var timeTillNextGroup = luxon.DateTime.now().diff(luxon.DateTime.fromSeconds(xhr.response.nextGroup.startTime), 'minutes').minutes;
+
+      if (xhr.response.nextGroup.stages.includes(+selectedRole) &&
+          timeTillNextGroup < 50000 &&
+          !notifiedGroups.includes(xhr.response.nextGroup.id) &&
+          xhr.response.nextGroup.callDetails.some((call) => call.stageId === +selectedRole && call.readyAt === undefined)) {
+        new Notification("Less than five minutes until " + xhr.response.nextGroup.name);
+        notifiedGroups.push(xhr.response.nextGroup.id);
+      }
+
+      if (selectedRole === 'announcer' &&
+          !notifiedGroups.includes(xhr.response.nextGroup.id) &&
+        !xhr.response.nextGroup.callDetails.some((call) => call.readyAt === undefined)) {
+        new Notification("All stages ready for " + xhr.response.nextGroup.name);
+        notifiedGroups.push(xhr.response.nextGroup.id);
+      }
     }
   }
   var dataset = document.getElementById('data-holder').dataset;
