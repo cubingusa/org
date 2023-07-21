@@ -1,5 +1,6 @@
 import datetime
 import os
+import json
 import requests
 
 from flask import Blueprint, request, abort, render_template, redirect
@@ -62,10 +63,24 @@ def parse_time(time, data):
   return date
 
 def comp_data(competition_id):
-  data = requests.get('https://api.worldcubeassociation.org/competitions/' + competition_id + '/wcif/public')
-  if data.status_code != 200:
-    abort(data.status_code)
-  out = data.json()
+  fname = '.comp_data.' + competition_id
+  should_fetch = False
+  try:
+    mtime = os.path.getmtime(fname)
+    if (datetime.datetime.now().timestamp() - os.path.getmtime(fname)) > 60 * 60 * 1000:
+      should_fetch = True
+    else:
+      with open(fname) as f:
+        out = json.loads(f.read())
+  except:
+    should_fetch = True
+  if should_fetch:
+    data = requests.get('https://api.worldcubeassociation.org/competitions/' + competition_id + '/wcif/public')
+    if data.status_code != 200:
+      abort(data.status_code)
+    out = data.json()
+    with open(fname, 'wb') as f:
+      f.write(data.content)
   for room in out['schedule']['venues'][0]['rooms']:
     for activity in room['activities']:
       activity['startTime'] = parse_time(activity['startTime'], out)

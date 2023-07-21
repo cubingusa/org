@@ -11,3 +11,5 @@ src/static/css/
 
 # Saved DB exports.
 exports/
+
+.comp_data.*
