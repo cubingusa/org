@@ -50,6 +50,11 @@ def supported():
     return render_template('supported.html', c=Common())
 
 @bp.route('/groups')
-def nats():
+def groups():
   with client.context():
     return redirect('https://www.competitiongroups.com/competitions/CubingUSANationals2023')
+
+@bp.route('/fto')
+def fto():
+  with client.context():
+    return redirect('https://tinyurl.com/FTOInterest2023')
