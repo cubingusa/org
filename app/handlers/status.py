@@ -54,15 +54,20 @@ def adm(competition_id):
   return 'admin-' + competition_id
 
 
-def parse_time(time, data):
+def parse_time(time, round_times, data):
   date = datetime.datetime.fromisoformat(time).astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
-  if date.minute % 5 in (1, 2):
-    date -= datetime.timedelta(minutes=date.minute % 5)
-  elif date.minute % 5 in (3, 4):
-    date += datetime.timedelta(minutes=5-(date.minute % 5))
+  if round_times:
+    if date.second < 30:
+      date -= datetime.timedelta(seconds=date.second)
+    elif date.second >= 30:
+      date += datetime.timedelta(seconds=60-date.second)
+    if date.minute % 5 in (1, 2):
+      date -= datetime.timedelta(minutes=date.minute % 5)
+    elif date.minute % 5 in (3, 4):
+      date += datetime.timedelta(minutes=5-(date.minute % 5))
   return date
 
-def comp_data(competition_id):
+def comp_data(competition_id, round_times):
   fname = '.comp_data.' + competition_id
   should_fetch = False
   try:
@@ -83,11 +88,11 @@ def comp_data(competition_id):
       f.write(data.content)
   for room in out['schedule']['venues'][0]['rooms']:
     for activity in room['activities']:
-      activity['startTime'] = parse_time(activity['startTime'], out)
-      activity['endTime'] = parse_time(activity['endTime'], out)
+      activity['startTime'] = parse_time(activity['startTime'], round_times, out)
+      activity['endTime'] = parse_time(activity['endTime'], round_times, out)
       for child_activity in activity['childActivities']:
-        child_activity['startTime'] = parse_time(child_activity['startTime'], out)
-        child_activity['endTime'] = parse_time(child_activity['endTime'], out)
+        child_activity['startTime'] = parse_time(child_activity['startTime'], round_times, out)
+        child_activity['endTime'] = parse_time(child_activity['endTime'], round_times, out)
   return out
 
 def is_admin(data):
@@ -150,9 +155,10 @@ def call_details(stage_to_activity, status_by_id):
 @bp.route('/<competition_id>/payload')
 def payload(competition_id):
   with client.context():
-    data = comp_data(competition_id)
-    current_time = datetime.datetime.now().astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
-    #current_time = pytz.timezone(data['schedule']['venues'][0]['timezone']).localize(datetime.datetime(2023,7,27,9,45))
+    round_times = request.args.get('round_times') == '1'
+    data = comp_data(competition_id, round_times)
+    #current_time = datetime.datetime.now().astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
+    current_time = pytz.timezone(data['schedule']['venues'][0]['timezone']).localize(datetime.datetime(2023,7,27,9,45))
 
     group_status = GroupStatus.query(GroupStatus.competition == ndb.Key(Competition, competition_id)).fetch()
     called_group_ids = set([group.group_id for group in group_status if group.called_by is not None])
@@ -256,7 +262,7 @@ def projector(competition_id):
 @bp.route('/<competition_id>/admin')
 def comp_admin(competition_id):
   with client.context():
-    data = comp_data(competition_id)
+    data = comp_data(competition_id, False)
     if not is_admin(data):
       return redirect('/login')
     return render_template('status/admin.html', c=Common(), data=data, metadata=get_metadata(data))
@@ -265,7 +271,7 @@ def comp_admin(competition_id):
 def ready(competition_id, group_id):
   with client.context():
     group_id = int(group_id)
-    data = comp_data(competition_id)
+    data = comp_data(competition_id, False)
     if not is_admin(data):
       abort(401)
     status_id = GroupStatus.Id(competition_id, group_id)
@@ -284,7 +290,7 @@ def call(competition_id, group_ids):
   with client.context():
     for group_id in group_ids.split(','):
       group_id = int(group_id)
-      data = comp_data(competition_id)
+      data = comp_data(competition_id, False)
       if not is_admin(data):
         abort(401)
 
