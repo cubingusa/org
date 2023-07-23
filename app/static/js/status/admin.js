@@ -149,7 +149,7 @@ function load() {
       if (!xhr.response.nextGroup.id) {
         return;
       }
-      var timeTillNextGroup = luxon.DateTime.now().diff(luxon.DateTime.fromSeconds(xhr.response.nextGroup.startTime), 'minutes').minutes;
+      var timeTillNextGroup = luxon.DateTime.fromSeconds(xhr.response.nextGroup.startTime).diff(luxon.DateTime.now(), 'minutes').minutes;
 
       if (xhr.response.nextGroup.stages.includes(+selectedRole) &&
           timeTillNextGroup < 5 &&
