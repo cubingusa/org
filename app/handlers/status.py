@@ -1,14 +1,16 @@
 import datetime
+from dateutil import parser
 import os
 import json
 import requests
 
 from flask import Blueprint, request, abort, render_template, redirect
-from google.cloud import ndb
+from google.cloud import ndb, storage
 import pytz
 
 from app.lib import auth
 from app.lib.common import Common
+from app.lib.secrets import get_secret
 from app.models.status import GroupStatus, CompetitionMetadata
 from app.models.wca.competition import Competition
 from app.models.wca.event import Event
@@ -55,7 +57,7 @@ def adm(competition_id):
 
 
 def parse_time(time, round_times, data):
-  date = datetime.datetime.fromisoformat(time).astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
+  date = parser.isoparse(time).astimezone(pytz.timezone(data['schedule']['venues'][0]['timezone']))
   if round_times:
     if date.second < 30:
       date -= datetime.timedelta(seconds=date.second)
@@ -67,25 +69,48 @@ def parse_time(time, round_times, data):
       date += datetime.timedelta(minutes=5-(date.minute % 5))
   return date
 
+def maybe_read_data(path):
+  if os.environ.get('ENV') == 'DEV':
+    try:
+      mtime = os.path.getmtime(path)
+      if (datetime.datetime.now().timestamp() - os.path.getmtime(path)) > 60 * 60 * 1000:
+        return None
+      with open(path) as f:
+        return json.loads(f.read())
+    except:
+      return None
+  else:
+    try:
+      storage_client = storage.Client()
+      bucket = storage_client.bucket(get_secret('BUCKET_NAME'))
+      mtime = int(bucket.blob('wcif/' + path + '.mtime').download_as_string())
+      if (datetime.datetime.now().timestamp() - mtime) > 60 * 60 * 1000:
+        return None
+      return json.loads(bucket.blob('wcif/' + path).download_as_string())
+    except:
+      return None
+
+
+def write_data(path, data):
+  if os.environ.get('ENV') == 'DEV':
+    with open(fname, 'wb') as f:
+      f.write(data)
+  else:
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(get_secret('BUCKET_NAME'))
+    bucket.blob('wcif/' + path).upload_from_string(data)
+    bucket.blob('wcif/' + path + '.mtime').upload_from_string(str(datetime.datetime.now().timestamp()))
+
+
 def comp_data(competition_id, round_times):
-  fname = '.comp_data.' + competition_id
-  should_fetch = False
-  try:
-    mtime = os.path.getmtime(fname)
-    if (datetime.datetime.now().timestamp() - os.path.getmtime(fname)) > 60 * 60 * 1000:
-      should_fetch = True
-    else:
-      with open(fname) as f:
-        out = json.loads(f.read())
-  except:
-    should_fetch = True
-  if should_fetch:
+  path = '.comp_data.' + competition_id
+  out = maybe_read_data(path)
+  if not out:
     data = requests.get('https://api.worldcubeassociation.org/competitions/' + competition_id + '/wcif/public')
     if data.status_code != 200:
       abort(data.status_code)
     out = data.json()
-    with open(fname, 'wb') as f:
-      f.write(data.content)
+    write_data(path, data.content)
   for room in out['schedule']['venues'][0]['rooms']:
     for activity in room['activities']:
       activity['startTime'] = parse_time(activity['startTime'], round_times, out)
