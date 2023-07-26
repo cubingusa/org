@@ -58,3 +58,8 @@ def groups():
 def fto():
   with client.context():
     return redirect('https://tinyurl.com/FTOInterest2023')
+
+@bp.route('/results')
+def results():
+  with client.context():
+    return redirect('https://live.worldcubeassociation.org/competitions/2227')
