@@ -33,7 +33,7 @@
     <p>
       <div class="card">
         <div class="card-header">
-          <h4><i class="fa fa-calendar" aria-hidden="true"></i> {{ year }} Regional Championships</h4>
+          <h4><span class="material-symbols-outlined">calendar_month</span> {{ year }} Regional Championships</h4>
         </div>
         <ul class="list-group list-group-flush">
           {% for championship in championships %}
@@ -46,11 +46,11 @@
                   </a>
                 </div>
                 <div class="competition-location-col">
-                  <i class="fa fa-map-marker" aria-hidden="true"></i>
+                  <span class="material-symbols-outlined">pin_drop</span>
                   {{ competition.city_name }}, {{ competition.state.get().name }}
                 </div>
                 <div class="competition-date-col">
-                  <i class="fa fa-calendar" aria-hidden="true"></i>
+                  <span class="material-symbols-outlined">calendar_month</span>
                   {% autoescape False %}
                     {{ c.format_date_range(competition.start_date, competition.end_date,
                                            include_year=False, full_months=True) }}
@@ -72,7 +72,7 @@
     <p>
       <div class="card">
         <div class="card-header">
-          <h4><i class="fa fa-trophy" aria-hidden="true"></i> {{ year }} <span id="regionals-evt"></span> Regional Champions</h4>
+          <h4><span class="material-symbols-outlined">trophy</span> {{ year }} <span id="regionals-evt"></span> Regional Champions</h4>
         </div>
         <div class="card-body">
           {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}

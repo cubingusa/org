@@ -36,6 +36,13 @@
       display: none;
     }
   }
+  .social-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 50%;
+    filter: invert(100%);
+    -webkit-filter: invert(100%);
+  }
 }
 
 .navbar-primary {
@@ -58,3 +65,8 @@ div#content {
 }
 
 .grecaptcha-badge { visibility: hidden; }
+
+h4 .material-symbols-outlined {
+  vertical-align: bottom;
+  line-height: 1.2;
+}
