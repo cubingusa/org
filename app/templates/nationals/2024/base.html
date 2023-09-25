@@ -1,0 +1,36 @@
+{% import "components/css.html" as css %}
+{% import "components/nav.html" as nav %}
+{% extends "base.html" %}
+{% block head %}
+  <meta property="og:image" content="https://www.cubingusa.org/static/img/nats-logo-2024-og-image.png"/>
+{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2024/base') }}
+{% endblock %}
+{% block navbar_secondary %}
+  <div class="navbar-secondary">
+    <div class="container">
+      <button class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#second_nav"
+              aria-controls="second_nav"
+              aria-expanded="false"
+              aria-label="NAC navigation">
+        <span class="sr-only">NAC navigation</span>
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="second_nav">
+        <ul class="navbar-left">
+          {% call nav.navitem(c, '/nac/2024') %} NAC 2024 {% endcall %}
+          {% call nav.navitem(c, '/nac/2024/events') %} Events {% endcall %}
+          {% call nav.navitem(c, '/nac/2024/qualifying') %} Qualifying {% endcall %}
+          {% call nav.navitem(c, '/nac/2024/volunteers') %} Volunteers {% endcall %}
+          {% call nav.navitem(c, '/nac/2024/schedule') %} Schedule {% endcall %}
+          {% call nav.navitem(c, '/nac/2024/travel') %} Travel {% endcall %}
+          {% call nav.navitem(c, '/nac/2024/contact') %} FAQ and Contact {% endcall %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

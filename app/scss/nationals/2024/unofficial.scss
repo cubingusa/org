@@ -1,0 +1,54 @@
+@import "base";
+
+.info-box-container {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col(6);
+  }
+  @include media-breakpoint-down(xs) {
+    @include make-col(12);
+  }
+
+  .info-box-row {
+    padding: 5px 0px;
+  }
+
+  .info-box-label {
+    font-weight: bold;
+    color: #666666;
+  }
+
+  .info-box-details {
+    font-style: italic;
+  }
+
+  margin-bottom: 10px;
+}
+
+.info-box-container-lg {
+  @include make-col-ready();
+  @include make-col(12);
+
+  .info-box-row {
+    padding: 5px 0px;
+  }
+
+  .info-box-label {
+    font-weight: bold;
+    color: #666666;
+  }
+
+  .info-box-details {
+    font-style: italic;
+  }
+
+  margin-bottom: 10px;
+}
+
+.card-header h4 {
+  margin-bottom: 0px;
+}
+
+.crew-img {
+  width: 50%;
+}

@@ -47,9 +47,10 @@ def title_policy():
 def regional_eligibility(region, year):
   with client.context():
     championship = Championship.get_by_id('%s_%d' % (region, int(year)))
-    if not championship:
-      abort(404)
-    competition_id = championship.competition.id()
+    #if not championship:
+    #  abort(404)
+    #competition_id = championship.competition.id()
+    competition_id = 'CubingUSANationals2023'
     wca_host = os.environ.get('WCA_HOST')
     data = requests.get(wca_host + '/api/v0/competitions/' + competition_id + '/wcif/public')
     if data.status_code != 200:
