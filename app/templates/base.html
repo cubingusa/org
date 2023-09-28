@@ -25,7 +25,7 @@
   <script src="/static/external/jquery-3.2.1.slim.min.js" type="application/javascript"></script>
   <script src="/static/js/onload.js" type="application/javascript"></script>
   <script src="/static/js/hash.js" type="application/javascript"></script>
-  <script src="https://kit.fontawesome.com/4bb003f5bc.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   {% if c.get_secret('RECAPTCHA_SECRET_KEY') %}
     <script src="https://www.google.com/recaptcha/enterprise.js?render={{ c.get_secret('RECAPTCHA_SECRET_KEY') }}"></script>
   {% endif %}
@@ -60,25 +60,25 @@
         <ul class="navbar-right">
           <li class="navbar-icon-item">
             <a href="https://github.com/cubingusa/cubingusa-org" target="_blank" class="nav-link">
-              <i class="fa fa-github" aria-label="GitHub"></i>
+              <img src="/static/img/github.png" class="social-icon">
               <span class="navbar-icon-label">GitHub</span>
             </a>
           </li>
           <li class="navbar-icon-item">
             <a href="https://www.facebook.com/CubingUSA/" target="_blank" class="nav-link">
-              <i class="fa fa-facebook-official" aria-label="Facebook"></i>
+              <img src="/static/img/fb.png" class="social-icon">
               <span class="navbar-icon-label">Facebook</span>
             </a>
           </li>
           <li class="navbar-icon-item">
             <a href="https://twitter.com/CubingUSA" target="_blank" class="nav-link">
-              <i class="fa fa-twitter" aria-label="Twitter"></i>
+              <img src="/static/img/twitter.png" class="social-icon">
               <span class="navbar-icon-label">Twitter</span>
             </a>
           </li>
           <li class="navbar-icon-item">
             <a href="https://www.instagram.com/cubingusa/" target="_blank" class="nav-link">
-              <i class="fa fa-instagram" aria-label="Instagram"></i>
+              <img src="/static/img/instagram.png" class="social-icon">
               <span class="navbar-icon-label">Instagram</span>
             </a>
           </li>
