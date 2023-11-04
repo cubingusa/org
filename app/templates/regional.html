@@ -70,13 +70,6 @@
       </div>
     </p>
     <p>
-      <div class="form-group">
-        <select class="form-control w-auto" id="year-select">
-          {% for championship_year in championship_years %}
-            <option value="{{ championship_year }}">{{ championship_year }}</option>
-          {% endfor %}
-        </select>
-      </div>
       <div class="card">
         <div class="card-header">
           <h4><span class="material-symbols-outlined">trophy</span>
@@ -89,6 +82,13 @@
         </div>
       </div>
     </p>
+    <div class="form-group">
+      <select class="form-control w-auto" id="year-select">
+        {% for championship_year in championship_years %}
+          <option value="{{ championship_year }}">{{ championship_year }}</option>
+        {% endfor %}
+      </select>
+    </div>
   </div>
   <div id="year" data-year="{{ c.year }}"></div>
   <script src="/static/js/regionals.js" type="application/javascript"></script>

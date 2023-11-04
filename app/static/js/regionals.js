@@ -19,6 +19,11 @@ var regionalsModule = (function() {
         } else {
           document.getElementById('regionals-evt').innerHTML = '';
         }
+        if (year >= 2020) {
+          document.getElementById('event-selector-link-333ft').style.display = 'none';
+        } else {
+          document.getElementById('event-selector-link-333ft').style.display = 'inline';
+        }
       }
     };
     var uri = '/async/champions_by_region/' + event_id + '/regional/' + year;
