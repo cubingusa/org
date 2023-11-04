@@ -37,26 +37,28 @@
         </div>
         <ul class="list-group list-group-flush">
           {% for championship in championships %}
-            {% set competition = championship.competition.get() %}
-            <li class="list-group-item">
-              <div class="row">
-                <div class="competition-name-col">
-                  <a href="{{ competition.GetWCALink() }}">
-                    {{ competition.name }}
-                  </a>
+            {% if not championship.is_pbq %}
+              {% set competition = championship.competition.get() %}
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="competition-name-col">
+                    <a href="{{ competition.GetWCALink() }}">
+                      {{ competition.name }}
+                    </a>
+                  </div>
+                  <div class="competition-location-col">
+                    <span class="material-symbols-outlined">pin_drop</span>
+                    {{ competition.city_name }}, {{ competition.state.get().name }}
+                  </div>
+                  <div class="competition-date-col">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    {% autoescape False %}
+                      {{ c.format_date_range(competition.start_date, competition.end_date,
+                                             include_year=False, full_months=True) }}
+                    {% endautoescape %}
+                  </div>
                 </div>
-                <div class="competition-location-col">
-                  <span class="material-symbols-outlined">pin_drop</span>
-                  {{ competition.city_name }}, {{ competition.state.get().name }}
-                </div>
-                <div class="competition-date-col">
-                  <span class="material-symbols-outlined">calendar_month</span>
-                  {% autoescape False %}
-                    {{ c.format_date_range(competition.start_date, competition.end_date,
-                                           include_year=False, full_months=True) }}
-                  {% endautoescape %}
-                </div>
-              </div>
+              {% endif %}
             </li>
           {% endfor %}
           {% for region in regions_missing_championships %}

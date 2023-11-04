@@ -7,10 +7,9 @@
     <select class="form-control" id="competition-id-dropdown">
       <option value="_empty"></option>
       {% for competition in all_us_competitions %}
-        <!-- Only show competitions with states.  This will drop competitions like FMC USA. -->
-        {% if competition.state %}
+        {% if 'Champ' in competition.name or 'Nationals' in competition.name or 'CubingUSA' in competition.name %}
           <option value="{{ competition.key.id() }}"
-                  data-state="{{ competition.state.id() }}"
+                  data-state="{{ competition.state.id() if competition.state else 'NONE' }}"
                   data-year="{{ competition.year }}">
             {{ competition.name }}
           </option>
@@ -25,8 +24,19 @@
       <strong>Regional Championship (<span class="championship-name"></span>):</strong>
       <a class="new-championship-link"></a>
     </div>
+    <div class="new-championship-row" id="regional-pbq-row" style="display:none;">
+      <strong>Regional PBQ Championship (<span class="championship-name" id="regional-pbq-name"></span><select id="regional-pbq-selector">
+          {% for region in regions %}
+            <option value="{{ region.key.id() }}">{{ region.name }}</option>
+          {% endfor %}</select>):</strong>
+      <a class="new-championship-link"></a>
+    </div>
     <div class="new-championship-row" id="state-row" style="display:none;">
       <strong>State Championship (<span class="championship-name"></span>):</strong>
+      <a class="new-championship-link"></a>
+    </div>
+    <div class="new-championship-row" id="state-pbq-row" style="display:none;">
+      <strong>State PBQ Championship (<span class="championship-name"></span>):</strong>
       <a class="new-championship-link"></a>
     </div>
   </div>
@@ -53,7 +63,8 @@
   {% for championship in regional_championships %}
     <div class="championship-row">
       {% set competition = championship.competition.get() %}
-      <strong>{{ competition.year }} {{ competition.state.get().region.get().name }}:</strong>
+      <strong>{{ competition.year }} {{ championship.region.get().name }}
+        {{ '(PBQ)' if championship.is_pbq else '' }}:</strong>
       <a href="{{ competition.GetWCALink() }}" target="_blank">
         {{ competition.name }}
       </a>
@@ -71,7 +82,8 @@
   {% for championship in state_championships %}
     <div class="championship-row">
       {% set competition = championship.competition.get() %}
-      <strong>{{ competition.year }} {{ competition.state.get().name }}:</strong>
+      <strong>{{ competition.year }} {{ championship.state.get().name }}
+        {{ '(PBQ)' if championship.is_pbq else '' }}:</strong>
       <a href="{{ competition.GetWCALink() }}" target="_blank">
         {{ competition.name }}
       </a>

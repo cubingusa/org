@@ -8,6 +8,7 @@ class Championship(ndb.Model):
   national_championship = ndb.BooleanProperty()
   region = ndb.KeyProperty(kind=Region)
   state = ndb.KeyProperty(kind=State)
+  is_pbq = ndb.BooleanProperty()
 
   competition = ndb.KeyProperty(kind=Competition)
 
@@ -21,12 +22,12 @@ class Championship(ndb.Model):
     return str(year)
 
   @staticmethod
-  def RegionalsId(year, region):
-    return '%s_%d' % (region.key.id(), year)
+  def RegionalsId(year, region, is_pbq=False):
+    return '%s_%d%s' % (region.key.id(), year, '_pbq' if is_pbq else '')
 
   @staticmethod
   def StateChampionshipId(year, state):
-    return '%s_%d' % (state.key.id(), year)
+    return '%s_%d%s' % (state.key.id(), year, '_pbq' if is_pbq else '')
 
   def GetEligibleStateKeys(self):
     if self.state:

@@ -13,35 +13,29 @@ from app.models.wca.country import Country
 bp = Blueprint('edit_championships', __name__)
 client = ndb.Client()
 
-@bp.route('/add_championship/<competition_id>/<championship_type>')
-def add_championship(competition_id, championship_type):
+@bp.route('/add_championship/<competition_id>/<championship_type>/<championship_id>')
+def add_championship(competition_id, championship_type, championship_id):
   with client.context():
     me = auth.user()
     if not me or not me.HasAnyRole(Roles.AdminRoles()):
       abort(403)
     competition = Competition.get_by_id(competition_id)
-    if championship_type == 'national':
-      championship_id = Championship.NationalsId(competition.year)
-    elif championship_type == 'regional':
-      championship_id = Championship.RegionalsId(competition.year,
-                                                 competition.state.get().region.get())
-    elif championship_type == 'state':
-      championship_id = Championship.StateChampionshipId(competition.year,
-                                                         competition.state.get())
+
     championship = (Championship.get_by_id(championship_id) or
                     Championship(id=championship_id))
 
     if championship_type == 'national':
       championship.national_championship = True
     elif championship_type == 'regional':
-      championship.region = competition.state.get().region
+      championship.region = ndb.Key(Region, championship_id.split('_')[0])
     elif championship_type == 'state':
-      championship.state = competition.state
+      championship.state = ndb.Key(State, championship_id.split('_')[0])
     championship.competition = competition.key
+    championship.is_pbq = 'pbq' in championship_id
     championship.put()
     # TODO: if we changed a championship we should update champions and eligibilities.
     return redirect('/admin/edit_championships')
-    
+
 
 @bp.route('/delete_championship/<championship_id>')
 def delete_championship(championship_id):
