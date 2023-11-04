@@ -35,11 +35,13 @@ def update_states():
 
     futures = []
     all_regions = {}
-    NORTHEAST = MakeRegion('ne', 'Northeast', 'Northeastern',all_regions, futures)
+    NEW_ENGLAND = MakeRegion('nwe', 'New England', 'New England', all_regions, futures)
+    MID_ATLANTIC = MakeRegion('mda', 'Mid-Atlantic', 'Mid-Atlantic', all_regions, futures)
     SOUTHEAST = MakeRegion('se', 'Southeast', 'Southeastern', all_regions, futures)
     GREAT_LAKES = MakeRegion('gl', 'Great Lakes', 'Great Lakes', all_regions, futures)
     HEARTLAND = MakeRegion('hl', 'Heartland', 'Heartland', all_regions, futures)
     SOUTH = MakeRegion('s', 'South', 'Southern', all_regions, futures)
+    ROCKIES = MakeRegion('ro', 'Rocky Mountain', 'Rocky Mountain', all_regions, futures)
     NORTHWEST = MakeRegion('nw', 'Northwest', 'Northwestern', all_regions, futures)
     WEST = MakeRegion('w', 'West', 'Western', all_regions, futures)
 
@@ -51,58 +53,58 @@ def update_states():
     for state_id, state_name, region in (
         ('al', 'Alabama', SOUTHEAST),
         ('ak', 'Alaska', NORTHWEST),
-        ('az', 'Arizona', WEST),
+        ('az', 'Arizona', ROCKIES),
         ('ar', 'Arkansas', SOUTH),
         ('ca', 'California', WEST),
-        ('co', 'Colorado', WEST),
-        ('ct', 'Connecticut', NORTHEAST),
-        ('de', 'Delaware', NORTHEAST),
+        ('co', 'Colorado', ROCKIES),
+        ('ct', 'Connecticut', NEW_ENGLAND),
+        ('de', 'Delaware', MID_ATLANTIC),
         ('fl', 'Florida', SOUTHEAST),
         ('ga', 'Georgia', SOUTHEAST),
         ('hi', 'Hawaii', WEST),
-        ('id', 'Idaho', NORTHWEST),
+        ('id', 'Idaho', ROCKIES),
         ('il', 'Illinois', GREAT_LAKES),
         ('in', 'Indiana', GREAT_LAKES),
         ('ia', 'Iowa', HEARTLAND),
         ('ks', 'Kansas', HEARTLAND),
         ('ky', 'Kentucky', GREAT_LAKES),
         ('la', 'Louisiana', SOUTH),
-        ('me', 'Maine', NORTHEAST),
-        ('md', 'Maryland', NORTHEAST),
-        ('ma', 'Massachusetts', NORTHEAST),
+        ('me', 'Maine', NEW_ENGLAND),
+        ('md', 'Maryland', MID_ATLANTIC),
+        ('ma', 'Massachusetts', NEW_ENGLAND),
         ('mi', 'Michigan', GREAT_LAKES),
         ('mn', 'Minnesota', HEARTLAND),
         ('ms', 'Mississippi', SOUTH),
         ('mo', 'Missouri', HEARTLAND),
-        ('mt', 'Montana', NORTHWEST),
+        ('mt', 'Montana', ROCKIES),
         ('ne', 'Nebraska', HEARTLAND),
         ('nv', 'Nevada', WEST),
-        ('nh', 'New Hampshire', NORTHEAST),
-        ('nj', 'New Jersey', NORTHEAST),
-        ('nm', 'New Mexico', WEST),
-        ('ny', 'New York', NORTHEAST),
+        ('nh', 'New Hampshire', NEW_ENGLAND),
+        ('nj', 'New Jersey', MID_ATLANTIC),
+        ('nm', 'New Mexico', SOUTH),
+        ('ny', 'New York', MID_ATLANTIC),
         ('nc', 'North Carolina', SOUTHEAST),
         ('nd', 'North Dakota', HEARTLAND),
         ('oh', 'Ohio', GREAT_LAKES),
         ('ok', 'Oklahoma', SOUTH),
         ('or', 'Oregon', NORTHWEST),
-        ('pa', 'Pennsylvania', NORTHEAST),
-        ('ri', 'Rhode Island', NORTHEAST),
+        ('pa', 'Pennsylvania', MID_ATLANTIC),
+        ('ri', 'Rhode Island', NEW_ENGLAND),
         ('sc', 'South Carolina', SOUTHEAST),
         ('sd', 'South Dakota', HEARTLAND),
         ('tn', 'Tennessee', SOUTHEAST),
         ('tx', 'Texas', SOUTH),
-        ('ut', 'Utah', WEST),
-        ('vt', 'Vermont', NORTHEAST),
+        ('ut', 'Utah', ROCKIES),
+        ('vt', 'Vermont', NEW_ENGLAND),
         ('va', 'Virginia', SOUTHEAST),
         ('wa', 'Washington', NORTHWEST),
-        ('wv', 'West Virginia', NORTHEAST),
+        ('wv', 'West Virginia', MID_ATLANTIC),
         ('wi', 'Wisconsin', GREAT_LAKES),
-        ('wy', 'Wyoming', NORTHWEST)):
+        ('wy', 'Wyoming', ROCKIES)):
       MakeState(state_id, state_name, region, True, all_states, futures)
 
     for territory_id, territory_name, region in (
-        ('dc', 'D. C.', NORTHEAST),
+        ('dc', 'D. C.', MID_ATLANTIC),
         ('pr', 'Puerto Rico', SOUTHEAST),
         ('gu', 'Guam', WEST),
         ('mp', 'Northern Mariana Islands', WEST),
