@@ -14,9 +14,9 @@ from app.models.wca.event import Event
 from app.models.wca.export import get_latest_export
 
 class Common(object):
-  
+
   current_date = datetime.datetime.now()
-  
+
   def __init__(self, wca_disclaimer=False):
     self.uri = request.path
     self.len = len
@@ -64,10 +64,11 @@ class Common(object):
   def regions(self):
     return [r for r in Region.query().order(Region.name).iter()]
 
-  def events(self, include_magic, include_mbo):
+  def events(self, include_magic, include_mbo, include_feet):
     return [e for e in Event.query().order(Event.rank).iter()
             if (include_magic or e.key.id() not in ['magic', 'mmagic']) and
-            (include_mbo or e.key.id() != '333mbo')]
+            (include_mbo or e.key.id() != '333mbo') and
+            (include_feet or e.key.id() != '333ft')]
 
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))

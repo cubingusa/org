@@ -32,7 +32,18 @@ class Championship(ndb.Model):
     if self.state:
       return [self.state]
     if self.region:
-      return State.query(State.region == self.region).fetch(keys_only=True)
+      extra_states = []
+      if self.year < 2023:
+        if self.region.id() == 'ne':
+          return State.query(ndb.OR(State.region == ndb.Key(Region, 'nwe'),
+                                    State.region == ndb.Key(Region, 'mda'))).fetch(keys_only=True)
+        if self.region.id() == 'w':
+          extra_states = [ndb.Key(State, 'co'), ndb.Key(State, 'ut'), ndb.Key(State, 'az')]
+        if self.region.id() == 's':
+          extra_states = [ndb.Key(State, 'nm')]
+        if self.region.id() == 'nw':
+          extra_states = [ndb.Key(State, 'id'), ndb.Key(State, 'mt'), ndb.Key(State, 'wy')]
+      return State.query(State.region == self.region).fetch(keys_only=True) + extra_states
     # National championships are not based on residence, they're based on
     # citizenship.
     return None

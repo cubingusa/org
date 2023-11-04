@@ -26,6 +26,9 @@ def regional():
 
     states = State.query().fetch()
     regions = Region.query().order(Region.name).fetch()
+    all_championships = Championship.query(Championship.region != None).fetch()
+    all_championship_years = sorted(set([championship.year for championship in all_championships
+                                         if championship.year <= year]), reverse=True)
 
     championships.sort(key=lambda championship: championship.competition.get().start_date)
     championship_regions = [championship.region for championship in championships]
@@ -35,6 +38,7 @@ def regional():
     return render_template('regional.html',
                            c=common.Common(wca_disclaimer=True),
                            year=year,
+                           championship_years=all_championship_years,
                            championships=championships,
                            regions_missing_championships=regions_missing_championships)
 
