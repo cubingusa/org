@@ -7,6 +7,7 @@ from google.cloud import recaptchaenterprise_v1
 from google.cloud.recaptchaenterprise_v1 import Assessment
 from mailjet_rest import Client
 
+from app.lib import auth
 from app.lib.common import Common
 from app.lib.secrets import get_secret
 
@@ -57,9 +58,26 @@ def handle_contact_request(template, subject_base, recipient):
   if get_secret('MAILJET_API_KEY') and get_secret('MAILJET_API_SECRET'):
     mailjet = Client(auth=(get_secret('MAILJET_API_KEY'), get_secret('MAILJET_API_SECRET')),
                      version='v3.1')
-    subject = '[' + subject_base + '] Contact form submission by ' + request.form['name']
-    if request.form['wcaid']:
-      subject += ' (' + request.form['wcaid'] + ')'
+    user = auth.user()
+    if user:
+      name = user.name
+      email = user.email
+      wca_id = user.wca_person.id()
+      validated = True
+    else:
+      name = request.form['name']
+      email = request.form['from-address']
+      wca_id = None
+      validated = False
+    subject = '[' + subject_base + '] Contact form submission by ' + name
+    if wca_id:
+      subject += ' (' + wca_id + ')'
+    body = request.form['contact-message']
+    body += '\n\n------------------------------\n\n'
+    if validated:
+      body += 'Sent from a signed-in user\n'
+    else:
+      body += 'Sent from a signed-out user\n'
     data = {
       'Messages': [
         {
@@ -72,14 +90,15 @@ def handle_contact_request(template, subject_base, recipient):
               'Email': recipient,
             },
             {
-              'Email': request.form['from-address'],
-              'Name': request.form['name'],
+              'Email': email,
+              'Name': name,
             },
           ],
           'Subject': subject,
-          'TextPart': request.form['contact-message'],
+          'TextPart': body,
         }
       ]
     }
+    print(data)
     result = mailjet.send.create(data=data)
   return redirect(request.root_path + request.path + '?success=1')
