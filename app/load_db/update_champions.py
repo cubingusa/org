@@ -68,6 +68,8 @@ def ComputeEligibleCompetitors(championship, competition, results):
       for update in user.updates or []:
         if update.update_time < residency_deadline:
           state = update.state
+      if not user.updates:
+        state = user.state
       if state and state in valid_state_keys:
         # This competitor is eligible, so save this on their User.
         resolution = Resolution.ELIGIBLE
@@ -122,7 +124,7 @@ def UpdateChampions():
       # For multi blind, we only recognize pre-2009 champions in 333mbo, since
       # that was the multi-blind event held those years.  For clarity in the
       # champions listings, we list those champions as the 333mbf champions for
-      # those years. 
+      # those years.
       if championship.competition.get().year < 2009:
         if result.event.id() == '333mbo':
           this_event = ndb.Key(Event, '333mbf')
