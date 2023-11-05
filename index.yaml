@@ -73,6 +73,17 @@ indexes:
   - name: year
   - name: end_date
 
+- kind: Championship
+  properties:
+  - name: event
+  - name: year
+  - name: state
+
+- kind: Championship
+  properties:
+  - name: year
+  - name: state
+
 - kind: Competition
   properties:
   - name: year

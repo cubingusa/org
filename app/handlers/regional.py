@@ -29,6 +29,9 @@ def regional():
     all_championships = Championship.query(Championship.region != None).fetch()
     all_championship_years = sorted(set([championship.year for championship in all_championships
                                          if championship.year <= year]), reverse=True)
+    regions_for_dropdown = sorted([(region.key.id(), region.name) for region in regions
+                                   if not region.obsolete],
+                                  key=lambda x: x[1])
 
     championships.sort(key=lambda championship: championship.competition.get().start_date)
     championship_regions = [championship.region for championship in championships]
@@ -40,7 +43,34 @@ def regional():
                            year=year,
                            championship_years=all_championship_years,
                            championships=championships,
-                           regions_missing_championships=regions_missing_championships)
+                           regions_missing_championships=regions_missing_championships,
+                           championship_regions=regions_for_dropdown)
+
+@bp.route('/state_championships')
+def state():
+  with client.context():
+    year = datetime.date.today().year
+
+    championships = Championship.query(ndb.AND(Championship.year == year,
+                                               Championship.state != None)).fetch()
+    competitions = ndb.get_multi([c.competition for c in championships])
+
+    states = State.query().fetch()
+    all_championships = Championship.query(Championship.state != None).fetch()
+    all_championship_years = sorted(set([championship.year for championship in all_championships
+                                         if championship.year <= year]), reverse=True)
+    championship_states = sorted(set([(championship.state.id(), championship.state.get().name)
+                                      for championship in all_championships]),
+                                 key=lambda x: x[1])
+
+    championships.sort(key=lambda championship: championship.state.get().name)
+
+    return render_template('state_championships.html',
+                           c=common.Common(wca_disclaimer=True),
+                           year=year,
+                           championship_years=all_championship_years,
+                           championships=championships,
+                           championship_states=championship_states)
 
 @bp.route('/regional/title_policy')
 def title_policy():

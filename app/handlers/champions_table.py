@@ -43,7 +43,7 @@ def champions_table(event_id, championship_type, championship_region='', year=0)
       championship_formatter = lambda c: c.region.get().name
       all_regions = Region.query().fetch()
     elif year and is_state:
-      all_champions.sort(key = lambda c: c.state.id())
+      all_champions.sort(key = lambda c: c.state.get().name)
       championship_formatter = lambda c: c.state.get().name
       all_states = State.query().fetch()
     else:

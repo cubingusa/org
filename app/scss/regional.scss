@@ -48,7 +48,7 @@
 .competition-date-col,.competition-psych-sheet-col {
   @include make-col-ready();
   @include media-breakpoint-up(sm) {
-    @include make-col(2);
+    @include make-col(4);
   }
   @include media-breakpoint-down(xs) {
     @include make-col(6);
