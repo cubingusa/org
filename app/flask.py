@@ -9,6 +9,7 @@ from app.lib.secrets import get_secret
 app = Flask(__name__)
 app.secret_key = get_secret('SESSION_SECRET_KEY')
 app.permanent_session_lifetime = datetime.timedelta(days=7)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 300
 
 @app.before_request
 def before_request():
