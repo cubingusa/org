@@ -3,10 +3,18 @@ var stateSelectorModule = (function() {
 
   return {
     stateSelect: function() {
-      state_id = this.options[this.selectedIndex].dataset.stateid;
-      state_name = this.options[this.selectedIndex].dataset.statename;
-      selectListener(state_id, state_name);
-      hashModule.setValue('s', state_id);
+      if (this.options[this.selectedIndex].dataset.stateid) {
+        state_id = this.options[this.selectedIndex].dataset.stateid;
+        state_name = this.options[this.selectedIndex].dataset.statename;
+        selectListener(state_id, state_name);
+        hashModule.setValue('s', state_id);
+      } else {
+        hashModule.deleteKey('s');
+      }
+    },
+
+    unselect: function() {
+      document.getElementById('state-selector').selectedIndex = 0;
     },
 
     setSelectListener: function(listener) { selectListener = listener; },

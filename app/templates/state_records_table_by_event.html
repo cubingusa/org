@@ -1,0 +1,29 @@
+{% import "components/event_icon.html" as event_icon %}
+
+{% autoescape true %}
+{% macro ranking_row(ranking) %}
+  {% set person = people_by_id[ranking.person.id()] %}
+  <div class="ranking-row-container">
+    <div class="row">
+      <div class="rank-col">
+        {{ event_icon.event_icon(events_by_id[ranking.event.id()], 'state-record-event-icon') }}
+      </div>
+      <div class="person-col">
+        <a href="{{ ranking.person.get().GetWCALink() }}" target="_blank">
+          {{ ranking.person.get().name }}
+        </a>
+      </div>
+      <div class="time-col">
+        {{ c.formatters.FormatTime(ranking.best, ranking.event, is_average) }}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% set last_time = 0 %}
+{% for ranking in rankings %}
+  {% if events_by_id[ranking.event.id()].rank < 900 %}
+    {{ ranking_row(ranking) }}
+  {% endif %}
+{% endfor %}
+{% endautoescape %}

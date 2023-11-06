@@ -91,6 +91,7 @@ class Common(object):
              ]),
              ('Competitors', [
                  ('State Rankings', '/state_rankings'),
+                 ('State Records', '/state_records'),
                  ('WCA Competitor Tutorial', 'https://www.worldcubeassociation.org/edudoc/competitor-tutorial/tutorial.pdf'),
              ]),
              ('Organizers', [
