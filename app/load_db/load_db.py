@@ -6,6 +6,7 @@ from absl import logging
 from google.cloud import ndb
 
 from app.load_db.update_champions import UpdateChampions
+from app.load_db.update_state_records import UpdateStateRecords
 from app.models.user import User
 from app.models.wca.competition import Competition
 from app.models.wca.continent import Continent
@@ -156,6 +157,7 @@ def main(argv):
   with client.context():
     set_latest_export(FLAGS.new_export_id)
     UpdateChampions()
+    UpdateStateRecords()
 
 if __name__ == '__main__':
   app.run(main)
