@@ -87,6 +87,7 @@ class Common(object):
              ('Competitions', [
                  ('Nationals', '/nationals'),
                  ('Regional Championships', '/regional'),
+                 ('State Championships', '/state_championships'),
              ]),
              ('Competitors', [
                  ('State Rankings', '/state_rankings'),
