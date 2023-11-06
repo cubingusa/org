@@ -23,7 +23,7 @@ def UpdateStateRecords():
             current_time = rank.best
           else:
             break
-  state_record_keys = [obj.key for obj in state_record]
+  state_record_keys = [obj.key for obj in state_records]
   to_remove = []
   for rank_cls in (RankSingle, RankAverage):
     for record in rank_cls.query(rank_cls.is_state_record == True).iter():
@@ -31,6 +31,6 @@ def UpdateStateRecords():
         record.is_state_record = False
         to_remove += [record]
   print('Setting %d state records' % len(state_record_keys))
-  print('Removing %d state records')
-  ndb.put_multi(state_record_keys)
+  print('Removing %d state records' % len(to_remove))
+  ndb.put_multi(state_records)
   ndb.put_multi(to_remove)
