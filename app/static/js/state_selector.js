@@ -15,6 +15,7 @@ var stateSelectorModule = (function() {
 
     unselect: function() {
       document.getElementById('state-selector').selectedIndex = 0;
+      hashModule.deleteKey('s');
     },
 
     setSelectListener: function(listener) { selectListener = listener; },
