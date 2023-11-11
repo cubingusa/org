@@ -33,17 +33,27 @@ def regional():
                                    if not region.obsolete],
                                   key=lambda x: x[1])
 
-    championships.sort(key=lambda championship: championship.competition.get().start_date)
+    championships = {championship.region.id() : championship
+                     for championship in championships if not championship.is_pbq}
     championship_regions = [championship.region for championship in championships]
-    regions_missing_championships = [
-        region for region in regions if region.key not in championship_regions and not region.obsolete]
+    unannounced_championships = [
+      ('nw', 'Northwest', 'Lynwood, Washington', 'April 5 - 7'),
+      ('hl', 'Heartland', 'Sioux Falls, South Dakota', 'June 7 - 9'),
+      ('ro', 'Rocky Mountain', 'Provo, Utah', 'June 20 - 22'),
+      ('se', 'Southeast', 'Spartanburg, South Carolina', 'June 28 - 30'),
+      ('w', 'Western', 'San Diego, California', 'August 2 - 4'),
+      ('s', 'Southern', 'Oklahoma City, Oklahoma', 'August 2 - 4'),
+      ('nwe', 'New England', 'Worcester, Massachusetts', 'August 16 - 18'),
+      ('gl', 'Great Lakes', 'Louisville, Kentucky', 'October 4 - 6'),
+      ('mda', 'Mid-Atlantic', 'Richmond, Virginia', 'October 11 - 14'),
+    ]
 
     return render_template('regional.html',
                            c=common.Common(wca_disclaimer=True),
                            year=year,
                            championship_years=all_championship_years,
                            championships=championships,
-                           regions_missing_championships=regions_missing_championships,
+                           unannounced_championships=unannounced_championships,
                            championship_regions=regions_for_dropdown)
 
 @bp.route('/state_championships')

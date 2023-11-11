@@ -17,14 +17,10 @@
         <div class="card-body main-card">
           <h1 class="card-title">CubingUSA Regional Championships</h1>
           <div class="card-text">
-            <p><strong>New in 2023:</strong>We updated our CubingUSA regions! Take a look at the new map for full details.</p>
             <p>In addition to CubingUSA Nationals, CubingUSA supports the organization of nine <strong>Regional Championships</strong> each year.  These competitions aim to provide competitors throughout the US with a high-quality, large competition experience, and to recognize the top competitors throughout the country.
             </p>
             <div>
               <p>Just like CubingUSA Nationals, our Regional Championships are open to all competitors.  However, the title of Regional Champion will be awarded to the top-ranked competitor who lives in that region.  In order to be eligible to win a title, you need to <a href="/login">log in</a> to the CubingUSA website with your WCA account and <a href="/edit">select</a> your home state before the competition. See the <a href="/regional/title_policy">Regional Title Policy</a> for full details, and please <a href="/about/contact">contact</a> us if you have any questions about what state you can represent.</p>
-              {% if regions_missing_championships %}
-                <p>We're still working to finalize the location and dates of this year's championships.  Please check back here for details!</p>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -33,11 +29,11 @@
     <p>
       <div class="card">
         <div class="card-header">
-          <h4><span class="material-symbols-outlined">calendar_month</span> {{ year }} Regional Championships</h4>
+          <h4><span class="material-symbols-outlined">calendar_month</span> 2024 Regional Championships</h4>
         </div>
         <ul class="list-group list-group-flush">
-          {% for championship in championships %}
-            {% if not championship.is_pbq %}
+          {% for unannounced in unannounced_championships %}
+            {% if unannounced[0] in championships %}
               {% set competition = championship.competition.get() %}
               <li class="list-group-item">
                 <div class="row">
@@ -58,8 +54,26 @@
                     {% endautoescape %}
                   </div>
                 </div>
-              {% endif %}
-            </li>
+              </li>
+            {% else %}
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="competition-name-col">
+                    CubingUSA {{ unannounced[1] }} Championship 2024
+                  </div>
+                  <div class="competition-location-col">
+                    <span class="material-symbols-outlined">pin_drop</span>
+                    {{ unannounced[2] }}
+                  </div>
+                  <div class="competition-date-col">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    {% autoescape False %}
+                      {{ unannounced[3] }}
+                    {% endautoescape %}
+                  </div>
+                </div>
+              </li>
+            {% endif %} 
           {% endfor %}
           {% for region in regions_missing_championships %}
             <li class="list-group-item">
