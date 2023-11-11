@@ -1,10 +1,13 @@
-{% macro state_selector(c) %}
+{% macro state_selector(c, include_blank=False) %}
   <div class="row">
     <div class="label-container">
       <label for="state-selector" class="label">State</label>
     </div>
     <div class="selector-container">
       <select class="form-control" id="state-selector">
+        {% if include_blank %}
+          <option></option>
+        {% endif %}
         {% for state in c.all_states() %}
           <option data-stateid="{{ state.key.id() }}"
                   data-statename="{{ state.name }}">

@@ -45,12 +45,12 @@ $(gcloud beta emulators datastore env-init)
 ```
 Run the app:
 ```sh
-gunicorn -b :8083 app:app
+gunicorn -b :8083 app.flask:app --reload
 ```
 
 You can use the `ADMIN_WCA_ID` environment variable to make yourself an admin:
 ```sh
-ADMIN_WCA_ID=2005REYN01 gunicorn -b :8083 app:app
+ADMIN_WCA_ID=2005REYN01 gunicorn -b :8083 app.flask:app --reload
 ```
 
 ## Deploying to staging

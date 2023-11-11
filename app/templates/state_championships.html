@@ -1,7 +1,7 @@
 {% import "components/css.html" as css %}
 {% import "components/event_selector.html" as event_selector %}
 {% extends "base.html" %}
-{% block title %}Regional Championships{% endblock %}
+{% block title %}State Championships{% endblock %}
 {% block style %}
   {{ css.css(c, 'regional') }}
 {% endblock %}
@@ -9,22 +9,15 @@
   <div class="container">
     <p>
       <div class="card">
-        <div class="regional-map-container">
-          <img class="regional-map"
-               src="/static/img/regionals-map.jpg"
-               alt="Map of US Regions">
-        </div>
         <div class="card-body main-card">
-          <h1 class="card-title">CubingUSA Regional Championships</h1>
+          <h1 class="card-title">CubingUSA State Championships</h1>
           <div class="card-text">
-            <p><strong>New in 2023:</strong>We updated our CubingUSA regions! Take a look at the new map for full details.</p>
-            <p>In addition to CubingUSA Nationals, CubingUSA supports the organization of nine <strong>Regional Championships</strong> each year.  These competitions aim to provide competitors throughout the US with a high-quality, large competition experience, and to recognize the top competitors throughout the country.
+            <p>
+              In addition to Nationals and Regionals, CubingUSA recognizes State Championships organized by local organizing teams. Not every state has a State Championship every year.
+            </p>
             </p>
             <div>
-              <p>Just like CubingUSA Nationals, our Regional Championships are open to all competitors.  However, the title of Regional Champion will be awarded to the top-ranked competitor who lives in that region.  In order to be eligible to win a title, you need to <a href="/login">log in</a> to the CubingUSA website with your WCA account and <a href="/edit">select</a> your home state before the competition. See the <a href="/regional/title_policy">Regional Title Policy</a> for full details, and please <a href="/about/contact">contact</a> us if you have any questions about what state you can represent.</p>
-              {% if regions_missing_championships %}
-                <p>We're still working to finalize the location and dates of this year's championships.  Please check back here for details!</p>
-              {% endif %}
+              <p>Just like CubingUSA Nationals, our State Championships are open to all competitors.  However, the title of State Champion will be awarded to the top-ranked competitor who lives in that state.  In order to be eligible to win a title, you need to <a href="/login">log in</a> to the CubingUSA website with your WCA account and <a href="/edit">select</a> your home state before the competition. See the <a href="/regional/title_policy">Regional Title Policy</a> for full details, and please <a href="/about/contact">contact</a> us if you have any questions about what state you can represent.</p>
             </div>
           </div>
         </div>
@@ -33,7 +26,7 @@
     <p>
       <div class="card">
         <div class="card-header">
-          <h4><span class="material-symbols-outlined">calendar_month</span> {{ year }} Regional Championships</h4>
+          <h4><span class="material-symbols-outlined">calendar_month</span> {{ year }} State Championships</h4>
         </div>
         <ul class="list-group list-group-flush">
           {% for championship in championships %}
@@ -43,7 +36,7 @@
                 <div class="row">
                   <div class="competition-name-col">
                     <a href="{{ competition.GetWCALink() }}">
-                      {{ competition.name }}
+                      {{ championship.state.get().name }} Championship
                     </a>
                   </div>
                   <div class="competition-location-col">
@@ -61,13 +54,6 @@
               {% endif %}
             </li>
           {% endfor %}
-          {% for region in regions_missing_championships %}
-            <li class="list-group-item">
-              <span class="missing-region">
-                CubingUSA {{ region.championship_name }} Championship {{ year }}: to be announced soon!
-              <span>
-            </li>
-          {% endfor %}
         </ul>
       </div>
     </p>
@@ -75,7 +61,7 @@
       <div class="card">
         <div class="card-header">
           <h4><span class="material-symbols-outlined">trophy</span>
-            <span id="regionals-yr"></span> <span id="regionals-evt"></span> Regional Champions</h4>
+            <span id="regionals-yr"></span> <span id="regionals-evt"></span> State Champions</h4>
         </div>
         <div class="card-body">
           {{ event_selector.event_selector(c, include_magic=False, include_mbo=False) }}
@@ -96,14 +82,14 @@
       <div class="col-6">
         <select class="form-control w-auto" id="region-select">
           <option></option>
-          {% for region, region_name in championship_regions %}
-            <option value="{{ region }}">{{ region_name }}</option>
+          {% for state, state_name in championship_states %}
+            <option value="{{ state }}">{{ state_name }}</option>
           {% endfor %}
         </select>
       </div>
     </div>
   </div>
   <div id="year" data-year="{{ c.year }}"></div>
-  <div id="type" data-type="regional"></div>
+  <div id="type" data-type="state"></div>
   <script src="/static/js/regionals.js" type="application/javascript"></script>
 {% endblock %}

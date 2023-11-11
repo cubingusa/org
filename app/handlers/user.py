@@ -19,7 +19,11 @@ def RewriteRanks(wca_person):
   if not wca_person:
     return
   for rank_class in (RankSingle, RankAverage):
-    ndb.put_multi(rank_class.query(rank_class.person == wca_person.key).fetch())
+    ranks = rank_class.query(rank_class.person == wca_person.key).fetch()
+    for rank in ranks:
+      # State records will be recomputed tomorrow; for now, just drop the state record.
+      rank.is_state_record = False
+    ndb.put_multi(ranks)
 
 def error(msg):
   return render_template('error.html', c=Common(), error=msg)

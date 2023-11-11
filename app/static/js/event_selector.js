@@ -7,7 +7,7 @@ var eventSelectorModule = (function() {
 
   var defaultEvt = '';
   var enableHash = true;
-  
+
   return {
     eventSelector: eventSelector,
 
@@ -42,6 +42,19 @@ var eventSelectorModule = (function() {
       }
     },
 
+    unselect: function() {
+      if (selectedEvent) {
+        document.getElementById('event-selector-link-' + selectedEvent)
+                .getElementsByTagName('img')[0]
+                .classList.remove('selected');
+        selectedEvent = '';
+        hashModule.deleteKey('e');
+        if (unselectListener) {
+          unselectListener();
+        }
+      }
+    },
+
     disableHash: function() { enableHash = false; },
 
     setSelectListener: function(listener) { selectListener = listener; },
@@ -53,7 +66,7 @@ var eventSelectorModule = (function() {
 
 onloadModule.register(function() {
   var events = document.getElementsByClassName('event-selector-link');
-  
+
   for (var i = 0; i < events.length; i++) {
     events[i].onclick = eventSelectorModule.eventClick;
   }

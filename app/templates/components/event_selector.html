@@ -1,8 +1,8 @@
 {% import "components/event_icon.html" as event_icon %}
-{% macro event_selector(c, include_magic=True, include_mbo=True, events=None) %}
+{% macro event_selector(c, include_magic=True, include_mbo=True, include_feet=True, events=None) %}
   <div id="event-selector">
     {% if c.is_none(events) %}
-      {% set events = c.events(include_magic, include_mbo) %}
+      {% set events = c.events(include_magic, include_mbo, include_feet) %}
     {% endif %}
     {% for event in events %}
       <a class="event-selector-link"

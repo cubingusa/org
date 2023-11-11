@@ -1,0 +1,24 @@
+{% autoescape true %}
+{% macro ranking_row(ranking) %}
+  {% set person = people_by_id[ranking.person.id()] %}
+  <div class="ranking-row-container">
+    <div class="row">
+      <div class="rank-col">
+        {{ states_by_id[ranking.state.id()].name }}
+      </div>
+      <div class="person-col">
+        <a href="{{ ranking.person.get().GetWCALink() }}" target="_blank">
+          {{ ranking.person.get().name }}
+        </a>
+      </div>
+      <div class="time-col">
+        {{ c.formatters.FormatTime(ranking.best, ranking.event, is_average) }}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% for ranking in rankings %}
+  {{ ranking_row(ranking) }}
+{% endfor %}
+{% endautoescape %}

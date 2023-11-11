@@ -26,6 +26,12 @@ indexes:
   - name: year
   - name: region
 
+- kind: Champion
+  properties:
+  - name: event
+  - name: year
+  - name: state
+
 - kind: Championship
   properties:
   - name: national_championship
@@ -72,6 +78,17 @@ indexes:
   properties:
   - name: year
   - name: end_date
+
+- kind: Championship
+  properties:
+  - name: event
+  - name: year
+  - name: state
+
+- kind: Championship
+  properties:
+  - name: year
+  - name: state
 
 - kind: Competition
   properties:
