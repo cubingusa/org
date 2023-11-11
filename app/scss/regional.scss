@@ -51,7 +51,7 @@
     @include make-col(4);
   }
   @include media-breakpoint-down(xs) {
-    @include make-col(6);
+    @include make-col(12);
   }
 }
 
