@@ -56,7 +56,10 @@ def ComputeEligibleCompetitors(championship, competition, results):
   for user in users:
     resolution = Resolution.UNRESOLVED
     for eligibility in eligibility_field(user):
+      other_championship = eligibility.championship.get()
       if eligibility.year != championship.year:
+        continue
+      if other_championship.is_pbq != championship.is_pbq:
         continue
       if eligibility.championship == championship.key:
         resolution = Resolution.ELIGIBLE
