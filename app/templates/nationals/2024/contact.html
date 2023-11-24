@@ -1,0 +1,52 @@
+{% import "components/css.html" as css %}
+{% import "components/contact.html" as contact %}
+{% import "components/faq.html" as faq %}
+{% extends "nationals/2024/base.html" %}
+{% block title%}Contact{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2024/contact') }}
+{% endblock %}
+{% block content %}
+  {% call contact.contact_form(c, result) %}
+  <div>
+    Please take a look at the following frequently asked questions and see if any of them answer your question.
+  </div>
+  <p>
+    <div id="faq" role="tablist">
+      {% call faq.faq_item("Can I cancel my registration and get a refund?") %}
+        You can get a 50% refund for canceling until the refund deadline, after which we will no longer give refunds. The deadline is <strong>June 6, 2024</strong>.
+      {% endcall %}
+
+      {% call faq.faq_item("Are spectators allowed at the competition? Is there a spectator fee?", "spectators") %}
+        Yes! Spectators are allowed. Spectator tickets cost $10 through May 31, and $20 starting June 1. Spectator tickets can be purchased from <a href="https://www.ticketor.com/cubingusa">Ticketor</a>.
+      {% endcall %}
+
+      {% call faq.faq_item("Can I take photos and make video recordings at the competition?", "recordings") %}
+        Photography and Videography is allowed during the competition however please be sure to follow all WCA regulations by maintaining the proper distance from competitors who are actively competing as well as not using flash photography. Commercial media teams must reach out to CubingUSA using the contact form prior to the competition to obtain a pass.
+      {% endcall %}
+
+      {% call faq.faq_item("I have never competed before. Can NAC 2024 be my first competition?", "firstcomp") %}
+        No. You must already have a qualifying time from a WCA competition in order to register. Please see the <a href="/nac/2024/events">events page</a> for per-event qualifying times.
+      {% endcall %}
+
+      {% call faq.faq_item("Where can I get an official qualification time?", "howqualify") %}
+        All results set at WCA competitions are eligible for qualification. You can find a list of <a href="https://www.worldcubeassociation.org/competitions?region=_North+America" target="_blank">upcoming North American competitions here</a>, or <a href="https://www.worldcubeassociation.org/competitions?region=all" target="_blank">upcoming competitions in all regions here</a>.
+      {% endcall %}
+
+      {% call faq.faq_item("Can I register for an event if I don’t yet qualify, but think I will by the deadline?", "notqualifiedyet") %}
+        No, you may only register for an event which you currently qualify for. To qualify for an event you must compete in that event at an official WCA competition and obtain a result that meets the qualification condition. You will have until June 13, 2024 to update your registration.
+      {% endcall %}
+
+      {% call faq.faq_item("Can I register without having any qualifying results?", "notimesyet") %}
+        No, you must have at least one result that meets the qualifying times in order to register for NAC 2024.
+      {% endcall %}
+
+      {% call faq.faq_item("Can I get a special accommodation?", "accommodation") %}
+        <p>Please use the contact form below if you need an accommodation, for example if you’re unable to compete for part of the competition due to a religious observance, or if you have a physical or medical condition that impacts your ability to compete on-stage.</p>
+        <p>The deadline to request accommodations is June 13, unless there are exceptional circumstances.</p>
+      {% endcall %}
+
+    </div>
+  </p>
+  {% endcall %}
+{% endblock %}

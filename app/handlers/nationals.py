@@ -7,6 +7,8 @@ from app.lib.common import Common
 from app.lib import contact
 
 bp = Blueprint('nationals', __name__, url_prefix='/nationals')
+nac_bp = Blueprint('nac', __name__, url_prefix='/nac')
+worlds_bp = Blueprint('worlds', __name__, url_prefix='/worlds')
 client = ndb.Client()
 
 @bp.route('/')
@@ -112,3 +114,51 @@ def nats2023volunteers():
 def nats2023unofficial():
   with client.context():
     return render_template('nationals/2023/unofficial.html', c=Common())
+
+@nac_bp.route('/')
+def nac():
+  with client.context():
+    return redirect('/nac/2024')
+
+@nac_bp.route('/2024')
+def nac2024():
+  with client.context():
+    return render_template('nationals/2024/index.html', c=Common())
+
+@nac_bp.route('/2024/contact', methods=['GET', 'POST'])
+def nac2024contact():
+  with client.context():
+    return contact.handle_contact_request('nationals/2024/contact.html',
+                                          'NAC 2024',
+                                          'nac-organizers@cubingusa.org')
+
+@nac_bp.route('/2024/events')
+def nac2024events():
+  with client.context():
+    return redirect('https://www.worldcubeassociation.org/competitions/NAC2024#competition-events')
+
+@nac_bp.route('/2024/schedule')
+def nac2024schedule():
+  with client.context():
+    return render_template('nationals/2024/schedule.html', c=Common())
+
+@nac_bp.route('/2024/travel')
+def nac2024travel():
+  with client.context():
+    return render_template('nationals/2024/travel.html', c=Common())
+
+@nac_bp.route('/2024/qualifying')
+def nac2024qualifying():
+  with client.context():
+    return render_template('nationals/2024/qualifying.html', c=Common())
+
+@nac_bp.route('/2024/volunteers')
+def nac2024volunteers():
+  with client.context():
+    return render_template('nationals/2024/volunteers.html', c=Common())
+
+@worlds_bp.route('/')
+def worlds2025():
+  with client.context():
+    return render_template('nationals/2025/index.html', c=Common())
+
