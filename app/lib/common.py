@@ -20,6 +20,8 @@ class Common(object):
   def __init__(self, wca_disclaimer=False):
     self.uri = request.path
     self.len = len
+    self.type = type
+    self.str = str
     self.formatters = formatters
     self.year = datetime.date.today().year
     self.user = auth.user()

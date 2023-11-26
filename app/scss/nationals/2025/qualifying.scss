@@ -1,0 +1,37 @@
+@import "base";
+
+.icon {
+  height: 1rem;
+}
+
+#qualtable-container {
+  overflow-x: scroll;
+}
+
+.qualcell {
+  white-space: nowrap;
+}
+
+.qualified {
+  background-color: #d9ead3;
+}
+
+.not_qualified {
+  background-color: #f4cccc;
+}
+
+.maybe_qualified {
+  background-color: #fce5cd;
+}
+
+.qualified::before {
+  content: '✔️';
+}
+
+.not_qualified::before {
+  content: '❌';
+}
+
+.maybe_qualified::before {
+  content: '❓';
+}

@@ -7,12 +7,12 @@ def parse_time(time):
   hours = res // 60
   return (hours, minutes, seconds, centiseconds)
 
-def FormatStandard(time, trim_zeros):
+def FormatStandard(time, trim_zeros, shorten_over_ten=True):
   hours, minutes, seconds, centiseconds = parse_time(time)
-  centiseconds_section = '' if trim_zeros and not centiseconds else '.%02d' % centiseconds 
+  centiseconds_section = '' if trim_zeros and not centiseconds else '.%02d' % centiseconds
   if hours > 0:
     return '%d:%02d:%02d' % (hours, minutes, seconds)
-  elif minutes >= 10:
+  elif minutes >= 10 and shorten_over_ten:
     return '%d:%02d' % (minutes, seconds)
   elif minutes > 0:
     return '%d:%02d%s' % (minutes, seconds, centiseconds_section)
@@ -90,13 +90,13 @@ def FormatTime(time, event_key, is_average, verbose=False,
   else:
     return FormatStandard(time, trim_zeros)
 
-def FormatQualifying(time, event_key, is_average, short_units=False):
+def FormatQualifying(time, event_key, is_average, short_units=False, shorten_over_ten=True):
   if event_key.id() == '333fm':
     return FormatFewestMoves(time, is_average, verbose=False, short_units=short_units)
   elif event_key.id() == '333mbf':
-    return '%d %s' % (99 - time // 10000000, 'pts' if short_units else 'points')
+    return '> %d %s' % (99 - time // 10000000, 'pts' if short_units else 'points')
   else:
-    return FormatVerbose(time, trim_zeros=True, short_units=short_units)
+    return FormatStandard(time, trim_zeros=False, shorten_over_ten=shorten_over_ten)
 
 def FormatResult(result, verbose=False):
   is_average = result.fmt.id() in ('a', 'm')
