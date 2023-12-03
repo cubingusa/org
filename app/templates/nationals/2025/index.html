@@ -1,0 +1,35 @@
+{% import "components/css.html" as css %}
+{% import "components/faq.html" as faq %}
+{% extends "nationals/2025/base.html" %}
+{% block title%}Worlds 2025{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2024/index') }}
+{% endblock %}
+{% block content %}
+  <div class="nats-top-row">
+    <div class="top-info">
+      <h2 class="d-none d-xs-block">WCA World Championship 2025</h2>
+      <p>
+        We're pleased to announce that CubingUSA will be hosting the WCA World Championship 2025 on <strong>July 3-6, 2025</strong> at the <a href="https://seattleconventioncenter.com/venues/convention-center" target="_blank">Seattle Convention Center</a> in <strong>Seattle, Washington!</strong> This will be the twelfth Rubik's Cube World Championships, and the first in the USA since 2013.
+      </p>
+      <p>
+        We'll be sharing more information about the competition over the next few months. We plan to open registration in <strong>Fall 2024</strong>.
+      </p>
+    </div>
+    <div class="image-container">
+      <img src="/static/img/seattle.jpg" alt="Image of Seattle">
+    </div>
+  </div>
+  <h6>Frequently Asked Questions</h6>
+  <div id="faq" role="tablist">
+    {% call faq.faq_item("When will registration open?", "reg-open") %}
+      <p>We expect to open registration in Fall 2024.</p>
+    {% endcall %}
+    {% call faq.faq_item("Will there be qualification times?", "qual") %}
+      <p>Yes, we plan to have qualification times in all events. We'll share more details about the qualification and registration processes soon.</p>
+    {% endcall %}
+    {% call faq.faq_item("Will spectators be able to attend?", "spectators") %}
+      <p>Yes, spectators will be able to purchase tickets.</p>
+    {% endcall %}
+  </div>
+{% endblock %}
