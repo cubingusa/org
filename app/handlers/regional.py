@@ -18,7 +18,7 @@ client = ndb.Client()
 @bp.route('/regional')
 def regional():
   with client.context():
-    year = datetime.date.today().year
+    year = 2024
 
     championships = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()
@@ -35,7 +35,7 @@ def regional():
 
     championships = {championship.region.id() : championship
                      for championship in championships if not championship.is_pbq}
-    championship_regions = [championship.region for championship in championships]
+    championship_regions = [championship.region for championship in championships.values()]
     unannounced_championships = [
       ('hl', 'Heartland', 'Sioux Falls, South Dakota', 'June 7 - 9'),
       ('ro', 'Rocky Mountain', 'Provo, Utah', 'June 20 - 22'),
@@ -45,6 +45,11 @@ def regional():
       ('gl', 'Great Lakes', 'Louisville, Kentucky', 'October 4 - 6'),
       ('mda', 'Mid-Atlantic', 'Richmond, Virginia', 'October 12 - 14'),
     ]
+    regions_missing_championships = [
+      r for r in regions if r.key.id() not in championships and
+      r.key.id() not in [c[0] for c in unannounced_championships] and
+      not r.obsolete
+    ]
 
     return render_template('regional.html',
                            c=common.Common(wca_disclaimer=True),
@@ -52,7 +57,8 @@ def regional():
                            championship_years=all_championship_years,
                            championships=championships,
                            unannounced_championships=unannounced_championships,
-                           championship_regions=regions_for_dropdown)
+                           championship_regions=regions_for_dropdown,
+                           regions_missing_championships=regions_missing_championships)
 
 @bp.route('/state_championships')
 def state():

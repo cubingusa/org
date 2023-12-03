@@ -34,7 +34,7 @@
         <ul class="list-group list-group-flush">
           {% for unannounced in unannounced_championships %}
             {% if unannounced[0] in championships %}
-              {% set competition = championship.competition.get() %}
+              {% set competition = championships[unannounced[0]].competition.get() %}
               <li class="list-group-item">
                 <div class="row">
                   <div class="competition-name-col">
