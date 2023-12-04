@@ -41,7 +41,6 @@ def regional():
       ('ro', 'Rocky Mountain', 'Provo, Utah', 'June 20 - 22'),
       ('se', 'Southeast', 'Spartanburg, South Carolina', 'June 28 - 30'),
       ('w', 'Western', 'San Diego, California', 'August 2 - 4'),
-      ('s', 'Southern', 'Oklahoma City, Oklahoma', 'August 2 - 4'),
       ('gl', 'Great Lakes', 'Louisville, Kentucky', 'October 4 - 6'),
       ('mda', 'Mid-Atlantic', 'Richmond, Virginia', 'October 12 - 14'),
     ]
