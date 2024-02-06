@@ -32,7 +32,7 @@ then
   mkdir $EXPORT_DIR
   ZIP_FILE="$EXPORT_DIR/$LATEST_EXPORT.tsv.zip"
 
-  curl $URL_TO_FETCH > $ZIP_FILE
+  curl -L $URL_TO_FETCH > $ZIP_FILE
   unzip $ZIP_FILE -d $EXPORT_DIR
   rm $ZIP_FILE
 
