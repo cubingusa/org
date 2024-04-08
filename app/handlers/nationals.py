@@ -1,10 +1,19 @@
+import collections
+import os
+import requests
+
+from flask import abort
 from flask import Blueprint
 from flask import render_template
 from flask import redirect
 from google.cloud import ndb
 
 from app.lib.common import Common
+from app.lib import auth
 from app.lib import contact
+from app.models.region import Region
+from app.models.state import State
+from app.models.user import User
 
 bp = Blueprint('nationals', __name__, url_prefix='/nationals')
 nac_bp = Blueprint('nac', __name__, url_prefix='/nac')
@@ -162,3 +171,42 @@ def worlds2025():
   with client.context():
     return render_template('nationals/2025/index.html', c=Common())
 
+@nac_bp.route('/person_states')
+def person_states():
+  with client.context():
+    me = auth.user()
+    if not me:
+      return redirect('/login')
+    wca_host = os.environ.get('WCA_HOST')
+    data = requests.get(wca_host + '/api/v0/competitions/NAC2024/wcif/public')
+    if data.status_code != 200:
+      abort(data.status_code)
+    competition = data.json()
+    authorized = False
+    for person in competition['persons']:
+      if person['wcaUserId'] != me.key.id() and 'organizer' in person['roles']:
+        authorized = True
+    if not authorized:
+      abort(403)
+      return
+    regions = list(Region.query().iter())
+    person_keys = [ndb.Key(User, str(person['wcaUserId'])) for person in competition['persons']]
+    users = ndb.get_multi(person_keys)
+    state_to_region = {state.key.id(): state.region.id() for state in State.query().iter()}
+    times = {}
+    for person in competition['persons']:
+      for best in person['personalBests']:
+        if best['type'] == 'average' and best['eventId'] == '333':
+          times[person['wcaUserId']] = best['best']
+    people_by_region = collections.defaultdict(list)
+    for user in users:
+      if not user or not user.state:
+        continue
+      if int(user.key.id()) in times:
+        people_by_region[state_to_region[user.state.id()]] += [(user, times[int(user.key.id())])]
+    for region, people in people_by_region.items():
+      people.sort(key=lambda person: person[1])
+    return render_template('nac_teams.html',
+                           c=Common(),
+                           regions=regions,
+                           people=people_by_region)

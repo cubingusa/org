@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Regional Championships{% endblock %}
+{% block content %}
+  <div class="container">
+    {% for region in regions %}
+      <p>
+        <h3>{{ region.name }} ({{ c.len(people[region.key.id()]) }})</h3>
+        <ul>
+          {% for competitor, t in people[region.key.id()] %}
+            <li>{{ competitor.name }} {{ c.formatters.FormatStandard(t, False) }} ({{ competitor.state.id() }})</li>
+          {% endfor %}
+        </ul>
+      </p>
+    {% endfor %}
+  </div>
+{% endblock %}
