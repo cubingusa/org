@@ -20,9 +20,9 @@ def regional():
   with client.context():
     year = 2024
 
-    championships = Championship.query(ndb.AND(Championship.year == year,
+    championships_list = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()
-    competitions = ndb.get_multi([c.competition for c in championships])
+    competitions = ndb.get_multi([c.competition for c in championships_list])
 
     states = State.query().fetch()
     regions = Region.query().order(Region.name).fetch()
@@ -34,7 +34,9 @@ def regional():
                                   key=lambda x: x[1])
 
     championships = {championship.region.id() : championship
-                     for championship in championships if not championship.is_pbq}
+                     for championship in championships_list if not championship.is_pbq}
+    pbq_championships = {championship.region.id() : championship
+                         for championship in championships_list if championship.is_pbq}
     championship_regions = [championship.region for championship in championships.values()]
     unannounced_championships = [
       ('hl', 'Heartland', 'Sioux Falls, South Dakota', 'June 7 - 9'),
@@ -58,6 +60,7 @@ def regional():
                            year=year,
                            championship_years=all_championship_years,
                            championships=championships,
+                           pbq_championships=pbq_championships,
                            unannounced_championships=unannounced_championships,
                            championship_regions=regions_for_dropdown,
                            regions_missing_championships=regions_missing_championships)
@@ -69,6 +72,8 @@ def state():
 
     championships = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.state != None)).fetch()
+    pbq_championships = {championship.state.id() : championship
+                         for championship in championships if championship.is_pbq}
     competitions = ndb.get_multi([c.competition for c in championships])
 
     states = State.query().fetch()
@@ -86,6 +91,7 @@ def state():
                            year=year,
                            championship_years=all_championship_years,
                            championships=championships,
+                           pbq_championships=pbq_championships,
                            championship_states=championship_states)
 
 @bp.route('/regional/title_policy')
