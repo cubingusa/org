@@ -6,7 +6,7 @@
       <h3>{{ competition['name'] }} Eligible Competitors</h3>
       <ul>
         {% for competitor in eligible_users %}
-          <li>{{ competitor.name }} ({{ competitor.state.id() }})</li>
+          <li>{{ competitor.name }} {{ competitor.wca_person.id() }} ({{ competitor.state.id() }})</li>
         {% endfor %}
       </ul>
     </p>
