@@ -156,6 +156,7 @@ def main(argv):
   client = ndb.Client()
   with client.context():
     set_latest_export(FLAGS.new_export_id)
+    UpdateChampionships()
     UpdateChampions()
     UpdateStateRecords()
 
