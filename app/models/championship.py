@@ -26,7 +26,7 @@ class Championship(ndb.Model):
     return '%s_%d%s' % (region.key.id(), year, '_pbq' if is_pbq else '')
 
   @staticmethod
-  def StateChampionshipId(year, state):
+  def StateChampionshipId(year, state, is_pbq=False):
     return '%s_%d%s' % (state.key.id(), year, '_pbq' if is_pbq else '')
 
   def GetEligibleStateKeys(self):
