@@ -46,4 +46,6 @@ def UpdateChampionships():
       #if championship.key.id() not in championships_used:
       logging.info('Assigning championship ' + competition.key.id() + ' ' + championship.key.id())
       to_write += [championship]
+    else:
+      logging.info('Failed to match ' + competition.key.id())
   #ndb.put_multi(to_write)
