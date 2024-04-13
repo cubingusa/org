@@ -4,13 +4,15 @@ import re
 
 from google.cloud import ndb
 
+from app.models.region import Region
+from app.models.state import State
 from app.models.championship import Championship
 from app.models.wca.competition import Competition
 
 
 def UpdateChampionships():
-  competitions_used = set([championship.competition.id() for championship in Championship.query.iter()])
-  championships_used = set([championship.key.id() for championship in Championship.query.iter()])
+  competitions_used = set([championship.competition.id() for championship in Championship.query().iter()])
+  championships_used = set([championship.key.id() for championship in Championship.query().iter()])
   states = {state.name : state for state in State.query().iter()}
   regions = {region.championship_name : region for region in Region.query().iter()}
 
@@ -20,10 +22,11 @@ def UpdateChampionships():
   to_write = []
 
   for competition in Competition.query().iter():
-    #if competition.key.id() in competitions_used:
-    #  continue
+    if competition.key.id() in competitions_used:
+      continue
     pbq_match = pbq_re.match(competition.name)
     area_name = None
+    championship = None
     if pbq_match:
       area_name = pbq_match.group(2)
       is_pbq = True
@@ -38,14 +41,15 @@ def UpdateChampionships():
         championship.state = states[area_name].key
       elif area_name in regions:
         championship = Championship(id=Championship.RegionalsId(competition.year, regions[area_name], is_pbq))
-        championship.state = regions[area_name].key
+        championship.region = regions[area_name].key
       else:
         logging.info('Failed to match ' + competition.key.id())
+        continue
       championship.is_pbq = is_pbq
       championship.competition = competition.key
-      #if championship.key.id() not in championships_used:
-      logging.info('Assigning championship ' + competition.key.id() + ' ' + championship.key.id())
-      to_write += [championship]
+      if championship.key.id() not in championships_used:
+        logging.info('Assigning championship ' + competition.key.id() + ' ' + championship.key.id())
+        to_write += [championship]
     else:
       logging.info('Failed to match ' + competition.key.id())
-  #ndb.put_multi(to_write)
+  ndb.put_multi(to_write)

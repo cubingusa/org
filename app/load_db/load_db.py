@@ -6,6 +6,7 @@ from absl import logging
 from google.cloud import ndb
 
 from app.load_db.update_champions import UpdateChampions
+from app.load_db.update_champiosnhips import UpdateChampiosnhips
 from app.load_db.update_state_records import UpdateStateRecords
 from app.models.user import User
 from app.models.wca.competition import Competition
