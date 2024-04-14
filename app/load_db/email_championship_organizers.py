@@ -1,12 +1,16 @@
 import collections
+import datetime
+import json
 import logging
 import re
 
 from google.cloud import ndb
 from mailjet_rest import Client
+import requests
 
 from app.lib.secrets import get_secret
 from app.models.championship import Championship
+from app.models.user import User
 from app.models.wca.competition import Competition
 
 
@@ -18,7 +22,7 @@ def EmailChampionshipOrganizers():
     logging.error('Could not load mailjet API')
     return
   all_championships = list(Championship.query().iter())
-  all_championship_competitions = Competition.get_multi([c.competition for c in all_championships])
+  all_championship_competitions = ndb.get_multi([c.competition for c in all_championships])
   for comp, championship in zip(all_championship_competitions, all_championships):
     if not comp:
       continue
@@ -28,8 +32,8 @@ def EmailChampionshipOrganizers():
       continue
     if championship.national_championship:
       continue
-    logging.info('Fetching ' + competition.key.id())
-    data = requests.get('https://api.worldcubeassociation.org/competitions/' + competition.key.id() + '/wcif/public')
+    logging.info('Fetching ' + comp.key.id())
+    data = requests.get('https://api.worldcubeassociation.org/competitions/' + comp.key.id() + '/wcif/public')
     if data.status_code != 200:
       logging.error('Got error loading WCIF')
       logging.error(data.status_code)
@@ -88,7 +92,7 @@ def EmailChampionshipOrganizers():
             'From': {
               'Email': 'tim@cubingusa.org',
               'Name': 'Tim Reynolds',
-            }
+            },
             'To': [
               {
                 'Email': 'tim@cubingusa.org',

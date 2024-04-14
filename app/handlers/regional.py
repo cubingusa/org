@@ -100,10 +100,11 @@ def title_policy():
   with client.context():
     return render_template('regional_title.html', c=common.Common())
 
-@bp.route('/regional/eligibility/<region>/<year>')
-def regional_eligibility(region, year):
+@bp.route('/regional/eligibility/<region>/<year>/pbq', defaults={'pbq': True})
+@bp.route('/regional/eligibility/<region>/<year>', defaults={'pbq': False})
+def regional_eligibility(region, year, pbq):
   with client.context():
-    championship = Championship.get_by_id('%s_%d' % (region, int(year)))
+    championship = Championship.get_by_id('%s_%d%s' % (region, int(year), '_pbq' if pbq else ''))
     competition_id = championship.competition.id()
     wca_host = os.environ.get('WCA_HOST')
     data = requests.get(wca_host + '/api/v0/competitions/' + competition_id + '/wcif/public')

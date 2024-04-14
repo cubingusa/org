@@ -9,6 +9,7 @@ class Championship(ndb.Model):
   region = ndb.KeyProperty(kind=Region)
   state = ndb.KeyProperty(kind=State)
   is_pbq = ndb.BooleanProperty()
+  organizer_email_sent = ndb.DateTimeProperty()
 
   competition = ndb.KeyProperty(kind=Competition)
 
