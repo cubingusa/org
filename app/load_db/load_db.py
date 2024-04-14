@@ -6,6 +6,7 @@ from absl import logging
 from google.cloud import ndb
 
 from app.load_db.update_champions import UpdateChampions
+from app.load_db.update_championships import UpdateChampionships
 from app.load_db.update_state_records import UpdateStateRecords
 from app.models.user import User
 from app.models.wca.competition import Competition
@@ -156,6 +157,7 @@ def main(argv):
   client = ndb.Client()
   with client.context():
     set_latest_export(FLAGS.new_export_id)
+    UpdateChampionships()
     UpdateChampions()
     UpdateStateRecords()
 
