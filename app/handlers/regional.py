@@ -11,6 +11,7 @@ from app.models.championship import Championship
 from app.models.region import Region
 from app.models.state import State
 from app.models.user import User
+from app.models.wca.person import Person
 
 bp = Blueprint('regional', __name__)
 client = ndb.Client()
@@ -116,13 +117,15 @@ def regional_eligibility(region, year):
       eligible_states = [key.id() for key in State.query(State.region == region.key).fetch(keys_only=True)]
     elif championship.state:
       eligible_states = [championship.state.id()]
-    logging.info(eligible_states)
-    logging.info(person_keys)
-    logging.info(users)
     eligible_users = [user for user in users if user and user.state and (user.state.id() in eligible_states)]
-    ineligible_users = [user for user in users if user and user.state and (user.state.id() not in eligible_states)]
-    logging.info(eligible_users)
-    logging.info(ineligible_users)
+    ineligible_users = [user for user in users if user and (not user.state or user.state.id() not in eligible_states)]
+    for user, person in zip(users, competition['persons']):
+      if user is None:
+        new_user = User()
+        new_user.name = person['name']
+        if person['wcaId']:
+          new_user.wca_person = ndb.Key(Person, person['wcaId'])
+        ineligible_users += [new_user]
     return render_template('regional_eligibility.html',
                            c=common.Common(),
                            eligible_users=eligible_users,
