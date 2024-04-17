@@ -126,6 +126,8 @@ def regional_eligibility(region, year):
         if person['wcaId']:
           new_user.wca_person = ndb.Key(Person, person['wcaId'])
         ineligible_users += [new_user]
+    eligible_users.sort(key=lambda u: u.name)
+    ineligible_users.sort(key=lambda u: u.name)
     return render_template('regional_eligibility.html',
                            c=common.Common(),
                            eligible_users=eligible_users,
