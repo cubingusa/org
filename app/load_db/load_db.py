@@ -5,6 +5,7 @@ from absl import flags
 from absl import logging
 from google.cloud import ndb
 
+from app.load_db.email_championship_organizers import EmailChampionshipOrganizers
 from app.load_db.update_champions import UpdateChampions
 from app.load_db.update_championships import UpdateChampionships
 from app.load_db.update_state_records import UpdateStateRecords
@@ -160,6 +161,7 @@ def main(argv):
     UpdateChampionships()
     UpdateChampions()
     UpdateStateRecords()
+    EmailChampionshipOrganizers()
 
 if __name__ == '__main__':
   app.run(main)
