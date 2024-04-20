@@ -75,9 +75,9 @@ def EmailChampionshipOrganizers():
                 'Email': 'tim@cubingusa.org',
                 'Name': 'Tim Reynolds',
               },
-            ],
+            ] + emails,
             'Subject': subject,
-            'TextPart': body + json.dumps(emails),
+            'TextPart': body,
           }
         ]
       }
