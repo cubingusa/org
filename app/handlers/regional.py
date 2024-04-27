@@ -111,7 +111,9 @@ def regional_eligibility(region, year, pbq):
     if data.status_code != 200:
       abort(data.status_code)
     competition = data.json()
-    person_keys = [ndb.Key(User, str(person['wcaUserId'])) for person in competition['persons']]
+    person_keys = [ndb.Key(User, str(person['wcaUserId']))
+                   for person in competition['persons']
+                   if person['registration'] and person['registration']['status'] == 'accepted']
     users = ndb.get_multi(person_keys)
     if championship.region:
       region = championship.region.get()
