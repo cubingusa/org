@@ -62,13 +62,13 @@ def EmailChampionshipOrganizers():
       body += 'We encourage you to request that competitors who wish to be eligible for %s championships to log onto the CubingUSA website, visit https://cubingusa.org/edit, and select their home state. Please ask them to do this before the competition starts.\n\n' % championship_type
       body += 'You can check the list of competitors who are eligible to win a title at %s. Please take a look at the list and see if there are any discrepancies you are aware of. After the competition, the top competitor in each event will be listed at %s.\n\n' % (eligibility_website, champions_website)
       body += 'If you run into any issues with the process of determining champions, please contact Tim Reynolds (tim@cubingusa.org).\n\n'
-      body += 'If this is an outdated email address for you, please log in to the CubingUSA website (https://cubingusa.org/login); this will automatically update the email address we have on file for you.'
+      body += 'This is an automated email. If this is an outdated email address for you, please log in to the CubingUSA website (https://cubingusa.org/login); this will automatically update the email address we have on file for you.'
       data = {
         'Messages': [
           {
             'From': {
-              'Email': 'tim@cubingusa.org',
-              'Name': 'Tim Reynolds',
+              'Email': 'webmaster@cubingusa.org',
+              'Name': 'CubingUSA Webmaster',
             },
             'To': [
               {
@@ -78,6 +78,9 @@ def EmailChampionshipOrganizers():
             ] + emails,
             'Subject': subject,
             'TextPart': body,
+            'Headers': [
+              'Reply-To': 'tim@cubingusa.org',
+            ],
           }
         ]
       }
