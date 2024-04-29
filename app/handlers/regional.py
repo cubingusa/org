@@ -11,6 +11,7 @@ from app.models.championship import Championship
 from app.models.region import Region
 from app.models.state import State
 from app.models.user import User
+from app.models.wca.person import Person
 
 bp = Blueprint('regional', __name__)
 client = ndb.Client()
@@ -18,11 +19,11 @@ client = ndb.Client()
 @bp.route('/regional')
 def regional():
   with client.context():
-    year = datetime.date.today().year
+    year = 2024
 
-    championships = Championship.query(ndb.AND(Championship.year == year,
+    championships_list = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()
-    competitions = ndb.get_multi([c.competition for c in championships])
+    competitions = ndb.get_multi([c.competition for c in championships_list])
 
     states = State.query().fetch()
     regions = Region.query().order(Region.name).fetch()
@@ -33,18 +34,37 @@ def regional():
                                    if not region.obsolete],
                                   key=lambda x: x[1])
 
-    championships.sort(key=lambda championship: championship.competition.get().start_date)
-    championship_regions = [championship.region for championship in championships]
+    championships = {championship.region.id() : championship
+                     for championship in championships_list if not championship.is_pbq}
+    pbq_championships = {championship.region.id() : championship
+                         for championship in championships_list if championship.is_pbq}
+    championship_regions = [championship.region for championship in championships.values()]
+    unannounced_championships = [
+      ('hl', 'Heartland', 'Sioux Falls, South Dakota', 'June 7 - 9'),
+      ('ro', 'Rocky Mountain', 'Provo, Utah', 'June 20 - 22'),
+      ('se', 'Southeast', 'Spartanburg, South Carolina', 'June 28 - 30'),
+      ('nw', 'Northwest', 'Lynnwood, Washington', 'June 28 - 30'),
+      ('w', 'Western', 'San Diego, California', 'August 2 - 4'),
+      ('s', 'Southern', 'Oklahoma City, Oklahoma', 'August 2 - 4'),
+      ('nwe', 'New England', 'Providence, Rhode Island', 'August 23 - 25'),
+      ('gl', 'Great Lakes', 'Louisville, Kentucky', 'October 4 - 6'),
+      ('mda', 'Mid-Atlantic', 'Richmond, Virginia', 'October 12 - 14'),
+    ]
     regions_missing_championships = [
-        region for region in regions if region.key not in championship_regions and not region.obsolete]
+      r for r in regions if r.key.id() not in championships and
+      r.key.id() not in [c[0] for c in unannounced_championships] and
+      not r.obsolete
+    ]
 
     return render_template('regional.html',
                            c=common.Common(wca_disclaimer=True),
                            year=year,
                            championship_years=all_championship_years,
                            championships=championships,
-                           regions_missing_championships=regions_missing_championships,
-                           championship_regions=regions_for_dropdown)
+                           pbq_championships=pbq_championships,
+                           unannounced_championships=unannounced_championships,
+                           championship_regions=regions_for_dropdown,
+                           regions_missing_championships=regions_missing_championships)
 
 @bp.route('/state_championships')
 def state():
@@ -53,6 +73,8 @@ def state():
 
     championships = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.state != None)).fetch()
+    pbq_championships = {championship.state.id() : championship
+                         for championship in championships if championship.is_pbq}
     competitions = ndb.get_multi([c.competition for c in championships])
 
     states = State.query().fetch()
@@ -70,6 +92,7 @@ def state():
                            year=year,
                            championship_years=all_championship_years,
                            championships=championships,
+                           pbq_championships=pbq_championships,
                            championship_states=championship_states)
 
 @bp.route('/regional/title_policy')
@@ -77,33 +100,37 @@ def title_policy():
   with client.context():
     return render_template('regional_title.html', c=common.Common())
 
-@bp.route('/regional/eligibility/<region>/<year>')
-def regional_eligibility(region, year):
+@bp.route('/regional/eligibility/<region>/<year>/pbq', defaults={'pbq': True})
+@bp.route('/regional/eligibility/<region>/<year>', defaults={'pbq': False})
+def regional_eligibility(region, year, pbq):
   with client.context():
-    championship = Championship.get_by_id('%s_%d' % (region, int(year)))
-    #if not championship:
-    #  abort(404)
-    #competition_id = championship.competition.id()
-    competition_id = 'CubingUSANationals2023'
+    championship = Championship.get_by_id('%s_%d%s' % (region, int(year), '_pbq' if pbq else ''))
+    competition_id = championship.competition.id()
     wca_host = os.environ.get('WCA_HOST')
     data = requests.get(wca_host + '/api/v0/competitions/' + competition_id + '/wcif/public')
     if data.status_code != 200:
       abort(data.status_code)
     competition = data.json()
-    person_keys = [ndb.Key(User, str(person['wcaUserId'])) for person in competition['persons']]
+    person_keys = [ndb.Key(User, str(person['wcaUserId']))
+                   for person in competition['persons']
+                   if person['registration'] and person['registration']['status'] == 'accepted']
     users = ndb.get_multi(person_keys)
     if championship.region:
       region = championship.region.get()
       eligible_states = [key.id() for key in State.query(State.region == region.key).fetch(keys_only=True)]
     elif championship.state:
       eligible_states = [championship.state.id()]
-    logging.info(eligible_states)
-    logging.info(person_keys)
-    logging.info(users)
     eligible_users = [user for user in users if user and user.state and (user.state.id() in eligible_states)]
-    ineligible_users = [user for user in users if user and user.state and (user.state.id() not in eligible_states)]
-    logging.info(eligible_users)
-    logging.info(ineligible_users)
+    ineligible_users = [user for user in users if user and (not user.state or user.state.id() not in eligible_states)]
+    for user, person in zip(users, competition['persons']):
+      if user is None:
+        new_user = User()
+        new_user.name = person['name']
+        if person['wcaId']:
+          new_user.wca_person = ndb.Key(Person, person['wcaId'])
+        ineligible_users += [new_user]
+    eligible_users.sort(key=lambda u: u.name)
+    ineligible_users.sort(key=lambda u: u.name)
     return render_template('regional_eligibility.html',
                            c=common.Common(),
                            eligible_users=eligible_users,

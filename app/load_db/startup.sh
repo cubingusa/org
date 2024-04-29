@@ -6,4 +6,4 @@
 source env/bin/activate
 pip3 install -r requirements.txt
 
-CUBINGUSA_ENV=COMPUTE_ENGINE ENV=PROD ./app/load_db/load_db.sh
+CUBINGUSA_ENV=COMPUTE_ENGINE ENV=PROD GOOGLE_CLOUD_PROJECT=cubingusa-org ./app/load_db/load_db.sh

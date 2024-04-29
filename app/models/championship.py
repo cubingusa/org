@@ -9,6 +9,7 @@ class Championship(ndb.Model):
   region = ndb.KeyProperty(kind=Region)
   state = ndb.KeyProperty(kind=State)
   is_pbq = ndb.BooleanProperty()
+  organizer_email_sent = ndb.DateTimeProperty()
 
   competition = ndb.KeyProperty(kind=Competition)
 
@@ -26,7 +27,7 @@ class Championship(ndb.Model):
     return '%s_%d%s' % (region.key.id(), year, '_pbq' if is_pbq else '')
 
   @staticmethod
-  def StateChampionshipId(year, state):
+  def StateChampionshipId(year, state, is_pbq=False):
     return '%s_%d%s' % (state.key.id(), year, '_pbq' if is_pbq else '')
 
   def GetEligibleStateKeys(self):
