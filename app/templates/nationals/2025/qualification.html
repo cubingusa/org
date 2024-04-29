@@ -1,0 +1,93 @@
+{% import "components/css.html" as css %}
+{% import "components/faq.html" as faq %}
+{% extends "nationals/2025/base.html" %}
+{% block title%}Worlds 2025 - Qualification{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2025/qualifying') }}
+{% endblock %}
+{% block content %}
+  <p>
+    All events at the WCA World Championship 2025 will have qualification times, which you will need to beat at other WCA competitions in order to register.
+  </p>
+  <p>
+    We will have four registration periods, beginning in late 2024 or early 2025. Each registration period will have its own qualification times. In order to register during a certain registration period, you only need to qualify for one event.
+  </p>
+  <p>
+    Please do not make travel plans until your registration has been accepted. We do not know if the competition will fill, or if competitors in later phases will have an opportunity to register.
+  </p>
+  <p>
+    If you register in Phase 1, 2, or 3, you will be able to add additional events when later registration phases open. Even if registration fills in one of the early phases, the qualification times will still be set to the Phase 4 times before the end of registration. Don't forget to go back to the WCA site after Phase 4 opens to add all events that you wish to compete in -- we will <b>not</b> automatically add you to events!
+  </p>
+  <p>
+    3x3x3 Fewest Moves and 3x3x3 Multi-Blind will each be open to the top 50 registered competitors. After registration closes, we will remove all competitors who are not in the top 50 in each of those events.
+  </p>
+  <h3>Qualification Times</h3>
+  <p>
+    All qualification times are "less than" -- that is, you need a time <b>better than</b> the qualifying time to register. For example, you can only register for 3x3x3 Cube in Phase 1 if your best average is 7.99 seconds or better.
+  </p>
+  {% if not c.user %}
+    <p>
+      To see what phase you can register for, please <a href="/login">log in to CubingUSA</a> using your WCA account.
+    </p>
+  {% elif earliest_phase %}
+    <p>
+      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b><!--, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span>--></b>.
+    </p>
+  {% else %}
+    <p>
+      You currently do not have any qualification times, so currently you are not able to register for WCA World Championship 2025.
+    </p>
+  {% endif %}
+  <div id="qualtable-container">
+    <table class="table qualtable">
+      <tr>
+        <th scope="col">Event</th>
+        {% for phase in qualifications %}
+          <th scope="col" class="qualcell">Phase {{ loop.index }}</th>
+        {% endfor %}
+      </tr>
+      {% for event in c.events(include_magic=False, include_mbo=False, include_feet=False) %}
+        <tr>
+          <td class="qualcell"><img class="icon" src="{{ event.IconURL() }}">
+            {{ event.name }}
+            {% if 'bf' in event.key.id() %}
+              (single)
+            {% endif %}
+          </td>
+          {% for quals in qualifications %}
+            {% set qual = quals[event.key.id()] %}
+            {% set qualified = event.key.id() in events_by_phase[loop.index - 1] %}
+            {% set maybe_qualified = event.key.id() in maybe_events_by_phase[loop.index - 1] %}
+            <td class="qualcell {% if c.user %}{% if qualified %}qualified{% elif maybe_qualified %}maybe_qualified{% else %}not_qualified{% endif %}{% endif %}">
+              {% if c.type(qual) == c.str %}
+                {{ qual }}
+              {% else %}
+                {{ c.formatters.FormatQualifying(qual, event.key, 'bf' not in event.key.id(), short_units=True, shorten_over_ten=False) }}
+              {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      <!--
+      <tr>
+        <td>
+          Registration Open
+        </td>
+        {% for time in open_times %}
+          <td class="ts qualcell" data-ts="{{ time.timestamp() }}" data-divider="<br/>"></td>
+        {% endfor %}
+      </tr>
+      <tr>
+        <td>
+          Registration Close
+        </td>
+        {% for time in close_times %}
+          <td class="qualcell ts" data-ts="{{ time.timestamp() }}" data-divider="<br/>"></td>
+        {% endfor %}
+      </tr>
+      -->
+    </table>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+  <script src="/static/js/worlds/qualification.js"></script>
+{% endblock %}
