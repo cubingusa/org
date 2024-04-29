@@ -266,8 +266,6 @@ def worlds2025qualification():
     person = None
     if auth.logged_in():
       person = auth.user().wca_person
-    if request.args.get('personid'):
-      person = ndb.Key(Person, request.args.get('personid'))
     if person:
       ranks_average = RankAverage.query(RankAverage.person == person).fetch()
       ranks_single = RankSingle.query(RankAverage.person == person).fetch()
