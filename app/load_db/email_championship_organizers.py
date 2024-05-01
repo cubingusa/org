@@ -78,9 +78,9 @@ def EmailChampionshipOrganizers():
             ] + emails,
             'Subject': subject,
             'TextPart': body,
-            'Headers': [
+            'Headers': {
               'Reply-To': 'tim@cubingusa.org',
-            ],
+            },
           }
         ]
       }
