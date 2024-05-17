@@ -166,6 +166,11 @@ def nac2024qualifying():
   with client.context():
     return render_template('nationals/2024/qualifying.html', c=Common())
 
+@nac_bp.route('/2024/unofficial')
+def nac2024unofficial():
+  with client.context():
+    return render_template('nationals/2024/unofficial.html', c=Common())
+
 @nac_bp.route('/2024/volunteers')
 def nac2024volunteers():
   with client.context():
