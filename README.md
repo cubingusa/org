@@ -14,6 +14,14 @@ If this is your first time running the CubingUSA website locally, follow the ins
 
 ### Run the app
 
+In another shell, run the Google Cloud local datastore:
+
+```sh
+gcloud beta emulators datastore start
+```
+
+Then run the server:
+
 ```sh
 npm run all
 ```
