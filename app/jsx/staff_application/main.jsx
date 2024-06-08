@@ -1,10 +1,25 @@
+import { createRoot } from "react-dom/client";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+  useParams,
+} from "react-router-dom";
+
 function StaffApplication() {
-  return (
-    <div>Hello world!</div>
-  );
+  const { competitionId } = useParams();
+  return <div>{competitionId}</div>;
 }
 
-ReactDOM.render(
-  <StaffApplication />,
-  document.getElementById('jsx-container')
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="staff">
+      <Route path=":competitionId" element={<StaffApplication />}></Route>
+    </Route>,
+  ),
+);
+
+createRoot(document.getElementById("jsx-container")).render(
+  <RouterProvider router={router} />,
 );
