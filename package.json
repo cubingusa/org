@@ -46,6 +46,6 @@
     "react-router-dom": "^6.23.1"
   },
   "lint-staged": {
-    "*.{js,css,md}": "prettier --write"
+    "*.{jsx}": "prettier --write"
   }
 }
