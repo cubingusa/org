@@ -4,18 +4,25 @@ import {
   createRoutesFromElements,
   RouterProvider,
   Route,
+  useLoaderData,
   useParams,
 } from "react-router-dom";
+import { CompetitionDataLoader, CompetitionData } from './data_loader'
 
 function StaffApplication() {
+  const competition = useLoaderData();
   const { competitionId } = useParams();
-  return <div>{competitionId}</div>;
+  return <div>{ competition.wcif.name }</div>;
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="staff">
-      <Route path=":competitionId" element={<StaffApplication />}></Route>
+      <Route path=":competitionId"
+             loader={({ params }) => {
+               return CompetitionDataLoader(params)
+             }}
+             element={<StaffApplication/>}></Route>
     </Route>,
   ),
 );

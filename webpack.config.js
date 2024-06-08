@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-  entry: './app/jsx/staff_application/main.jsx',
+  entry: './app/jsx/staff_application/main.tsx',
   mode: 'development',
   output: {
     filename: '[name].bundle.js',
@@ -13,13 +13,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: ['babel-loader'],
       }
     ]
   },
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: [".ts", ".js", ".tsx"]
   }
 }
