@@ -4,27 +4,11 @@ import {
   createRoutesFromElements,
   RouterProvider,
   Route,
-  useLoaderData,
-  useParams,
 } from "react-router-dom";
 
+import { Application } from "./application";
 import { CompetitionDataLoader } from "./data_loader";
 import { CompetitionData } from "./types/competition_data";
-
-function StaffApplication() {
-  const { wcif, user } = useLoaderData();
-  const { competitionId } = useParams();
-  let adminText;
-  if (user.is_admin) {
-    adminText = <div>You are an admin</div>;
-  }
-  return (
-    <div>
-      <div>{wcif.name}</div>
-      {adminText}
-    </div>
-  );
-}
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,8 +18,10 @@ const router = createBrowserRouter(
         loader={({ params }) => {
           return CompetitionDataLoader(params);
         }}
-        element={<StaffApplication />}
-      ></Route>
+        id="competition"
+      >
+        <Route index element={<Application />} id="application"></Route>
+      </Route>
     </Route>,
   ),
 );
