@@ -12,45 +12,15 @@ You will need to install the following:
 
 If this is your first time running the CubingUSA website locally, follow the instructions in `doc/deploy.sh` to set up your local development server.
 
-### sass
-
-Run
-```sh
-./run_sass.sh
-```
-This command will keep running, and watch for updates to the scss files.
-
-### Setup Cloud Datastore
-
-We use Google Cloud Datastore, which you will need to run locally.  Run the command
-```sh
-gcloud beta emulators datastore start
-```
-
 ### Run the app
 
-Run the following commands in the same terminal:
-
-Enable the virtualenv:
 ```sh
-source env/bin/activate
-```
-Install python dependencies:
-```sh
-pip install -r requirements.txt
-```
-Configure the app to use the local datastore:
-```sh
-$(gcloud beta emulators datastore env-init)
-```
-Run the app:
-```sh
-gunicorn -b :8083 app.flask:app --reload
+npm run all
 ```
 
 You can use the `ADMIN_WCA_ID` environment variable to make yourself an admin:
 ```sh
-ADMIN_WCA_ID=2005REYN01 gunicorn -b :8083 app.flask:app --reload
+ADMIN_WCA_ID=2005REYN01 npm run all
 ```
 
 ## Deploying to staging

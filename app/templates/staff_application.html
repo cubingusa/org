@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title%}Staff Application{% endblock %}
+{% block content %}
+  <div id="jsx-container">
+  </div>
+  {% if c.is_prod() %}
+    <script src="{{ url_for('static', filename='bower_components/react/react.production.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bower_components/react/react-dom.production.min.js') }}"></script>
+  {% else %}
+    <script src="{{ url_for('static', filename='bower_components/react/react.development.js') }}"></script>
+    <script src="{{ url_for('static', filename='bower_components/react/react-dom.development.js') }}"></script>
+  {% endif %}
+  <script src="{{ url_for('static', filename='js/react/staff_application/main.bundle.js') }}"></script>
+{% endblock %}

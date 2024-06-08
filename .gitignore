@@ -13,3 +13,7 @@ src/static/css/
 exports/
 
 .comp_data.*
+
+app/static/bower_components/
+app/static/js/react/
+node_modules/

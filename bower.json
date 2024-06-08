@@ -1,0 +1,22 @@
+{
+  "name": "cubingusa",
+  "homepage": "https://github.com/cubingusa/org",
+  "authors": [
+    "Tim Reynolds <tim@cubingusa.org>"
+  ],
+  "description": "CubingUSA frontend",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "react": "^16.1.0"
+  }
+}
