@@ -9,7 +9,8 @@
   "scripts": {
     "site": "source env/bin/activate && pip install -r requirements.txt && $(gcloud beta emulators datastore env-init) && gunicorn -b :8083 app.flask:app --reload $(find app/templates -type f -name '*.html' -exec echo --reload-extra-file {} \\;)",
     "sass": "./run_sass.sh",
-    "all": "concurrently --kill-others \"npm run site\" \"npm run sass\" \"npx webpack --watch\""
+    "all": "concurrently --kill-others \"npm run site\" \"npm run sass\" \"npx webpack --watch\"",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -35,7 +36,16 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bower": "^1.8.14",
     "concurrently": "^8.2.2",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
+    "prettier": "^3.3.1",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "react-router-dom": "^6.23.1"
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
