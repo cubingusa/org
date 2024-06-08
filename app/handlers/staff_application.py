@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, render_template, redirect, abort
 from google.cloud import ndb
 import logging
 import requests
@@ -9,6 +9,16 @@ from app.models.user import Roles, User
 
 bp = Blueprint('staff_application', __name__)
 client = ndb.Client()
+
+def is_admin(user, wcif):
+  if not user:
+    return False
+  if user.HasAnyRole(Roles.AdminRoles()):
+    return True
+  for person in wcif.persons:
+    if person.wcaUserId == int(user.key.id()):
+      return 'delegate' in person.roles or 'organizer' in person.roles or 'trainee-delegate' in person.roles
+  return False
 
 def get_wcif(competition_id):
   # TODO: switch this to env.WCA_HOST.
@@ -47,3 +57,16 @@ def enable(competition_id):
 def api_wcif(competition_id):
   with client.context():
     return get_wcif(competition_id)
+
+@bp.route('/staff_api/<competition_id>/me')
+def me_wcif(competition_id):
+  with client.context():
+    user = auth.user()
+    if not user:
+      abort(401)
+    return {
+      'id': user.key.id(),
+      'name': user.name,
+      'email': user.email,
+      'is_admin': is_admin(user, get_wcif(competition_id))
+    }

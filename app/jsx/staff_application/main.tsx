@@ -7,22 +7,35 @@ import {
   useLoaderData,
   useParams,
 } from "react-router-dom";
-import { CompetitionDataLoader, CompetitionData } from './data_loader'
+
+import { CompetitionDataLoader } from "./data_loader";
+import { CompetitionData } from "./types/competition_data";
 
 function StaffApplication() {
-  const competition = useLoaderData();
+  const { wcif, user } = useLoaderData();
   const { competitionId } = useParams();
-  return <div>{ competition.wcif.name }</div>;
+  let adminText;
+  if (user.is_admin) {
+    adminText = <div>You are an admin</div>;
+  }
+  return (
+    <div>
+      <div>{wcif.name}</div>
+      {adminText}
+    </div>
+  );
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="staff">
-      <Route path=":competitionId"
-             loader={({ params }) => {
-               return CompetitionDataLoader(params)
-             }}
-             element={<StaffApplication/>}></Route>
+      <Route
+        path=":competitionId"
+        loader={({ params }) => {
+          return CompetitionDataLoader(params);
+        }}
+        element={<StaffApplication />}
+      ></Route>
     </Route>,
   ),
 );

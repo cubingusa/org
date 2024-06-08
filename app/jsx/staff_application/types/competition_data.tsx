@@ -1,5 +1,7 @@
-import { Competition } from '@wca/wca-helpers';
+import { Competition } from "@wca/wca-helpers";
+import { User } from "./user";
 
-interface CompetitionData {
+export interface CompetitionData {
   wcif: Competition;
+  user: User | null;
 }
