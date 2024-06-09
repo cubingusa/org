@@ -6,6 +6,7 @@ import {
   Route,
 } from "react-router-dom";
 
+import { Admin } from "./admin";
 import { Application } from "./application";
 import { CompetitionDataLoader } from "./data_loader";
 import { CompetitionData } from "./types/competition_data";
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
         id="competition"
       >
         <Route index element={<Application />} id="application"></Route>
+        <Route path="admin" element={<Admin />}></Route>
       </Route>
     </Route>,
   ),

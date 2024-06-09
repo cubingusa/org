@@ -45,6 +45,8 @@
   },
   "dependencies": {
     "@wca/helpers": "^1.1.5",
+    "bootstrap": "^5.3.3",
+    "react-bootstrap": "^2.10.2",
     "react-router-dom": "^6.23.1"
   },
   "lint-staged": {
