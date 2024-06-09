@@ -10,7 +10,7 @@
 .navbar-left {
   @extend .nav;
   @extend .navbar-nav;
-  @extend .mr-auto;
+  @extend .me-auto;
 }
 
 .navbar-right {
@@ -69,4 +69,8 @@ div#content {
 h4 .material-symbols-outlined {
   vertical-align: bottom;
   line-height: 1.2;
+}
+
+a {
+  text-decoration: none;
 }

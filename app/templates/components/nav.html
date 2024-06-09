@@ -3,7 +3,7 @@
   <li>
     <a class="navbar-item {% if active %}active{% endif %}"
        href="{{ path }}">
-      {{ caller() }}{% if active %}<span class="sr-only"> (current)</span>{% endif %}
+      {{ caller() }}{% if active %}<span class="visually-hidden"> (current)</span>{% endif %}
     </a>
   </li>
 {% endmacro %}
