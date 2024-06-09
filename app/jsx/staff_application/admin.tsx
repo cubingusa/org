@@ -1,13 +1,19 @@
 import { useState, useCallback } from "react";
 import { useRouteLoaderData, Navigate, Link } from "react-router-dom";
-import { Form } from "types/form";
+import { CompetitionData } from "./types/competition_data";
+import { Form } from "./types/form";
 
-function FormEditor(props) {
+interface FormEditorProps {
+  form: Form;
+  deleteForm: Function;
+}
+
+function FormEditor(props: FormEditorProps) {
   const [name, setName] = useState(props.form.name || "");
   const form = props.form;
   const deleteForm = props.deleteForm;
 
-  const updateName = function (name) {
+  const updateName = function (name: string) {
     form.name = name;
     setName(name);
   };
@@ -66,7 +72,9 @@ function FormEditor(props) {
 
 export function Admin() {
   const [spinning, setSpinning] = useState(false);
-  const { wcif, user, settings } = useRouteLoaderData("competition");
+  const { wcif, user, settings } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
   const [formCount, setFormCount] = useState((settings.forms || []).length);
 
   const submit = async function () {
@@ -100,7 +108,7 @@ export function Admin() {
     settings.nextFormId += 1;
   };
 
-  const deleteForm = function (form) {
+  const deleteForm = function (form: Form) {
     settings.forms = settings.forms.filter((f) => f.id !== form.id);
     setFormCount(settings.forms.length);
   };

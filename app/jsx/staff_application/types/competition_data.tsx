@@ -1,4 +1,4 @@
-import { Competition } from "@wca/wca-helpers";
+import { Competition } from "@wca/helpers";
 import { User } from "./user";
 import { Form } from "./form";
 

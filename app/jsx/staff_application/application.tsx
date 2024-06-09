@@ -1,7 +1,10 @@
 import { useRouteLoaderData, useParams, Link } from "react-router-dom";
+import { CompetitionData } from "./types/competition_data";
 
 export function Application() {
-  const { wcif, user, settings } = useRouteLoaderData("competition");
+  const { wcif, user, settings } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
   const { competitionId } = useParams();
   let adminText;
   if (user.is_admin) {
