@@ -10,3 +10,5 @@ __pycache__/
 .gitignore
 env/
 .env.dev
+/jsx/
+node_modules/
