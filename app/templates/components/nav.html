@@ -11,7 +11,7 @@
   {% set active = c.uri_matches_any(path_list) %}
   <div class="dropdown {% if active %}active{% endif %}">
     <a class="navbar-dropdown"
-       data-toggle="dropdown"
+       data-bs-toggle="dropdown"
        aria-haspopup="true"
        aria-expanded="false">
       {{ caller() }}
