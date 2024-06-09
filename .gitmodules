@@ -4,9 +4,3 @@
 [submodule "external/icons"]
 	path = external/icons
 	url = https://github.com/cubing/icons.git
-[submodule "external/moment"]
-	path = external/moment
-	url = https://github.com/moment/moment.git
-[submodule "external/bootstrap-datetimepicker"]
-	path = external/bootstrap-datetimepicker
-	url = https://github.com/Eonasdan/bootstrap-datetimepicker
