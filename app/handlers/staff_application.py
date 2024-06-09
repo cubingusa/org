@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, abort
+from flask import Blueprint, render_template, redirect, abort, request
 from google.cloud import ndb
 import logging
 import requests
@@ -70,3 +70,25 @@ def me_wcif(competition_id):
       'email': user.email,
       'is_admin': is_admin(user, get_wcif(competition_id))
     }
+
+@bp.route('/staff_api/<competition_id>/settings', methods=['GET'])
+def get_settings(competition_id):
+  with client.context():
+    settings = ApplicationSettings.get_by_id(competition_id)
+    if not settings:
+      abort(404)
+    if settings.details is None:
+      return {}
+    return settings.details
+
+@bp.route('/staff_api/<competition_id>/settings', methods=['PUT'])
+def put_settings(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      abort(401)
+    settings = ApplicationSettings(id=competition_id)
+    settings.details = request.json
+    settings.put()
+    return '', 200
