@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-export interface YesNoQuestion {
+export interface YesNoQuestion extends QuestionBase {
   questionType: "yes_no";
 }
 
@@ -9,19 +9,25 @@ export enum TextQuestionType {
   Short = 1,
 }
 
-export interface TextQuestion {
+export interface TextQuestion extends QuestionBase {
   questionType: "text";
   textQuestionType: TextQuestionType;
 }
 
-export interface Question {
+export interface NullQuestion extends QuestionBase {
+  questionType: "null";
+}
+
+interface QuestionBase {
   // Unique within a form.
   id: number;
 
   name: string;
   required: boolean;
-  question: TextQuestion | YesNoQuestion;
+  questionType: "yes_no" | "text" | "null";
 }
+
+export type Question = YesNoQuestion | TextQuestion | NullQuestion;
 
 export interface Form {
   // Unique within a competition.
@@ -31,4 +37,7 @@ export interface Form {
   description: string;
   isOpen: boolean;
   deadline: DateTime | null;
+  nextQuestionId: number;
+
+  questions: Question[];
 }

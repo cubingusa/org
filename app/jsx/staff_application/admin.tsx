@@ -1,7 +1,16 @@
 import { useState, useCallback } from "react";
 import { useRouteLoaderData, Navigate, Link } from "react-router-dom";
 import { CompetitionData } from "./types/competition_data";
-import { Form } from "./types/form";
+import { Form, Question } from "./types/form";
+
+interface QuestionEditorProps {
+  question: Question;
+  deleteQuestion: Function;
+}
+
+function QuestionEditor(props: QuestionEditorProps) {
+  return <div>hello world</div>;
+}
 
 interface FormEditorProps {
   form: Form;
@@ -10,12 +19,30 @@ interface FormEditorProps {
 
 function FormEditor(props: FormEditorProps) {
   const [name, setName] = useState(props.form.name || "");
+  const [numQuestions, setNumQuestions] = useState(props.form.questions.length);
   const form = props.form;
   const deleteForm = props.deleteForm;
 
   const updateName = function (name: string) {
     form.name = name;
     setName(name);
+  };
+
+  const newQuestion = function () {
+    event.preventDefault();
+    form.questions.push({
+      id: form.nextQuestionId,
+      name: "New Question",
+      required: false,
+      questionType: "null",
+    });
+    form.nextQuestionId++;
+    setNumQuestions(form.questions.length);
+  };
+
+  const deleteQuestion = function (question: Question) {
+    form.questions = form.questions.filter((q) => q.id !== question.id);
+    setNumQuestions(form.questions.length);
   };
 
   return (
@@ -58,12 +85,29 @@ function FormEditor(props: FormEditorProps) {
             placeholder="Text to show at the top of the form"
           ></textarea>
         </div>
+        <div>Questions</div>
+        <ul className="list-group">
+          {form.questions.map((question) => (
+            <li className="list-group-item" key={question.id + 1}>
+              <QuestionEditor
+                question={question}
+                deleteQuestion={deleteQuestion}
+              />
+            </li>
+          ))}
+          <li className="list-group-item" key="new">
+            <button className="btn btn-success mb-3" onClick={newQuestion}>
+              <span className="material-symbols-outlined">add</span> Add
+              Question
+            </button>
+          </li>
+        </ul>
         <button
           type="button"
           className="btn btn-danger"
           onClick={(e) => deleteForm(form)}
         >
-          <span className="material-symbols-outlined">delete</span> Delete
+          <span className="material-symbols-outlined">delete</span> Delete Form
         </button>
       </div>
     </div>
@@ -78,7 +122,6 @@ export function Admin() {
   const [formCount, setFormCount] = useState((settings.forms || []).length);
 
   const submit = async function () {
-    console.log(settings);
     event.preventDefault();
     setSpinning(true);
     await fetch(`/staff_api/${wcif.id}/settings`, {
@@ -91,18 +134,14 @@ export function Admin() {
 
   const newForm = function () {
     event.preventDefault();
-    if (settings.forms === undefined) {
-      settings.forms = [];
-    }
-    if (settings.nextFormId === undefined) {
-      settings.nextFormId = 0;
-    }
     settings.forms.push({
       id: settings.nextFormId,
       name: "New Form",
       description: "",
       isOpen: false,
       deadline: null,
+      nextQuestionId: 0,
+      questions: [],
     });
     setFormCount(settings.forms.length);
     settings.nextFormId += 1;
@@ -162,7 +201,7 @@ export function Admin() {
         </div>
         <div className="accordion" id="formAccordion">
           {(settings.forms || []).map((form) => (
-            <div className="accordion-item">
+            <div className="accordion-item" key={form.id}>
               <h2 className="accordion-header">
                 <button
                   className="accordion-button collapsed"
