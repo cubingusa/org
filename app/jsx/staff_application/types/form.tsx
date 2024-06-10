@@ -24,7 +24,6 @@ interface QuestionBase {
 
   name: string;
   required: boolean;
-  questionType: "yes_no" | "text" | "null";
 }
 
 export type Question = YesNoQuestion | TextQuestion | NullQuestion;

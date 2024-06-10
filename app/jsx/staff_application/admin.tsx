@@ -9,7 +9,77 @@ interface QuestionEditorProps {
 }
 
 function QuestionEditor(props: QuestionEditorProps) {
-  return <div>hello world</div>;
+  const [questionType, setQuestionType] = useState(
+    props.question.questionType || "",
+  );
+  const types = {
+    null: "Question Type",
+    text: "Text",
+    yes_no: "Yes / No",
+  };
+
+  const updateQuestionType = function (newType: string) {
+    switch (newType) {
+      case "null":
+        Object.assign(props.question, { questionType: "null" });
+        break;
+      case "text":
+        Object.assign(props.question, { questionType: "text" });
+        break;
+      case "yes_no":
+        Object.assign(props.question, { questionType: "yes_no" });
+        break;
+    }
+    setQuestionType(newType);
+  };
+
+  const header = (
+    <div className="row">
+      <div className="col">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Question Text"
+          value={props.question.name}
+          onChange={(e) => (props.question.name = e.target.value)}
+        />
+      </div>
+      <div className="col">
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id={"required-" + props.question.id}
+            defaultChecked={props.question.required}
+            onChange={(e) => (props.question.required = e.target.checked)}
+          />
+          <label
+            className="form-check-label"
+            htmlFor={"required-" + props.question.id}
+          >
+            Required
+          </label>
+        </div>
+      </div>
+      <div className="col">
+        <select
+          className="form-select"
+          value={props.question.questionType}
+          onChange={(e) => updateQuestionType(e.target.value)}
+        >
+          {Object.entries(types).map(([typeId, description]) => {
+            return (
+              <option value={typeId} key={typeId}>
+                {description}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    </div>
+  );
+  return header;
 }
 
 interface FormEditorProps {
