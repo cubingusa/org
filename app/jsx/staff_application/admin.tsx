@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useRouteLoaderData, Navigate, Link } from "react-router-dom";
 import { CompetitionData } from "./types/competition_data";
-import { Form, Question } from "./types/form";
+import { Form, Question, TextQuestion, TextQuestionType } from "./types/form";
 
 interface QuestionEditorProps {
   question: Question;
@@ -9,9 +9,8 @@ interface QuestionEditorProps {
 }
 
 function QuestionEditor(props: QuestionEditorProps) {
-  const [questionType, setQuestionType] = useState(
-    props.question.questionType || "",
-  );
+  const question = props.question;
+  const [questionType, setQuestionType] = useState(question.questionType || "");
   const types = {
     null: "Question Type",
     text: "Text",
@@ -21,16 +20,21 @@ function QuestionEditor(props: QuestionEditorProps) {
   const updateQuestionType = function (newType: string) {
     switch (newType) {
       case "null":
-        Object.assign(props.question, { questionType: "null" });
+        Object.assign(question, { questionType: "null" });
         break;
       case "text":
-        Object.assign(props.question, { questionType: "text" });
+        Object.assign(question, { questionType: "text" });
         break;
       case "yes_no":
-        Object.assign(props.question, { questionType: "yes_no" });
+        Object.assign(question, { questionType: "yes_no" });
         break;
     }
     setQuestionType(newType);
+  };
+
+  const selectTextQuestionType = function (textQuestionType: TextQuestionType) {
+    console.log(textQuestionType);
+    (question as TextQuestion).textQuestionType = textQuestionType;
   };
 
   const header = (
@@ -40,8 +44,8 @@ function QuestionEditor(props: QuestionEditorProps) {
           type="text"
           className="form-control"
           placeholder="Question Text"
-          value={props.question.name}
-          onChange={(e) => (props.question.name = e.target.value)}
+          value={question.name}
+          onChange={(e) => (question.name = e.target.value)}
         />
       </div>
       <div className="col">
@@ -50,13 +54,13 @@ function QuestionEditor(props: QuestionEditorProps) {
             className="form-check-input"
             type="checkbox"
             role="switch"
-            id={"required-" + props.question.id}
-            defaultChecked={props.question.required}
-            onChange={(e) => (props.question.required = e.target.checked)}
+            id={"required-" + question.id}
+            defaultChecked={question.required}
+            onChange={(e) => (question.required = e.target.checked)}
           />
           <label
             className="form-check-label"
-            htmlFor={"required-" + props.question.id}
+            htmlFor={"required-" + question.id}
           >
             Required
           </label>
@@ -65,7 +69,7 @@ function QuestionEditor(props: QuestionEditorProps) {
       <div className="col">
         <select
           className="form-select"
-          value={props.question.questionType}
+          value={questionType}
           onChange={(e) => updateQuestionType(e.target.value)}
         >
           {Object.entries(types).map(([typeId, description]) => {
@@ -79,7 +83,57 @@ function QuestionEditor(props: QuestionEditorProps) {
       </div>
     </div>
   );
-  return header;
+  let questionDetails;
+  switch (question.questionType) {
+    case "text":
+      questionDetails = (
+        <div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name={"question-" + question.id + "-length"}
+              id={"question-" + question.id + "-short"}
+              defaultChecked={
+                question.textQuestionType == TextQuestionType.Short
+              }
+              onChange={(e) => selectTextQuestionType(TextQuestionType.Short)}
+            />
+            <label
+              className="form-check-label"
+              htmlFor={"question-" + question.id + "-short"}
+            >
+              Short Answer
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name={"question-" + question.id + "-length"}
+              id={"question-" + question.id + "-long"}
+              defaultChecked={
+                question.textQuestionType == TextQuestionType.Long
+              }
+              onChange={(e) => selectTextQuestionType(TextQuestionType.Long)}
+            />
+            <label
+              className="form-check-label"
+              htmlFor={"question-" + question.id + "-long"}
+            >
+              Long Answer
+            </label>
+          </div>
+        </div>
+      );
+      break;
+  }
+  return (
+    <>
+      {header}
+      {questionDetails}
+    </>
+  );
 }
 
 interface FormEditorProps {
