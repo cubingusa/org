@@ -276,7 +276,7 @@ export function Admin() {
     setFormCount(settings.forms.length);
   };
 
-  if (user === null || !user.is_admin) {
+  if (user === null || !user.isAdmin) {
     return <Navigate to="" />;
   }
   let spinner;

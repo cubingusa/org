@@ -69,8 +69,9 @@ def me_wcif(competition_id):
     return {
       'id': user.key.id(),
       'name': user.name,
+      'wcaId': user.wca_person.id() if user.wca_person else '',
       'email': user.email,
-      'is_admin': is_admin(user, get_wcif(competition_id))
+      'isAdmin': is_admin(user, get_wcif(competition_id))
     }
 
 @bp.route('/staff_api/<competition_id>/settings', methods=['GET'])

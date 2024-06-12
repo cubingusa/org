@@ -1,6 +1,7 @@
 export interface User {
   id: number;
   name: string;
+  wcaId: string;
   email: string;
-  is_admin: boolean;
+  isAdmin: boolean;
 }

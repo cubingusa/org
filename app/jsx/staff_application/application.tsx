@@ -205,7 +205,7 @@ export function Application() {
   ) as CompetitionData;
   const { competitionId } = useParams();
   let adminText;
-  if (user.is_admin) {
+  if (user.isAdmin) {
     adminText = (
       <div className="alert alert-primary">
         You are logged in as an admin.{" "}
@@ -271,12 +271,27 @@ export function Application() {
       })}
     </div>
   );
+  let nameElt = !!user.wcaId ? (
+    <a href={"https://wca.link/" + user.wcaId}>{user.name}</a>
+  ) : (
+    <>{user.name}</>
+  );
+  let loggedIn = (
+    <div>
+      You are logged in as {nameElt}. Updates to your application will be sent
+      to {user.email}. If you would like to submit your application for another
+      person, please <a href="/logout">log out</a> and log back in using their
+      account.
+    </div>
+  );
 
   return (
     <div>
       <h3>{wcif.name} Staff Application</h3>
       {adminText}
-      {settings.description}
+      <div>{settings.description}</div>
+      <p />
+      {loggedIn}
       <p />
       {forms}
     </div>
