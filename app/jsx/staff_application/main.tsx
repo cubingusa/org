@@ -8,7 +8,10 @@ import {
 
 import { Admin } from "./admin";
 import { Application } from "./application";
-import { CompetitionDataLoader } from "./data_loader";
+import {
+  CompetitionDataLoader,
+  PersonalApplicationDataLoader,
+} from "./data_loader";
 import { CompetitionData } from "./types/competition_data";
 
 const router = createBrowserRouter(
@@ -21,7 +24,14 @@ const router = createBrowserRouter(
         }}
         id="competition"
       >
-        <Route index element={<Application />} id="application"></Route>
+        <Route
+          index
+          element={<Application />}
+          id="application"
+          loader={({ params }) => {
+            return PersonalApplicationDataLoader(params);
+          }}
+        ></Route>
         <Route path="admin" element={<Admin />}></Route>
       </Route>
     </Route>,

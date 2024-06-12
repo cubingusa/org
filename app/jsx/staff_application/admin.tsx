@@ -44,7 +44,7 @@ function QuestionEditor(props: QuestionEditorProps) {
           type="text"
           className="form-control"
           placeholder="Question Text"
-          value={question.name}
+          defaultValue={question.name}
           onChange={(e) => (question.name = e.target.value)}
         />
       </div>
@@ -204,7 +204,7 @@ function FormEditor(props: FormEditorProps) {
           <textarea
             className="form-control"
             id={"description-" + form.id}
-            value={form.description}
+            defaultValue={form.description}
             onChange={(e) => (form.description = e.target.value)}
             placeholder="Text to show at the top of the form"
           ></textarea>
@@ -312,7 +312,7 @@ export function Admin() {
           <textarea
             className="form-control"
             id="description"
-            value={settings.description}
+            defaultValue={settings.description}
             onChange={(e) => (settings.description = e.target.value)}
             placeholder="Text to show at the top of the application page"
           ></textarea>

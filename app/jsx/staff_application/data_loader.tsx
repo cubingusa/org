@@ -1,4 +1,5 @@
 import { CompetitionData } from "./types/competition_data";
+import { PersonalApplicationData } from "./types/personal_application_data";
 
 export async function CompetitionDataLoader(
   params: any,
@@ -11,5 +12,14 @@ export async function CompetitionDataLoader(
     wcif: await wcif.json(),
     user: user_out,
     settings: await settings.json(),
+  };
+}
+
+export async function PersonalApplicationDataLoader(
+  params: any,
+): Promise<PersonalApplicationData> {
+  const forms = await fetch(`/staff_api/${params.competitionId}/my_forms`);
+  return {
+    forms: await forms.json(),
   };
 }

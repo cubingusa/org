@@ -1,5 +1,12 @@
 import { DateTime } from "luxon";
 
+export interface MultipleChoiceQuestion extends QuestionBase {
+  questionType: "multiple_choice";
+  options: Map<number, string>;
+  nextOptionId: number;
+  multipleAllewd: boolean;
+}
+
 export interface YesNoQuestion extends QuestionBase {
   questionType: "yes_no";
 }
@@ -26,7 +33,11 @@ interface QuestionBase {
   required: boolean;
 }
 
-export type Question = YesNoQuestion | TextQuestion | NullQuestion;
+export type Question =
+  | YesNoQuestion
+  | TextQuestion
+  | NullQuestion
+  | MultipleChoiceQuestion;
 
 export interface Form {
   // Unique within a competition.

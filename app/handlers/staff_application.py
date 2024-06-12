@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template, redirect, abort, request
 from google.cloud import ndb
+import datetime
 import logging
 import requests
 
 from app.lib import auth, common
-from app.models.staff_application import ApplicationSettings
+from app.models.staff_application import ApplicationSettings, SubmittedForm
 from app.models.user import Roles, User
+from app.models.wca.competition import Competition
 
 bp = Blueprint('staff_application', __name__)
 client = ndb.Client()
@@ -92,3 +94,38 @@ def put_settings(competition_id):
     settings.details = request.json
     settings.put()
     return '', 200
+
+@bp.route('/staff_api/<competition_id>/form_submission/<form_id>', methods=['POST'])
+def save_form(competition_id, form_id):
+  form_id = int(form_id)
+  with client.context():
+    user = auth.user()
+    if user is None:
+      abort(401)
+    key = SubmittedForm.Key(competition_id, form_id, user.key.id())
+    form = SubmittedForm.get_by_id(key)
+    if not form:
+      form = SubmittedForm(id=key)
+      form.user = user.key
+      form.competition = ndb.Key(Competition, competition_id)
+      form.form_id = form_id
+      form.submitted_at = datetime.datetime.now()
+    form.updated_at = datetime.datetime.now()
+    form.details = request.json
+    form.put()
+    return '', 200
+
+@bp.route('/staff_api/<competition_id>/my_forms', methods=['GET'])
+def get_submitted_forms(competition_id):
+  with client.context():
+    user = auth.user()
+    if user is None:
+      abort(401)
+    all_forms = SubmittedForm.query(ndb.AND(SubmittedForm.competition == ndb.Key(Competition, competition_id),
+                                            SubmittedForm.user == user.key))
+    return [{
+      'formId': form.form_id,
+      'submittedAtTs': form.submitted_at.timestamp(),
+      'updatedAtTs': form.updated_at.timestamp(),
+      'details': form.details
+    } for form in all_forms.iter()]
