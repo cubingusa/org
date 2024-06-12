@@ -1,5 +1,21 @@
-import { Routes, Route } from "react-router-dom";
-import { Admin, AdminGuard } from "./admin";
+import {
+  Routes,
+  Route,
+  useRouteLoaderData,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+import { Admin } from "./admin";
+import { CompetitionData } from "../types/competition_data";
+
+function AdminGuard() {
+  const { user } = useRouteLoaderData("competition") as CompetitionData;
+  if (user !== null && user.isAdmin) {
+    return <Outlet />;
+  } else {
+    return <Navigate to=".." />;
+  }
+}
 
 export function AdminRoutes() {
   return (

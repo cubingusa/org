@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { useRouteLoaderData, Navigate, Link, Outlet } from "react-router-dom";
+import { useState } from "react";
+import { useRouteLoaderData, Link } from "react-router-dom";
 import { CompetitionData } from "../types/competition_data";
 import { Form } from "../types/form";
 import { FormEditor } from "./form_editor";
@@ -122,13 +122,4 @@ export function Admin() {
       </form>
     </div>
   );
-}
-
-export function AdminGuard() {
-  const { user } = useRouteLoaderData("competition") as CompetitionData;
-  if (user !== null && user.isAdmin) {
-    return <Outlet />;
-  } else {
-    return <Navigate to=".." />;
-  }
 }
