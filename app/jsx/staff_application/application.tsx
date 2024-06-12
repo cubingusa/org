@@ -204,7 +204,7 @@ export function Application() {
   ) as CompetitionData;
   const { competitionId } = useParams();
   let adminText;
-  if (user.isAdmin) {
+  if (user?.isAdmin) {
     adminText = (
       <div className="alert alert-primary">
         You are logged in as an admin.{" "}

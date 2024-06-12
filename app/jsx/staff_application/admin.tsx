@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useRouteLoaderData, Navigate, Link } from "react-router-dom";
+import { useRouteLoaderData, Navigate, Link, Outlet } from "react-router-dom";
 import { CompetitionData } from "./types/competition_data";
 import { Form, Question, TextQuestion, TextQuestionType } from "./types/form";
 
@@ -276,9 +276,6 @@ export function Admin() {
     setFormCount(settings.forms.length);
   };
 
-  if (user === null || !user.isAdmin) {
-    return <Navigate to="" />;
-  }
   let spinner;
   if (spinning) {
     spinner = <div>submitting...</div>;
@@ -359,4 +356,13 @@ export function Admin() {
       </form>
     </div>
   );
+}
+
+export function AdminGuard() {
+  const { user } = useRouteLoaderData("competition") as CompetitionData;
+  if (user !== null && user.isAdmin) {
+    return <Outlet />;
+  } else {
+    return <Navigate to=".." />;
+  }
 }
