@@ -7,7 +7,7 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 
-import { Admin, AdminGuard } from "./admin";
+import { AdminRoutes } from "./admin/routes";
 import { Application } from "./application";
 import {
   CompetitionDataLoader,
@@ -33,9 +33,7 @@ const router = createBrowserRouter(
             return PersonalApplicationDataLoader(params);
           }}
         ></Route>
-        <Route path="admin" element={<AdminGuard />}>
-          <Route index element={<Admin />}></Route>
-        </Route>
+        <Route path="admin/*" element={<AdminRoutes />}></Route>
       </Route>
     </Route>,
   ),
