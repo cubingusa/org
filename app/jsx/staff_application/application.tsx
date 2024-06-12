@@ -34,7 +34,7 @@ function TextQuestionDisplay(props: QuestionDisplayProps) {
             {question.name}
           </label>
           <textarea
-            value={props.myQuestion.textAnswer}
+            defaultValue={props.myQuestion.textAnswer}
             id={"text-input-" + question.id}
             className="form-control"
             onChange={(e) => updateAnswer(e.target.value)}
@@ -49,7 +49,7 @@ function TextQuestionDisplay(props: QuestionDisplayProps) {
           </label>
           <input
             type="text"
-            value={props.myQuestion.textAnswer}
+            defaultValue={props.myQuestion.textAnswer}
             id={"text-input-" + question.id}
             className="form-control"
             onChange={(e) => updateAnswer(e.target.value)}
@@ -149,7 +149,6 @@ function FormDisplay(props: FormDisplayProps) {
     <div className="card">
       <div className="card-body">
         <form>
-          <h3>{form.name}</h3>
           <div>{form.description}</div>
           <hr />
           {form.questions.map((question) => {
