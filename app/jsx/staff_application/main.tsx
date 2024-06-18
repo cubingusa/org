@@ -15,29 +15,27 @@ import {
 } from "./data_loader";
 import { CompetitionData } from "./types/competition_data";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="staff">
-      <Route
-        path=":competitionId"
-        loader={({ params }) => {
-          return CompetitionDataLoader(params);
-        }}
-        id="competition"
-      >
-        <Route
-          index
-          element={<Application />}
-          id="application"
-          loader={({ params }) => {
-            return PersonalApplicationDataLoader(params);
-          }}
-        ></Route>
-        <Route path="admin/*" element={<AdminRoutes />}></Route>
-      </Route>
-    </Route>,
-  ),
-);
+const router = createBrowserRouter([
+  {
+    path: "staff",
+    children: [
+      {
+        path: ":competitionId",
+        loader: CompetitionDataLoader,
+        id: "competition",
+        children: [
+          {
+            index: true,
+            element: <Application />,
+            id: "application",
+            loader: PersonalApplicationDataLoader,
+          },
+          AdminRoutes(),
+        ],
+      },
+    ],
+  },
+]);
 
 createRoot(document.getElementById("jsx-container")).render(
   <RouterProvider router={router} />,

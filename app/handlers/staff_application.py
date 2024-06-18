@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, abort, request
+from flask import Blueprint, render_template, redirect, request
 from google.cloud import ndb
 import datetime
 import logging
@@ -11,6 +11,23 @@ from app.models.wca.competition import Competition
 
 bp = Blueprint('staff_application', __name__)
 client = ndb.Client()
+
+def user_to_frontend(user, wcif):
+  return {
+    'id': user.key.id(),
+    'name': user.name,
+    'wcaId': user.wca_person.id() if user.wca_person else '',
+    'email': user.email,
+    'isAdmin': is_admin(user, wcif)
+  }
+
+def form_to_frontend(form):
+  return {
+    'formId': form.form_id,
+    'submittedAtTs': form.submitted_at.timestamp(),
+    'updatedAtTs': form.updated_at.timestamp(),
+    'details': form.details
+  }
 
 def is_admin(user, wcif):
   if not user:
@@ -64,22 +81,17 @@ def api_wcif(competition_id):
 def me_wcif(competition_id):
   with client.context():
     user = auth.user()
+    wcif = get_wcif(competition_id)
     if not user:
-      abort(401)
-    return {
-      'id': user.key.id(),
-      'name': user.name,
-      'wcaId': user.wca_person.id() if user.wca_person else '',
-      'email': user.email,
-      'isAdmin': is_admin(user, get_wcif(competition_id))
-    }
+      return {}, 401
+    return user_to_frontend(user, wcif)
 
 @bp.route('/staff_api/<competition_id>/settings', methods=['GET'])
 def get_settings(competition_id):
   with client.context():
     settings = ApplicationSettings.get_by_id(competition_id)
     if not settings:
-      abort(404)
+      return {}, 404
     if settings.details is None:
       return {}
     return settings.details
@@ -90,19 +102,19 @@ def put_settings(competition_id):
     user = auth.user()
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
-      abort(401)
+      return {}, 401
     settings = ApplicationSettings(id=competition_id)
     settings.details = request.json
     settings.put()
-    return '', 200
+    return {}, 200
 
 @bp.route('/staff_api/<competition_id>/form_submission/<form_id>', methods=['POST'])
 def save_form(competition_id, form_id):
   form_id = int(form_id)
   with client.context():
     user = auth.user()
-    if user is None:
-      abort(401)
+    if not user:
+      return {}, 401
     key = SubmittedForm.Key(competition_id, form_id, user.key.id())
     form = SubmittedForm.get_by_id(key)
     if not form:
@@ -114,19 +126,31 @@ def save_form(competition_id, form_id):
     form.updated_at = datetime.datetime.now()
     form.details = request.json
     form.put()
-    return '', 200
+    return {}, 200
 
 @bp.route('/staff_api/<competition_id>/my_forms', methods=['GET'])
 def get_submitted_forms(competition_id):
   with client.context():
     user = auth.user()
-    if user is None:
-      abort(401)
+    if not user:
+      return {}, 401
     all_forms = SubmittedForm.query(ndb.AND(SubmittedForm.competition == ndb.Key(Competition, competition_id),
                                             SubmittedForm.user == user.key))
-    return [{
-      'formId': form.form_id,
-      'submittedAtTs': form.submitted_at.timestamp(),
-      'updatedAtTs': form.updated_at.timestamp(),
-      'details': form.details
-    } for form in all_forms.iter()]
+    return [form_to_frontend(form) for form in all_forms.iter()]
+
+@bp.route('/staff_api/<competition_id>/all_users', methods=['GET'])
+def get_all_users(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    all_forms = list(SubmittedForm.query(SubmittedForm.competition == ndb.Key(Competition, competition_id)).iter())
+    user_keys = list(set([form.user for form in all_forms]))
+    users = ndb.get_multi(user_keys)
+    return [
+      {
+        'user': user_to_frontend(user, wcif),
+        'forms': [form_to_frontend(form) for form in all_forms if form.user == user.key]
+      } for user in users
+    ]

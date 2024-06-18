@@ -49,11 +49,20 @@ export function Admin() {
   return (
     <div>
       <h1>{wcif.name} Staff Admin</h1>
-      <div>
-        You're viewing the admin settings. Return to the{" "}
-        <Link to="..">public application</Link>.
-      </div>
-      <hr />
+      <ul className="list-group">
+        <Link to="..">
+          <li className="list-group-item">
+            <span className="material-symbols-outlined">visibility</span> Public
+            Application
+          </li>
+        </Link>
+        <Link to="responses">
+          <li className="list-group-item">
+            <span className="material-symbols-outlined">groups</span> Responses
+          </li>
+        </Link>
+      </ul>
+      <p />
       <form>
         <div className="form-check form-switch">
           <input
