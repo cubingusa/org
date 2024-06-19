@@ -23,7 +23,19 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
   );
   let disabledSubmit = false;
 
-  const doAddColumn = function () {};
+  const doAddColumn = function () {
+    switch (columnType) {
+      case ColumnType.PERSONAL_ATTRIBUTE:
+        addColumn({
+          columnType,
+          attribute: personalAttributeType,
+        });
+        break;
+      case ColumnType.FORM_ANSWER:
+        addColumn({ columnType, questionId, formId });
+        break;
+    }
+  };
 
   let detailsSection;
   switch (columnType) {

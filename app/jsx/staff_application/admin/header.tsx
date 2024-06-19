@@ -11,9 +11,8 @@ import classNames from "classnames";
 import { CompetitionData } from "../types/competition_data";
 
 export function AdminHeader() {
-  const location = useLocation();
   const { user, wcif } = useRouteLoaderData("competition") as CompetitionData;
-  const { pathname } = location;
+  const { pathname } = useLocation();
   if (user !== null && user.isAdmin) {
     return (
       <>

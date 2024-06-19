@@ -3,6 +3,7 @@ import {
   useRouteLoaderData,
   Link,
   useParams,
+  useLocation,
   useNavigate,
   redirect,
 } from "react-router-dom";
@@ -51,6 +52,7 @@ export function Responses() {
   const { encodedSettings } = useParams();
   const applicants = useRouteLoaderData("responses") as ApplicantData[];
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const baseSettings = useRouteLoaderData(
     "responses_settings",
   ) as TableSettings;
@@ -58,7 +60,12 @@ export function Responses() {
 
   const updateSettings = function (newSettings: TableSettings) {
     setSettings(newSettings);
-    navigate(`../{encodeTableSettings(newSettings)}`);
+    navigate(
+      pathname.replace(
+        /\/responses.*/i,
+        `/responses/${encodeTableSettings(newSettings)}`,
+      ),
+    );
   };
 
   const addColumn = function (params: ColumnParams) {

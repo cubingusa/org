@@ -9,7 +9,7 @@ export enum PersonalAttribute {
 }
 
 interface PersonalAttributeParams {
-  columnType: ColumnType.FORM_ANSWER;
+  columnType: ColumnType.PERSONAL_ATTRIBUTE;
   attribute: PersonalAttribute;
 }
 
