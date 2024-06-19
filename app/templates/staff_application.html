@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% import "components/css.html" as css %}
 {% block title%}Staff Application{% endblock %}
+{% block style %}
+  {{ css.css(c, 'staff_application') }}
+{% endblock %}
 {% block content %}
   <div id="jsx-container">
   </div>
