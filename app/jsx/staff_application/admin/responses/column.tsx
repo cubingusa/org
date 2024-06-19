@@ -77,7 +77,7 @@ export interface TableColumn {
   name(): string;
 }
 
-export function decode(params: any): TableColumn | null {
+export function decodeColumn(params: any): TableColumn | null {
   if (params.columnType === undefined) {
     return null;
   }
