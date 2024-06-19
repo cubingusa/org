@@ -1,6 +1,6 @@
 import { Admin } from "./admin";
 import { AdminHeader } from "./header";
-import { Responses, EncodedSettingsLoader } from "./responses";
+import { Responses, EncodedSettingsLoader } from "./responses/base";
 import { ApplicantLoader } from "./applicant_loader";
 import { CompetitionData } from "../types/competition_data";
 

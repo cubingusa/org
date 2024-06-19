@@ -6,18 +6,10 @@ import {
   useNavigate,
   redirect,
 } from "react-router-dom";
-import { ApplicantData } from "../types/applicant_data";
-import { CompetitionData } from "../types/competition_data";
-import { Form } from "../types/form";
-import { FormEditor } from "./form_editor";
-
-interface TableFilter {}
-
-interface TableColumn {
-  name: string;
-  formId: number;
-  questionId: number;
-}
+import { TableFilter, filterPasses } from "./filter";
+import { TableColumn } from "./column";
+import { ApplicantData } from "../../types/applicant_data";
+import { CompetitionData } from "../../types/competition_data";
 
 interface TableSettings {
   filters: TableFilter[];
@@ -43,10 +35,6 @@ export function EncodedSettingsLoader({ params }: any): TableSettings {
 
 function encodeTableSettings(settings: TableSettings): string {
   return btoa(JSON.stringify(settings));
-}
-
-function filterPasses(filter: TableFilter, applicant: ApplicantData): boolean {
-  return true;
 }
 
 export function Responses() {
