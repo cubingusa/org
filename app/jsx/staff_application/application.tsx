@@ -9,6 +9,7 @@ import {
 import {
   Form,
   Question,
+  QuestionType,
   TextQuestion,
   TextQuestionType,
   YesNoQuestion,
@@ -162,7 +163,7 @@ function FormDisplay(props: FormDisplayProps) {
               myForm.details.questions.push(myQuestion);
             }
             switch (question.questionType) {
-              case "text":
+              case QuestionType.Text:
                 return (
                   <TextQuestionDisplay
                     question={question}
@@ -170,7 +171,7 @@ function FormDisplay(props: FormDisplayProps) {
                     key={question.id}
                   />
                 );
-              case "yes_no":
+              case QuestionType.YesNo:
                 return (
                   <YesNoQuestionDisplay
                     question={question}

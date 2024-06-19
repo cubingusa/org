@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Form, Question, TextQuestion, TextQuestionType } from "../types/form";
+import {
+  Form,
+  Question,
+  QuestionType,
+  TextQuestion,
+  TextQuestionType,
+} from "../types/form";
 
 interface QuestionEditorProps {
   question: Question;
@@ -10,21 +16,21 @@ export function QuestionEditor(props: QuestionEditorProps) {
   const question = props.question;
   const [questionType, setQuestionType] = useState(question.questionType || "");
   const types = {
-    null: "Question Type",
-    text: "Text",
-    yes_no: "Yes / No",
+    [QuestionType.Null]: "Question Type",
+    [QuestionType.Text]: "Text",
+    [QuestionType.YesNo]: "Yes / No",
   };
 
   const updateQuestionType = function (newType: string) {
     switch (newType) {
-      case "null":
-        Object.assign(question, { questionType: "null" });
+      case QuestionType.Null:
+        Object.assign(question, { questionType: newType });
         break;
-      case "text":
-        Object.assign(question, { questionType: "text" });
+      case QuestionType.Text:
+        Object.assign(question, { questionType: newType });
         break;
-      case "yes_no":
-        Object.assign(question, { questionType: "yes_no" });
+      case QuestionType.YesNo:
+        Object.assign(question, { questionType: newType });
         break;
     }
     setQuestionType(newType);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { QuestionEditor } from "./question_editor";
-import { Form, Question } from "../types/form";
+import { Form, Question, QuestionType } from "../types/form";
 
 interface FormEditorProps {
   form: Form;
@@ -25,7 +25,7 @@ export function FormEditor(props: FormEditorProps) {
       id: form.nextQuestionId,
       name: "New Question",
       required: false,
-      questionType: "null",
+      questionType: QuestionType.Null,
     });
     form.nextQuestionId++;
     setNumQuestions(form.questions.length);

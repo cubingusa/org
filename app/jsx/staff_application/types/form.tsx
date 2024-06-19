@@ -1,14 +1,21 @@
 import { DateTime } from "luxon";
 
+export enum QuestionType {
+  Null = "null",
+  Text = "text",
+  YesNo = "yes_no",
+  MultipleChoice = "multiple_choice",
+}
+
 export interface MultipleChoiceQuestion extends QuestionBase {
-  questionType: "multiple_choice";
+  questionType: QuestionType.Null;
   options: Map<number, string>;
   nextOptionId: number;
-  multipleAllewd: boolean;
+  multipleAllowed: boolean;
 }
 
 export interface YesNoQuestion extends QuestionBase {
-  questionType: "yes_no";
+  questionType: QuestionType.YesNo;
 }
 
 export enum TextQuestionType {
@@ -17,12 +24,12 @@ export enum TextQuestionType {
 }
 
 export interface TextQuestion extends QuestionBase {
-  questionType: "text";
+  questionType: QuestionType.Text;
   textQuestionType: TextQuestionType;
 }
 
 export interface NullQuestion extends QuestionBase {
-  questionType: "null";
+  questionType: QuestionType.Null;
 }
 
 interface QuestionBase {
