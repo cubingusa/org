@@ -65,6 +65,13 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
           <option value={PersonalAttribute.DELEGATE_STATUS}>
             Delegate Status
           </option>
+          <option value={PersonalAttribute.REGISTERED}>Registered</option>
+          <option value={PersonalAttribute.LISTED_ORGANIZER}>
+            Listed Organizer
+          </option>
+          <option value={PersonalAttribute.LISTED_DELEGATE}>
+            Listed Delegate
+          </option>
         </select>
       );
       break;

@@ -30,7 +30,14 @@ class PersonalAttributeColumn extends TableColumn {
   }
 
   id(): string {
-    return `PA-${this.params.attribute.toString()}`;
+    let suffix = "";
+    if (
+      this.params.attribute == PersonalAttribute.REGISTERED_FOR_EVENT ||
+      this.params.attribute == PersonalAttribute.PSYCH_SHEET_POSITION_FOR_EVENT
+    ) {
+      suffix = `-${this.params.eventId}`;
+    }
+    return `PA-${this.params.attribute.toString()}${suffix}`;
   }
 
   name(): string {
@@ -38,7 +45,13 @@ class PersonalAttributeColumn extends TableColumn {
       case PersonalAttribute.AGE:
         return "Age";
       case PersonalAttribute.DELEGATE_STATUS:
-        return "Delegate Status";
+        return "Is Delegate";
+      case PersonalAttribute.LISTED_ORGANIZER:
+        return "Listed Organezer";
+      case PersonalAttribute.LISTED_DELEGATE:
+        return "Listed Delegate";
+      case PersonalAttribute.REGISTERED:
+        return "Registered";
     }
   }
 
@@ -62,6 +75,37 @@ class PersonalAttributeColumn extends TableColumn {
             return <>Trainee Delegate</>;
         }
         return null;
+      case PersonalAttribute.REGISTERED:
+        return this.wcif.persons.find((p) => {
+          return (
+            p.wcaUserId == applicant.user.id &&
+            p.registration?.status == "accepted"
+          );
+        }) !== null ? (
+          <span className="material-symbols-outlined">check</span>
+        ) : (
+          <span className="material-symbols-outlined">close</span>
+        );
+      case PersonalAttribute.LISTED_ORGANIZER:
+        return this.wcif.persons.find((p) => {
+          return (
+            p.wcaUserId == applicant.user.id && p.roles.includes("organizer")
+          );
+        }) !== null ? (
+          <span className="material-symbols-outlined">check</span>
+        ) : (
+          <span className="material-symbols-outlined">close</span>
+        );
+      case PersonalAttribute.LISTED_DELEGATE:
+        return this.wcif.persons.find((p) => {
+          return (
+            p.wcaUserId == applicant.user.id && p.roles.includes("delegate")
+          );
+        }) !== null ? (
+          <span className="material-symbols-outlined">check</span>
+        ) : (
+          <span className="material-symbols-outlined">close</span>
+        );
     }
   }
 }

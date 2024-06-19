@@ -11,6 +11,11 @@ enum PersonalAttribute {
   PERSONAL_ATTRIBUTE_UNSPECIFIED = 0;
   AGE = 1;
   DELEGATE_STATUS = 2;
+  LISTED_ORGANIZER = 3;
+  LISTED_DELEGATE = 4;
+  REGISTERED = 5;
+  REGISTERED_FOR_EVENT = 6;
+  PSYCH_SHEET_POSITION_FOR_EVENT = 7;
 }
 
 enum ColumnType {
@@ -18,6 +23,7 @@ enum ColumnType {
   PERSONAL_ATTRIBUTE = 1;
   FORM_ANSWER = 2;
   FORM_METADATA = 3;
+  COMPETITION_INFO = 4;
 }
 
 message ColumnParams {
@@ -25,6 +31,8 @@ message ColumnParams {
 
   // When PERSONAL_ATTRIBUTE is used:
   optional PersonalAttribute attribute = 2;
+  // For PersonalAttribute types *_FOR_EVENT:
+  optional string event_id = 7;
 
   // When FORM_QUESTION is used:
   optional int32 form_id = 3;
