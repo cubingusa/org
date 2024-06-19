@@ -1,5 +1,12 @@
 syntax = "proto2";
 
+enum FormMetadata {
+  FORM_METADATA_UNSPECIFIED = 0;
+  SUBMITTED = 1;
+  SUBMIT_TIME = 2;
+  UPDATE_TIME = 3;
+}
+
 enum PersonalAttribute {
   PERSONAL_ATTRIBUTE_UNSPECIFIED = 0;
   AGE = 1;
@@ -10,6 +17,7 @@ enum ColumnType {
   COLUMN_TYPE_UNSPECIFIED = 0;
   PERSONAL_ATTRIBUTE = 1;
   FORM_ANSWER = 2;
+  FORM_METADATA = 3;
 }
 
 message ColumnParams {
@@ -21,6 +29,9 @@ message ColumnParams {
   // When FORM_QUESTION is used:
   optional int32 form_id = 3;
   optional int32 question_id = 4;
+
+  // When FORM_METADATA is used:
+  optional FormMetadata form_metadata = 5;
 }
 
 message FilterParams {}

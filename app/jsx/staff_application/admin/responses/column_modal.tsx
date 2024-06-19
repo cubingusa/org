@@ -1,6 +1,11 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
-import { PersonalAttribute, ColumnType, ColumnParams } from "./api.proto";
+import {
+  PersonalAttribute,
+  ColumnType,
+  ColumnParams,
+  FormMetadata,
+} from "./api.proto";
 import { CompetitionData } from "../../types/competition_data";
 
 interface ColumnModalParams {
@@ -21,6 +26,7 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
   const [questionId, setQuestionId] = useState(
     selectedForm?.questions.length > 0 ? selectedForm.questions[0].id : null,
   );
+  const [formMetadata, setFormMetadata] = useState(FormMetadata.SUBMITTED);
   let disabledSubmit = false;
 
   const doAddColumn = function () {
@@ -35,6 +41,11 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
         break;
       case ColumnType.FORM_ANSWER:
         addColumn(ColumnParams.fromObject({ columnType, questionId, formId }));
+        break;
+      case ColumnType.FORM_METADATA:
+        addColumn(
+          ColumnParams.fromObject({ columnType, formMetadata, formId }),
+        );
         break;
     }
   };
@@ -58,6 +69,7 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
       );
       break;
     case ColumnType.FORM_ANSWER:
+    case ColumnType.FORM_METADATA:
       if (settings.forms.length == 0) {
         detailsSection = <div>You haven't added any forms yet!</div>;
         disabledSubmit = true;
@@ -88,7 +100,10 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
           </>
         );
         let questionSection;
-        if (selectedForm?.questions.length > 0) {
+        if (
+          columnType == ColumnType.FORM_ANSWER &&
+          selectedForm?.questions.length > 0
+        ) {
           questionSection = (
             <>
               <div className="row g-2 align-items-center">
@@ -107,7 +122,7 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
                     {selectedForm.questions.map((question) => (
                       <option
                         value={question.id}
-                        key={"question-" + question.id}
+                        key={`question-${question.id}`}
                       >
                         {question.name}
                       </option>
@@ -115,6 +130,26 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
                   </select>
                 </div>
               </div>
+            </>
+          );
+        } else if (columnType == ColumnType.FORM_METADATA) {
+          questionSection = (
+            <>
+              <select
+                className="form-select"
+                value={formMetadata}
+                onChange={(e) => setFormMetadata(+e.target.value)}
+              >
+                {[
+                  { id: FormMetadata.SUBMITTED, name: "Submitted" },
+                  { id: FormMetadata.SUBMIT_TIME, name: "Submitted Time" },
+                  { id: FormMetadata.UPDATE_TIME, name: "Updated Time" },
+                ].map(({ id, name }) => (
+                  <option value={id} key={`fm-${id}`}>
+                    {name}
+                  </option>
+                ))}
+              </select>
             </>
           );
         } else {
@@ -143,24 +178,23 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
             {[
               { id: ColumnType.PERSONAL_ATTRIBUTE, name: "Personal Attribute" },
               { id: ColumnType.FORM_ANSWER, name: "Form Answer" },
-            ].map(({ id, name }) => {
-              return (
-                <div className="form-check" key={id}>
-                  <input
-                    className="form-check-input"
-                    name="column-type"
-                    type="radio"
-                    id={"radio-" + id}
-                    value={id}
-                    defaultChecked={columnType == id}
-                    onChange={(evt) => setColumnType(id)}
-                  />
-                  <label className="form-check-label" htmlFor={"radio-" + id}>
-                    {name}
-                  </label>
-                </div>
-              );
-            })}
+              { id: ColumnType.FORM_METADATA, name: "Form Metadata" },
+            ].map(({ id, name }) => (
+              <div className="form-check" key={id}>
+                <input
+                  className="form-check-input"
+                  name="column-type"
+                  type="radio"
+                  id={"radio-" + id}
+                  value={id}
+                  defaultChecked={columnType == id}
+                  onChange={(evt) => setColumnType(id)}
+                />
+                <label className="form-check-label" htmlFor={"radio-" + id}>
+                  {name}
+                </label>
+              </div>
+            ))}
             {detailsSection}
           </div>
           <div className="modal-footer">

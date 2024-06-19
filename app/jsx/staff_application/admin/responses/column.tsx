@@ -4,7 +4,12 @@ import { Competition } from "@wca/helpers";
 import { ApplicantData } from "../../types/applicant_data";
 import { ApplicationSettings } from "../../types/competition_data";
 import { Question, QuestionType } from "../../types/form";
-import { PersonalAttribute, ColumnType, ColumnParams } from "./api.proto";
+import {
+  PersonalAttribute,
+  ColumnType,
+  ColumnParams,
+  FormMetadata,
+} from "./api.proto";
 
 export abstract class TableColumn {
   constructor(public params: ColumnParams) {}
@@ -58,6 +63,65 @@ class PersonalAttributeColumn extends TableColumn {
         }
         return null;
     }
+  }
+}
+
+class FormMetadataColumn extends TableColumn {
+  constructor(
+    params: ColumnParams,
+    private settings: ApplicationSettings,
+  ) {
+    super(params);
+  }
+
+  id(): string {
+    return `FM-${this.params.formId}-${this.params.formMetadata}`;
+  }
+
+  name(): string {
+    console.log(this.params);
+    const form = this.settings.forms.find((f) => f.id == this.params.formId);
+    if (form) {
+      switch (this.params.formMetadata) {
+        case FormMetadata.SUBMITTED:
+          return `${form.name} Submitted`;
+        case FormMetadata.SUBMIT_TIME:
+          return `${form.name} Submit Time`;
+        case FormMetadata.UPDATE_TIME:
+          return `${form.name} Update Time`;
+      }
+    }
+    return "??";
+  }
+
+  render(applicant: ApplicantData): JSX.Element {
+    const submittedForm = applicant.forms.find(
+      (f) => f.formId == this.params.formId,
+    );
+    if (!submittedForm) {
+      return <>&ndash;</>;
+    }
+    switch (this.params.formMetadata) {
+      case FormMetadata.SUBMITTED:
+        return <span className="material-symbols-outlined">check</span>;
+      case FormMetadata.SUBMIT_TIME:
+        return (
+          <>
+            {DateTime.fromSeconds(submittedForm.submittedAtTs).toLocaleString(
+              DateTime.DATETIME_MED,
+            )}
+          </>
+        );
+      case FormMetadata.UPDATE_TIME:
+        return (
+          <>
+            {DateTime.fromSeconds(submittedForm.updatedAtTs).toLocaleString(
+              DateTime.DATETIME_MED,
+            )}
+          </>
+        );
+    }
+    return <>&ndash;</>;
   }
 }
 
@@ -130,6 +194,8 @@ export function decodeColumn(
       return new PersonalAttributeColumn(params, wcif);
     case ColumnType.FORM_ANSWER:
       return new FormAnswerColumn(params, settings);
+    case ColumnType.FORM_METADATA:
+      return new FormMetadataColumn(params, settings);
   }
   return null;
 }
