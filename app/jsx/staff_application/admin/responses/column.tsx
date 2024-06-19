@@ -79,7 +79,6 @@ class FormMetadataColumn extends TableColumn {
   }
 
   name(): string {
-    console.log(this.params);
     const form = this.settings.forms.find((f) => f.id == this.params.formId);
     if (form) {
       switch (this.params.formMetadata) {
