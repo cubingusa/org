@@ -1,6 +1,12 @@
 import { DateTime } from "luxon";
 import { JSX } from "react";
-import { Competition, Person } from "@wca/helpers";
+import {
+  Competition,
+  Person,
+  EventId,
+  RankingType,
+  PersonalBest,
+} from "@wca/helpers";
 import { ApplicantData } from "../../types/applicant_data";
 import { ApplicationSettings } from "../../types/competition_data";
 import { Question, QuestionType } from "../../types/form";
@@ -10,6 +16,7 @@ import {
   ColumnParams,
   FormMetadata,
 } from "./api.proto";
+import classNames from "classnames";
 
 const CHECK = <span className="material-symbols-outlined">check</span>;
 const X = <span className="material-symbols-outlined">close</span>;
@@ -22,6 +29,17 @@ export abstract class TableColumn {
   abstract id(): string;
   abstract header(): JSX.Element;
   abstract render(applicant: ApplicantData): JSX.Element;
+}
+
+// TODO: Move this to a utils place or @wca/helpers.
+function personalBest(
+  person: Person,
+  eventId: EventId,
+  type: RankingType,
+): PersonalBest | null {
+  return person.personalBests.find(
+    (pb) => pb.eventId == eventId && pb.type == type,
+  );
 }
 
 class PersonalAttributeColumn extends TableColumn {
@@ -55,6 +73,27 @@ class PersonalAttributeColumn extends TableColumn {
         return <>Listed Delegate</>;
       case PersonalAttribute.REGISTERED:
         return <>Registered</>;
+      case PersonalAttribute.REGISTERED_FOR_EVENT:
+        return (
+          <span
+            className={classNames(
+              "cubing-icon",
+              `event-${this.params.eventId}`,
+            )}
+          ></span>
+        );
+      case PersonalAttribute.PSYCH_SHEET_POSITION_FOR_EVENT:
+        return (
+          <>
+            <span
+              className={classNames(
+                "cubing-icon",
+                `event-${this.params.eventId}`,
+              )}
+            ></span>{" "}
+            Pos
+          </>
+        );
     }
   }
 
@@ -94,6 +133,42 @@ class PersonalAttributeColumn extends TableColumn {
         return this.getPerson(applicant)?.roles?.includes("delegate")
           ? CHECK
           : X;
+      case PersonalAttribute.REGISTERED_FOR_EVENT:
+        return this.getPerson(applicant)?.registration?.eventIds?.includes(
+          this.params.eventId as EventId,
+        )
+          ? CHECK
+          : X;
+      case PersonalAttribute.PSYCH_SHEET_POSITION_FOR_EVENT:
+        const person = this.getPerson(applicant);
+        if (
+          !person?.registration?.eventIds?.includes(
+            this.params.eventId as EventId,
+          )
+        ) {
+          return X;
+        }
+        const myPb = personalBest(
+          person,
+          this.params.eventId as EventId,
+          this.params.eventId.includes("bf") ? "single" : "average",
+        );
+        const betterPeople = this.wcif.persons.filter((p) => {
+          const reg = p.registration;
+          if (
+            reg?.status !== "accepted" ||
+            !reg?.eventIds?.includes(this.params.eventId as EventId)
+          ) {
+            return false;
+          }
+          const pb = personalBest(
+            p,
+            this.params.eventId as EventId,
+            this.params.eventId.includes("bf") ? "single" : "average",
+          );
+          return pb.worldRanking < myPb.worldRanking;
+        });
+        return <>{betterPeople.length + 1}</>;
     }
   }
 }
@@ -117,9 +192,9 @@ class FormMetadataColumn extends TableColumn {
         case FormMetadata.SUBMITTED:
           return <>{`${form.name} Submitted`}</>;
         case FormMetadata.SUBMIT_TIME:
-          return <>{`${form.name} Submit Time`}</>;
+          return <>{`${form.name} Submit`}</>;
         case FormMetadata.UPDATE_TIME:
-          return <>{`${form.name} Update Time`}</>;
+          return <>{`${form.name} Update`}</>;
       }
     }
     return <>??</>;

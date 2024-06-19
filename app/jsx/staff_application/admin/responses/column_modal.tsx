@@ -1,5 +1,6 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
+import { EventId, getEventName } from "@wca/helpers";
 import {
   PersonalAttribute,
   ColumnType,
@@ -18,7 +19,9 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
   const [personalAttributeType, setPersonalAttributeType] = useState(
     PersonalAttribute.AGE,
   );
-  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+  const { wcif, settings } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
   const [formId, setFormId] = useState(
     settings.forms.length > 0 ? settings.forms[0].id : null,
   );
@@ -27,17 +30,24 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
     selectedForm?.questions.length > 0 ? selectedForm.questions[0].id : null,
   );
   const [formMetadata, setFormMetadata] = useState(FormMetadata.SUBMITTED);
+  const [eventId, setEventId] = useState(wcif.events[0].id);
   let disabledSubmit = false;
 
   const doAddColumn = function () {
     switch (columnType) {
       case ColumnType.PERSONAL_ATTRIBUTE:
-        addColumn(
-          ColumnParams.fromObject({
-            columnType,
-            attribute: personalAttributeType,
-          }),
-        );
+        let params = ColumnParams.fromObject({
+          columnType,
+          attribute: personalAttributeType,
+        });
+        if (
+          personalAttributeType == PersonalAttribute.REGISTERED_FOR_EVENT ||
+          personalAttributeType ==
+            PersonalAttribute.PSYCH_SHEET_POSITION_FOR_EVENT
+        ) {
+          params.eventId = eventId;
+        }
+        addColumn(params);
         break;
       case ColumnType.FORM_ANSWER:
         addColumn(ColumnParams.fromObject({ columnType, questionId, formId }));
@@ -53,26 +63,53 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
   let detailsSection;
   switch (columnType) {
     case ColumnType.PERSONAL_ATTRIBUTE:
+      let eventSection;
+      if (
+        personalAttributeType == PersonalAttribute.REGISTERED_FOR_EVENT ||
+        personalAttributeType ==
+          PersonalAttribute.PSYCH_SHEET_POSITION_FOR_EVENT
+      ) {
+        eventSection = (
+          <select
+            className="form-select"
+            value={eventId}
+            onChange={(e) => setEventId(e.target.value as EventId)}
+          >
+            {wcif.events.map((evt) => (
+              <option value={evt.id}>{getEventName(evt.id)}</option>
+            ))}
+          </select>
+        );
+      }
       detailsSection = (
-        <select
-          className="form-select"
-          value={personalAttributeType}
-          onChange={(e) =>
-            setPersonalAttributeType(+e.target.value as PersonalAttribute)
-          }
-        >
-          <option value={PersonalAttribute.AGE}>Age</option>
-          <option value={PersonalAttribute.DELEGATE_STATUS}>
-            Delegate Status
-          </option>
-          <option value={PersonalAttribute.REGISTERED}>Registered</option>
-          <option value={PersonalAttribute.LISTED_ORGANIZER}>
-            Listed Organizer
-          </option>
-          <option value={PersonalAttribute.LISTED_DELEGATE}>
-            Listed Delegate
-          </option>
-        </select>
+        <>
+          <select
+            className="form-select"
+            value={personalAttributeType}
+            onChange={(e) =>
+              setPersonalAttributeType(+e.target.value as PersonalAttribute)
+            }
+          >
+            <option value={PersonalAttribute.AGE}>Age</option>
+            <option value={PersonalAttribute.DELEGATE_STATUS}>
+              Delegate Status
+            </option>
+            <option value={PersonalAttribute.REGISTERED}>Registered</option>
+            <option value={PersonalAttribute.LISTED_ORGANIZER}>
+              Listed Organizer
+            </option>
+            <option value={PersonalAttribute.LISTED_DELEGATE}>
+              Listed Delegate
+            </option>
+            <option value={PersonalAttribute.REGISTERED_FOR_EVENT}>
+              Registered for Event
+            </option>
+            <option value={PersonalAttribute.PSYCH_SHEET_POSITION_FOR_EVENT}>
+              Psych Sheet Position
+            </option>
+          </select>
+          {eventSection}
+        </>
       );
       break;
     case ColumnType.FORM_ANSWER:
