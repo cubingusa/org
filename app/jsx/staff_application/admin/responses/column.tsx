@@ -3,6 +3,7 @@ import { JSX } from "react";
 import { Competition } from "@wca/helpers";
 import { ApplicantData } from "../../types/applicant_data";
 import { ApplicationSettings } from "../../types/competition_data";
+import { Question, QuestionType } from "../../types/form";
 import { PersonalAttribute, ColumnType, ColumnParams } from "./api.proto";
 
 export abstract class TableColumn {
@@ -61,17 +62,61 @@ class PersonalAttributeColumn extends TableColumn {
 }
 
 class FormAnswerColumn extends TableColumn {
+  constructor(
+    params: ColumnParams,
+    private settings: ApplicationSettings,
+  ) {
+    super(params);
+  }
+
   id(): string {
     return `FA-${this.params.formId}-${this.params.questionId}`;
   }
 
-  name(): string {
-    // TODO: Pass in form data.
-    return `${this.params.formId}-${this.params.questionId}`;
+  getQuestion(): Question | null {
+    const form = this.settings.forms.find((f) => f.id == this.params.formId);
+    const question = form?.questions.find(
+      (q) => q.id == this.params.questionId,
+    );
+    return question || null;
+    if (!question) {
+      return null;
+    }
+    return question;
   }
 
-  render(): JSX.Element {
-    return null;
+  name(): string {
+    const question = this.getQuestion();
+    if (!question) {
+      return "??";
+    }
+    return question.name;
+  }
+
+  render(applicant: ApplicantData): JSX.Element {
+    const question = this.getQuestion();
+    if (!question) {
+      return <>'??'</>;
+    }
+    const submittedForm = applicant.forms.find(
+      (f) => f.formId == this.params.formId,
+    );
+    const submittedQuestion = submittedForm?.details.questions.find(
+      (q) => q.questionId == this.params.questionId,
+    );
+    if (submittedQuestion) {
+      switch (question.questionType) {
+        case QuestionType.Text:
+          return <>{submittedQuestion.textAnswer}</>;
+        case QuestionType.YesNo:
+          return submittedQuestion.booleanAnswer ? (
+            <span className="material-symbols-outlined">check</span>
+          ) : (
+            <span className="material-symbols-outlined">close</span>
+          );
+      }
+    }
+    return <>&ndash</>;
   }
 }
 
@@ -84,7 +129,7 @@ export function decodeColumn(
     case ColumnType.PERSONAL_ATTRIBUTE:
       return new PersonalAttributeColumn(params, wcif);
     case ColumnType.FORM_ANSWER:
-      return new FormAnswerColumn(params);
+      return new FormAnswerColumn(params, settings);
   }
   return null;
 }
