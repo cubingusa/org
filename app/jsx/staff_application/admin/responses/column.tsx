@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { JSX } from "react";
-import { Competition } from "@wca/helpers";
+import { Competition, Person } from "@wca/helpers";
 import { ApplicantData } from "../../types/applicant_data";
 import { ApplicationSettings } from "../../types/competition_data";
 import { Question, QuestionType } from "../../types/form";
@@ -10,6 +10,9 @@ import {
   ColumnParams,
   FormMetadata,
 } from "./api.proto";
+
+const CHECK = <span className="material-symbols-outlined">check</span>;
+const X = <span className="material-symbols-outlined">close</span>;
 
 export abstract class TableColumn {
   constructor(public params: ColumnParams) {}
@@ -55,6 +58,10 @@ class PersonalAttributeColumn extends TableColumn {
     }
   }
 
+  getPerson(applicant: ApplicantData): Person | null {
+    return this.wcif.persons.find((p) => p.wcaUserId == applicant.user.id);
+  }
+
   render(applicant: ApplicantData): JSX.Element {
     switch (this.params.attribute) {
       case PersonalAttribute.AGE:
@@ -76,36 +83,17 @@ class PersonalAttributeColumn extends TableColumn {
         }
         return null;
       case PersonalAttribute.REGISTERED:
-        return this.wcif.persons.find((p) => {
-          return (
-            p.wcaUserId == applicant.user.id &&
-            p.registration?.status == "accepted"
-          );
-        }) !== null ? (
-          <span className="material-symbols-outlined">check</span>
-        ) : (
-          <span className="material-symbols-outlined">close</span>
-        );
+        return this.getPerson(applicant)?.registration?.status == "accepted"
+          ? CHECK
+          : X;
       case PersonalAttribute.LISTED_ORGANIZER:
-        return this.wcif.persons.find((p) => {
-          return (
-            p.wcaUserId == applicant.user.id && p.roles.includes("organizer")
-          );
-        }) !== null ? (
-          <span className="material-symbols-outlined">check</span>
-        ) : (
-          <span className="material-symbols-outlined">close</span>
-        );
+        return this.getPerson(applicant)?.roles?.includes("organizer")
+          ? CHECK
+          : X;
       case PersonalAttribute.LISTED_DELEGATE:
-        return this.wcif.persons.find((p) => {
-          return (
-            p.wcaUserId == applicant.user.id && p.roles.includes("delegate")
-          );
-        }) !== null ? (
-          <span className="material-symbols-outlined">check</span>
-        ) : (
-          <span className="material-symbols-outlined">close</span>
-        );
+        return this.getPerson(applicant)?.roles?.includes("delegate")
+          ? CHECK
+          : X;
     }
   }
 }
@@ -146,7 +134,7 @@ class FormMetadataColumn extends TableColumn {
     }
     switch (this.params.formMetadata) {
       case FormMetadata.SUBMITTED:
-        return <span className="material-symbols-outlined">check</span>;
+        return CHECK;
       case FormMetadata.SUBMIT_TIME:
         return (
           <>
@@ -216,11 +204,7 @@ class FormAnswerColumn extends TableColumn {
         case QuestionType.Text:
           return <>{submittedQuestion.textAnswer}</>;
         case QuestionType.YesNo:
-          return submittedQuestion.booleanAnswer ? (
-            <span className="material-symbols-outlined">check</span>
-          ) : (
-            <span className="material-symbols-outlined">close</span>
-          );
+          return submittedQuestion.booleanAnswer ? CHECK : X;
       }
     }
     return <>&ndash</>;
