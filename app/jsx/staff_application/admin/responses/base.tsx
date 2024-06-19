@@ -21,15 +21,12 @@ export interface TableConfig {
   columns: TableColumn[];
 }
 
-export function EncodedSettingsLoader({ params }: any): TableConfig {
+export function EncodedSettingsLoader({ params }: any): TableSettings {
+  console.log("ESL");
   try {
-    let parsedSettings = TableSettings.decode(
+    return TableSettings.decode(
       Uint8Array.from(atob(params.encodedSettings), (c) => c.charCodeAt(0)),
     );
-    return {
-      filters: parsedSettings.filters.map(decodeFilter),
-      columns: parsedSettings.columns.map(decodeColumn),
-    };
   } catch (e) {
     throw redirect("..");
   }
@@ -47,13 +44,19 @@ function encodeConfig(config: TableConfig): string {
 
 export function Responses() {
   const { encodedSettings } = useParams();
+  const { wcif, settings } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
   const applicants = useRouteLoaderData("responses") as ApplicantData[];
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const baseConfig = useRouteLoaderData("responses_settings") as TableConfig;
-  const [config, setConfig] = useState(
-    baseConfig || { filters: [], columns: [] },
-  );
+  const tableSettings =
+    (useRouteLoaderData("responses_settings") as TableSettings) ||
+    TableSettings.fromObject({});
+  const [config, setConfig] = useState({
+    filters: tableSettings.filters.map(decodeFilter),
+    columns: tableSettings.columns.map((c) => decodeColumn(c, settings, wcif)),
+  });
 
   const updateConfig = function (newConfig: TableConfig) {
     setConfig(newConfig);
@@ -66,7 +69,7 @@ export function Responses() {
   };
 
   const addColumn = function (params: ColumnParams) {
-    config.columns.push(decodeColumn(params));
+    config.columns.push(decodeColumn(params, settings, wcif));
     updateConfig(config);
   };
 
@@ -122,7 +125,9 @@ export function Responses() {
                   ) : null}
                 </td>
                 {config.columns.map((column) => (
-                  <td key={applicant.user.id + "-" + column.id()}></td>
+                  <td key={applicant.user.id + "-" + column.id()}>
+                    {column.render(applicant)}
+                  </td>
                 ))}
               </tr>
             ))}

@@ -4,4 +4,6 @@ export interface User {
   wcaId: string;
   email: string;
   isAdmin: boolean;
+  birthdate: string;
+  delegateStatus: string;
 }
