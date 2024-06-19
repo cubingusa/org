@@ -18,7 +18,8 @@ def user_to_frontend(user, wcif):
     'name': user.name,
     'wcaId': user.wca_person.id() if user.wca_person else '',
     'email': user.email,
-    'isAdmin': is_admin(user, wcif)
+    'isAdmin': is_admin(user, wcif),
+    'birthdate': user.birthdate.isoformat(),
   }
 
 def form_to_frontend(form):

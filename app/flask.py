@@ -29,7 +29,7 @@ oauth.register(
     authorize_url=wca_host + '/oauth/authorize',
     authorize_params=None,
     api_base_url=wca_host + '/api/v0/',
-    client_kwargs={'scope': 'public email'},
+    client_kwargs={'scope': 'public email dob'},
 )
 
 from app.handlers.admin import bp as admin_bp

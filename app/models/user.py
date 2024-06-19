@@ -34,13 +34,14 @@ class UserLocationUpdate(ndb.Model):
   update_time = ndb.DateTimeProperty()
   # Defined at end of file (it's a circular reference so we can't define here)
   # updater = ndb.KeyProperty(kind=User)
- 
+
 
 class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
   name = ndb.StringProperty()
   email = ndb.StringProperty()
   roles = ndb.StringProperty(repeated=True)
+  birthdate = ndb.DateProperty()
 
   city = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)

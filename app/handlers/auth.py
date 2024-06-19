@@ -55,6 +55,11 @@ def create_bp(oauth):
       else:
         del user.email
 
+      if 'dob' in wca_info:
+        user.birthdate = datetime.date.fromisoformat(wca_info['dob'])
+      else:
+        del user.birthdate
+
       user.roles = [role for role in user.roles if role not in Roles.DelegateRoles()]
       if 'delegate_status' in wca_info:
         if wca_info['delegate_status'] == 'senior_delegate':
@@ -81,6 +86,8 @@ def create_bp(oauth):
           user.latitude = wca_id_user.latitude
         if wca_id_user.longitude and not user.longitude:
           user.longitude = wca_id_user.longitude
+        if wca_id_user.birthdate and not user.birthdate:
+          user.birthdate = wca_id_user.birthdate
         wca_id_user.key.delete()
 
       user.last_login = datetime.datetime.now()
