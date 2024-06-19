@@ -111,7 +111,7 @@ export function Responses() {
                   delete
                 </span>
                 <br />
-                {column.name()}
+                {column.header()}
               </th>
             ))}
           </tr>

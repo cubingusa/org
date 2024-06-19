@@ -17,7 +17,7 @@ export abstract class TableColumn {
     return ColumnParams.encode(this.params).finish();
   }
   abstract id(): string;
-  abstract name(): string;
+  abstract header(): JSX.Element;
   abstract render(applicant: ApplicantData): JSX.Element;
 }
 
@@ -40,18 +40,18 @@ class PersonalAttributeColumn extends TableColumn {
     return `PA-${this.params.attribute.toString()}${suffix}`;
   }
 
-  name(): string {
+  header(): JSX.Element {
     switch (this.params.attribute) {
       case PersonalAttribute.AGE:
-        return "Age";
+        return <>Age</>;
       case PersonalAttribute.DELEGATE_STATUS:
-        return "Is Delegate";
+        return <>Is Delegate</>;
       case PersonalAttribute.LISTED_ORGANIZER:
-        return "Listed Organezer";
+        return <>Listed Organezer</>;
       case PersonalAttribute.LISTED_DELEGATE:
-        return "Listed Delegate";
+        return <>Listed Delegate</>;
       case PersonalAttribute.REGISTERED:
-        return "Registered";
+        return <>Registered</>;
     }
   }
 
@@ -122,19 +122,19 @@ class FormMetadataColumn extends TableColumn {
     return `FM-${this.params.formId}-${this.params.formMetadata}`;
   }
 
-  name(): string {
+  header(): JSX.Element {
     const form = this.settings.forms.find((f) => f.id == this.params.formId);
     if (form) {
       switch (this.params.formMetadata) {
         case FormMetadata.SUBMITTED:
-          return `${form.name} Submitted`;
+          return <>{`${form.name} Submitted`}</>;
         case FormMetadata.SUBMIT_TIME:
-          return `${form.name} Submit Time`;
+          return <>{`${form.name} Submit Time`}</>;
         case FormMetadata.UPDATE_TIME:
-          return `${form.name} Update Time`;
+          return <>{`${form.name} Update Time`}</>;
       }
     }
-    return "??";
+    return <>??</>;
   }
 
   render(applicant: ApplicantData): JSX.Element {
@@ -192,12 +192,12 @@ class FormAnswerColumn extends TableColumn {
     return question;
   }
 
-  name(): string {
+  header(): JSX.Element {
     const question = this.getQuestion();
     if (!question) {
-      return "??";
+      return <>??</>;
     }
-    return question.name;
+    return <>question.name</>;
   }
 
   render(applicant: ApplicantData): JSX.Element {
