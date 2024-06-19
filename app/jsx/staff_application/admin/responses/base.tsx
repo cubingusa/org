@@ -68,7 +68,11 @@ export function Responses() {
   };
 
   const addColumn = function (params: ColumnParams) {
-    config.columns.push(decodeColumn(params, settings, wcif));
+    const newColumn = decodeColumn(params, settings, wcif);
+    if (config.columns.map((c) => c.id()).includes(newColumn.id())) {
+      return;
+    }
+    config.columns.push(newColumn);
     updateConfig(config);
   };
 
