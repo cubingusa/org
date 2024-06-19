@@ -1,30 +1,14 @@
-import {
-  Routes,
-  Route,
-  useRouteLoaderData,
-  redirect,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
 import { Admin } from "./admin";
+import { AdminHeader } from "./header";
 import { Responses, EncodedSettingsLoader } from "./responses";
 import { ApplicantLoader } from "./applicant_loader";
 import { CompetitionData } from "../types/competition_data";
-
-function AdminGuard() {
-  const { user } = useRouteLoaderData("competition") as CompetitionData;
-  if (user !== null && user.isAdmin) {
-    return <Outlet />;
-  } else {
-    return <Navigate to=".." />;
-  }
-}
 
 export function AdminRoutes() {
   return {
     path: "admin",
     loader: ApplicantLoader,
-    element: <AdminGuard />,
+    element: <AdminHeader />,
     children: [
       {
         index: true,
