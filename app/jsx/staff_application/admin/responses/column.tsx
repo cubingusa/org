@@ -66,13 +66,13 @@ class PersonalAttributeColumn extends TableColumn {
       case PersonalAttribute.AGE:
         return <>Age</>;
       case PersonalAttribute.DELEGATE_STATUS:
-        return <>Is Delegate</>;
+        return <>Delegate</>;
       case PersonalAttribute.LISTED_ORGANIZER:
         return <>Listed Organezer</>;
       case PersonalAttribute.LISTED_DELEGATE:
         return <>Listed Delegate</>;
       case PersonalAttribute.REGISTERED:
-        return <>Registered</>;
+        return <>Reg</>;
       case PersonalAttribute.REGISTERED_FOR_EVENT:
         return (
           <span
