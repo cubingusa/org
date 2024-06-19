@@ -16,6 +16,17 @@ module.exports = {
         test: /\.tsx?$/,
         exclude: [/node_modules/, /external/],
         use: ['ts-loader'],
+      },
+      {
+        test: /\.proto$/,
+        use: {
+          loader: 'protobufjs-loader',
+          options: {
+            pbts: {
+              args: ['--no-comments'],
+            },
+          }
+        }
       }
     ]
   },

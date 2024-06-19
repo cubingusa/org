@@ -7,45 +7,42 @@ import {
   useNavigate,
   redirect,
 } from "react-router-dom";
-import { TableFilter, filterPasses } from "./filter";
-import { TableColumn, decodeColumn, ColumnParams } from "./column";
+import { util } from "protobufjs";
+
+import { TableFilter, filterPasses, decodeFilter } from "./filter";
+import { ColumnParams, TableSettings } from "./api.proto";
+import { TableColumn, decodeColumn } from "./column";
 import { ColumnModal } from "./column_modal";
 import { ApplicantData } from "../../types/applicant_data";
 import { CompetitionData } from "../../types/competition_data";
 
-interface TableSettings {
+export interface TableConfig {
   filters: TableFilter[];
   columns: TableColumn[];
 }
 
-function defaultSettings(): TableSettings {
-  return {
-    filters: [],
-    columns: [],
-  };
-}
-
-export function EncodedSettingsLoader({ params }: any): TableSettings {
+export function EncodedSettingsLoader({ params }: any): TableConfig {
   try {
-    let parsedSettings = JSON.parse(atob(params.encodedSettings));
+    let parsedSettings = TableSettings.decode(
+      Uint8Array.from(atob(params.encodedSettings), (c) => c.charCodeAt(0)),
+    );
     return {
-      filters: parsedSettings.filters || [],
-      columns: (parsedSettings.columns || []).map((column: any) =>
-        decodeColumn(column),
-      ),
+      filters: parsedSettings.filters.map(decodeFilter),
+      columns: parsedSettings.columns.map(decodeColumn),
     };
   } catch (e) {
     throw redirect("..");
   }
 }
 
-function encodeTableSettings(settings: TableSettings): string {
-  return btoa(
-    JSON.stringify({
-      filters: settings.filters,
-      columns: settings.columns.map((col) => col.encode()),
+function encodeConfig(config: TableConfig): string {
+  let buffer = TableSettings.encode(
+    TableSettings.fromObject({
+      filters: config.filters.map((filter) => filter.params),
+      columns: config.columns.map((column) => column.params),
     }),
-  );
+  ).finish();
+  return util.base64.encode(buffer, 0, buffer.length);
 }
 
 export function Responses() {
@@ -53,24 +50,24 @@ export function Responses() {
   const applicants = useRouteLoaderData("responses") as ApplicantData[];
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const baseSettings = useRouteLoaderData(
-    "responses_settings",
-  ) as TableSettings;
-  const [settings, setSettings] = useState(baseSettings || defaultSettings());
+  const baseConfig = useRouteLoaderData("responses_settings") as TableConfig;
+  const [config, setConfig] = useState(
+    baseConfig || { filters: [], columns: [] },
+  );
 
-  const updateSettings = function (newSettings: TableSettings) {
-    setSettings(newSettings);
+  const updateConfig = function (newConfig: TableConfig) {
+    setConfig(newConfig);
     navigate(
       pathname.replace(
         /\/responses.*/i,
-        `/responses/${encodeTableSettings(newSettings)}`,
+        `/responses/${encodeConfig(newConfig)}`,
       ),
     );
   };
 
   const addColumn = function (params: ColumnParams) {
-    settings.columns.push(decodeColumn(params));
-    updateSettings(settings);
+    config.columns.push(decodeColumn(params));
+    updateConfig(config);
   };
 
   return (
@@ -93,7 +90,7 @@ export function Responses() {
         <thead>
           <tr>
             <th scope="col">Name</th>
-            {settings.columns.map((column) => (
+            {config.columns.map((column) => (
               <th key={column.id()} scope="col">
                 {column.name()}
               </th>
@@ -103,7 +100,7 @@ export function Responses() {
         <tbody>
           {applicants
             .filter((applicant) => {
-              for (const filter of settings.filters) {
+              for (const filter of config.filters) {
                 if (!filterPasses(filter, applicant)) {
                   return false;
                 }
@@ -124,7 +121,7 @@ export function Responses() {
                     </>
                   ) : null}
                 </td>
-                {settings.columns.map((column) => (
+                {config.columns.map((column) => (
                   <td key={applicant.user.id + "-" + column.id()}></td>
                 ))}
               </tr>

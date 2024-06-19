@@ -1,6 +1,6 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
-import { ColumnParams, ColumnType, PersonalAttribute } from "./column";
+import { PersonalAttribute, ColumnType, ColumnParams } from "./api.proto";
 import { CompetitionData } from "../../types/competition_data";
 
 interface ColumnModalParams {
@@ -26,13 +26,15 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
   const doAddColumn = function () {
     switch (columnType) {
       case ColumnType.PERSONAL_ATTRIBUTE:
-        addColumn({
-          columnType,
-          attribute: personalAttributeType,
-        });
+        addColumn(
+          ColumnParams.fromObject({
+            columnType,
+            attribute: personalAttributeType,
+          }),
+        );
         break;
       case ColumnType.FORM_ANSWER:
-        addColumn({ columnType, questionId, formId });
+        addColumn(ColumnParams.fromObject({ columnType, questionId, formId }));
         break;
     }
   };
@@ -45,7 +47,7 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
           className="form-select"
           value={personalAttributeType}
           onChange={(e) =>
-            setPersonalAttributeType(e.target.value as PersonalAttribute)
+            setPersonalAttributeType(+e.target.value as PersonalAttribute)
           }
         >
           <option value={PersonalAttribute.AGE}>Age</option>

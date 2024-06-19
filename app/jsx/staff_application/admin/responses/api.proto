@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+enum PersonalAttribute {
+  PERSONAL_ATTRIBUTE_UNSPECIFIED = 0;
+  AGE = 1;
+  DELEGATE_STATUS = 2;
+}
+
+enum ColumnType {
+  COLUMN_TYPE_UNSPECIFIED = 0;
+  PERSONAL_ATTRIBUTE = 1;
+  FORM_ANSWER = 2;
+}
+
+message ColumnParams {
+  optional ColumnType column_type = 1;
+
+  // When PERSONAL_ATTRIBUTE is used:
+  optional PersonalAttribute attribute = 2;
+
+  // When FORM_QUESTION is used:
+  optional int32 form_id = 3;
+  optional int32 question_id = 4;
+}
+
+message FilterParams {}
+
+message TableSettings {
+  repeated ColumnParams columns = 1;
+  repeated FilterParams filters = 2;
+}

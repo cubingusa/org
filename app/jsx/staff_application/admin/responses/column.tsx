@@ -1,31 +1,17 @@
-export enum ColumnType {
-  PERSONAL_ATTRIBUTE = "personal_attribute",
-  FORM_ANSWER = "form_answer",
-}
+import { PersonalAttribute, ColumnType, ColumnParams } from "./api.proto";
 
-export enum PersonalAttribute {
-  AGE = "age",
-  DELEGATE_STATUS = "delegate_status",
-}
-
-interface PersonalAttributeParams {
-  columnType: ColumnType.PERSONAL_ATTRIBUTE;
-  attribute: PersonalAttribute;
-}
-
-class PersonalAttributeColumn implements TableColumn {
-  constructor(params: any) {
-    this.params = Object.assign({
-      columnType: ColumnType.FORM_ANSWER,
-      attribute: PersonalAttribute.AGE,
-    });
+export abstract class TableColumn {
+  constructor(public params: ColumnParams) {}
+  encode(): Uint8Array {
+    return ColumnParams.encode(this.params).finish();
   }
+  abstract id(): string;
+  abstract name(): string;
+}
 
-  encode(): any {
-    return this.params;
-  }
+class PersonalAttributeColumn extends TableColumn {
   id(): string {
-    return this.params.attribute;
+    return `PA-${this.params.attribute.toString()}`;
   }
   name(): string {
     switch (this.params.attribute) {
@@ -35,58 +21,24 @@ class PersonalAttributeColumn implements TableColumn {
         return "Delegate";
     }
   }
-
-  params: PersonalAttributeParams;
 }
 
-interface FormAnswerParams {
-  columnType: ColumnType.FORM_ANSWER;
-  formId: number;
-  questionId: number;
-}
-
-class FormAnswerColumn implements TableColumn {
-  constructor(params: any) {
-    this.params = Object.assign(
-      {
-        columnType: ColumnType.FORM_ANSWER,
-        formId: 0,
-        questionId: 0,
-      },
-      params,
-    );
-  }
-
-  encode(): any {
-    return this.params;
-  }
+class FormAnswerColumn extends TableColumn {
   id(): string {
-    return this.params.formId + "-" + this.params.questionId;
+    return `FA-${this.params.formId}-${this.params.questionId}`;
   }
   name(): string {
     // TODO: Pass in form data.
-    return this.params.formId + "-" + this.params.questionId;
+    return `${this.params.formId}-${this.params.questionId}`;
   }
-
-  params: FormAnswerParams;
 }
 
-export interface TableColumn {
-  encode(): any;
-  id(): string;
-  name(): string;
-}
-
-export function decodeColumn(params: any): TableColumn | null {
-  if (params.columnType === undefined) {
-    return null;
-  }
+export function decodeColumn(params: ColumnParams): TableColumn | null {
   switch (params.columnType) {
     case ColumnType.PERSONAL_ATTRIBUTE:
       return new PersonalAttributeColumn(params);
     case ColumnType.FORM_ANSWER:
       return new FormAnswerColumn(params);
   }
+  return null;
 }
-
-export type ColumnParams = PersonalAttributeParams | FormAnswerParams;

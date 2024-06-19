@@ -1,5 +1,6 @@
 *.pyc
 *.swp
+*.proto.d.ts
 lib/*
 .sass-cache/
 .local_storage/
