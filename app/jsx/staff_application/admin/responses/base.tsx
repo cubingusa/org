@@ -7,7 +7,7 @@ import {
   redirect,
 } from "react-router-dom";
 import { TableFilter, filterPasses } from "./filter";
-import { TableColumn } from "./column";
+import { TableColumn, decode } from "./column";
 import { ApplicantData } from "../../types/applicant_data";
 import { CompetitionData } from "../../types/competition_data";
 
@@ -25,16 +25,25 @@ function defaultSettings(): TableSettings {
 
 export function EncodedSettingsLoader({ params }: any): TableSettings {
   try {
-    let settings = defaultSettings();
-    Object.assign(settings, JSON.parse(atob(params.encodedSettings)));
-    return settings;
+    let parsedSettings = JSON.parse(atob(params.encodedSettings));
+    return {
+      filters: parsedSettings.filters || [],
+      columns: (parsedSettings.columns || []).map((column: any) =>
+        decode(column),
+      ),
+    };
   } catch (e) {
     throw redirect("..");
   }
 }
 
 function encodeTableSettings(settings: TableSettings): string {
-  return btoa(JSON.stringify(settings));
+  return btoa(
+    JSON.stringify({
+      filters: settings.filters,
+      columns: settings.columns.map((col) => col.encode()),
+    }),
+  );
 }
 
 export function Responses() {
@@ -57,8 +66,8 @@ export function Responses() {
         <tr>
           <th scope="col">Name</th>
           {settings.columns.map((column) => (
-            <th key={column.formId + "-" + column.questionId} scope="col">
-              {column.name}
+            <th key={column.id()} scope="col">
+              {column.name()}
             </th>
           ))}
         </tr>
@@ -88,15 +97,7 @@ export function Responses() {
                 ) : null}
               </td>
               {settings.columns.map((column) => (
-                <td
-                  key={
-                    applicant.user.id +
-                    "-" +
-                    column.formId +
-                    "-" +
-                    column.questionId
-                  }
-                ></td>
+                <td key={applicant.user.id + "-" + column.id()}></td>
               ))}
             </tr>
           ))}
