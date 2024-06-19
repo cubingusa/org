@@ -42,6 +42,7 @@ class User(ndb.Model):
   email = ndb.StringProperty()
   roles = ndb.StringProperty(repeated=True)
   birthdate = ndb.DateProperty()
+  delegate_status = ndb.StringProperty()
 
   city = ndb.StringProperty()
   state = ndb.KeyProperty(kind=State)

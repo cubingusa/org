@@ -66,6 +66,7 @@ def create_bp(oauth):
           user.roles.append(Roles.SENIOR_DELEGATE)
         elif wca_info['delegate_status'] in ('delegate', 'candidate_delegate'):
           user.roles.append(Roles.DELEGATE)
+      user.delegate_status = wca_info['delegate_status']
 
       # For local development, make it easier to make a user a global admin.
       if os.environ.get('ADMIN_WCA_ID'):

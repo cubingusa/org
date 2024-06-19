@@ -20,6 +20,7 @@ def user_to_frontend(user, wcif):
     'email': user.email,
     'isAdmin': is_admin(user, wcif),
     'birthdate': user.birthdate.isoformat(),
+    'delegateStatus': user.delegate_status,
   }
 
 def form_to_frontend(form):
