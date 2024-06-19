@@ -76,6 +76,11 @@ export function Responses() {
     updateConfig(config);
   };
 
+  const deleteColumn = function (columnId: string) {
+    config.columns = config.columns.filter((c) => c.id() !== columnId);
+    updateConfig(config);
+  };
+
   return (
     <>
       <button
@@ -92,12 +97,20 @@ export function Responses() {
           <div className="modal-content"></div>
         </div>
       </div>
-      <table className="table">
+      <table className="table" style={{ overflowX: "auto" }}>
         <thead>
           <tr>
             <th scope="col">Name</th>
             {config.columns.map((column) => (
               <th key={column.id()} scope="col">
+                <span
+                  className="material-symbols-outlined"
+                  onClick={(e) => deleteColumn(column.id())}
+                  style={{ cursor: "pointer" }}
+                >
+                  delete
+                </span>
+                <br />
                 {column.name()}
               </th>
             ))}
