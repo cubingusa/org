@@ -22,7 +22,6 @@ export interface TableConfig {
 }
 
 export function EncodedSettingsLoader({ params }: any): TableSettings {
-  console.log("ESL");
   try {
     return TableSettings.decode(
       Uint8Array.from(atob(params.encodedSettings), (c) => c.charCodeAt(0)),
