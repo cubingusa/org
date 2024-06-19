@@ -31,7 +31,8 @@ export function AdminHeader() {
                 active: pathname.endsWith("/admin"),
               })}
             >
-              <span className="material-symbols-outlined">edit</span> Edit Form
+              <span className="material-symbols-outlined">edit</span> Edit
+              Application
             </li>
           </Link>
           <Link to="responses">
