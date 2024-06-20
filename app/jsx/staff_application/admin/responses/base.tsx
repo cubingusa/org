@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useRouteLoaderData,
   Link,
@@ -13,6 +13,7 @@ import { TableFilter, filterPasses, decodeFilter } from "./filter";
 import { ColumnParams, TableSettings } from "./api.proto";
 import { TableColumn, decodeColumn } from "./column";
 import { ColumnModal } from "./column_modal";
+import { EditPropertiesModal } from "./edit_properties_modal";
 import { ApplicantData } from "../../types/applicant_data";
 import { CompetitionData } from "../../types/competition_data";
 
@@ -56,6 +57,7 @@ export function Responses() {
     filters: tableSettings.filters.map(decodeFilter),
     columns: tableSettings.columns.map((c) => decodeColumn(c, settings, wcif)),
   });
+  const [selectedIds, setSelectedIds] = useState([] as Number[]);
 
   const updateConfig = function (newConfig: TableConfig) {
     setConfig(newConfig);
@@ -76,13 +78,53 @@ export function Responses() {
     updateConfig(config);
   };
 
+  const filteredApplicants = applicants.filter((applicant) => {
+    for (const filter of config.filters) {
+      if (!filterPasses(filter, applicant)) {
+        return false;
+      }
+    }
+    return true;
+  });
+
   const deleteColumn = function (columnId: string) {
     config.columns = config.columns.filter((c) => c.id() !== columnId);
     updateConfig(config);
   };
 
+  const onSelectAll = function (selected: boolean) {
+    if (selected) {
+      setSelectedIds(filteredApplicants.map((applicant) => applicant.user.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  const onSelectPerson = function (
+    selected: boolean,
+    applicant: ApplicantData,
+  ) {
+    if (selected) {
+      setSelectedIds([...selectedIds, applicant.user.id]);
+    } else {
+      setSelectedIds(selectedIds.filter((a) => a != applicant.user.id));
+    }
+  };
+
   return (
     <>
+      <button
+        type="button"
+        className="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#properties-modal"
+        disabled={selectedIds.length == 0}
+      >
+        <span className="material-symbols-outlined">edit</span> Edit{" "}
+        {selectedIds.length} {selectedIds.length == 1 ? "person" : "people"}
+      </button>
+      &nbsp;
+      <EditPropertiesModal id="properties-modal" personIds={selectedIds} />
       <button
         type="button"
         className="btn btn-success"
@@ -92,14 +134,33 @@ export function Responses() {
         <span className="material-symbols-outlined">add</span> Add Column
       </button>
       <ColumnModal id="column-modal" addColumn={addColumn} />
-      <div className="modal fade" id="column-modal">
-        <div className="modal-dialog">
-          <div className="modal-content"></div>
-        </div>
-      </div>
       <table className="table" style={{ overflowX: "auto" }}>
         <thead>
           <tr>
+            <th scope="col">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="select-all"
+                  checked={selectedIds.length == filteredApplicants.length}
+                  ref={(input) => {
+                    if (!input) {
+                      return;
+                    }
+                    if (
+                      selectedIds.length > 0 &&
+                      selectedIds.length < filteredApplicants.length
+                    ) {
+                      input.indeterminate = true;
+                    } else {
+                      input.indeterminate = false;
+                    }
+                  }}
+                  onChange={(e) => onSelectAll(e.target.checked)}
+                />
+              </div>
+            </th>
             <th scope="col">Name</th>
             {config.columns.map((column) => (
               <th key={column.id()} scope="col">
@@ -117,36 +178,39 @@ export function Responses() {
           </tr>
         </thead>
         <tbody>
-          {applicants
-            .filter((applicant) => {
-              for (const filter of config.filters) {
-                if (!filterPasses(filter, applicant)) {
-                  return false;
-                }
-              }
-              return true;
-            })
-            .map((applicant) => (
-              <tr key={applicant.user.id}>
-                <td>
-                  {applicant.user.name}&nbsp;
-                  {applicant.user.wcaId ? (
-                    <>
-                      (
-                      <Link to={"https://wca.link/" + applicant.user.wcaId}>
-                        {applicant.user.wcaId}
-                      </Link>
-                      )
-                    </>
-                  ) : null}
+          {filteredApplicants.map((applicant) => (
+            <tr key={applicant.user.id}>
+              <td>
+                <div className="form-check">
+                  <input
+                    className="form-check-input person-selector"
+                    type="checkbox"
+                    checked={selectedIds.includes(applicant.user.id)}
+                    onChange={(e) =>
+                      onSelectPerson(e.target.checked, applicant)
+                    }
+                  />
+                </div>
+              </td>
+              <td>
+                {applicant.user.name}&nbsp;
+                {applicant.user.wcaId ? (
+                  <>
+                    (
+                    <Link to={"https://wca.link/" + applicant.user.wcaId}>
+                      {applicant.user.wcaId}
+                    </Link>
+                    )
+                  </>
+                ) : null}
+              </td>
+              {config.columns.map((column) => (
+                <td key={applicant.user.id + "-" + column.id()}>
+                  {column.render(applicant)}
                 </td>
-                {config.columns.map((column) => (
-                  <td key={applicant.user.id + "-" + column.id()}>
-                    {column.render(applicant)}
-                  </td>
-                ))}
-              </tr>
-            ))}
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
