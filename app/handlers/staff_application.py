@@ -15,7 +15,7 @@ client = ndb.Client()
 def user_to_frontend(user, wcif, settings, user_settings):
   admin = is_admin(user, wcif)
   if user_settings:
-    props = [{'key': k, 'value': v} for k, v in user_settings.properties.items()]
+    props = [{'key': k, 'value': v} for k, v in user_settings.properties.items() if v > -1]
   else:
     props = []
   if not admin:

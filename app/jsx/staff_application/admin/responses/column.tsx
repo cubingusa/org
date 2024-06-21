@@ -283,7 +283,7 @@ class FormAnswerColumn extends TableColumn {
           return submittedQuestion.booleanAnswer ? CHECK : X;
       }
     }
-    return <>&ndash</>;
+    return <>&ndash;</>;
   }
 }
 
@@ -320,7 +320,7 @@ class PropertyColumn extends TableColumn {
       (p) => p.key == property.id,
     );
     if (!userProperty) {
-      return <>&ndash</>;
+      return <>&ndash;</>;
     }
     const propertyVal = property.values.find((v) => v.id == userProperty.value);
     if (!propertyVal) {
