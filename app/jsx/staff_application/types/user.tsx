@@ -1,3 +1,8 @@
+export interface UserProperty {
+  key: number;
+  value: number;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -6,4 +11,5 @@ export interface User {
   isAdmin: boolean;
   birthdate: string;
   delegateStatus: string;
+  properties: UserProperty[];
 }

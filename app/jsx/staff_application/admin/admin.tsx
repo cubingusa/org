@@ -57,7 +57,7 @@ export function Admin() {
       id: settings.nextPropertyId,
       name: "New Property",
       visible: false,
-      values: new Map(),
+      values: [],
       nextValueId: 0,
     });
     setPropertyCount(settings.properties.length);
@@ -144,7 +144,7 @@ export function Admin() {
         have been accepted to.
       </div>
       <div className="accordion" id="formAccordion">
-        {(settings.properties || []).map((property) => (
+        {settings.properties.map((property) => (
           <div className="accordion-item" key={property.id}>
             <h2 className="accordion-header">
               <button

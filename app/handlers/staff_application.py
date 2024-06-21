@@ -5,22 +5,31 @@ import logging
 import requests
 
 from app.lib import auth, common
-from app.models.staff_application import ApplicationSettings, SubmittedForm
+from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings
 from app.models.user import Roles, User
 from app.models.wca.competition import Competition
 
 bp = Blueprint('staff_application', __name__)
 client = ndb.Client()
 
-def user_to_frontend(user, wcif):
+def user_to_frontend(user, wcif, settings, user_settings):
+  admin = is_admin(user, wcif)
+  if user_settings:
+    props = [{'key': k, 'value': v} for k, v in user_settings.properties.items()]
+  else:
+    props = []
+  if not admin:
+    visible_props = [prop['id'] for prop in settings.details['properties'] if prop['visible']]
+    props = [p for p in props if p['key'] in visible_props]
   return {
     'id': user.key.id(),
     'name': user.name,
     'wcaId': user.wca_person.id() if user.wca_person else '',
     'email': user.email,
-    'isAdmin': is_admin(user, wcif),
+    'isAdmin': admin,
     'birthdate': user.birthdate.isoformat(),
     'delegateStatus': user.delegate_status,
+    'properties': props,
   }
 
 def form_to_frontend(form):
@@ -83,10 +92,12 @@ def api_wcif(competition_id):
 def me_wcif(competition_id):
   with client.context():
     user = auth.user()
-    wcif = get_wcif(competition_id)
     if not user:
       return {}, 401
-    return user_to_frontend(user, wcif)
+    wcif = get_wcif(competition_id)
+    settings = ApplicationSettings.get_by_id(competition_id)
+    user_settings = UserSettings.get_by_id(UserSettings.Key(competition_id, int(user.key.id())))
+    return user_to_frontend(user, wcif, settings, user_settings)
 
 @bp.route('/staff_api/<competition_id>/settings', methods=['GET'])
 def get_settings(competition_id):
@@ -147,12 +158,44 @@ def get_all_users(competition_id):
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
+    settings = ApplicationSettings.get_by_id(competition_id)
     all_forms = list(SubmittedForm.query(SubmittedForm.competition == ndb.Key(Competition, competition_id)).iter())
     user_keys = list(set([form.user for form in all_forms]))
     users = ndb.get_multi(user_keys)
+    user_settings_keys = [ndb.Key(UserSettings, UserSettings.Key(competition_id, int(user.key.id()))) for user in users]
+    user_settings = ndb.get_multi(user_settings_keys)
     return [
       {
-        'user': user_to_frontend(user, wcif),
+        'user': user_to_frontend(user, wcif, settings, user_settings),
         'forms': [form_to_frontend(form) for form in all_forms if form.user == user.key]
-      } for user in users
+      } for user, user_settings in zip(users, user_settings)
     ]
+
+@bp.route('/staff_api/<competition_id>/properties', methods=['POST'])
+def post_properties(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    req = request.json
+    if not is_admin(user, wcif):
+      return {}, 401
+    personIds = [int(i) for i in req['personIds']]
+    propertyId = req['propertyId']
+    valueId = req['valueId']
+    user_settings = ndb.get_multi([ndb.Key(UserSettings, UserSettings.Key(competition_id, user_id)) for user_id in personIds])
+    all_user_settings = [
+      user_settings if user_settings else UserSettings(id=UserSettings.Key(competition_id, user_id))
+      for user_settings, user_id in zip(user_settings, personIds)
+    ]
+    for user_settings, user_id in zip(all_user_settings, personIds):
+      if not user_settings.properties:
+        user_settings.properties = {}
+        user_settings.user = ndb.Key(User, user_id)
+        user_settings.competition = ndb.Key(Competition, competition_id)
+      props = user_settings.properties
+      if propertyId != -1:
+        props[propertyId] = valueId
+      elif propertyId in props:
+        del props[propertyId]
+    ndb.put_multi(all_user_settings)
+    return {}, 200

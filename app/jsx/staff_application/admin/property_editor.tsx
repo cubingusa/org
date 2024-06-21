@@ -9,7 +9,7 @@ interface PropertyEditorProps {
 
 export function PropertyEditor(props: PropertyEditorProps) {
   const [name, setName] = useState(props.property.name || "");
-  const [numValues, setNumValues] = useState(props.property.values.size);
+  const [numValues, setNumValues] = useState(props.property.values.length);
   const property = props.property;
   const deleteProperty = props.deleteProperty;
 
@@ -19,15 +19,19 @@ export function PropertyEditor(props: PropertyEditorProps) {
   };
 
   const newValue = function () {
+    console.log(property);
     event.preventDefault();
-    property.values.set(property.nextValueId, "New Value");
+    property.values.push({
+      id: property.nextValueId,
+      value: "New Value",
+    });
     property.nextValueId++;
-    setNumValues(property.values.size);
+    setNumValues(property.values.length);
   };
 
   const deleteValue = function (id: number) {
-    property.values.delete(id);
-    setNumValues(property.values.size);
+    property.values = property.values.filter((v) => v.id !== id);
+    setNumValues(property.values.length);
   };
 
   return (
@@ -63,18 +67,18 @@ export function PropertyEditor(props: PropertyEditorProps) {
         </div>
         <div>Values</div>
         <ul className="list-group">
-          {Array.from(property.values).map(([id, value]) => (
-            <li className="list-group-item" key={id + 1}>
+          {property.values.map((val) => (
+            <li className="list-group-item" key={val.id + 1}>
               <input
                 className="form-control"
                 type="text"
-                defaultValue={value}
-                onChange={(e) => property.values.set(id, e.target.value)}
+                defaultValue={val.value}
+                onChange={(e) => (val.value = e.target.value)}
                 placeholder="Value of property"
               ></input>
               <span
                 className="material-symbols-outlined"
-                onClick={(e) => deleteValue(id)}
+                onClick={(e) => deleteValue(val.id)}
                 style={{ cursor: "pointer" }}
               >
                 delete

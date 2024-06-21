@@ -15,5 +15,14 @@ class SubmittedForm(ndb.Model):
   def Key(competition_id, form_id, user_id):
     return '%s_%d_%s' % (competition_id, form_id, user_id)
 
+class UserSettings(ndb.Model):
+  user = ndb.KeyProperty(kind=User)
+  competition = ndb.KeyProperty(kind=Competition)
+  properties = ndb.JsonProperty()
+
+  @staticmethod
+  def Key(competition_id, user_id):
+    return '%s_%d' % (competition_id, user_id)
+
 class ApplicationSettings(ndb.Model):
   details = ndb.JsonProperty()

@@ -284,6 +284,26 @@ export function Application() {
       account.
     </div>
   );
+  let props = (
+    <>
+      {user.properties.map(({ key, value }) => {
+        const prop = settings.properties.find((p) => p.id == key);
+        if (prop === null) {
+          return null;
+        }
+        const val = prop.values.find((val) => val.id == value);
+        if (val == undefined) {
+          return null;
+        }
+        return (
+          <div key={key}>
+            <b>{prop.name}</b>:{" "}
+            <span className="badge text-bg-primary">{val.value}</span>
+          </div>
+        );
+      })}
+    </>
+  );
 
   return (
     <div>
@@ -292,6 +312,8 @@ export function Application() {
       <div>{settings.description}</div>
       <p />
       {loggedIn}
+      <p />
+      {props}
       <p />
       {forms}
     </div>
