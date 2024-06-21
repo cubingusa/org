@@ -10,6 +10,7 @@ import {
 import { ApplicantData } from "../../types/applicant_data";
 import { ApplicationSettings } from "../../types/competition_data";
 import { Question, QuestionType } from "../../types/form";
+import { Property } from "../../types/property";
 import {
   PersonalAttribute,
   ColumnType,
@@ -286,6 +287,49 @@ class FormAnswerColumn extends TableColumn {
   }
 }
 
+class PropertyColumn extends TableColumn {
+  constructor(
+    params: ColumnParams,
+    private settings: ApplicationSettings,
+  ) {
+    super(params);
+  }
+
+  id(): string {
+    return `PROP-${this.params.propertyId}`;
+  }
+
+  getProperty(): Property | null {
+    return this.settings.properties.find((p) => p.id == this.params.propertyId);
+  }
+
+  header(): JSX.Element {
+    const property = this.getProperty();
+    if (!property) {
+      return <>??</>;
+    }
+    return <>{property.name}</>;
+  }
+
+  render(applicant: ApplicantData): JSX.Element {
+    const property = this.getProperty();
+    if (!property) {
+      return <>??</>;
+    }
+    const userProperty = applicant.user.properties.find(
+      (p) => p.key == property.id,
+    );
+    if (!userProperty) {
+      return <>&ndash</>;
+    }
+    const propertyVal = property.values.find((v) => v.id == userProperty.value);
+    if (!propertyVal) {
+      return <>??</>;
+    }
+    return <>{propertyVal.value}</>;
+  }
+}
+
 export function decodeColumn(
   params: ColumnParams,
   settings: ApplicationSettings,
@@ -298,6 +342,8 @@ export function decodeColumn(
       return new FormAnswerColumn(params, settings);
     case ColumnType.FORM_METADATA:
       return new FormMetadataColumn(params, settings);
+    case ColumnType.PROPERTY:
+      return new PropertyColumn(params, settings);
   }
   return null;
 }

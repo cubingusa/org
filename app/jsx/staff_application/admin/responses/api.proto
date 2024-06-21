@@ -24,6 +24,7 @@ enum ColumnType {
   FORM_ANSWER = 2;
   FORM_METADATA = 3;
   COMPETITION_INFO = 4;
+  PROPERTY = 5;
 }
 
 message ColumnParams {
@@ -40,6 +41,9 @@ message ColumnParams {
 
   // When FORM_METADATA is used:
   optional FormMetadata form_metadata = 5;
+
+  // When PROPERTY is used:
+  optional int32 property_id = 6;
 }
 
 message FilterParams {}

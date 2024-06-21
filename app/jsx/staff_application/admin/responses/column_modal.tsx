@@ -31,6 +31,9 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
   );
   const [formMetadata, setFormMetadata] = useState(FormMetadata.SUBMITTED);
   const [eventId, setEventId] = useState(wcif.events[0].id);
+  const [propertyId, setPropertyId] = useState(
+    settings.properties.length > 0 ? settings.properties[0].id : null,
+  );
   let disabledSubmit = false;
 
   const doAddColumn = function () {
@@ -56,6 +59,9 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
         addColumn(
           ColumnParams.fromObject({ columnType, formMetadata, formId }),
         );
+        break;
+      case ColumnType.PROPERTY:
+        addColumn(ColumnParams.fromObject({ columnType, propertyId }));
         break;
     }
   };
@@ -209,6 +215,26 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
           </>
         );
       }
+      break;
+    case ColumnType.PROPERTY:
+      if (settings.properties.length == 0) {
+        detailsSection = <>You haven't created any properties!</>;
+        disabledSubmit = true;
+      } else {
+        detailsSection = (
+          <select
+            className="form-select"
+            value={propertyId}
+            onChange={(e) => setPropertyId(+e.target.value)}
+          >
+            {settings.properties.map((property) => (
+              <option value={property.id} key={property.id}>
+                {property.name}
+              </option>
+            ))}
+          </select>
+        );
+      }
   }
 
   return (
@@ -223,6 +249,7 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
               { id: ColumnType.PERSONAL_ATTRIBUTE, name: "Personal Attribute" },
               { id: ColumnType.FORM_ANSWER, name: "Form Answer" },
               { id: ColumnType.FORM_METADATA, name: "Form Metadata" },
+              { id: ColumnType.PROPERTY, name: "Property" },
             ].map(({ id, name }) => (
               <div className="form-check" key={id}>
                 <input
