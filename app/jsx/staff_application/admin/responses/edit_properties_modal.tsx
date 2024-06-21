@@ -1,4 +1,4 @@
-import { useRouteLoaderData, useNavigate } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { EventId, getEventName } from "@wca/helpers";
 import {
@@ -26,7 +26,6 @@ export function EditPropertiesModal({
   );
   const property = settings.properties.find((p) => p.id == propertyId);
   const [valueId, setValueId] = useState(-1);
-  const navigate = useNavigate();
 
   const disabledSubmit = settings.properties.length == 0 || property == null;
 
@@ -95,7 +94,7 @@ export function EditPropertiesModal({
         valueId,
       }),
     });
-    navigate(".", { replace: true });
+    window.location.reload();
   };
 
   return (
