@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useRouteLoaderData, Link } from "react-router-dom";
 import { CompetitionData } from "../types/competition_data";
 import { Form } from "../types/form";
+import { Property } from "../types/property";
 import { FormEditor } from "./form_editor";
+import { PropertyEditor } from "./property_editor";
 
 export function Admin() {
   const [spinning, setSpinning] = useState(false);
@@ -10,6 +12,9 @@ export function Admin() {
     "competition",
   ) as CompetitionData;
   const [formCount, setFormCount] = useState((settings.forms || []).length);
+  const [propertyCount, setPropertyCount] = useState(
+    (settings.properties || []).length,
+  );
 
   const submit = async function () {
     event.preventDefault();
@@ -40,6 +45,30 @@ export function Admin() {
   const deleteForm = function (form: Form) {
     settings.forms = settings.forms.filter((f) => f.id !== form.id);
     setFormCount(settings.forms.length);
+  };
+
+  const newProperty = function () {
+    event.preventDefault();
+    if (settings.properties === undefined) {
+      settings.properties = [];
+      settings.nextPropertyId = 0;
+    }
+    settings.properties.push({
+      id: settings.nextPropertyId,
+      name: "New Property",
+      visible: false,
+      values: new Map(),
+      nextValueId: 0,
+    });
+    setPropertyCount(settings.properties.length);
+    settings.nextPropertyId++;
+  };
+
+  const deleteProperty = function (property: Property) {
+    settings.properties = settings.properties.filter(
+      (p) => p.id !== property.id,
+    );
+    setPropertyCount(settings.properties.length);
   };
 
   let spinner;
@@ -108,6 +137,45 @@ export function Admin() {
           <span className="material-symbols-outlined">add</span> New Form
         </button>
       </div>
+      <h3>Properties</h3>
+      <div>
+        You can add properties that can be applied to applicants, for example
+        whether their application has been accepted or not, or what team they
+        have been accepted to.
+      </div>
+      <div className="accordion" id="formAccordion">
+        {(settings.properties || []).map((property) => (
+          <div className="accordion-item" key={property.id}>
+            <h2 className="accordion-header">
+              <button
+                className="accordion-button collapsed"
+                id={"header-" + property.id}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={"#collapsed-property-" + property.id}
+              >
+                {property.name}
+              </button>
+            </h2>
+            <div
+              id={"collapsed-property-" + property.id}
+              className="accordion-collapse collapse"
+              data-bs-parent="#propertyAccordion"
+            >
+              <PropertyEditor
+                property={property}
+                deleteProperty={deleteProperty}
+              ></PropertyEditor>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div>
+        <button className="btn btn-success mb-3" onClick={newProperty}>
+          <span className="material-symbols-outlined">add</span> New Property
+        </button>
+      </div>
+      <br />
       <button className="btn btn-primary mb-3" type="submit" onClick={submit}>
         Save
       </button>
