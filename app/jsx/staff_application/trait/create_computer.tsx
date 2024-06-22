@@ -19,7 +19,7 @@ export function createComputer(
     case ComputerType.FormMetadata:
       return new FormMetadataComputer(params, settings);
     case ComputerType.PersonalAttribute:
-      return new PersonalAttributeComputer(params, settings);
+      return new PersonalAttributeComputer(params, wcif);
     case ComputerType.Property:
       return new PropertyComputer(params, settings);
   }

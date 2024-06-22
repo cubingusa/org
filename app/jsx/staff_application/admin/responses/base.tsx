@@ -1,95 +1,38 @@
-import { useState, useEffect } from "react";
-import {
-  useRouteLoaderData,
-  Link,
-  useParams,
-  useLocation,
-  useNavigate,
-  redirect,
-} from "react-router-dom";
+import { useState } from "react";
+import { useRouteLoaderData, Link } from "react-router-dom";
 import { util } from "protobufjs";
 
-import { TableFilter, filterPasses, decodeFilter } from "./filter";
-import { ColumnParams, TableSettings } from "./api.proto";
-import { TableColumn, decodeColumn } from "./column";
 import { ColumnModal } from "./column_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
+import { ComputerParams } from "../../trait/params";
+import { TraitComputer } from "../../trait/api";
+import { createComputer } from "../../trait/create_computer";
 import { ApplicantData } from "../../types/applicant_data";
 import { CompetitionData } from "../../types/competition_data";
 
-export interface TableConfig {
-  filters: TableFilter[];
-  columns: TableColumn[];
-}
-
-export function EncodedSettingsLoader({ params }: any): TableSettings {
-  try {
-    return TableSettings.decode(
-      Uint8Array.from(atob(params.encodedSettings), (c) => c.charCodeAt(0)),
-    );
-  } catch (e) {
-    throw redirect("..");
-  }
-}
-
-function encodeConfig(config: TableConfig): string {
-  let buffer = TableSettings.encode(
-    TableSettings.fromObject({
-      filters: config.filters.map((filter) => filter.params),
-      columns: config.columns.map((column) => column.params),
-    }),
-  ).finish();
-  return util.base64.encode(buffer, 0, buffer.length);
-}
-
 export function Responses() {
-  const { encodedSettings } = useParams();
   const { wcif, settings } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
   const applicants = useRouteLoaderData("responses") as ApplicantData[];
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const tableSettings =
-    (useRouteLoaderData("responses_settings") as TableSettings) ||
-    TableSettings.fromObject({});
-  const [config, setConfig] = useState({
-    filters: tableSettings.filters.map(decodeFilter),
-    columns: tableSettings.columns.map((c) => decodeColumn(c, settings, wcif)),
-  });
   const [selectedIds, setSelectedIds] = useState([] as Number[]);
+  const [columns, setColumns] = useState([] as TraitComputer[]);
 
-  const updateConfig = function (newConfig: TableConfig) {
-    setConfig(newConfig);
-    navigate(
-      pathname.replace(
-        /\/responses.*/i,
-        `/responses/${encodeConfig(newConfig)}`,
-      ),
-    );
-  };
-
-  const addColumn = function (params: ColumnParams) {
-    const newColumn = decodeColumn(params, settings, wcif);
-    if (config.columns.map((c) => c.id()).includes(newColumn.id())) {
+  const addColumn = function (trait: ComputerParams) {
+    const newComputer = createComputer(trait, settings, wcif);
+    if (columns.map((c) => c.id()).includes(newComputer.id())) {
       return;
     }
-    config.columns.push(newColumn);
-    updateConfig(config);
+    columns.push(newComputer);
+    setColumns(columns);
   };
 
   const filteredApplicants = applicants.filter((applicant) => {
-    for (const filter of config.filters) {
-      if (!filterPasses(filter, applicant)) {
-        return false;
-      }
-    }
     return true;
   });
 
   const deleteColumn = function (columnId: string) {
-    config.columns = config.columns.filter((c) => c.id() !== columnId);
-    updateConfig(config);
+    setColumns(columns.filter((c) => c.id() !== columnId));
   };
 
   const onSelectAll = function (selected: boolean) {
@@ -162,7 +105,7 @@ export function Responses() {
               </div>
             </th>
             <th scope="col">Name</th>
-            {config.columns.map((column) => (
+            {columns.map((column) => (
               <th key={column.id()} scope="col">
                 <span
                   className="material-symbols-outlined"
@@ -204,9 +147,9 @@ export function Responses() {
                   </>
                 ) : null}
               </td>
-              {config.columns.map((column) => (
+              {columns.map((column) => (
                 <td key={applicant.user.id + "-" + column.id()}>
-                  {column.render(applicant)}
+                  {column.compute(applicant).render()}
                 </td>
               ))}
             </tr>

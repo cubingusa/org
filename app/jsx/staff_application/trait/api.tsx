@@ -8,7 +8,7 @@ export abstract class Trait {
 }
 
 export abstract class TraitComputer {
-  constructor(private params: ComputerParams) {}
+  constructor(private baseParams: ComputerParams) {}
   abstract compute(applicant: ApplicantData): Trait;
   abstract id(): string;
   abstract header(): JSX.Element;

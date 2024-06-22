@@ -1,6 +1,6 @@
 import { Admin } from "./admin";
 import { AdminHeader } from "./header";
-import { Responses, EncodedSettingsLoader } from "./responses/base";
+import { Responses } from "./responses/base";
 import { ApplicantLoader } from "./applicant_loader";
 import { CompetitionData } from "../types/competition_data";
 
@@ -22,12 +22,6 @@ export function AdminRoutes() {
           {
             index: true,
             element: <Responses />,
-          },
-          {
-            path: ":encodedSettings",
-            element: <Responses />,
-            loader: EncodedSettingsLoader,
-            id: "responses_settings",
           },
         ],
       },
