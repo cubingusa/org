@@ -1,5 +1,5 @@
 import { ApplicantData } from "../types/applicant_data";
-import { SerializedTrait } from "../types/serialized_trait";
+import { SerializedTrait } from "./serialized";
 import { ComputerParams } from "./params";
 
 export abstract class Trait {

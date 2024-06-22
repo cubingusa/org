@@ -1,5 +1,5 @@
-import { SerializedTrait } from "../types/serialized_trait";
-import { Trait } from "./trait_api";
+import { SerializedTrait } from "./serialized";
+import { Trait } from "./api";
 
 type NumberTraitParams =
   | {
