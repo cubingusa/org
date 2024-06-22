@@ -44,7 +44,7 @@ interface PropertyParams {
   propertyId: number;
 }
 
-type ComputerParams =
+export type ComputerParams =
   | PersonalAttributeParams
   | FormAnswerParams
   | FormMetadataParams
