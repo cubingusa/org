@@ -8,7 +8,7 @@ export enum QuestionType {
 }
 
 export interface MultipleChoiceQuestion extends QuestionBase {
-  questionType: QuestionType.Null;
+  questionType: QuestionType.MultipleChoice;
   options: Map<number, string>;
   nextOptionId: number;
   multipleAllowed: boolean;
