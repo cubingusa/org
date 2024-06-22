@@ -1,11 +1,11 @@
-enum ComputerType {
+export enum ComputerType {
   PersonalAttribute = "personal_attribute",
   FormAnswer = "form_answer",
   FormMetadata = "form_metadata",
   Property = "property",
 }
 
-enum PersonalAttributeType {
+export enum PersonalAttributeType {
   Name = "name",
   WcaId = "wca_id",
   WcaUserId = "wca_user_id",
@@ -16,30 +16,30 @@ enum PersonalAttributeType {
   Registered = "registered",
 }
 
-interface PersonalAttributeParams {
+export interface PersonalAttributeParams {
   type: ComputerType.PersonalAttribute;
   attributeType: PersonalAttributeType;
 }
 
-interface FormAnswerParams {
+export interface FormAnswerParams {
   type: ComputerType.FormAnswer;
   formId: number;
   questionId: number;
 }
 
-enum FormMetadataType {
+export enum FormMetadataType {
   Submitted = "submitted",
   SubmitTime = "submit_time",
   UpdateTime = "update_time",
 }
 
-interface FormMetadataParams {
+export interface FormMetadataParams {
   type: ComputerType.FormMetadata;
   metadataType: FormMetadataType;
   formId: number;
 }
 
-interface PropertyParams {
+export interface PropertyParams {
   type: ComputerType.Property;
   propertyId: number;
 }
