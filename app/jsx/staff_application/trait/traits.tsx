@@ -100,3 +100,26 @@ export class BooleanTrait extends Trait {
 
   private val: boolean;
 }
+
+type NullTraitParams =
+  | {}
+  | {
+      serialized: SerializedTrait;
+    };
+export class NullTrait extends Trait {
+  constructor(params: NullTraitParams) {
+    super();
+  }
+
+  serialize(): SerializedTrait {
+    return {
+      traitType: TraitType.NullTrait,
+      numberValues: [],
+      stringValues: [],
+    };
+  }
+
+  render(): JSX.Element {
+    return <>&ndash;</>;
+  }
+}
