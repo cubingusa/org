@@ -16,15 +16,14 @@ export function Responses() {
   ) as CompetitionData;
   const applicants = useRouteLoaderData("responses") as ApplicantData[];
   const [selectedIds, setSelectedIds] = useState([] as Number[]);
-  const [columns, setColumns] = useState([] as TraitComputer[]);
+  const [computers, setComputers] = useState([] as TraitComputer[]);
 
   const addColumn = function (trait: ComputerParams) {
     const newComputer = createComputer(trait, settings, wcif);
-    if (columns.map((c) => c.id()).includes(newComputer.id())) {
+    if (computers.map((c) => c.id()).includes(newComputer.id())) {
       return;
     }
-    columns.push(newComputer);
-    setColumns(columns);
+    setComputers([...computers, newComputer]);
   };
 
   const filteredApplicants = applicants.filter((applicant) => {
@@ -32,7 +31,7 @@ export function Responses() {
   });
 
   const deleteColumn = function (columnId: string) {
-    setColumns(columns.filter((c) => c.id() !== columnId));
+    setComputers(computers.filter((c) => c.id() !== columnId));
   };
 
   const onSelectAll = function (selected: boolean) {
@@ -105,7 +104,7 @@ export function Responses() {
               </div>
             </th>
             <th scope="col">Name</th>
-            {columns.map((column) => (
+            {computers.map((column) => (
               <th key={column.id()} scope="col">
                 <span
                   className="material-symbols-outlined"
@@ -147,7 +146,7 @@ export function Responses() {
                   </>
                 ) : null}
               </td>
-              {columns.map((column) => (
+              {computers.map((column) => (
                 <td key={applicant.user.id + "-" + column.id()}>
                   {column.compute(applicant).render()}
                 </td>
