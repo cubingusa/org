@@ -2,7 +2,9 @@
 ^(.*/)?.*~$
 ^(.*/)?.*\.py[co]$
 ^(.*/)?\..*$
-external/bootstrap
+/node_modules/
+/exports/
+/external/
 __pycache__/
 /src/
 /lib/
