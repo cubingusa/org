@@ -1,12 +1,6 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { EventId, getEventName } from "@wca/helpers";
-import {
-  PersonalAttribute,
-  ColumnType,
-  ColumnParams,
-  FormMetadata,
-} from "./api.proto";
 import { CompetitionData } from "../../types/competition_data";
 
 interface EditPropertiesModalParams {
