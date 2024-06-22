@@ -1,4 +1,4 @@
-import { SerializedTrait } from "./serialized";
+import { SerializedTrait, TraitType } from "./serialized";
 import { Trait } from "./api";
 
 type NumberTraitParams =
@@ -14,14 +14,15 @@ export class NumberTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = params.serialized.number_values[0];
+      this.val = params.serialized.numberValues[0];
     }
   }
 
   serialize(): SerializedTrait {
     return {
-      number_values: [this.val],
-      string_values: [],
+      traitType: TraitType.NumberTrait,
+      numberValues: [this.val],
+      stringValues: [],
     };
   }
 
@@ -45,14 +46,15 @@ export class StringTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = params.serialized.string_values[0];
+      this.val = params.serialized.stringValues[0];
     }
   }
 
   serialize(): SerializedTrait {
     return {
-      number_values: [],
-      string_values: [this.val],
+      traitType: TraitType.StringTrait,
+      numberValues: [],
+      stringValues: [this.val],
     };
   }
 
@@ -76,26 +78,23 @@ export class BooleanTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = params.serialized.number_values[0] === 1;
+      this.val = params.serialized.numberValues[0] === 1;
     }
   }
 
   serialize(): SerializedTrait {
     return {
-      number_values: [this.val ? 1 : 0],
-      string_values: [],
+      traitType: TraitType.BooleanTrait,
+      numberValues: [this.val ? 1 : 0],
+      stringValues: [],
     };
   }
 
   render(): JSX.Element {
     return this.val ? (
-      <span export className="material-symbols-outlined">
-        check
-      </span>
+      <span className="material-symbols-outlined">check</span>
     ) : (
-      <span export className="material-symbols-outlined">
-        close
-      </span>
+      <span className="material-symbols-outlined">close</span>
     );
   }
 

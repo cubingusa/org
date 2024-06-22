@@ -10,7 +10,6 @@ export abstract class Trait {
 export abstract class TraitComputer {
   constructor(private params: ComputerParams) {}
   abstract compute(applicant: ApplicantData): Trait;
-  abstract deserialize(serialized: SerializedTrait): Trait;
   abstract id(): string;
   abstract header(): JSX.Element;
 }
