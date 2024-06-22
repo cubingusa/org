@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { SerializedTrait, TraitType } from "./serialized";
 import { Trait } from "./api";
 
@@ -122,4 +123,36 @@ export class NullTrait extends Trait {
   render(): JSX.Element {
     return <>&ndash;</>;
   }
+}
+
+type DateTimeTraitParams =
+  | {
+      val: DateTime;
+    }
+  | {
+      serialized: SerializedTrait;
+    };
+export class DateTimeTrait extends Trait {
+  constructor(params: DateTimeTraitParams) {
+    super();
+    if ("val" in params) {
+      this.val = params.val;
+    } else if ("serialized" in params) {
+      this.val = DateTime.fromSeconds(params.serialized.numberValues[0]);
+    }
+  }
+
+  serialize(): SerializedTrait {
+    return {
+      traitType: TraitType.DateTimeTrait,
+      numberValues: [this.val.toSeconds()],
+      stringValues: [],
+    };
+  }
+
+  render(): JSX.Element {
+    return <>{this.val.toLocaleString(DateTime.DATETIME_MED)}</>;
+  }
+
+  private val: DateTime;
 }

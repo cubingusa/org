@@ -3,6 +3,7 @@ export enum TraitType {
   StringTrait = "string",
   NumberTrait = "number",
   NullTrait = "null",
+  DateTimeTrait = "date_time",
 }
 
 export interface SerializedTrait {
