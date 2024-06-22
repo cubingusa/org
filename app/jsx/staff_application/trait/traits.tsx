@@ -8,7 +8,7 @@ type NumberTraitParams =
   | {
       serialized: SerializedTrait;
     };
-class NumberTrait extends Trait {
+export class NumberTrait extends Trait {
   constructor(params: NumberTraitParams) {
     super();
     if ("val" in params) {
@@ -39,7 +39,7 @@ type StringTraitParams =
   | {
       serialized: SerializedTrait;
     };
-class StringTrait extends Trait {
+export class StringTrait extends Trait {
   constructor(params: StringTraitParams) {
     super();
     if ("val" in params) {
@@ -70,7 +70,7 @@ type BooleanTraitParams =
   | {
       serialized: SerializedTrait;
     };
-class BooleanTrait extends Trait {
+export class BooleanTrait extends Trait {
   constructor(params: BooleanTraitParams) {
     super();
     if ("val" in params) {
@@ -89,9 +89,13 @@ class BooleanTrait extends Trait {
 
   render(): JSX.Element {
     return this.val ? (
-      <span className="material-symbols-outlined">check</span>
+      <span export className="material-symbols-outlined">
+        check
+      </span>
     ) : (
-      <span className="material-symbols-outlined">close</span>
+      <span export className="material-symbols-outlined">
+        close
+      </span>
     );
   }
 
