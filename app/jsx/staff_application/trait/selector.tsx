@@ -105,7 +105,7 @@ export function TraitSelector({
           </label>
         </div>
       ))}
-      {activeComputer.formElement()}
+      {activeComputer.formElement(params, onTraitChange)}
     </>
   );
 }

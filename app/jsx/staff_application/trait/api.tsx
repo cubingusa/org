@@ -12,6 +12,9 @@ export abstract class TraitComputer {
   abstract compute(applicant: ApplicantData): Trait;
   abstract id(): string;
   abstract header(): JSX.Element;
-  abstract formElement(): JSX.Element;
+  abstract formElement(
+    params: ComputerParams,
+    onTraitChange: (params: ComputerParams) => void,
+  ): JSX.Element;
   abstract isValid(): boolean;
 }

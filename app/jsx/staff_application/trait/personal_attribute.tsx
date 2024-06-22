@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Person, Competition } from "@wca/helpers";
 import { DateTime } from "luxon";
 
@@ -5,31 +7,26 @@ import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
 import {
+  ComputerParams,
   ComputerType,
   PersonalAttributeParams,
   PersonalAttributeType,
 } from "./params";
 import { StringTrait, NumberTrait, BooleanTrait, NullTrait } from "./traits";
 
+const personalAttributes = [
+  { type: PersonalAttributeType.Name, name: "Name" },
+  { type: PersonalAttributeType.WcaId, name: "WCA ID" },
+  { type: PersonalAttributeType.WcaUserId, name: "WCA User ID" },
+  { type: PersonalAttributeType.Age, name: "Age" },
+  { type: PersonalAttributeType.DelegateStatus, name: "Is Delegate" },
+  { type: PersonalAttributeType.ListedOrganizer, name: "Listed Organizer" },
+  { type: PersonalAttributeType.ListedDelegate, name: "Listed Delegate" },
+  { type: PersonalAttributeType.Registered, name: "Registered" },
+];
+
 function personalAttributeName(type: PersonalAttributeType) {
-  switch (type) {
-    case PersonalAttributeType.Name:
-      return "Name";
-    case PersonalAttributeType.WcaId:
-      return "WCA ID";
-    case PersonalAttributeType.WcaUserId:
-      return "WCA User ID";
-    case PersonalAttributeType.Age:
-      return "Age";
-    case PersonalAttributeType.DelegateStatus:
-      return "Is Delegate";
-    case PersonalAttributeType.ListedOrganizer:
-      return "Listed Organizer";
-    case PersonalAttributeType.ListedDelegate:
-      return "Listed Delegate";
-    case PersonalAttributeType.Registered:
-      return "Registered";
-  }
+  return personalAttributes.find((p) => p.type === type).name;
 }
 
 function delegateStatusName(statusId: string) {
@@ -108,7 +105,7 @@ export class PersonalAttributeComputer extends TraitComputer {
   }
 
   header(): JSX.Element {
-    return <>${personalAttributeName(this.params.attributeType)}</>;
+    return <>{personalAttributeName(this.params.attributeType)}</>;
   }
 
   static defaultParams(): PersonalAttributeParams {
@@ -122,7 +119,48 @@ export class PersonalAttributeComputer extends TraitComputer {
     return true;
   }
 
-  formElement(): JSX.Element {
-    return <></>;
+  formElement(
+    params: ComputerParams,
+    onTraitChange: (params: ComputerParams) => void,
+  ): JSX.Element {
+    return (
+      <PersonalAttributeSelector
+        params={params as PersonalAttributeParams}
+        onTraitChange={onTraitChange}
+      />
+    );
   }
+}
+
+interface PersonalAttributeSelectorParams {
+  params: PersonalAttributeParams;
+  onTraitChange: (params: ComputerParams) => void;
+}
+function PersonalAttributeSelector({
+  params,
+  onTraitChange,
+}: PersonalAttributeSelectorParams) {
+  const [attributeType, setAttributeType] = useState(params.attributeType);
+
+  const updateAttributeType = function (type: PersonalAttributeType) {
+    setAttributeType(type);
+    params.attributeType = type;
+    onTraitChange(params);
+  };
+
+  return (
+    <select
+      className="form-select"
+      value={attributeType}
+      onChange={(e) =>
+        updateAttributeType(e.target.value as PersonalAttributeType)
+      }
+    >
+      {personalAttributes.map((attr) => (
+        <option value={attr.type} key={attr.type}>
+          {attr.name}
+        </option>
+      ))}
+    </select>
+  );
 }
