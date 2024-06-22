@@ -13,14 +13,15 @@ export function createComputer(
   settings: ApplicationSettings,
   wcif: Competition,
 ): TraitComputer {
-  switch (params.type) {
+  const paramsClone = JSON.parse(JSON.stringify(params));
+  switch (paramsClone.type) {
     case ComputerType.FormAnswer:
-      return new FormAnswerComputer(params, settings);
+      return new FormAnswerComputer(paramsClone, settings);
     case ComputerType.FormMetadata:
-      return new FormMetadataComputer(params, settings);
+      return new FormMetadataComputer(paramsClone, settings);
     case ComputerType.PersonalAttribute:
-      return new PersonalAttributeComputer(params, wcif);
+      return new PersonalAttributeComputer(paramsClone, wcif);
     case ComputerType.Property:
-      return new PropertyComputer(params, settings);
+      return new PropertyComputer(paramsClone, settings);
   }
 }
