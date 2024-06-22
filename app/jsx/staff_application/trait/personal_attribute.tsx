@@ -4,7 +4,11 @@ import { DateTime } from "luxon";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
-import { PersonalAttributeParams, PersonalAttributeType } from "./params";
+import {
+  ComputerType,
+  PersonalAttributeParams,
+  PersonalAttributeType,
+} from "./params";
 import { StringTrait, NumberTrait, BooleanTrait, NullTrait } from "./traits";
 
 function personalAttributeName(type: PersonalAttributeType) {
@@ -44,7 +48,7 @@ function delegateStatusName(statusId: string) {
   return "";
 }
 
-class PersonalAttributeComputer extends TraitComputer {
+export class PersonalAttributeComputer extends TraitComputer {
   constructor(
     private params: PersonalAttributeParams,
     private wcif: Competition,
@@ -105,5 +109,12 @@ class PersonalAttributeComputer extends TraitComputer {
 
   header(): JSX.Element {
     return <>${personalAttributeName(this.params.attributeType)}</>;
+  }
+
+  static defaultParams(): PersonalAttributeParams {
+    return {
+      type: ComputerType.PersonalAttribute,
+      attributeType: PersonalAttributeType.Name,
+    };
   }
 }

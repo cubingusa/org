@@ -5,10 +5,10 @@ import { ApplicationSettings } from "../types/competition_data";
 import { Property } from "../types/property";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
-import { PropertyParams } from "./params";
+import { ComputerType, PropertyParams } from "./params";
 import { StringTrait, NullTrait } from "./traits";
 
-class PropertyComputer extends TraitComputer {
+export class PropertyComputer extends TraitComputer {
   constructor(
     private params: PropertyParams,
     private settings: ApplicationSettings,
@@ -50,5 +50,13 @@ class PropertyComputer extends TraitComputer {
   header(): JSX.Element {
     const property = this.getProperty();
     return property === null ? <>??</> : <>{property.name}</>;
+  }
+
+  static defaultParams(settings: ApplicationSettings): PropertyParams {
+    return {
+      type: ComputerType.Property,
+      propertyId:
+        settings.properties.length > 0 ? settings.properties[0].id : -1,
+    };
   }
 }

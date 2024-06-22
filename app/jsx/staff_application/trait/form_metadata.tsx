@@ -7,7 +7,7 @@ import { SubmittedForm } from "../types/personal_application_data";
 
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
-import { FormMetadataParams, FormMetadataType } from "./params";
+import { ComputerType, FormMetadataParams, FormMetadataType } from "./params";
 import { DateTimeTrait, BooleanTrait, NullTrait } from "./traits";
 
 function formMetadataName(type: FormMetadataType) {
@@ -21,7 +21,7 @@ function formMetadataName(type: FormMetadataType) {
   }
 }
 
-class FormMetadataComputer extends TraitComputer {
+export class FormMetadataComputer extends TraitComputer {
   constructor(
     private params: FormMetadataParams,
     private settings: ApplicationSettings,
@@ -75,5 +75,13 @@ class FormMetadataComputer extends TraitComputer {
         {form.name} {formMetadataName(this.params.metadataType)}
       </>
     );
+  }
+
+  static defaultParams(settings: ApplicationSettings): FormMetadataParams {
+    return {
+      type: ComputerType.FormMetadata,
+      formId: settings.forms.length > 0 ? settings.forms[0].id : -1,
+      metadataType: FormMetadataType.Submitted,
+    };
   }
 }

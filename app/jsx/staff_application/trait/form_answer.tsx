@@ -2,10 +2,10 @@ import { ApplicantData } from "../types/applicant_data";
 import { ApplicationSettings } from "../types/competition_data";
 import { Question, QuestionType } from "../types/form";
 import { Trait, TraitComputer } from "./api";
-import { FormAnswerParams } from "./params";
+import { ComputerType, FormAnswerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
 
-class FormAnswerComputer extends TraitComputer {
+export class FormAnswerComputer extends TraitComputer {
   constructor(
     private params: FormAnswerParams,
     private settings: ApplicationSettings,
@@ -56,5 +56,19 @@ class FormAnswerComputer extends TraitComputer {
   header(): JSX.Element {
     const question = this.getQuestion();
     return <>{question.name}</>;
+  }
+
+  static defaultParams(settings: ApplicationSettings): FormAnswerParams {
+    const formId = settings.forms.length > 0 ? settings.forms[0].id : -1;
+    const questionId =
+      formId >= 0 && settings.forms[0].questions.length > 0
+        ? settings.forms[0].questions[0].id
+        : -1;
+
+    return {
+      type: ComputerType.FormAnswer,
+      formId,
+      questionId,
+    };
   }
 }
