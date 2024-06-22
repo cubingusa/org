@@ -117,4 +117,12 @@ export class PersonalAttributeComputer extends TraitComputer {
       attributeType: PersonalAttributeType.Name,
     };
   }
+
+  isValid(): boolean {
+    return true;
+  }
+
+  formElement(): JSX.Element {
+    return <></>;
+  }
 }

@@ -84,4 +84,12 @@ export class FormMetadataComputer extends TraitComputer {
       metadataType: FormMetadataType.Submitted,
     };
   }
+
+  isValid(): boolean {
+    return this.getForm() !== null;
+  }
+
+  formElement(): JSX.Element {
+    return <></>;
+  }
 }

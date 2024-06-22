@@ -59,4 +59,12 @@ export class PropertyComputer extends TraitComputer {
         settings.properties.length > 0 ? settings.properties[0].id : -1,
     };
   }
+
+  isValid(): boolean {
+    return this.getProperty() !== null;
+  }
+
+  formElement(): JSX.Element {
+    return <></>;
+  }
 }

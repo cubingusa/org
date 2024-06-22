@@ -71,4 +71,12 @@ export class FormAnswerComputer extends TraitComputer {
       questionId,
     };
   }
+
+  isValid(): boolean {
+    return this.getQuestion() !== null;
+  }
+
+  formElement(): JSX.Element {
+    return <></>;
+  }
 }
