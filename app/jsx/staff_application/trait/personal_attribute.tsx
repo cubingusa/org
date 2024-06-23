@@ -3,7 +3,13 @@ import { useState } from "react";
 import { Person, Competition } from "@wca/helpers";
 import { DateTime } from "luxon";
 
-import { FilterParams, NumberFilterParams } from "../filter/params";
+import {
+  FilterParams,
+  NumberFilterParams,
+  FilterType,
+  StringFilterType,
+  NumberFilterType,
+} from "../filter/params";
 import { NumberFilterSelector } from "../filter/number";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
@@ -113,6 +119,31 @@ export class PersonalAttributeComputer extends TraitComputer {
     };
   }
 
+  defaultFilterParams(): FilterParams {
+    switch (this.params.attributeType) {
+      case PersonalAttributeType.Name:
+      case PersonalAttributeType.WcaId:
+      case PersonalAttributeType.WcaUserId:
+        return {
+          trait: this.params,
+          type: FilterType.StringFilter,
+          stringType: StringFilterType.Equals,
+          reference: "",
+        };
+      case PersonalAttributeType.Age:
+        return {
+          trait: this.params,
+          type: FilterType.NumberFilter,
+          numberType: NumberFilterType.Equals,
+          reference: 0,
+        };
+      case PersonalAttributeType.DelegateStatus:
+      case PersonalAttributeType.ListedOrganizer:
+      case PersonalAttributeType.ListedDelegate:
+      case PersonalAttributeType.Registered:
+    }
+  }
+
   isValid(): boolean {
     return true;
   }
@@ -133,25 +164,42 @@ export class PersonalAttributeComputer extends TraitComputer {
     params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element {
-    switch (this.params.attributeType) {
-      case PersonalAttributeType.Name:
-      case PersonalAttributeType.WcaId:
-      case PersonalAttributeType.WcaUserId:
-      case PersonalAttributeType.Age:
-        return (
-          <NumberFilterSelector
-            params={params as NumberFilterParams}
-            trait={this.params}
-            onFilterChange={onFilterChange}
-          />
-        );
-      case PersonalAttributeType.DelegateStatus:
-      case PersonalAttributeType.ListedOrganizer:
-      case PersonalAttributeType.ListedDelegate:
-      case PersonalAttributeType.Registered:
-    }
-    return <></>;
+    return (
+      <PersonalAttributeFilterSelector
+        params={params}
+        computerParams={this.params}
+        onFilterChange={onFilterChange}
+      />
+    );
   }
+}
+
+interface PersonalAttributeFilterSelectorParams {
+  params: FilterParams | null;
+  computerParams: ComputerParams;
+  onFilterChange: (params: FilterParams) => void;
+}
+function PersonalAttributeFilterSelector({
+  params,
+  computerParams,
+  onFilterChange,
+}: PersonalAttributeFilterSelectorParams) {
+  const useNumberFilter =
+    (computerParams as PersonalAttributeParams).attributeType ===
+    PersonalAttributeType.Age;
+  return (
+    <>
+      {useNumberFilter ? (
+        <NumberFilterSelector
+          params={params as NumberFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      ) : (
+        <></>
+      )}
+    </>
+  );
 }
 
 interface PersonalAttributeSelectorParams {

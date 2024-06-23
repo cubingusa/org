@@ -6,7 +6,7 @@ import {
   CompetitionData,
 } from "../types/competition_data";
 import { Question, QuestionType } from "../types/form";
-import { FilterParams } from "../filter/params";
+import { FilterParams, FilterType, StringFilterType } from "../filter/params";
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
@@ -75,6 +75,32 @@ export class FormAnswerComputer extends TraitComputer {
       formId,
       questionId,
     };
+  }
+
+  defaultFilterParams(): FilterParams {
+    const question = this.getQuestion();
+    if (!question) {
+      return {
+        type: FilterType.NullFilter,
+        trait: this.params,
+      };
+    }
+    switch (question.questionType) {
+      case QuestionType.Null:
+        return {
+          type: FilterType.NullFilter,
+          trait: this.params,
+        };
+      case QuestionType.Text:
+        return {
+          type: FilterType.StringFilter,
+          trait: this.params,
+          stringType: StringFilterType.Equals,
+          reference: "",
+        };
+      case QuestionType.YesNo:
+      case QuestionType.MultipleChoice:
+    }
   }
 
   isValid(): boolean {

@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
-import { FilterParams } from "../filter/params";
+import { FilterParams, FilterType } from "../filter/params";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -89,6 +89,18 @@ export class FormMetadataComputer extends TraitComputer {
       type: ComputerType.FormMetadata,
       formId: settings.forms.length > 0 ? settings.forms[0].id : -1,
       metadataType: FormMetadataType.Submitted,
+    };
+  }
+
+  defaultFilterParams(): FilterParams {
+    switch (this.params.metadataType) {
+      case FormMetadataType.Submitted:
+      case FormMetadataType.SubmitTime:
+      case FormMetadataType.UpdateTime:
+    }
+    return {
+      type: FilterType.NullFilter,
+      trait: this.params,
     };
   }
 

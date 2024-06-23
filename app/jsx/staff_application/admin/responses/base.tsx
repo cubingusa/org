@@ -3,7 +3,11 @@ import { useRouteLoaderData, Link } from "react-router-dom";
 import { util } from "protobufjs";
 
 import { ColumnModal } from "./column_modal";
+import { FilterModal } from "./filter_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
+import { Filter } from "../../filter/filter";
+import { FilterParams } from "../../filter/params";
+import { createFilter } from "../../filter/create_filter";
 import { ComputerParams } from "../../trait/params";
 import { TraitComputer } from "../../trait/api";
 import { createComputer } from "../../trait/create_computer";
@@ -17,6 +21,7 @@ export function Responses() {
   const applicants = useRouteLoaderData("responses") as ApplicantData[];
   const [selectedIds, setSelectedIds] = useState([] as Number[]);
   const [computers, setComputers] = useState([] as TraitComputer[]);
+  const [filters, setFilters] = useState([] as Filter[]);
 
   const addColumn = function (trait: ComputerParams) {
     const newComputer = createComputer(trait, settings, wcif);
@@ -26,13 +31,26 @@ export function Responses() {
     setComputers([...computers, newComputer]);
   };
 
-  const filteredApplicants = applicants.filter((applicant) => {
-    return true;
-  });
-
   const deleteColumn = function (columnId: string) {
     setComputers(computers.filter((c) => c.id() !== columnId));
   };
+
+  const addFilter = function (params: FilterParams) {
+    const newFilter = createFilter(params, settings, wcif);
+    if (filters.map((c) => c.id()).includes(newFilter.id())) {
+      return;
+    }
+    setFilters([...filters, newFilter]);
+    setSelectedIds([]);
+  };
+
+  const deleteFilter = function (filterId: string) {
+    setFilters(filters.filter((f) => f.id() !== filterId));
+  };
+
+  const filteredApplicants = applicants.filter((applicant) => {
+    return !filters.some((f) => !f.apply(applicant));
+  });
 
   const onSelectAll = function (selected: boolean) {
     if (selected) {
@@ -55,6 +73,27 @@ export function Responses() {
 
   return (
     <>
+      {filters.length > 0 ? (
+        <p>
+          Filters:&nbsp;
+          {filters.map((filter) => (
+            <span key={filter.id()}>
+              <span className="badge text-bg-primary">
+                {filter.description()}
+              </span>
+              <span
+                className="material-symbols-outlined"
+                onClick={(e) => deleteFilter(filter.id())}
+                style={{ cursor: "pointer" }}
+              >
+                delete
+              </span>
+            </span>
+          ))}
+        </p>
+      ) : (
+        <></>
+      )}
       <button
         type="button"
         className="btn btn-success"
@@ -65,8 +104,18 @@ export function Responses() {
         <span className="material-symbols-outlined">edit</span> Edit{" "}
         {selectedIds.length} {selectedIds.length == 1 ? "person" : "people"}
       </button>
-      &nbsp;
       <EditPropertiesModal id="properties-modal" personIds={selectedIds} />
+      &nbsp;
+      <button
+        type="button"
+        className="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#filter-modal"
+      >
+        <span className="material-symbols-outlined">add</span> Add Filter
+      </button>
+      <FilterModal id="filter-modal" addFilter={addFilter} />
+      &nbsp;
       <button
         type="button"
         className="btn btn-success"

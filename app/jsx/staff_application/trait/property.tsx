@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "react-router-dom";
 
 import { Person, Competition } from "@wca/helpers";
 
-import { FilterParams } from "../filter/params";
+import { FilterParams, FilterType } from "../filter/params";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -64,6 +64,13 @@ export class PropertyComputer extends TraitComputer {
       type: ComputerType.Property,
       propertyId:
         settings.properties.length > 0 ? settings.properties[0].id : -1,
+    };
+  }
+
+  defaultFilterParams(): FilterParams {
+    return {
+      type: FilterType.NullFilter,
+      trait: this.params,
     };
   }
 
