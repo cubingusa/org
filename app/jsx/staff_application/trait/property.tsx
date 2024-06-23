@@ -1,11 +1,17 @@
+import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
+
 import { Person, Competition } from "@wca/helpers";
 
 import { ApplicantData } from "../types/applicant_data";
-import { ApplicationSettings } from "../types/competition_data";
+import {
+  ApplicationSettings,
+  CompetitionData,
+} from "../types/competition_data";
 import { Property } from "../types/property";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
-import { ComputerType, PropertyParams } from "./params";
+import { ComputerType, PropertyParams, ComputerParams } from "./params";
 import { StringTrait, NullTrait } from "./traits";
 
 export class PropertyComputer extends TraitComputer {
@@ -16,7 +22,7 @@ export class PropertyComputer extends TraitComputer {
     super(params);
   }
 
-  getProperty(): Property | null {
+  getProperty(): Property | undefined {
     return this.settings.properties.find(
       (p) => p.id === this.params.propertyId,
     );
@@ -24,19 +30,19 @@ export class PropertyComputer extends TraitComputer {
 
   compute(applicant: ApplicantData): Trait {
     const property = this.getProperty();
-    if (property === null) {
+    if (property === undefined) {
       return new NullTrait({});
     }
     const userProperty = applicant.user.properties.find(
       (p) => p.key === this.params.propertyId,
     );
-    if (userProperty === null) {
+    if (userProperty === undefined) {
       return new NullTrait({});
     }
     const propertyValue = property.values.find(
       (v) => v.id === userProperty.value,
     );
-    if (propertyValue === null) {
+    if (propertyValue === undefined) {
       return new NullTrait({});
     }
     // TODO: switch to EnumTrait.
@@ -49,7 +55,7 @@ export class PropertyComputer extends TraitComputer {
 
   header(): JSX.Element {
     const property = this.getProperty();
-    return property === null ? <>??</> : <>{property.name}</>;
+    return property === undefined ? <>??</> : <>{property.name}</>;
   }
 
   static defaultParams(settings: ApplicationSettings): PropertyParams {
@@ -61,10 +67,59 @@ export class PropertyComputer extends TraitComputer {
   }
 
   isValid(): boolean {
-    return this.getProperty() !== null;
+    return this.getProperty() !== undefined;
   }
 
-  formElement(): JSX.Element {
-    return <></>;
+  formElement(
+    params: ComputerParams,
+    onTraitChange: (params: ComputerParams) => void,
+  ): JSX.Element {
+    return (
+      <PropertySelector
+        params={params as PropertyParams}
+        onTraitChange={onTraitChange}
+      />
+    );
   }
+}
+
+interface PropertySelectorParams {
+  params: PropertyParams;
+  onTraitChange: (params: ComputerParams) => void;
+}
+function PropertySelector({ params, onTraitChange }: PropertySelectorParams) {
+  const [propertyId, setPropertyId] = useState(params.propertyId);
+  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+
+  const updatePropertyId = function (propertyId: number) {
+    setPropertyId(propertyId);
+    params.propertyId = propertyId;
+    onTraitChange(params);
+  };
+
+  if (settings.properties.length == 0) {
+    return <>This competition does not have any properties.</>;
+  }
+  return (
+    <div className="row g-2 align-items-center">
+      <div className="col-auto">
+        <label htmlFor="property-selector" className="col-property-label">
+          Property
+        </label>
+      </div>
+      <div className="col-auto">
+        <select
+          className="form-select"
+          value={propertyId}
+          onChange={(e) => updatePropertyId(+e.target.value)}
+        >
+          {settings.properties.map((property) => (
+            <option value={property.id} key={property.id}>
+              {property.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
 }
