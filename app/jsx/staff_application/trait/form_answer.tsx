@@ -6,7 +6,16 @@ import {
   CompetitionData,
 } from "../types/competition_data";
 import { Question, QuestionType } from "../types/form";
-import { FilterParams, FilterType, StringFilterType } from "../filter/params";
+import {
+  FilterParams,
+  FilterType,
+  StringFilterParams,
+  StringFilterType,
+  BooleanFilterParams,
+  BooleanFilterType,
+} from "../filter/params";
+import { BooleanFilterSelector } from "../filter/boolean";
+import { StringFilterSelector } from "../filter/string";
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
@@ -132,8 +141,23 @@ export class FormAnswerComputer extends TraitComputer {
     }
     switch (question.questionType) {
       case QuestionType.Text:
+        return (
+          <StringFilterSelector
+            params={params as StringFilterParams}
+            trait={this.params}
+            onFilterChange={onFilterChange}
+          />
+        );
       case QuestionType.YesNo:
+        return (
+          <BooleanFilterSelector
+            params={params as BooleanFilterParams}
+            trait={this.params}
+            onFilterChange={onFilterChange}
+          />
+        );
       case QuestionType.MultipleChoice:
+      // TODO: Enum filter.
     }
     return <></>;
   }
