@@ -4,7 +4,7 @@ import { Trait } from "./api";
 
 type NumberTraitParams =
   | {
-      val: number;
+      val: number | null;
     }
   | {
       serialized: SerializedTrait;
@@ -15,28 +15,32 @@ export class NumberTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = params.serialized.numberValues[0];
+      if (params.serialized.numberValues.length == 0) {
+        this.val = null;
+      } else {
+        this.val = params.serialized.numberValues[0];
+      }
     }
   }
 
   serialize(): SerializedTrait {
     return {
       traitType: TraitType.NumberTrait,
-      numberValues: [this.val],
+      numberValues: this.val == null ? [] : [this.val],
       stringValues: [],
     };
   }
 
   render(): JSX.Element {
-    return <>{this.val}</>;
+    return this.val == null ? <>&ndash;</> : <>{this.val}</>;
   }
 
-  private val: number;
+  private val: number | null;
 }
 
 type StringTraitParams =
   | {
-      val: string;
+      val: string | null;
     }
   | {
       serialized: SerializedTrait;
@@ -47,7 +51,11 @@ export class StringTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = params.serialized.stringValues[0];
+      if (params.serialized.stringValues.length == 0) {
+        this.val = null;
+      } else {
+        this.val = params.serialized.stringValues[0];
+      }
     }
   }
 
@@ -55,20 +63,20 @@ export class StringTrait extends Trait {
     return {
       traitType: TraitType.StringTrait,
       numberValues: [],
-      stringValues: [this.val],
+      stringValues: this.val == null ? [] : [this.val],
     };
   }
 
   render(): JSX.Element {
-    return <>{this.val}</>;
+    return this.val == null ? <>&ndash;</> : <>{this.val}</>;
   }
 
-  private val: string;
+  private val: string | null;
 }
 
 type BooleanTraitParams =
   | {
-      val: boolean;
+      val: boolean | null;
     }
   | {
       serialized: SerializedTrait;
@@ -79,27 +87,34 @@ export class BooleanTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = params.serialized.numberValues[0] === 1;
+      if (params.serialized.numberValues.length > 0) {
+        this.val = params.serialized.numberValues[0] === 1;
+      } else {
+        this.val = null;
+      }
     }
   }
 
   serialize(): SerializedTrait {
     return {
       traitType: TraitType.BooleanTrait,
-      numberValues: [this.val ? 1 : 0],
+      numberValues: this.val == null ? [] : [this.val ? 1 : 0],
       stringValues: [],
     };
   }
 
   render(): JSX.Element {
-    return this.val ? (
-      <span className="material-symbols-outlined">check</span>
-    ) : (
-      <span className="material-symbols-outlined">close</span>
-    );
+    switch (this.val) {
+      case null:
+        return <>&ndash</>;
+      case true:
+        return <span className="material-symbols-outlined">check</span>;
+      case false:
+        return <span className="material-symbols-outlined">close</span>;
+    }
   }
 
-  private val: boolean;
+  private val: boolean | null;
 }
 
 type NullTraitParams =
@@ -127,7 +142,7 @@ export class NullTrait extends Trait {
 
 type DateTimeTraitParams =
   | {
-      val: DateTime;
+      val: DateTime | null;
     }
   | {
       serialized: SerializedTrait;
@@ -138,21 +153,29 @@ export class DateTimeTrait extends Trait {
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
-      this.val = DateTime.fromSeconds(params.serialized.numberValues[0]);
+      if (params.serialized.numberValues.length > 0) {
+        this.val = DateTime.fromSeconds(params.serialized.numberValues[0]);
+      } else {
+        this.val = null;
+      }
     }
   }
 
   serialize(): SerializedTrait {
     return {
       traitType: TraitType.DateTimeTrait,
-      numberValues: [this.val.toSeconds()],
+      numberValues: this.val == null ? [] : [this.val.toSeconds()],
       stringValues: [],
     };
   }
 
   render(): JSX.Element {
-    return <>{this.val.toLocaleString(DateTime.DATETIME_MED)}</>;
+    return this.val == null ? (
+      <>&ndash;</>
+    ) : (
+      <>{this.val.toLocaleString(DateTime.DATETIME_MED)}</>
+    );
   }
 
-  private val: DateTime;
+  private val: DateTime | null;
 }

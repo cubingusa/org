@@ -32,25 +32,24 @@ export class FormAnswerComputer extends TraitComputer {
     const myQuestion = applicant.forms
       .find((f) => f.formId == this.params.formId)
       ?.details?.questions?.find((q) => q.questionId == this.params.questionId);
-    if (myQuestion === undefined) {
-      return new NullTrait({});
-    }
     switch (question.questionType) {
       case QuestionType.Null:
         return new NullTrait({});
       case QuestionType.Text:
-        return new StringTrait({ val: myQuestion.textAnswer });
+        return new StringTrait({
+          val: myQuestion === undefined ? null : myQuestion.textAnswer,
+        });
       case QuestionType.YesNo:
-        return new BooleanTrait({ val: myQuestion.booleanAnswer });
+        return new BooleanTrait({
+          val: myQuestion === undefined ? null : myQuestion.booleanAnswer,
+        });
       case QuestionType.MultipleChoice:
         // TODO: switch to EnumTrait.
-        if (question.options.has(myQuestion.numberAnswer)) {
-          return new StringTrait({
-            val: question.options.get(myQuestion.numberAnswer),
-          });
-        } else {
-          return new NullTrait({});
-        }
+        return new StringTrait({
+          val: question.options.has(myQuestion?.numberAnswer)
+            ? question.options.get(myQuestion.numberAnswer)
+            : null,
+        });
     }
   }
 

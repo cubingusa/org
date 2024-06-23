@@ -12,7 +12,7 @@ import { Property } from "../types/property";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
 import { ComputerType, PropertyParams, ComputerParams } from "./params";
-import { StringTrait, NullTrait } from "./traits";
+import { StringTrait } from "./traits";
 
 export class PropertyComputer extends TraitComputer {
   constructor(
@@ -31,19 +31,19 @@ export class PropertyComputer extends TraitComputer {
   compute(applicant: ApplicantData): Trait {
     const property = this.getProperty();
     if (property === undefined) {
-      return new NullTrait({});
+      return new StringTrait({ val: null });
     }
     const userProperty = applicant.user.properties.find(
       (p) => p.key === this.params.propertyId,
     );
     if (userProperty === undefined) {
-      return new NullTrait({});
+      return new StringTrait({ val: null });
     }
     const propertyValue = property.values.find(
       (v) => v.id === userProperty.value,
     );
     if (propertyValue === undefined) {
-      return new NullTrait({});
+      return new StringTrait({ val: null });
     }
     // TODO: switch to EnumTrait.
     return new StringTrait({ val: propertyValue.value });

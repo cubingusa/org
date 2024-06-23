@@ -18,7 +18,7 @@ import {
   FormMetadataType,
   ComputerParams,
 } from "./params";
-import { DateTimeTrait, BooleanTrait, NullTrait } from "./traits";
+import { DateTimeTrait, BooleanTrait } from "./traits";
 
 const metadataTypes = [
   { type: FormMetadataType.Submitted, name: "Submitted" },
@@ -51,21 +51,19 @@ export class FormMetadataComputer extends TraitComputer {
       case FormMetadataType.Submitted:
         return new BooleanTrait({ val: myForm !== undefined });
       case FormMetadataType.SubmitTime:
-        if (myForm === undefined) {
-          return new NullTrait({});
-        } else {
-          return new DateTimeTrait({
-            val: DateTime.fromSeconds(myForm.submittedAtTs),
-          });
-        }
+        return new DateTimeTrait({
+          val:
+            myForm === undefined
+              ? null
+              : DateTime.fromSeconds(myForm.submittedAtTs),
+        });
       case FormMetadataType.UpdateTime:
-        if (myForm === undefined) {
-          return new NullTrait({});
-        } else {
-          return new DateTimeTrait({
-            val: DateTime.fromSeconds(myForm.updatedAtTs),
-          });
-        }
+        return new DateTimeTrait({
+          val:
+            myForm === undefined
+              ? null
+              : DateTime.fromSeconds(myForm.updatedAtTs),
+        });
     }
   }
 

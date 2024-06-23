@@ -12,7 +12,7 @@ import {
   PersonalAttributeParams,
   PersonalAttributeType,
 } from "./params";
-import { StringTrait, NumberTrait, BooleanTrait, NullTrait } from "./traits";
+import { StringTrait, NumberTrait, BooleanTrait } from "./traits";
 
 const personalAttributes = [
   { type: PersonalAttributeType.Name, name: "Name" },
@@ -62,11 +62,7 @@ export class PersonalAttributeComputer extends TraitComputer {
       case PersonalAttributeType.Name:
         return new StringTrait({ val: applicant.user.name });
       case PersonalAttributeType.WcaId:
-        if (applicant.user.wcaId) {
-          return new StringTrait({ val: applicant.user.wcaId });
-        } else {
-          return new NullTrait({});
-        }
+        return new StringTrait({ val: applicant.user.wcaId || null });
       case PersonalAttributeType.WcaUserId:
         return new NumberTrait({ val: applicant.user.id });
       case PersonalAttributeType.Age:
@@ -82,7 +78,7 @@ export class PersonalAttributeComputer extends TraitComputer {
             val: delegateStatusName(applicant.user.delegateStatus),
           });
         } else {
-          return new NullTrait({});
+          return new StringTrait({ val: null });
         }
       case PersonalAttributeType.ListedOrganizer:
         return new BooleanTrait({
