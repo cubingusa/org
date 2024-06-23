@@ -6,6 +6,7 @@ import { FilterParams } from "../filter/types/params";
 export abstract class Trait {
   abstract serialize(): SerializedTrait;
   abstract render(): JSX.Element;
+  abstract value(): any;
 }
 
 export abstract class TraitComputer {
