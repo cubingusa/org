@@ -1,8 +1,13 @@
+import { useRouteLoaderData } from "react-router-dom";
+import { useState } from "react";
 import { ApplicantData } from "../types/applicant_data";
-import { ApplicationSettings } from "../types/competition_data";
+import {
+  ApplicationSettings,
+  CompetitionData,
+} from "../types/competition_data";
 import { Question, QuestionType } from "../types/form";
 import { Trait, TraitComputer } from "./api";
-import { ComputerType, FormAnswerParams } from "./params";
+import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
 
 export class FormAnswerComputer extends TraitComputer {
@@ -76,7 +81,102 @@ export class FormAnswerComputer extends TraitComputer {
     return this.getQuestion() !== null;
   }
 
-  formElement(): JSX.Element {
-    return <></>;
+  formElement(
+    params: ComputerParams,
+    onTraitChange: (params: ComputerParams) => void,
+  ): JSX.Element {
+    return (
+      <FormAnswerSelector
+        params={params as FormAnswerParams}
+        onTraitChange={onTraitChange}
+      />
+    );
   }
+}
+
+interface FormAnswerSelectorParams {
+  params: FormAnswerParams;
+  onTraitChange: (params: ComputerParams) => void;
+}
+function FormAnswerSelector({
+  params,
+  onTraitChange,
+}: FormAnswerSelectorParams) {
+  const [formId, setFormId] = useState(params.formId);
+  const [questionId, setQuestionId] = useState(params.questionId);
+  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+
+  const updateFormId = function (formId: number) {
+    setFormId(formId);
+    params.formId = formId;
+    onTraitChange(params);
+  };
+
+  const updateQuestionId = function (questionId: number) {
+    setQuestionId(questionId);
+    params.questionId = questionId;
+    onTraitChange(params);
+  };
+
+  if (settings.forms.length == 0) {
+    return <>This competition does not have any forms.</>;
+  }
+  let formPart = (
+    <div className="row g-2 align-items-center">
+      <div className="col-auto">
+        <label htmlFor="form-selector" className="col-form-label">
+          Form
+        </label>
+      </div>
+      <div className="col-auto">
+        <select
+          className="form-select"
+          value={formId}
+          onChange={(e) => updateFormId(+e.target.value)}
+        >
+          {settings.forms.map((form) => (
+            <option value={form.id} key={form.id}>
+              {form.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+
+  let questionPart;
+  const form = settings.forms.find((f) => f.id == formId);
+  if (form) {
+    questionPart =
+      form.questions.length > 0 ? (
+        <div className="row g-2 align-items-center">
+          <div className="col-auto">
+            <label htmlFor="form-selector" className="col-form-label">
+              Question
+            </label>
+          </div>
+          <div className="col-auto">
+            <select
+              className="form-select"
+              value={questionId}
+              onChange={(e) => updateQuestionId(+e.target.value)}
+            >
+              {form.questions.map((question) => (
+                <option value={question.id} key={question.id}>
+                  {question.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      ) : (
+        <>This form does not have any questions.</>
+      );
+  }
+  return (
+    <>
+      {formPart}
+      {questionPart}
+    </>
+  );
 }
