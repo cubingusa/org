@@ -68,7 +68,7 @@ export function TraitSelector({
     const computer = createComputer(defaultParams, settings, wcif);
     setActiveComputer(computer);
     if (computer.isValid()) {
-      onChange(activeParams, computer);
+      onChange(defaultParams, computer);
       setValid(true);
     } else {
       setValid(false);

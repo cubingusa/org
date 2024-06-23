@@ -1,24 +1,32 @@
 import { DateTime } from "luxon";
+import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 
 import { ApplicantData } from "../types/applicant_data";
-import { ApplicationSettings } from "../types/competition_data";
+import {
+  ApplicationSettings,
+  CompetitionData,
+} from "../types/competition_data";
 import { Form } from "../types/form";
 import { SubmittedForm } from "../types/personal_application_data";
 
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
-import { ComputerType, FormMetadataParams, FormMetadataType } from "./params";
+import {
+  ComputerType,
+  FormMetadataParams,
+  FormMetadataType,
+  ComputerParams,
+} from "./params";
 import { DateTimeTrait, BooleanTrait, NullTrait } from "./traits";
 
+const metadataTypes = [
+  { type: FormMetadataType.Submitted, name: "Submitted" },
+  { type: FormMetadataType.SubmitTime, name: "Submit Time" },
+  { type: FormMetadataType.UpdateTime, name: "Update Time" },
+];
 function formMetadataName(type: FormMetadataType) {
-  switch (type) {
-    case FormMetadataType.Submitted:
-      return "Submitted";
-    case FormMetadataType.SubmitTime:
-      return "Submit Time";
-    case FormMetadataType.UpdateTime:
-      return "Update Time";
-  }
+  return metadataTypes.find((t) => t.type === type).name;
 }
 
 export class FormMetadataComputer extends TraitComputer {
@@ -89,7 +97,89 @@ export class FormMetadataComputer extends TraitComputer {
     return this.getForm() !== null;
   }
 
-  formElement(): JSX.Element {
-    return <></>;
+  formElement(
+    params: ComputerParams,
+    onTraitChange: (params: ComputerParams) => void,
+  ): JSX.Element {
+    return (
+      <FormMetadataSelector
+        params={params as FormMetadataParams}
+        onTraitChange={onTraitChange}
+      />
+    );
   }
+}
+
+interface FormMetadataSelectorParams {
+  params: FormMetadataParams;
+  onTraitChange: (params: ComputerParams) => void;
+}
+function FormMetadataSelector({
+  params,
+  onTraitChange,
+}: FormMetadataSelectorParams) {
+  const [formId, setFormId] = useState(params.formId);
+  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+  const [metadataType, setMetadataType] = useState(params.metadataType);
+
+  const updateFormId = function (formId: number) {
+    setFormId(formId);
+    params.formId = formId;
+    onTraitChange(params);
+  };
+
+  const updateMetadataType = function (metadataType: FormMetadataType) {
+    setMetadataType(metadataType);
+    params.metadataType = metadataType;
+    onTraitChange(params);
+  };
+
+  return settings.forms.length > 0 ? (
+    <>
+      <div className="row g-2 align-items-center">
+        <div className="col-auto">
+          <label htmlFor="form-selector" className="col-form-label">
+            Form
+          </label>
+        </div>
+        <div className="col-auto">
+          <select
+            className="form-select"
+            value={formId}
+            onChange={(e) => updateFormId(+e.target.value)}
+          >
+            {settings.forms.map((form) => (
+              <option value={form.id} key={form.id}>
+                {form.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="row g-2 align-items-center">
+        <div className="col-auto">
+          <label htmlFor="form-selector" className="col-form-label">
+            Metadata
+          </label>
+        </div>
+        <div className="col-auto">
+          <select
+            className="form-select"
+            value={metadataType}
+            onChange={(e) =>
+              updateMetadataType(e.target.value as FormMetadataType)
+            }
+          >
+            {metadataTypes.map((attr) => (
+              <option value={attr.type} key={attr.type}>
+                {attr.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </>
+  ) : (
+    <>This competition does not have any forms.</>
+  );
 }
