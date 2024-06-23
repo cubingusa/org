@@ -227,37 +227,30 @@ function PersonalAttributeFilterSelector({
   const attributeType = (computerParams as PersonalAttributeParams)
     .attributeType;
   const filterType = personalAttributeFilterType(attributeType);
-  return (
-    <>
-      {filterType == FilterType.NumberFilter ? (
+  switch (filterType) {
+    case FilterType.NumberFilter:
+      return (
         <NumberFilterSelector
           params={params as NumberFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
         />
-      ) : (
-        <></>
-      )}
-      {filterType == FilterType.StringFilter ? (
+      );
+    case FilterType.StringFilter:
+      return (
         <StringFilterSelector
           params={params as StringFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
         />
-      ) : (
-        <></>
-      )}
-      {filterType == FilterType.BooleanFilter ? (
-        <BooleanFilterSelector
-          params={params as BooleanFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      ) : (
-        <></>
-      )}
-    </>
-  );
+      );
+    case FilterType.BooleanFilter:
+      <BooleanFilterSelector
+        params={params as BooleanFilterParams}
+        trait={computerParams}
+        onFilterChange={onFilterChange}
+      />;
+  }
 }
 
 interface PersonalAttributeSelectorParams {

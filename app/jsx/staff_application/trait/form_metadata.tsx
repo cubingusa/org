@@ -156,19 +156,17 @@ function FormMetadataFilterSelector({
     metadataType == FormMetadataType.Submitted
       ? FilterType.BooleanFilter
       : FilterType.DateTimeFilter;
-  return (
-    <>
-      {filterType == FilterType.BooleanFilter ? (
+  switch (filterType) {
+    case FilterType.BooleanFilter:
+      return (
         <BooleanFilterSelector
           params={params as BooleanFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
         />
-      ) : (
-        <></>
-      )}
-    </>
-  );
+      );
+  }
+  return <></>;
   // TODO: add DateTimeFilterSelector here.
 }
 
