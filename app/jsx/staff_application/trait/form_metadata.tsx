@@ -2,7 +2,8 @@ import { DateTime } from "luxon";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
-import { FilterParams, FilterType } from "../filter/params";
+import { FilterParams } from "../filter/types/params";
+import { FilterType } from "../filter/types/base";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,

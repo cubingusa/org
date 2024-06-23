@@ -1,38 +1,18 @@
-import { useState } from "react";
-
 import { Competition } from "@wca/helpers";
 
+import { FilterParams } from "./types/params";
+import { FilterType } from "./types/base";
 import {
-  FilterParams,
-  FilterType,
   StringFilterParams,
   StringFilterType,
-} from "./params";
+  stringFilterUsesReference,
+  stringTypes,
+} from "./types/string";
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
 import { StringTrait } from "../trait/traits";
 import { ApplicationSettings } from "../types/competition_data";
-
-function usesReference(type: StringFilterType) {
-  return [
-    StringFilterType.Equals,
-    StringFilterType.NotEquals,
-    StringFilterType.Contains,
-    StringFilterType.NotContains,
-  ].includes(type);
-}
-
-const stringTypes = [
-  { id: StringFilterType.Equals, name: "Equals" },
-  { id: StringFilterType.NotEquals, name: "Does not equal" },
-  { id: StringFilterType.Contains, name: "Contains" },
-  { id: StringFilterType.NotContains, name: "Does not contain" },
-  { id: StringFilterType.IsEmpty, name: "Is empty" },
-  { id: StringFilterType.NotEmpty, name: "Is not empty" },
-  { id: StringFilterType.IsNull, name: "Is not set" },
-  { id: StringFilterType.NotNull, name: "Is set" },
-];
 
 export class StringFilter extends Filter {
   constructor(
@@ -110,7 +90,7 @@ export class StringFilter extends Filter {
   }
 
   id(): string {
-    if (usesReference(this.params.stringType)) {
+    if (stringFilterUsesReference(this.params.stringType)) {
       return `SF-${this.params.stringType}-${this.params.reference}`;
     } else {
       return `SF-${this.params.stringType}`;
@@ -125,59 +105,4 @@ export class StringFilter extends Filter {
       reference: "",
     };
   }
-}
-
-interface StringFilterSelectorParams {
-  params: StringFilterParams | null;
-  trait: ComputerParams;
-  onFilterChange: (params: FilterParams) => void;
-}
-export function StringFilterSelector({
-  params,
-  trait,
-  onFilterChange,
-}: StringFilterSelectorParams) {
-  const activeParams = params || StringFilter.defaultParams(trait);
-  const [stringType, setStringType] = useState(activeParams.stringType);
-  const [reference, setReference] = useState(activeParams.reference);
-
-  const updateStringType = function (newType: StringFilterType) {
-    setStringType(newType);
-    activeParams.stringType = newType;
-    onFilterChange(activeParams);
-  };
-
-  const updateReference = function (reference: string) {
-    setReference(reference);
-    activeParams.reference = reference;
-    onFilterChange(activeParams);
-  };
-
-  return (
-    <div className="row g-2 align-items-center">
-      <div className="col-auto">
-        <select
-          className="form-select"
-          value={stringType}
-          onChange={(e) => updateStringType(e.target.value as StringFilterType)}
-        >
-          {stringTypes.map((stringType) => (
-            <option value={stringType.id} key={stringType.id}>
-              {stringType.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      {usesReference(stringType) ? (
-        <div className="col-auto">
-          <input
-            className="form-control"
-            type="string"
-            value={reference}
-            onChange={(e) => updateReference(e.target.value)}
-          />
-        </div>
-      ) : null}
-    </div>
-  );
 }

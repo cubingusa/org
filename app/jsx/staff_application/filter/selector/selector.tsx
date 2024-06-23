@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
-import { ComputerParams } from "../trait/params";
-import { createComputer } from "../trait/create_computer";
-import { TraitSelector } from "../trait/selector";
-import { CompetitionData } from "../types/competition_data";
-import { FilterParams } from "./params";
+import { ComputerParams } from "../../trait/params";
+import { createComputer } from "../../trait/create_computer";
+import { TraitSelector } from "../../trait/selector";
+import { CompetitionData } from "../../types/competition_data";
+import { FilterParams } from "../types/params";
 
 interface FilterSelectorParams {
   params: FilterParams;

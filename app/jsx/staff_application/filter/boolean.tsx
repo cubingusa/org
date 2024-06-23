@@ -2,24 +2,14 @@ import { useState } from "react";
 
 import { Competition } from "@wca/helpers";
 
-import {
-  FilterParams,
-  FilterType,
-  BooleanFilterParams,
-  BooleanFilterType,
-} from "./params";
+import { BooleanFilterParams, BooleanFilterType } from "./types/boolean";
+import { FilterParams } from "./types/params";
+import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
 import { BooleanTrait } from "../trait/traits";
 import { ApplicationSettings } from "../types/competition_data";
-
-const booleanTypes = [
-  { id: BooleanFilterType.IsTrue, name: "True" },
-  { id: BooleanFilterType.IsFalse, name: "False" },
-  { id: BooleanFilterType.IsNull, name: "Is not set" },
-  { id: BooleanFilterType.NotNull, name: "Is set" },
-];
 
 export class BooleanFilter extends Filter {
   constructor(
@@ -67,52 +57,4 @@ export class BooleanFilter extends Filter {
   id(): string {
     return `BF-${this.params.booleanType}`;
   }
-
-  static defaultParams(trait: ComputerParams): BooleanFilterParams {
-    return {
-      trait,
-      type: FilterType.BooleanFilter,
-      booleanType: BooleanFilterType.IsTrue,
-    };
-  }
-}
-
-interface BooleanFilterSelectorParams {
-  params: BooleanFilterParams | null;
-  trait: ComputerParams;
-  onFilterChange: (params: FilterParams) => void;
-}
-export function BooleanFilterSelector({
-  params,
-  trait,
-  onFilterChange,
-}: BooleanFilterSelectorParams) {
-  const activeParams = params || BooleanFilter.defaultParams(trait);
-  const [booleanType, setBooleanType] = useState(activeParams.booleanType);
-
-  const updateBooleanType = function (newType: BooleanFilterType) {
-    setBooleanType(newType);
-    activeParams.booleanType = newType;
-    onFilterChange(activeParams);
-  };
-
-  return (
-    <div className="row g-2 align-items-center">
-      <div className="col-auto">
-        <select
-          className="form-select"
-          value={booleanType}
-          onChange={(e) =>
-            updateBooleanType(e.target.value as BooleanFilterType)
-          }
-        >
-          {booleanTypes.map((booleanType) => (
-            <option value={booleanType.id} key={booleanType.id}>
-              {booleanType.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  );
 }

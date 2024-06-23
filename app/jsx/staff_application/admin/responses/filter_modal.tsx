@@ -4,12 +4,10 @@ import { useState } from "react";
 import { TraitComputer } from "../../trait/api";
 import { CompetitionData } from "../../types/competition_data";
 import { PersonalAttributeComputer } from "../../trait/personal_attribute";
-import {
-  FilterParams,
-  FilterType,
-  StringFilterType,
-} from "../../filter/params";
-import { FilterSelector } from "../../filter/selector";
+import { FilterParams } from "../../filter/types/params";
+import { FilterType } from "../../filter/types/base";
+import { defaultStringParams } from "../../filter/types/string";
+import { FilterSelector } from "../../filter/selector/selector";
 
 interface FilterModalParams {
   id: string;
@@ -17,12 +15,11 @@ interface FilterModalParams {
 }
 
 export function FilterModal({ id, addFilter }: FilterModalParams) {
-  const [params, setParams] = useState({
-    trait: PersonalAttributeComputer.defaultParams(),
-    type: FilterType.StringFilter,
-    stringType: StringFilterType.Equals,
-    reference: "",
-  } as FilterParams);
+  const [params, setParams] = useState(
+    defaultStringParams(
+      PersonalAttributeComputer.defaultParams(),
+    ) as FilterParams,
+  );
   const [isValid, setIsValid] = useState(true);
 
   const onTraitChange = function (params: FilterParams) {

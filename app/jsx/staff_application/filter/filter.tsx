@@ -1,6 +1,6 @@
 import { Competition } from "@wca/helpers";
 
-import { FilterParams } from "./params";
+import { FilterParams } from "./types/params";
 import { Trait, TraitComputer } from "../trait/api";
 import { createComputer } from "../trait/create_computer";
 import { ApplicantData } from "../types/applicant_data";

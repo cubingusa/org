@@ -6,16 +6,17 @@ import {
   CompetitionData,
 } from "../types/competition_data";
 import { Question, QuestionType } from "../types/form";
+
+import { FilterParams } from "../filter/types/params";
+import { FilterType } from "../filter/types/base";
 import {
-  FilterParams,
-  FilterType,
-  StringFilterParams,
-  StringFilterType,
   BooleanFilterParams,
   BooleanFilterType,
-} from "../filter/params";
-import { BooleanFilterSelector } from "../filter/boolean";
-import { StringFilterSelector } from "../filter/string";
+} from "../filter/types/boolean";
+import { StringFilterParams, StringFilterType } from "../filter/types/string";
+import { BooleanFilterSelector } from "../filter/selector/boolean";
+import { StringFilterSelector } from "../filter/selector/string";
+
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";

@@ -3,40 +3,17 @@ import { useState } from "react";
 import { Competition } from "@wca/helpers";
 
 import {
-  FilterParams,
-  FilterType,
   NumberFilterParams,
   NumberFilterType,
-} from "./params";
+  numberFilterUsesReference,
+} from "./types/number";
+import { FilterParams } from "./types/params";
+import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
 import { NumberTrait } from "../trait/traits";
 import { ApplicationSettings } from "../types/competition_data";
-
-function usesReference(type: NumberFilterType) {
-  return [
-    NumberFilterType.Equals,
-    NumberFilterType.NotEquals,
-    NumberFilterType.GreaterThan,
-    NumberFilterType.LessThan,
-    NumberFilterType.GreaterThanOrEqual,
-    NumberFilterType.LessThanOrEqual,
-  ].includes(type);
-}
-
-const numberTypes = [
-  { id: NumberFilterType.Equals, name: "Equals" },
-  { id: NumberFilterType.NotEquals, name: "Does not equal" },
-  { id: NumberFilterType.GreaterThan, name: "Greater than" },
-  { id: NumberFilterType.LessThan, name: "Less than" },
-  { id: NumberFilterType.GreaterThanOrEqual, name: "Greater than or equal" },
-  { id: NumberFilterType.LessThanOrEqual, name: "Less than or equal" },
-  { id: NumberFilterType.Even, name: "Even" },
-  { id: NumberFilterType.Odd, name: "Odd" },
-  { id: NumberFilterType.IsNull, name: "Is empty" },
-  { id: NumberFilterType.NotNull, name: "Is not empty" },
-];
 
 export class NumberFilter extends Filter {
   constructor(
@@ -130,72 +107,10 @@ export class NumberFilter extends Filter {
   }
 
   id(): string {
-    if (usesReference(this.params.numberType)) {
+    if (numberFilterUsesReference(this.params.numberType)) {
       return `NF-${this.params.numberType}-${this.params.reference}`;
     } else {
       return `NF-${this.params.numberType}`;
     }
   }
-
-  static defaultParams(trait: ComputerParams): NumberFilterParams {
-    return {
-      trait,
-      type: FilterType.NumberFilter,
-      numberType: NumberFilterType.Equals,
-      reference: 0,
-    };
-  }
-}
-
-interface NumberFilterSelectorParams {
-  params: NumberFilterParams | null;
-  trait: ComputerParams;
-  onFilterChange: (params: FilterParams) => void;
-}
-export function NumberFilterSelector({
-  params,
-  trait,
-  onFilterChange,
-}: NumberFilterSelectorParams) {
-  const activeParams = params || NumberFilter.defaultParams(trait);
-  const [numberType, setNumberType] = useState(activeParams.numberType);
-  const [reference, setReference] = useState(activeParams.reference);
-
-  const updateNumberType = function (newType: NumberFilterType) {
-    setNumberType(newType);
-    activeParams.numberType = newType;
-    onFilterChange(activeParams);
-  };
-
-  const updateReference = function (reference: number) {
-    setReference(reference);
-    activeParams.reference = reference;
-    onFilterChange(activeParams);
-  };
-
-  return (
-    <div className="row g-2 align-items-center">
-      <div className="col-auto">
-        <select
-          className="form-select"
-          value={numberType}
-          onChange={(e) => updateNumberType(e.target.value as NumberFilterType)}
-        >
-          {numberTypes.map((numberType) => (
-            <option value={numberType.id} key={numberType.id}>
-              {numberType.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="col-auto">
-        <input
-          className="form-control"
-          type="number"
-          value={reference}
-          onChange={(e) => updateReference(+e.target.value)}
-        />
-      </div>
-    </div>
-  );
 }

@@ -3,19 +3,18 @@ import { useState } from "react";
 import { Person, Competition } from "@wca/helpers";
 import { DateTime } from "luxon";
 
+import { FilterParams } from "../filter/types/params";
+import { FilterType } from "../filter/types/base";
 import {
-  FilterParams,
-  FilterType,
-  StringFilterType,
-  StringFilterParams,
-  NumberFilterType,
-  NumberFilterParams,
-  BooleanFilterType,
   BooleanFilterParams,
-} from "../filter/params";
-import { NumberFilterSelector } from "../filter/number";
-import { StringFilterSelector } from "../filter/string";
-import { BooleanFilterSelector } from "../filter/boolean";
+  BooleanFilterType,
+} from "../filter/types/boolean";
+import { StringFilterParams, StringFilterType } from "../filter/types/string";
+import { NumberFilterParams, NumberFilterType } from "../filter/types/number";
+import { BooleanFilterSelector } from "../filter/selector/boolean";
+import { NumberFilterSelector } from "../filter/selector/number";
+import { StringFilterSelector } from "../filter/selector/string";
+
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";

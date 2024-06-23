@@ -1,7 +1,7 @@
 import { ApplicantData } from "../types/applicant_data";
 import { SerializedTrait } from "./serialized";
 import { ComputerParams } from "./params";
-import { FilterParams } from "../filter/params";
+import { FilterParams } from "../filter/types/params";
 
 export abstract class Trait {
   abstract serialize(): SerializedTrait;

@@ -1,5 +1,6 @@
 import { Competition } from "@wca/helpers";
-import { FilterParams, FilterType } from "./params";
+import { FilterParams } from "./types/params";
+import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { ApplicationSettings } from "../types/competition_data";
 

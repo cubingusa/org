@@ -6,7 +6,7 @@ import { ColumnModal } from "./column_modal";
 import { FilterModal } from "./filter_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
 import { Filter } from "../../filter/filter";
-import { FilterParams } from "../../filter/params";
+import { FilterParams } from "../../filter/types/params";
 import { createFilter } from "../../filter/create_filter";
 import { ComputerParams } from "../../trait/params";
 import { TraitComputer } from "../../trait/api";
