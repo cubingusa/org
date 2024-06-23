@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Person, Competition } from "@wca/helpers";
 import { DateTime } from "luxon";
 
-import { FilterParams } from "../filter/params";
+import { FilterParams, NumberFilterParams } from "../filter/params";
 import { NumberFilterSelector } from "../filter/number";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
@@ -140,7 +140,7 @@ export class PersonalAttributeComputer extends TraitComputer {
       case PersonalAttributeType.Age:
         return (
           <NumberFilterSelector
-            params={params}
+            params={params as NumberFilterParams}
             trait={this.params}
             onFilterChange={onFilterChange}
           />

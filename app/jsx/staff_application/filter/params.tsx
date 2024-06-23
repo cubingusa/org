@@ -2,10 +2,12 @@ import { ComputerParams } from "../trait/params";
 
 export enum FilterType {
   NumberFilter = "number",
+  StringFilter = "string",
 }
 
 interface FilterParamsBase {
   trait: ComputerParams;
+  type: FilterType;
 }
 
 export enum NumberFilterType {
@@ -27,4 +29,15 @@ export interface NumberFilterParams extends FilterParamsBase {
   reference: number;
 }
 
-export type FilterParams = NumberFilterParams;
+export enum StringFilterType {
+  Equals = "=",
+  NotEquals = "!",
+}
+
+export interface StringFilterParams extends FilterParamsBase {
+  type: FilterType.StringFilter;
+  stringType: StringFilterType;
+  reference: string;
+}
+
+export type FilterParams = NumberFilterParams | StringFilterParams;
