@@ -30,6 +30,8 @@ const stringTypes = [
   { id: StringFilterType.NotContains, name: "Does not contain" },
   { id: StringFilterType.IsEmpty, name: "Is empty" },
   { id: StringFilterType.NotEmpty, name: "Is not empty" },
+  { id: StringFilterType.IsNull, name: "Is not set" },
+  { id: StringFilterType.NotNull, name: "Is set" },
 ];
 
 export class StringFilter extends Filter {
@@ -63,9 +65,9 @@ export class StringFilter extends Filter {
       case StringFilterType.NotEmpty:
         return stringTrait.value() !== "";
       case StringFilterType.IsNull:
-        return stringTrait.value() === "";
+        return stringTrait.value() === null;
       case StringFilterType.NotNull:
-        return stringTrait.value() !== "";
+        return stringTrait.value() !== null;
     }
   }
 
@@ -100,14 +102,18 @@ export class StringFilter extends Filter {
         return <>{subDescription} is empty</>;
       case StringFilterType.NotEmpty:
         return <>{subDescription} is not empty</>;
+      case StringFilterType.IsNull:
+        return <>{subDescription} is not set</>;
+      case StringFilterType.NotNull:
+        return <>{subDescription} is set</>;
     }
   }
 
   id(): string {
     if (usesReference(this.params.stringType)) {
-      return `NF-${this.params.stringType}-${this.params.reference}`;
+      return `SF-${this.params.stringType}-${this.params.reference}`;
     } else {
-      return `NF-${this.params.stringType}`;
+      return `SF-${this.params.stringType}`;
     }
   }
 
