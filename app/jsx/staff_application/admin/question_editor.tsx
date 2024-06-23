@@ -37,7 +37,6 @@ export function QuestionEditor(props: QuestionEditorProps) {
   };
 
   const selectTextQuestionType = function (textQuestionType: TextQuestionType) {
-    console.log(textQuestionType);
     (question as TextQuestion).textQuestionType = textQuestionType;
   };
 

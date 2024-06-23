@@ -19,7 +19,6 @@ export function PropertyEditor(props: PropertyEditorProps) {
   };
 
   const newValue = function () {
-    console.log(property);
     event.preventDefault();
     property.values.push({
       id: property.nextValueId,
