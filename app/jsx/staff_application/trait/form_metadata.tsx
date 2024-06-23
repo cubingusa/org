@@ -4,7 +4,10 @@ import { useRouteLoaderData } from "react-router-dom";
 
 import { FilterParams } from "../filter/types/params";
 import { FilterType } from "../filter/types/base";
-import { BooleanFilterParams } from "../filter/types/boolean";
+import {
+  BooleanFilterParams,
+  defaultBooleanParams,
+} from "../filter/types/boolean";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { ApplicantData } from "../types/applicant_data";
 import {
@@ -98,6 +101,7 @@ export class FormMetadataComputer extends TraitComputer {
   defaultFilterParams(): FilterParams {
     switch (this.params.metadataType) {
       case FormMetadataType.Submitted:
+        return defaultBooleanParams(this.params);
       case FormMetadataType.SubmitTime:
       case FormMetadataType.UpdateTime:
     }

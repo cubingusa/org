@@ -4,6 +4,7 @@ import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { ApplicationSettings } from "../types/competition_data";
 
+import { BooleanFilter } from "./boolean";
 import { NumberFilter } from "./number";
 import { StringFilter } from "./string";
 
@@ -18,5 +19,7 @@ export function createFilter(
       return new NumberFilter(paramsClone, settings, wcif);
     case FilterType.StringFilter:
       return new StringFilter(paramsClone, settings, wcif);
+    case FilterType.BooleanFilter:
+      return new BooleanFilter(paramsClone, settings, wcif);
   }
 }
