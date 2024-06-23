@@ -16,10 +16,6 @@ function usesReference(type: NumberFilterType) {
   ].includes(type);
 }
 
-function usesReferenceList(type: NumberFilterType) {
-  return type === NumberFilterType.OneOf;
-}
-
 export class NumberFilter extends Filter<NumberTrait> {
   constructor(
     private params: NumberFilterParams,
@@ -43,8 +39,6 @@ export class NumberFilter extends Filter<NumberTrait> {
         return trait.value() >= this.params.reference;
       case NumberFilterType.LessThanOrEqual:
         return trait.value() <= this.params.reference;
-      case NumberFilterType.OneOf:
-        return this.params.referenceList.includes(trait.value());
       case NumberFilterType.Even:
         return trait.value() % 2 == 0;
       case NumberFilterType.Odd:
@@ -95,12 +89,6 @@ export class NumberFilter extends Filter<NumberTrait> {
             {subDescription} &lt;= {this.params.reference}
           </>
         );
-      case NumberFilterType.OneOf:
-        return (
-          <>
-            {subDescription} is one of {this.params.referenceList}
-          </>
-        );
       case NumberFilterType.Even:
         return <>{subDescription} even</>;
       case NumberFilterType.Odd:
@@ -115,8 +103,6 @@ export class NumberFilter extends Filter<NumberTrait> {
   id(): string {
     if (usesReference(this.params.numberType)) {
       return `NF-${this.params.numberType}-${this.params.reference}`;
-    } else if (usesReferenceList(this.params.numberType)) {
-      return `NF-${this.params.numberType}-${this.params.referenceList}`;
     } else {
       return `NF-${this.params.numberType}`;
     }

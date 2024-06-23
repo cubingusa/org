@@ -15,7 +15,6 @@ export enum NumberFilterType {
   LessThan = "<",
   GreaterThanOrEqual = ">=",
   LessThanOrEqual = "<=",
-  OneOf = "in",
   Even = "even",
   Odd = "odd",
   IsNull = "null",
@@ -26,7 +25,6 @@ export interface NumberFilterParams extends FilterParamsBase {
   type: FilterType.NumberFilter;
   numberType: NumberFilterType;
   reference: number;
-  referenceList: number[];
 }
 
 export type FilterParams = NumberFilterParams;
