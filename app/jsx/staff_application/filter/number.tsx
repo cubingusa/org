@@ -108,9 +108,9 @@ export class NumberFilter extends Filter {
 
   id(): string {
     if (numberFilterUsesReference(this.params.numberType)) {
-      return `NF-${this.params.numberType}-${this.params.reference}`;
+      return `NF-${this.idBase()}-${this.params.numberType}-${this.params.reference}`;
     } else {
-      return `NF-${this.params.numberType}`;
+      return `NF-${this.idBase()}-${this.params.numberType}`;
     }
   }
 }

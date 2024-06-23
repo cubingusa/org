@@ -42,7 +42,7 @@ class EnumFilterBase<T> extends Filter {
   }
 
   id(): string {
-    return `SEF-${this.params.allowedValues.join(",")}`;
+    return `EF-${this.idBase()}-${this.params.allowedValues.join(",")}`;
   }
 }
 

@@ -91,9 +91,9 @@ export class StringFilter extends Filter {
 
   id(): string {
     if (stringFilterUsesReference(this.params.stringType)) {
-      return `SF-${this.params.stringType}-${this.params.reference}`;
+      return `SF-${this.idBase()}-${this.params.stringType}-${this.params.reference}`;
     } else {
-      return `SF-${this.params.stringType}`;
+      return `SF-${this.idBase()}-${this.params.stringType}`;
     }
   }
 

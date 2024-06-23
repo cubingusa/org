@@ -55,6 +55,6 @@ export class BooleanFilter extends Filter {
   }
 
   id(): string {
-    return `BF-${this.params.booleanType}`;
+    return `BF-${this.idBase()}-${this.params.booleanType}`;
   }
 }

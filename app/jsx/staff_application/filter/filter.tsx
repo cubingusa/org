@@ -25,5 +25,9 @@ export abstract class Filter {
   abstract description(): JSX.Element;
   abstract id(): string;
 
+  idBase(): string {
+    return this.computer.id();
+  }
+
   protected computer: TraitComputer;
 }
