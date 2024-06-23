@@ -3,6 +3,7 @@ import { useRouteLoaderData } from "react-router-dom";
 
 import { Person, Competition } from "@wca/helpers";
 
+import { FilterParams } from "../filter/params";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -80,6 +81,10 @@ export class PropertyComputer extends TraitComputer {
         onTraitChange={onTraitChange}
       />
     );
+  }
+
+  filterSelector(onFilterChange: (params: FilterParams) => void): JSX.Element {
+    return <></>;
   }
 }
 

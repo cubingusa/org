@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Person, Competition } from "@wca/helpers";
 import { DateTime } from "luxon";
 
+import { FilterParams } from "../filter/params";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
@@ -125,6 +126,10 @@ export class PersonalAttributeComputer extends TraitComputer {
         onTraitChange={onTraitChange}
       />
     );
+  }
+
+  filterSelector(onFilterChange: (params: FilterParams) => void): JSX.Element {
+    return <></>;
   }
 }
 

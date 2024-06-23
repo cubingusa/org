@@ -6,6 +6,7 @@ import {
   CompetitionData,
 } from "../types/competition_data";
 import { Question, QuestionType } from "../types/form";
+import { FilterParams } from "../filter/params";
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
@@ -90,6 +91,10 @@ export class FormAnswerComputer extends TraitComputer {
         onTraitChange={onTraitChange}
       />
     );
+  }
+
+  filterSelector(onFilterChange: (params: FilterParams) => void): JSX.Element {
+    return <></>;
   }
 }
 

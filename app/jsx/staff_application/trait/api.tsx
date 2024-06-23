@@ -1,6 +1,7 @@
 import { ApplicantData } from "../types/applicant_data";
 import { SerializedTrait } from "./serialized";
 import { ComputerParams } from "./params";
+import { FilterParams } from "../filter/params";
 
 export abstract class Trait {
   abstract serialize(): SerializedTrait;
@@ -17,4 +18,7 @@ export abstract class TraitComputer {
     onTraitChange: (params: ComputerParams) => void,
   ): JSX.Element;
   abstract isValid(): boolean;
+  abstract filterSelector(
+    onFilterChange: (params: FilterParams) => void,
+  ): JSX.Element;
 }
