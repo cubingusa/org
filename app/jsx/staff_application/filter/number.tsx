@@ -9,6 +9,7 @@ import {
   NumberFilterType,
 } from "./params";
 import { Filter } from "./filter";
+import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
 import { NumberTrait } from "../trait/traits";
 import { ApplicationSettings } from "../types/competition_data";
@@ -37,7 +38,7 @@ const numberTypes = [
   { id: NumberFilterType.NotNull, name: "Is not null" },
 ];
 
-export class NumberFilter extends Filter<NumberTrait> {
+export class NumberFilter extends Filter {
   constructor(
     private params: NumberFilterParams,
     settings: ApplicationSettings,
@@ -46,34 +47,35 @@ export class NumberFilter extends Filter<NumberTrait> {
     super(params, settings, wcif);
   }
 
-  protected applyImpl(trait: NumberTrait): boolean {
+  protected applyImpl(trait: Trait): boolean {
+    const numberTrait = trait as NumberTrait;
     if (
-      trait.value() === null &&
+      numberTrait.value() === null &&
       this.params.numberType !== NumberFilterType.IsNull
     ) {
       return false;
     }
     switch (this.params.numberType) {
       case NumberFilterType.Equals:
-        return trait.value() === this.params.reference;
+        return numberTrait.value() === this.params.reference;
       case NumberFilterType.NotEquals:
-        return trait.value() !== this.params.reference;
+        return numberTrait.value() !== this.params.reference;
       case NumberFilterType.GreaterThan:
-        return trait.value() > this.params.reference;
+        return numberTrait.value() > this.params.reference;
       case NumberFilterType.LessThan:
-        return trait.value() < this.params.reference;
+        return numberTrait.value() < this.params.reference;
       case NumberFilterType.GreaterThanOrEqual:
-        return trait.value() >= this.params.reference;
+        return numberTrait.value() >= this.params.reference;
       case NumberFilterType.LessThanOrEqual:
-        return trait.value() <= this.params.reference;
+        return numberTrait.value() <= this.params.reference;
       case NumberFilterType.Even:
-        return trait.value() % 2 == 0;
+        return numberTrait.value() % 2 == 0;
       case NumberFilterType.Odd:
-        return trait.value() % 2 == 1;
+        return numberTrait.value() % 2 == 1;
       case NumberFilterType.IsNull:
-        return trait.value() === null;
+        return numberTrait.value() === null;
       case NumberFilterType.NotNull:
-        return trait.value() !== null;
+        return numberTrait.value() !== null;
     }
   }
 

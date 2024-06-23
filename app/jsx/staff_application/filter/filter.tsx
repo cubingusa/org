@@ -6,7 +6,7 @@ import { createComputer } from "../trait/create_computer";
 import { ApplicantData } from "../types/applicant_data";
 import { ApplicationSettings } from "../types/competition_data";
 
-export abstract class Filter<T extends Trait> {
+export abstract class Filter {
   constructor(
     private baseParams: FilterParams,
     settings: ApplicationSettings,
@@ -16,11 +16,11 @@ export abstract class Filter<T extends Trait> {
   }
 
   apply(applicant: ApplicantData): boolean {
-    const trait = this.computer.compute(applicant) as T;
+    const trait = this.computer.compute(applicant);
     return this.applyImpl(trait);
   }
 
-  protected abstract applyImpl(val: T): boolean;
+  protected abstract applyImpl(val: Trait): boolean;
 
   abstract description(): JSX.Element;
   abstract id(): string;
