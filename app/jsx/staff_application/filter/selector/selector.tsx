@@ -21,7 +21,7 @@ export function FilterSelector({
   const { settings, wcif } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  const activeComputer = createComputer(params.trait, settings, wcif);
+  const activeComputer = createComputer(activeParams.trait, settings, wcif);
 
   const onFilterChange = function (params: FilterParams) {
     setActiveParams(params);

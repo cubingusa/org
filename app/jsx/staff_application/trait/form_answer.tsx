@@ -12,8 +12,14 @@ import { FilterType } from "../filter/types/base";
 import {
   BooleanFilterParams,
   BooleanFilterType,
+  defaultBooleanParams,
 } from "../filter/types/boolean";
-import { StringFilterParams, StringFilterType } from "../filter/types/string";
+import {
+  StringFilterParams,
+  StringFilterType,
+  defaultStringParams,
+} from "../filter/types/string";
+import { defaultNullParams } from "../filter/types/null";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { StringFilterSelector } from "../filter/selector/string";
 
@@ -90,26 +96,17 @@ export class FormAnswerComputer extends TraitComputer {
   defaultFilterParams(): FilterParams {
     const question = this.getQuestion();
     if (!question) {
-      return {
-        type: FilterType.NullFilter,
-        trait: this.params,
-      };
+      return defaultNullParams(this.params);
     }
     switch (question.questionType) {
       case QuestionType.Null:
-        return {
-          type: FilterType.NullFilter,
-          trait: this.params,
-        };
+        return defaultNullParams(this.params);
       case QuestionType.Text:
-        return {
-          type: FilterType.StringFilter,
-          trait: this.params,
-          stringType: StringFilterType.Equals,
-          reference: "",
-        };
+        return defaultStringParams(this.params);
       case QuestionType.YesNo:
+        return defaultBooleanParams(this.params);
       case QuestionType.MultipleChoice:
+      // TODO: defaultEnumParams
     }
   }
 
@@ -136,32 +133,56 @@ export class FormAnswerComputer extends TraitComputer {
     params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element {
-    const question = this.getQuestion();
-    if (question === undefined) {
-      return <></>;
-    }
-    switch (question.questionType) {
-      case QuestionType.Text:
-        return (
-          <StringFilterSelector
-            params={params as StringFilterParams}
-            trait={this.params}
-            onFilterChange={onFilterChange}
-          />
-        );
-      case QuestionType.YesNo:
-        return (
-          <BooleanFilterSelector
-            params={params as BooleanFilterParams}
-            trait={this.params}
-            onFilterChange={onFilterChange}
-          />
-        );
-      case QuestionType.MultipleChoice:
-      // TODO: Enum filter.
-    }
+    return (
+      <FormAnswerFilterSelector
+        params={params}
+        computerParams={this.params}
+        onFilterChange={onFilterChange}
+      />
+    );
+  }
+}
+
+interface FormAnswerFilterSelectorParams {
+  params: FilterParams | null;
+  computerParams: ComputerParams;
+  onFilterChange: (params: FilterParams) => void;
+}
+function FormAnswerFilterSelector({
+  params,
+  computerParams,
+  onFilterChange,
+}: FormAnswerFilterSelectorParams) {
+  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+  const formAnswerParams = computerParams as FormAnswerParams;
+
+  const question = settings.forms
+    .find((f) => f.id == formAnswerParams.formId)
+    ?.questions?.find((q) => q.id == formAnswerParams.questionId);
+  if (question === undefined) {
     return <></>;
   }
+  switch (question.questionType) {
+    case QuestionType.Text:
+      return (
+        <StringFilterSelector
+          params={params as StringFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      );
+    case QuestionType.YesNo:
+      return (
+        <BooleanFilterSelector
+          params={params as BooleanFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      );
+    case QuestionType.MultipleChoice:
+    // TODO: Enum filter.
+  }
+  return <></>;
 }
 
 interface FormAnswerSelectorParams {
