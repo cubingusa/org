@@ -34,8 +34,8 @@ const numberTypes = [
   { id: NumberFilterType.LessThanOrEqual, name: "Less than or equal" },
   { id: NumberFilterType.Even, name: "Even" },
   { id: NumberFilterType.Odd, name: "Odd" },
-  { id: NumberFilterType.IsNull, name: "Is null" },
-  { id: NumberFilterType.NotNull, name: "Is not null" },
+  { id: NumberFilterType.IsNull, name: "Is empty" },
+  { id: NumberFilterType.NotNull, name: "Is not empty" },
 ];
 
 export class NumberFilter extends Filter {
