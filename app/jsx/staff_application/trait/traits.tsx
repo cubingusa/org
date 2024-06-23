@@ -35,6 +35,10 @@ export class NumberTrait extends Trait {
     return this.val == null ? <>&ndash;</> : <>{this.val}</>;
   }
 
+  value(): number | null {
+    return this.val;
+  }
+
   private val: number | null;
 }
 
@@ -69,6 +73,10 @@ export class StringTrait extends Trait {
 
   render(): JSX.Element {
     return this.val == null ? <>&ndash;</> : <>{this.val}</>;
+  }
+
+  value(): string | null {
+    return this.val;
   }
 
   private val: string | null;
@@ -114,6 +122,10 @@ export class BooleanTrait extends Trait {
     }
   }
 
+  value(): boolean | null {
+    return this.val;
+  }
+
   private val: boolean | null;
 }
 
@@ -137,6 +149,10 @@ export class NullTrait extends Trait {
 
   render(): JSX.Element {
     return <>&ndash;</>;
+  }
+
+  value(): null {
+    return null;
   }
 }
 
@@ -175,6 +191,10 @@ export class DateTimeTrait extends Trait {
     ) : (
       <>{this.val.toLocaleString(DateTime.DATETIME_MED)}</>
     );
+  }
+
+  value(): DateTime | null {
+    return this.val;
   }
 
   private val: DateTime | null;
