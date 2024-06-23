@@ -22,11 +22,11 @@ export enum NumberFilterType {
   NotNull = "not_null",
 }
 
-export interface NumberFilter extends FilterParamsBase {
+export interface NumberFilterParams extends FilterParamsBase {
   type: FilterType.NumberFilter;
   numberType: NumberFilterType;
   reference: number;
   referenceList: number[];
 }
 
-export type FilterParams = NumberFilter;
+export type FilterParams = NumberFilterParams;
