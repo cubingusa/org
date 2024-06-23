@@ -1,6 +1,7 @@
 import { ComputerParams } from "../trait/params";
 
 export enum FilterType {
+  NullFilter = "null",
   NumberFilter = "number",
   StringFilter = "string",
 }
@@ -8,6 +9,10 @@ export enum FilterType {
 interface FilterParamsBase {
   trait: ComputerParams;
   type: FilterType;
+}
+
+export interface NullFilterParams extends FilterParamsBase {
+  type: FilterType.NullFilter;
 }
 
 export enum NumberFilterType {
@@ -40,4 +45,7 @@ export interface StringFilterParams extends FilterParamsBase {
   reference: string;
 }
 
-export type FilterParams = NumberFilterParams | StringFilterParams;
+export type FilterParams =
+  | NullFilterParams
+  | NumberFilterParams
+  | StringFilterParams;
