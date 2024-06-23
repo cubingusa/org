@@ -4,6 +4,8 @@ import { useRouteLoaderData } from "react-router-dom";
 
 import { FilterParams } from "../filter/types/params";
 import { FilterType } from "../filter/types/base";
+import { BooleanFilterParams } from "../filter/types/boolean";
+import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -125,13 +127,45 @@ export class FormMetadataComputer extends TraitComputer {
     params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element {
-    switch (this.params.metadataType) {
-      case FormMetadataType.Submitted:
-      case FormMetadataType.SubmitTime:
-      case FormMetadataType.UpdateTime:
-    }
-    return <></>;
+    return (
+      <FormMetadataFilterSelector
+        params={params}
+        computerParams={this.params}
+        onFilterChange={onFilterChange}
+      />
+    );
   }
+}
+
+interface FormMetadataFilterSelectorParams {
+  params: FilterParams | null;
+  computerParams: ComputerParams;
+  onFilterChange: (params: FilterParams) => void;
+}
+function FormMetadataFilterSelector({
+  params,
+  computerParams,
+  onFilterChange,
+}: FormMetadataFilterSelectorParams) {
+  const metadataType = (computerParams as FormMetadataParams).metadataType;
+  const filterType =
+    metadataType == FormMetadataType.Submitted
+      ? FilterType.BooleanFilter
+      : FilterType.DateTimeFilter;
+  return (
+    <>
+      {filterType == FilterType.BooleanFilter ? (
+        <BooleanFilterSelector
+          params={params as BooleanFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      ) : (
+        <></>
+      )}
+    </>
+  );
+  // TODO: add DateTimeFilterSelector here.
 }
 
 interface FormMetadataSelectorParams {
