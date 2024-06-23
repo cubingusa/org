@@ -199,3 +199,78 @@ export class DateTimeTrait extends Trait {
 
   private val: DateTime | null;
 }
+
+type EnumTraitParams<T> =
+  | {
+      val: T | null;
+      allValues: Map<T, string>;
+    }
+  | {
+      serialized: SerializedTrait;
+      allValues: Map<T, string>;
+    };
+abstract class EnumTrait<T> extends Trait {
+  constructor(params: EnumTraitParams<T>) {
+    super();
+    this.allValues = params.allValues;
+    if ("val" in params) {
+      this.val = params.val;
+    } else if ("serialized" in params) {
+      this.val = this.deserialize(params.serialized);
+    }
+  }
+
+  abstract deserialize(trait: SerializedTrait): T | null;
+  abstract serialize(): SerializedTrait;
+
+  render(): JSX.Element {
+    if (!this.allValues.has(this.val)) {
+      return <>&ndash;</>;
+    } else {
+      return <>{this.allValues.get(this.val)}</>;
+    }
+  }
+
+  value(): T | null {
+    return this.val;
+  }
+
+  protected val: T | null;
+  private allValues: Map<T, string>;
+}
+
+export class StringEnumTrait extends EnumTrait<string> {
+  deserialize(trait: SerializedTrait): string | null {
+    if (trait.stringValues.length == 0) {
+      return null;
+    } else {
+      return trait.stringValues[0];
+    }
+  }
+
+  serialize(): SerializedTrait {
+    return {
+      traitType: TraitType.StringEnumTrait,
+      numberValues: [],
+      stringValues: [this.val],
+    };
+  }
+}
+
+export class NumberEnumTrait extends EnumTrait<number> {
+  deserialize(trait: SerializedTrait): number | null {
+    if (trait.numberValues.length == 0) {
+      return null;
+    } else {
+      return trait.numberValues[0];
+    }
+  }
+
+  serialize(): SerializedTrait {
+    return {
+      traitType: TraitType.NumberEnumTrait,
+      numberValues: [this.val],
+      stringValues: [],
+    };
+  }
+}
