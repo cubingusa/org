@@ -18,7 +18,7 @@ export class FormAnswerComputer extends TraitComputer {
     super(params);
   }
 
-  getQuestion(): Question | null {
+  getQuestion(): Question | undefined {
     return this.settings.forms
       .find((f) => f.id == this.params.formId)
       ?.questions?.find((q) => q.id == this.params.questionId);
@@ -26,13 +26,13 @@ export class FormAnswerComputer extends TraitComputer {
 
   compute(applicant: ApplicantData): Trait {
     const question = this.getQuestion();
-    if (question === null) {
+    if (question === undefined) {
       return new NullTrait({});
     }
     const myQuestion = applicant.forms
       .find((f) => f.formId == this.params.formId)
       ?.details?.questions?.find((q) => q.questionId == this.params.questionId);
-    if (myQuestion === null) {
+    if (myQuestion === undefined) {
       return new NullTrait({});
     }
     switch (question.questionType) {
@@ -78,7 +78,7 @@ export class FormAnswerComputer extends TraitComputer {
   }
 
   isValid(): boolean {
-    return this.getQuestion() !== null;
+    return this.getQuestion() !== undefined;
   }
 
   formElement(

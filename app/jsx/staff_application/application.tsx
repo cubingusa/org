@@ -288,7 +288,7 @@ export function Application() {
     <>
       {user.properties.map(({ key, value }) => {
         const prop = settings.properties.find((p) => p.id == key);
-        if (prop === null) {
+        if (prop === undefined) {
           return null;
         }
         const val = prop.values.find((val) => val.id == value);

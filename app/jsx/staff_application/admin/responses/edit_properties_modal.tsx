@@ -21,7 +21,8 @@ export function EditPropertiesModal({
   const property = settings.properties.find((p) => p.id == propertyId);
   const [valueId, setValueId] = useState(-1);
 
-  const disabledSubmit = settings.properties.length == 0 || property == null;
+  const disabledSubmit =
+    settings.properties.length == 0 || property == undefined;
 
   const propertySection =
     settings.properties.length > 0 ? (
@@ -51,7 +52,7 @@ export function EditPropertiesModal({
     );
 
   const valuesSection =
-    property == null ? (
+    property == undefined ? (
       <>Hmm, something's gone wrong.</>
     ) : (
       <div className="row g-2 align-items-center">

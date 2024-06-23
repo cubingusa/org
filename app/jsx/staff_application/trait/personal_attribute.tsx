@@ -53,7 +53,7 @@ export class PersonalAttributeComputer extends TraitComputer {
     super(params);
   }
 
-  getPerson(applicant: ApplicantData): Person | null {
+  getPerson(applicant: ApplicantData): Person | undefined {
     return this.wcif.persons.find((p) => p.wcaUserId == applicant.user.id);
   }
 

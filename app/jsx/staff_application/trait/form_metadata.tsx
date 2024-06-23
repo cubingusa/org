@@ -37,11 +37,11 @@ export class FormMetadataComputer extends TraitComputer {
     super(params);
   }
 
-  getForm(): Form | null {
+  getForm(): Form | undefined {
     return this.settings.forms.find((f) => f.id == this.params.formId);
   }
 
-  getSubmittedForm(applicant: ApplicantData): SubmittedForm | null {
+  getSubmittedForm(applicant: ApplicantData): SubmittedForm | undefined {
     return applicant.forms.find((f) => f.formId == this.params.formId);
   }
 
@@ -49,9 +49,9 @@ export class FormMetadataComputer extends TraitComputer {
     const myForm = this.getSubmittedForm(applicant);
     switch (this.params.metadataType) {
       case FormMetadataType.Submitted:
-        return new BooleanTrait({ val: myForm !== null });
+        return new BooleanTrait({ val: myForm !== undefined });
       case FormMetadataType.SubmitTime:
-        if (myForm === null) {
+        if (myForm === undefined) {
           return new NullTrait({});
         } else {
           return new DateTimeTrait({
@@ -59,7 +59,7 @@ export class FormMetadataComputer extends TraitComputer {
           });
         }
       case FormMetadataType.UpdateTime:
-        if (myForm === null) {
+        if (myForm === undefined) {
           return new NullTrait({});
         } else {
           return new DateTimeTrait({
@@ -75,7 +75,7 @@ export class FormMetadataComputer extends TraitComputer {
 
   header(): JSX.Element {
     const form = this.getForm();
-    if (form === null) {
+    if (form === undefined) {
       return <>??</>;
     }
     return (
@@ -94,7 +94,7 @@ export class FormMetadataComputer extends TraitComputer {
   }
 
   isValid(): boolean {
-    return this.getForm() !== null;
+    return this.getForm() !== undefined;
   }
 
   formElement(
