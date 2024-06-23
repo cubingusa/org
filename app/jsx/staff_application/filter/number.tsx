@@ -1,7 +1,15 @@
+import { useState } from "react";
+
 import { Competition } from "@wca/helpers";
 
-import { NumberFilterParams, NumberFilterType } from "./params";
+import {
+  FilterParams,
+  FilterType,
+  NumberFilterParams,
+  NumberFilterType,
+} from "./params";
 import { Filter } from "./filter";
+import { ComputerParams } from "../trait/params";
 import { NumberTrait } from "../trait/traits";
 import { ApplicationSettings } from "../types/competition_data";
 
@@ -16,6 +24,19 @@ function usesReference(type: NumberFilterType) {
   ].includes(type);
 }
 
+const numberTypes = [
+  { id: NumberFilterType.Equals, name: "Equals" },
+  { id: NumberFilterType.NotEquals, name: "Does not equal" },
+  { id: NumberFilterType.GreaterThan, name: "Greater than" },
+  { id: NumberFilterType.LessThan, name: "Less than" },
+  { id: NumberFilterType.GreaterThanOrEqual, name: "Greater than or equal" },
+  { id: NumberFilterType.LessThanOrEqual, name: "Less than or equal" },
+  { id: NumberFilterType.Even, name: "Even" },
+  { id: NumberFilterType.Odd, name: "Odd" },
+  { id: NumberFilterType.IsNull, name: "Is null" },
+  { id: NumberFilterType.NotNull, name: "Is not null" },
+];
+
 export class NumberFilter extends Filter<NumberTrait> {
   constructor(
     private params: NumberFilterParams,
@@ -26,6 +47,12 @@ export class NumberFilter extends Filter<NumberTrait> {
   }
 
   protected applyImpl(trait: NumberTrait): boolean {
+    if (
+      trait.value() === null &&
+      this.params.numberType !== NumberFilterType.IsNull
+    ) {
+      return false;
+    }
     switch (this.params.numberType) {
       case NumberFilterType.Equals:
         return trait.value() === this.params.reference;
@@ -107,4 +134,66 @@ export class NumberFilter extends Filter<NumberTrait> {
       return `NF-${this.params.numberType}`;
     }
   }
+
+  static defaultParams(trait: ComputerParams): NumberFilterParams {
+    return {
+      trait,
+      type: FilterType.NumberFilter,
+      numberType: NumberFilterType.Equals,
+      reference: 0,
+    };
+  }
+}
+
+interface NumberFilterSelectorParams {
+  params: NumberFilterParams | null;
+  trait: ComputerParams;
+  onFilterChange: (params: FilterParams) => void;
+}
+export function NumberFilterSelector({
+  params,
+  trait,
+  onFilterChange,
+}: NumberFilterSelectorParams) {
+  const activeParams = params || NumberFilter.defaultParams(trait);
+  const [numberType, setNumberType] = useState(activeParams.numberType);
+  const [reference, setReference] = useState(activeParams.reference);
+
+  const updateNumberType = function (newType: NumberFilterType) {
+    setNumberType(newType);
+    activeParams.numberType = newType;
+    onFilterChange(activeParams);
+  };
+
+  const updateReference = function (reference: number) {
+    setReference(reference);
+    activeParams.reference = reference;
+    onFilterChange(activeParams);
+  };
+
+  return (
+    <div className="row g-2 align-items-center">
+      <div className="col-auto">
+        <select
+          className="form-select"
+          value={numberType}
+          onChange={(e) => updateNumberType(e.target.value as NumberFilterType)}
+        >
+          {numberTypes.map((numberType) => (
+            <option value={numberType.id} key={numberType.id}>
+              {numberType.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="col-auto">
+        <input
+          className="form-control"
+          type="number"
+          value={reference}
+          onChange={(e) => updateReference(+e.target.value)}
+        />
+      </div>
+    </div>
+  );
 }
