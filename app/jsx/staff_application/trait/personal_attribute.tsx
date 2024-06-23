@@ -5,12 +5,14 @@ import { DateTime } from "luxon";
 
 import {
   FilterParams,
-  NumberFilterParams,
   FilterType,
   StringFilterType,
+  StringFilterParams,
   NumberFilterType,
+  NumberFilterParams,
 } from "../filter/params";
 import { NumberFilterSelector } from "../filter/number";
+import { StringFilterSelector } from "../filter/string";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
@@ -23,18 +25,54 @@ import {
 import { StringTrait, NumberTrait, BooleanTrait } from "./traits";
 
 const personalAttributes = [
-  { type: PersonalAttributeType.Name, name: "Name" },
-  { type: PersonalAttributeType.WcaId, name: "WCA ID" },
-  { type: PersonalAttributeType.WcaUserId, name: "WCA User ID" },
-  { type: PersonalAttributeType.Age, name: "Age" },
-  { type: PersonalAttributeType.DelegateStatus, name: "Is Delegate" },
-  { type: PersonalAttributeType.ListedOrganizer, name: "Listed Organizer" },
-  { type: PersonalAttributeType.ListedDelegate, name: "Listed Delegate" },
-  { type: PersonalAttributeType.Registered, name: "Registered" },
+  {
+    type: PersonalAttributeType.Name,
+    name: "Name",
+    filter: FilterType.StringFilter,
+  },
+  {
+    type: PersonalAttributeType.WcaId,
+    name: "WCA ID",
+    filter: FilterType.StringFilter,
+  },
+  {
+    type: PersonalAttributeType.WcaUserId,
+    name: "WCA User ID",
+    filter: FilterType.NumberFilter,
+  },
+  {
+    type: PersonalAttributeType.Age,
+    name: "Age",
+    filter: FilterType.NumberFilter,
+  },
+  {
+    type: PersonalAttributeType.DelegateStatus,
+    name: "Is Delegate",
+    filter: FilterType.BooleanFilter,
+  },
+  {
+    type: PersonalAttributeType.ListedOrganizer,
+    name: "Listed Organizer",
+    filter: FilterType.BooleanFilter,
+  },
+  {
+    type: PersonalAttributeType.ListedDelegate,
+    name: "Listed Delegate",
+    filter: FilterType.BooleanFilter,
+  },
+  {
+    type: PersonalAttributeType.Registered,
+    name: "Registered",
+    filter: FilterType.BooleanFilter,
+  },
 ];
 
-function personalAttributeName(type: PersonalAttributeType) {
+function personalAttributeName(type: PersonalAttributeType): string {
   return personalAttributes.find((p) => p.type === type).name;
+}
+
+function personalAttributeFilterType(type: PersonalAttributeType): FilterType {
+  return personalAttributes.find((p) => p.type === type).filter;
 }
 
 function delegateStatusName(statusId: string) {
@@ -184,14 +222,23 @@ function PersonalAttributeFilterSelector({
   computerParams,
   onFilterChange,
 }: PersonalAttributeFilterSelectorParams) {
-  const useNumberFilter =
-    (computerParams as PersonalAttributeParams).attributeType ===
-    PersonalAttributeType.Age;
+  const attributeType = (computerParams as PersonalAttributeParams)
+    .attributeType;
+  const filterType = personalAttributeFilterType(attributeType);
   return (
     <>
-      {useNumberFilter ? (
+      {filterType == FilterType.NumberFilter ? (
         <NumberFilterSelector
           params={params as NumberFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      ) : (
+        <></>
+      )}
+      {filterType == FilterType.StringFilter ? (
+        <StringFilterSelector
+          params={params as StringFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
         />

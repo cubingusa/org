@@ -4,6 +4,7 @@ import { Filter } from "./filter";
 import { ApplicationSettings } from "../types/competition_data";
 
 import { NumberFilter } from "./number";
+import { StringFilter } from "./string";
 
 export function createFilter(
   params: FilterParams,
@@ -14,5 +15,7 @@ export function createFilter(
   switch (paramsClone.type) {
     case FilterType.NumberFilter:
       return new NumberFilter(paramsClone, settings, wcif);
+    case FilterType.StringFilter:
+      return new StringFilter(paramsClone, settings, wcif);
   }
 }
