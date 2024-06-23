@@ -161,27 +161,22 @@ export class PersonalAttributeComputer extends TraitComputer {
   }
 
   defaultFilterParams(): FilterParams {
-    switch (this.params.attributeType) {
-      case PersonalAttributeType.Name:
-      case PersonalAttributeType.WcaId:
-      case PersonalAttributeType.WcaUserId:
+    switch (personalAttributeFilterType(this.params.attributeType)) {
+      case FilterType.StringFilter:
         return {
           trait: this.params,
           type: FilterType.StringFilter,
           stringType: StringFilterType.Equals,
           reference: "",
         };
-      case PersonalAttributeType.Age:
+      case FilterType.NumberFilter:
         return {
           trait: this.params,
           type: FilterType.NumberFilter,
           numberType: NumberFilterType.Equals,
           reference: 0,
         };
-      case PersonalAttributeType.DelegateStatus:
-      case PersonalAttributeType.ListedOrganizer:
-      case PersonalAttributeType.ListedDelegate:
-      case PersonalAttributeType.Registered:
+      case FilterType.BooleanFilter:
         return {
           trait: this.params,
           type: FilterType.BooleanFilter,
