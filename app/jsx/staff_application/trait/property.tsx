@@ -96,8 +96,31 @@ export class PropertyComputer extends TraitComputer {
     params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element {
-    return <></>;
+    return (
+      <PropertyFilterSelector
+        params={params}
+        computerParams={this.params}
+        onFilterChange={onFilterChange}
+      />
+    );
   }
+}
+
+interface PropertyFilterSelectorParams {
+  params: FilterParams | null;
+  computerParams: ComputerParams;
+  onFilterChange: (params: FilterParams) => void;
+}
+function PropertyFilterSelector({
+  params,
+  computerParams,
+  onFilterChange,
+}: PropertyFilterSelectorParams) {
+  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+  const formAnswerParams = computerParams as PropertyParams;
+
+  // TODO: return EnumFilterSelector.
+  return <></>;
 }
 
 interface PropertySelectorParams {
