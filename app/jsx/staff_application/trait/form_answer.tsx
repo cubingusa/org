@@ -78,7 +78,10 @@ export class FormAnswerComputer extends TraitComputer {
   }
 
   isValid(): boolean {
-    return this.getQuestion() !== undefined;
+    const question = this.getQuestion();
+    return (
+      question !== undefined && question.questionType !== QuestionType.Null
+    );
   }
 
   formElement(
@@ -93,7 +96,19 @@ export class FormAnswerComputer extends TraitComputer {
     );
   }
 
-  filterSelector(onFilterChange: (params: FilterParams) => void): JSX.Element {
+  filterSelector(
+    params: FilterParams | null,
+    onFilterChange: (params: FilterParams) => void,
+  ): JSX.Element {
+    const question = this.getQuestion();
+    if (question === undefined) {
+      return <></>;
+    }
+    switch (question.questionType) {
+      case QuestionType.Text:
+      case QuestionType.YesNo:
+      case QuestionType.MultipleChoice:
+    }
     return <></>;
   }
 }

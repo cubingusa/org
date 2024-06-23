@@ -108,7 +108,15 @@ export class FormMetadataComputer extends TraitComputer {
     );
   }
 
-  filterSelector(onFilterChange: (params: FilterParams) => void): JSX.Element {
+  filterSelector(
+    params: FilterParams | null,
+    onFilterChange: (params: FilterParams) => void,
+  ): JSX.Element {
+    switch (this.params.metadataType) {
+      case FormMetadataType.Submitted:
+      case FormMetadataType.SubmitTime:
+      case FormMetadataType.UpdateTime:
+    }
     return <></>;
   }
 }

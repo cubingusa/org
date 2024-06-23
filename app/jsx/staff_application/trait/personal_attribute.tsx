@@ -4,6 +4,7 @@ import { Person, Competition } from "@wca/helpers";
 import { DateTime } from "luxon";
 
 import { FilterParams } from "../filter/params";
+import { NumberFilterSelector } from "../filter/number";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
@@ -128,7 +129,27 @@ export class PersonalAttributeComputer extends TraitComputer {
     );
   }
 
-  filterSelector(onFilterChange: (params: FilterParams) => void): JSX.Element {
+  filterSelector(
+    params: FilterParams | null,
+    onFilterChange: (params: FilterParams) => void,
+  ): JSX.Element {
+    switch (this.params.attributeType) {
+      case PersonalAttributeType.Name:
+      case PersonalAttributeType.WcaId:
+      case PersonalAttributeType.WcaUserId:
+      case PersonalAttributeType.Age:
+        return (
+          <NumberFilterSelector
+            params={params}
+            trait={this.params}
+            onFilterChange={onFilterChange}
+          />
+        );
+      case PersonalAttributeType.DelegateStatus:
+      case PersonalAttributeType.ListedOrganizer:
+      case PersonalAttributeType.ListedDelegate:
+      case PersonalAttributeType.Registered:
+    }
     return <></>;
   }
 }

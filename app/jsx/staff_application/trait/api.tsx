@@ -19,6 +19,7 @@ export abstract class TraitComputer {
   ): JSX.Element;
   abstract isValid(): boolean;
   abstract filterSelector(
+    params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element;
 }
