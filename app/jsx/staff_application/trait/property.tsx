@@ -5,6 +5,11 @@ import { Person, Competition } from "@wca/helpers";
 
 import { FilterParams } from "../filter/types/params";
 import { FilterType } from "../filter/types/base";
+import {
+  NumberEnumFilterParams,
+  defaultNumberEnumParams,
+} from "../filter/types/enum";
+import { NumberEnumFilterSelector } from "../filter/selector/enum";
 
 import { ApplicantData } from "../types/applicant_data";
 import {
@@ -15,7 +20,7 @@ import { Property } from "../types/property";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
 import { ComputerType, PropertyParams, ComputerParams } from "./params";
-import { StringTrait } from "./traits";
+import { NumberEnumTrait } from "./traits";
 
 export class PropertyComputer extends TraitComputer {
   constructor(
@@ -33,23 +38,21 @@ export class PropertyComputer extends TraitComputer {
 
   compute(applicant: ApplicantData): Trait {
     const property = this.getProperty();
+    const propertyMap = new Map<number, string>();
     if (property === undefined) {
-      return new StringTrait({ val: null });
+      return new NumberEnumTrait({ val: null, allValues: propertyMap });
     }
+    property.values.forEach((val) => propertyMap.set(val.id, val.value));
     const userProperty = applicant.user.properties.find(
       (p) => p.key === this.params.propertyId,
     );
     if (userProperty === undefined) {
-      return new StringTrait({ val: null });
+      return new NumberEnumTrait({ val: null, allValues: propertyMap });
     }
-    const propertyValue = property.values.find(
-      (v) => v.id === userProperty.value,
-    );
-    if (propertyValue === undefined) {
-      return new StringTrait({ val: null });
-    }
-    // TODO: switch to EnumTrait.
-    return new StringTrait({ val: propertyValue.value });
+    return new NumberEnumTrait({
+      val: userProperty.value,
+      allValues: propertyMap,
+    });
   }
 
   id(): string {
@@ -70,10 +73,15 @@ export class PropertyComputer extends TraitComputer {
   }
 
   defaultFilterParams(): FilterParams {
-    return {
-      type: FilterType.NullFilter,
-      trait: this.params,
-    };
+    return defaultNumberEnumParams(
+      this.params,
+      this.getProperty()?.values.map((v) => {
+        return {
+          key: v.id,
+          value: v.value,
+        };
+      }) || [],
+    );
   }
 
   isValid(): boolean {
@@ -117,10 +125,21 @@ function PropertyFilterSelector({
   onFilterChange,
 }: PropertyFilterSelectorParams) {
   const { settings } = useRouteLoaderData("competition") as CompetitionData;
-  const formAnswerParams = computerParams as PropertyParams;
+  const map = new Map<number, string>();
+  const propertyParams = computerParams as PropertyParams;
+  const property = settings.properties.find(
+    (p) => p.id == propertyParams.propertyId,
+  );
+  property.values.forEach((v) => map.set(v.id, v.value));
 
-  // TODO: return EnumFilterSelector.
-  return <></>;
+  return (
+    <NumberEnumFilterSelector
+      params={params as NumberEnumFilterParams}
+      trait={computerParams}
+      values={map}
+      onFilterChange={onFilterChange}
+    />
+  );
 }
 
 interface PropertySelectorParams {

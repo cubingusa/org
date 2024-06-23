@@ -209,7 +209,7 @@ type EnumTraitParams<T> =
       serialized: SerializedTrait;
       allValues: Map<T, string>;
     };
-abstract class EnumTrait<T> extends Trait {
+export abstract class EnumTrait<T> extends Trait {
   constructor(params: EnumTraitParams<T>) {
     super();
     this.allValues = params.allValues;

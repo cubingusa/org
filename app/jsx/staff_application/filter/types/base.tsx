@@ -6,6 +6,8 @@ export enum FilterType {
   StringFilter = "string",
   BooleanFilter = "boolean",
   DateTimeFilter = "date_time",
+  NumberEnumFilter = "number_enum",
+  StringEnumFilter = "string_enum",
 }
 
 export interface FilterParamsBase {

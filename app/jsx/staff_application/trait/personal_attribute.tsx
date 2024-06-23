@@ -9,9 +9,11 @@ import {
   BooleanFilterParams,
   BooleanFilterType,
 } from "../filter/types/boolean";
+import { StringEnumFilterParams } from "../filter/types/enum";
 import { StringFilterParams, StringFilterType } from "../filter/types/string";
 import { NumberFilterParams, NumberFilterType } from "../filter/types/number";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
+import { StringEnumFilterSelector } from "../filter/selector/enum";
 import { NumberFilterSelector } from "../filter/selector/number";
 import { StringFilterSelector } from "../filter/selector/string";
 
@@ -24,7 +26,12 @@ import {
   PersonalAttributeParams,
   PersonalAttributeType,
 } from "./params";
-import { StringTrait, NumberTrait, BooleanTrait } from "./traits";
+import {
+  StringTrait,
+  NumberTrait,
+  BooleanTrait,
+  StringEnumTrait,
+} from "./traits";
 
 const personalAttributes = [
   {
@@ -49,8 +56,8 @@ const personalAttributes = [
   },
   {
     type: PersonalAttributeType.DelegateStatus,
-    name: "Is Delegate",
-    filter: FilterType.BooleanFilter,
+    name: "Delegate Status",
+    filter: FilterType.StringEnumFilter,
   },
   {
     type: PersonalAttributeType.ListedOrganizer,
@@ -77,20 +84,18 @@ function personalAttributeFilterType(type: PersonalAttributeType): FilterType {
   return personalAttributes.find((p) => p.type === type).filter;
 }
 
+const delegateStatuses = [
+  { key: "senior_delegate", value: "Senior Delegate" },
+  { key: "regional_delegate", value: "Regional Delegate" },
+  { key: "delegate", value: "Delegate" },
+  { key: "junior_delegate", value: "Junior Delegate" },
+  { key: "trainee_delegate", value: "Trainee Delegate" },
+];
+const delegateStatusMap = new Map<string, string>();
+delegateStatuses.forEach(({ key, value }) => delegateStatusMap.set(key, value));
+
 function delegateStatusName(statusId: string) {
-  switch (statusId) {
-    case "senior_delegate":
-      return "Senior Delegate";
-    case "regional_delegate":
-      return "Regional Delegate";
-    case "delegate":
-      return "Delegate";
-    case "junior_delegate":
-      return "Junior Delegate";
-    case "trainee_delegate":
-      return "Trainee Delegate";
-  }
-  return "";
+  return delegateStatuses.find((s) => s.key == statusId)?.value || "";
 }
 
 export class PersonalAttributeComputer extends TraitComputer {
@@ -121,12 +126,15 @@ export class PersonalAttributeComputer extends TraitComputer {
         });
       case PersonalAttributeType.DelegateStatus:
         if (applicant.user.delegateStatus) {
-          // TODO: switch to EnumTrait.
-          return new StringTrait({
-            val: delegateStatusName(applicant.user.delegateStatus),
+          return new StringEnumTrait({
+            val: applicant.user.delegateStatus,
+            allValues: delegateStatusMap,
           });
         } else {
-          return new StringTrait({ val: null });
+          return new StringEnumTrait({
+            val: null,
+            allValues: delegateStatusMap,
+          });
         }
       case PersonalAttributeType.ListedOrganizer:
         return new BooleanTrait({
@@ -181,6 +189,15 @@ export class PersonalAttributeComputer extends TraitComputer {
           type: FilterType.BooleanFilter,
           booleanType: BooleanFilterType.IsTrue,
         };
+      case FilterType.StringEnumFilter:
+        if (this.params.attributeType == PersonalAttributeType.DelegateStatus) {
+          return {
+            trait: this.params,
+            type: FilterType.StringEnumFilter,
+            allowedValues: [],
+            allValuesForDebugging: delegateStatuses,
+          };
+        }
     }
   }
 
@@ -245,11 +262,27 @@ function PersonalAttributeFilterSelector({
         />
       );
     case FilterType.BooleanFilter:
-      <BooleanFilterSelector
-        params={params as BooleanFilterParams}
-        trait={computerParams}
-        onFilterChange={onFilterChange}
-      />;
+      return (
+        <BooleanFilterSelector
+          params={params as BooleanFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      );
+    case FilterType.StringEnumFilter:
+      if (
+        (computerParams as PersonalAttributeParams).attributeType ==
+        PersonalAttributeType.DelegateStatus
+      ) {
+        return (
+          <StringEnumFilterSelector
+            params={params as StringEnumFilterParams}
+            trait={computerParams}
+            onFilterChange={onFilterChange}
+            values={delegateStatusMap}
+          />
+        );
+      }
   }
 }
 

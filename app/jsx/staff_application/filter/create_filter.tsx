@@ -7,6 +7,7 @@ import { ApplicationSettings } from "../types/competition_data";
 import { BooleanFilter } from "./boolean";
 import { NumberFilter } from "./number";
 import { StringFilter } from "./string";
+import { StringEnumFilter, NumberEnumFilter } from "./enum";
 
 export function createFilter(
   params: FilterParams,
@@ -21,5 +22,9 @@ export function createFilter(
       return new StringFilter(paramsClone, settings, wcif);
     case FilterType.BooleanFilter:
       return new BooleanFilter(paramsClone, settings, wcif);
+    case FilterType.StringEnumFilter:
+      return new StringEnumFilter(paramsClone, settings, wcif);
+    case FilterType.NumberEnumFilter:
+      return new NumberEnumFilter(paramsClone, settings, wcif);
   }
 }
