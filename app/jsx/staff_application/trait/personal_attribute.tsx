@@ -10,9 +10,12 @@ import {
   StringFilterParams,
   NumberFilterType,
   NumberFilterParams,
+  BooleanFilterType,
+  BooleanFilterParams,
 } from "../filter/params";
 import { NumberFilterSelector } from "../filter/number";
 import { StringFilterSelector } from "../filter/string";
+import { BooleanFilterSelector } from "../filter/boolean";
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
@@ -179,6 +182,11 @@ export class PersonalAttributeComputer extends TraitComputer {
       case PersonalAttributeType.ListedOrganizer:
       case PersonalAttributeType.ListedDelegate:
       case PersonalAttributeType.Registered:
+        return {
+          trait: this.params,
+          type: FilterType.BooleanFilter,
+          booleanType: BooleanFilterType.IsTrue,
+        };
     }
   }
 
@@ -239,6 +247,15 @@ function PersonalAttributeFilterSelector({
       {filterType == FilterType.StringFilter ? (
         <StringFilterSelector
           params={params as StringFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      ) : (
+        <></>
+      )}
+      {filterType == FilterType.BooleanFilter ? (
+        <BooleanFilterSelector
+          params={params as BooleanFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
         />
