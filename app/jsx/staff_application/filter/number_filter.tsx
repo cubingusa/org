@@ -5,6 +5,21 @@ import { Filter } from "./filter";
 import { NumberTrait } from "../trait/traits";
 import { ApplicationSettings } from "../types/competition_data";
 
+function usesReference(type: NumberFilterType) {
+  return [
+    NumberFilterType.Equals,
+    NumberFilterType.NotEquals,
+    NumberFilterType.GreaterThan,
+    NumberFilterType.LessThan,
+    NumberFilterType.GreaterThanOrEqual,
+    NumberFilterType.LessThanOrEqual,
+  ].includes(type);
+}
+
+function usesReferenceList(type: NumberFilterType) {
+  return type === NumberFilterType.OneOf;
+}
+
 export class NumberFilter extends Filter<NumberTrait> {
   constructor(
     private params: NumberFilterParams,
@@ -38,6 +53,72 @@ export class NumberFilter extends Filter<NumberTrait> {
         return trait.value() === null;
       case NumberFilterType.NotNull:
         return trait.value() !== null;
+    }
+  }
+
+  description(): JSX.Element {
+    const subDescription = this.computer.header();
+    switch (this.params.numberType) {
+      case NumberFilterType.Equals:
+        return (
+          <>
+            {subDescription} == {this.params.reference}
+          </>
+        );
+      case NumberFilterType.NotEquals:
+        return (
+          <>
+            {subDescription} != {this.params.reference}
+          </>
+        );
+      case NumberFilterType.GreaterThan:
+        return (
+          <>
+            {subDescription} &gt; {this.params.reference}
+          </>
+        );
+      case NumberFilterType.LessThan:
+        return (
+          <>
+            {subDescription} &lt; {this.params.reference}
+          </>
+        );
+      case NumberFilterType.GreaterThanOrEqual:
+        return (
+          <>
+            {subDescription} &gt;= {this.params.reference}
+          </>
+        );
+      case NumberFilterType.LessThanOrEqual:
+        return (
+          <>
+            {subDescription} &lt;= {this.params.reference}
+          </>
+        );
+      case NumberFilterType.OneOf:
+        return (
+          <>
+            {subDescription} is one of {this.params.referenceList}
+          </>
+        );
+      case NumberFilterType.Even:
+        return <>{subDescription} even</>;
+      case NumberFilterType.Odd:
+        return <>{subDescription} is odd</>;
+      case NumberFilterType.IsNull:
+        return <>{subDescription} is null</>;
+      case NumberFilterType.NotNull:
+        return <>{subDescription} is not null</>;
+    }
+  }
+
+  id(): string {
+    if (usesReference(this.params.numberType)) {
+      return `NF-${this.params.numberType}-${this.params.reference}`;
+    } else if (usesReferenceList(this.params.numberType)) {
+      return `NF-${this.params.numberType}-${this.params.referenceList}`;
+    } else {
+      return `NF-${this.params.numberType}`;
     }
   }
 }

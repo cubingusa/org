@@ -22,5 +22,8 @@ export abstract class Filter<T extends Trait> {
 
   protected abstract applyImpl(val: T): boolean;
 
-  private computer: TraitComputer;
+  abstract description(): JSX.Element;
+  abstract id(): string;
+
+  protected computer: TraitComputer;
 }
