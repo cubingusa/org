@@ -9,10 +9,16 @@ export enum DateTimeFilterType {
   NotNull = "not_null",
 }
 
+export enum DateTimeFilterTimeZone {
+  UserLocal = "local",
+  Competition = "competition",
+}
+
 export interface DateTimeFilterParams extends FilterParamsBase {
   type: FilterType.DateTimeFilter;
   dateTimeType: DateTimeFilterType;
   referenceSeconds: number;
+  timeZone: DateTimeFilterTimeZone;
 }
 
 export function defaultDateTimeParams(
@@ -23,5 +29,19 @@ export function defaultDateTimeParams(
     type: FilterType.DateTimeFilter,
     dateTimeType: DateTimeFilterType.IsBefore,
     referenceSeconds: 0,
+    timeZone: DateTimeFilterTimeZone.UserLocal,
   };
 }
+
+export function dateTimeFilterUsesReference(type: DateTimeFilterType) {
+  return [DateTimeFilterType.IsBefore, DateTimeFilterType.IsAfter].includes(
+    type,
+  );
+}
+
+export const dateTimeTypes = [
+  { id: DateTimeFilterType.IsBefore, name: "Before" },
+  { id: DateTimeFilterType.IsAfter, name: "After" },
+  { id: DateTimeFilterType.IsNull, name: "Empty" },
+  { id: DateTimeFilterType.NotNull, name: "Not empty" },
+];
