@@ -51,14 +51,16 @@ export function NumberFilterSelector({
           ))}
         </select>
       </div>
-      <div className="col-auto">
-        <input
-          className="form-control"
-          type="number"
-          value={reference}
-          onChange={(e) => updateReference(+e.target.value)}
-        />
-      </div>
+      {numberFilterUsesReference(numberType) ? (
+        <div className="col-auto">
+          <input
+            className="form-control"
+            type="number"
+            value={reference}
+            onChange={(e) => updateReference(+e.target.value)}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
