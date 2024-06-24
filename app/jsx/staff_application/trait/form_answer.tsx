@@ -57,6 +57,7 @@ export class FormAnswerComputer extends TraitComputer {
           val: myQuestion === undefined ? null : myQuestion.textAnswer,
         });
       case QuestionType.YesNo:
+      case QuestionType.Acknowledgement:
         return new BooleanTrait({
           val: myQuestion === undefined ? null : myQuestion.booleanAnswer,
         });
@@ -104,6 +105,7 @@ export class FormAnswerComputer extends TraitComputer {
       case QuestionType.Text:
         return defaultStringParams(this.params);
       case QuestionType.YesNo:
+      case QuestionType.Acknowledgement:
         return defaultBooleanParams(this.params);
       case QuestionType.MultipleChoice:
       // TODO: defaultEnumParams
@@ -172,6 +174,7 @@ function FormAnswerFilterSelector({
         />
       );
     case QuestionType.YesNo:
+    case QuestionType.Acknowledgement:
       return (
         <BooleanFilterSelector
           params={params as BooleanFilterParams}

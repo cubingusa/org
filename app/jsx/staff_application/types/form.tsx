@@ -5,6 +5,11 @@ export enum QuestionType {
   Text = "text",
   YesNo = "yes_no",
   MultipleChoice = "multiple_choice",
+  Acknowledgement = "acknowledgement",
+}
+
+export interface AcknowledgementQuestion extends QuestionBase {
+  questionType: QuestionType.Acknowledgement;
 }
 
 export interface MultipleChoiceQuestion extends QuestionBase {
@@ -44,7 +49,8 @@ export type Question =
   | YesNoQuestion
   | TextQuestion
   | NullQuestion
-  | MultipleChoiceQuestion;
+  | MultipleChoiceQuestion
+  | AcknowledgementQuestion;
 
 export interface Form {
   // Unique within a competition.

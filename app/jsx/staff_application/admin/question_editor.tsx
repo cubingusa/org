@@ -19,17 +19,15 @@ export function QuestionEditor(props: QuestionEditorProps) {
     [QuestionType.Null]: "Question Type",
     [QuestionType.Text]: "Text",
     [QuestionType.YesNo]: "Yes / No",
+    [QuestionType.Acknowledgement]: "Acknowledgement",
   };
 
   const updateQuestionType = function (newType: string) {
     switch (newType) {
       case QuestionType.Null:
-        Object.assign(question, { questionType: newType });
-        break;
       case QuestionType.Text:
-        Object.assign(question, { questionType: newType });
-        break;
       case QuestionType.YesNo:
+      case QuestionType.Acknowledgement:
         Object.assign(question, { questionType: newType });
         break;
     }
@@ -88,7 +86,7 @@ export function QuestionEditor(props: QuestionEditorProps) {
   );
   let questionDetails;
   switch (question.questionType) {
-    case "text":
+    case QuestionType.Text:
       questionDetails = (
         <div>
           <div className="form-check form-check-inline">

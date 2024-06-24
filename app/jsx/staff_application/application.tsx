@@ -13,6 +13,7 @@ import {
   TextQuestion,
   TextQuestionType,
   YesNoQuestion,
+  AcknowledgementQuestion,
 } from "./types/form";
 
 interface QuestionDisplayProps {
@@ -110,6 +111,32 @@ function YesNoQuestionDisplay(props: QuestionDisplayProps) {
   );
 }
 
+function AcknowledgementQuestionDisplay(props: QuestionDisplayProps) {
+  let question = props.question as AcknowledgementQuestion;
+
+  const updateAnswer = function (newAnswer: boolean) {
+    props.myQuestion.booleanAnswer = newAnswer;
+  };
+
+  return (
+    <div className="form-check form-check-inline">
+      <input
+        className="form-check-input"
+        type="checkbox"
+        id={"acknowledgement-input-" + question.id + "-yes"}
+        defaultChecked={props.myQuestion.booleanAnswer === true}
+        onChange={(e) => updateAnswer(e.target.checked)}
+      />
+      <label
+        className="form-check-label"
+        htmlFor={"yes-no-input-" + question.id + "-yes"}
+      >
+        {question.name}
+      </label>
+    </div>
+  );
+}
+
 interface FormDisplayProps {
   form: Form;
 }
@@ -174,6 +201,14 @@ function FormDisplay(props: FormDisplayProps) {
               case QuestionType.YesNo:
                 return (
                   <YesNoQuestionDisplay
+                    question={question}
+                    myQuestion={myQuestion}
+                    key={question.id}
+                  />
+                );
+              case QuestionType.Acknowledgement:
+                return (
+                  <AcknowledgementQuestionDisplay
                     question={question}
                     myQuestion={myQuestion}
                     key={question.id}
