@@ -3,7 +3,7 @@ import { useRouteLoaderData, Link } from "react-router-dom";
 import { util } from "protobufjs";
 
 import { ColumnModal } from "./column_modal";
-import { FilterModal } from "./filter_modal";
+import { FilterModal } from "../../filter/modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
 import { Filter } from "../../filter/filter";
 import { FilterParams } from "../../filter/types/params";

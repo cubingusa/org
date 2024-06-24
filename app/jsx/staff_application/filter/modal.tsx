@@ -1,13 +1,13 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { useState } from "react";
 
-import { TraitComputer } from "../../trait/api";
-import { CompetitionData } from "../../types/competition_data";
-import { PersonalAttributeComputer } from "../../trait/personal_attribute";
-import { FilterParams } from "../../filter/types/params";
-import { FilterType } from "../../filter/types/base";
-import { defaultStringParams } from "../../filter/types/string";
-import { FilterSelector } from "../../filter/selector/selector";
+import { TraitComputer } from "../trait/api";
+import { CompetitionData } from "../types/competition_data";
+import { PersonalAttributeComputer } from "../trait/personal_attribute";
+import { FilterParams } from "./types/params";
+import { FilterType } from "./types/base";
+import { defaultStringParams } from "./types/string";
+import { FilterSelector } from "./selector/selector";
 
 interface FilterModalParams {
   id: string;
