@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 import { ComputerParams } from "../../trait/params";
 
 import { FilterType, FilterParamsBase } from "./base";
@@ -28,7 +30,7 @@ export function defaultDateTimeParams(
     trait,
     type: FilterType.DateTimeFilter,
     dateTimeType: DateTimeFilterType.IsBefore,
-    referenceSeconds: 0,
+    referenceSeconds: DateTime.now().toSeconds(),
     timeZone: DateTimeFilterTimeZone.UserLocal,
   };
 }

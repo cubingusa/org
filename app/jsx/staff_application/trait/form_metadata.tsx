@@ -9,6 +9,11 @@ import {
   defaultBooleanParams,
 } from "../filter/types/boolean";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
+import {
+  DateTimeFilterParams,
+  defaultDateTimeParams,
+} from "../filter/types/date_time";
+import { DateTimeFilterSelector } from "../filter/selector/date_time";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -104,6 +109,7 @@ export class FormMetadataComputer extends TraitComputer {
         return defaultBooleanParams(this.params);
       case FormMetadataType.SubmitTime:
       case FormMetadataType.UpdateTime:
+        return defaultDateTimeParams(this.params);
     }
     return {
       type: FilterType.NullFilter,
@@ -165,9 +171,16 @@ function FormMetadataFilterSelector({
           onFilterChange={onFilterChange}
         />
       );
+    case FilterType.DateTimeFilter:
+      return (
+        <DateTimeFilterSelector
+          params={params as DateTimeFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      );
   }
   return <></>;
-  // TODO: add DateTimeFilterSelector here.
 }
 
 interface FormMetadataSelectorParams {
