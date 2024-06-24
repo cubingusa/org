@@ -9,10 +9,10 @@ import { ApplicationSettings } from "../types/competition_data";
 export abstract class Filter {
   constructor(
     private baseParams: FilterParams,
-    settings: ApplicationSettings,
-    wcif: Competition,
+    private baseSettings: ApplicationSettings,
+    private baseWcif: Competition,
   ) {
-    this.computer = createComputer(baseParams.trait, settings, wcif);
+    this.computer = createComputer(baseParams.trait, baseSettings, baseWcif);
   }
 
   apply(applicant: ApplicantData): boolean {
