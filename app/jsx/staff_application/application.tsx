@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DateTime } from "luxon";
 import { useRouteLoaderData, useParams, Link } from "react-router-dom";
 import { CompetitionData } from "./types/competition_data";
 import {
@@ -277,33 +278,51 @@ export function Application() {
   }
   let forms = (
     <div className="accordion" id="formAccordion">
-      {(settings.forms || []).map((form) => {
-        if (form.isOpen) {
-          return (
-            <div className="accordion-item" key={form.id}>
-              <h2 className="accordion-header">
-                <button
-                  className="accordion-button collapsed"
-                  id={"header-" + form.id}
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target={"#collapsed-form-" + form.id}
-                >
-                  {form.name}
-                </button>
-              </h2>
-              <div
-                id={"collapsed-form-" + form.id}
-                className="accordion-collapse collapse"
-                data-bs-parent="#formAccordion"
+      {(settings.forms || [])
+        .filter((form) => {
+          if (!form.isOpen) {
+            return false;
+          }
+          if (form.deadlineSeconds) {
+            const closeTime = DateTime.fromSeconds(form.deadlineSeconds);
+            if (closeTime < DateTime.now()) {
+              return false;
+            }
+          }
+          return true;
+        })
+        .map((form) => (
+          <div className="accordion-item" key={form.id}>
+            <h2 className="accordion-header">
+              <button
+                className="accordion-button collapsed"
+                id={"header-" + form.id}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={"#collapsed-form-" + form.id}
               >
-                <FormDisplay form={form}></FormDisplay>
-              </div>
+                {form.name}
+                {form.deadlineSeconds ? (
+                  <>
+                    {" "}
+                    (Closes{" "}
+                    {DateTime.fromSeconds(form.deadlineSeconds).toLocaleString(
+                      DateTime.DATETIME_MED,
+                    )}{" "}
+                    )
+                  </>
+                ) : null}
+              </button>
+            </h2>
+            <div
+              id={"collapsed-form-" + form.id}
+              className="accordion-collapse collapse"
+              data-bs-parent="#formAccordion"
+            >
+              <FormDisplay form={form}></FormDisplay>
             </div>
-          );
-        }
-        return null;
-      })}
+          </div>
+        ))}
     </div>
   );
   let nameElt = !!user.wcaId ? (

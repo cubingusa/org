@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DateTime } from "luxon";
 import { useRouteLoaderData, Link } from "react-router-dom";
 import { CompetitionData } from "../types/competition_data";
 import { Form } from "../types/form";
@@ -38,7 +39,7 @@ export function Admin() {
       name: "New Form",
       description: "",
       isOpen: false,
-      deadline: null,
+      deadlineSeconds: DateTime.now().toSeconds(),
       nextQuestionId: 0,
       questions: [],
     });

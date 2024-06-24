@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DateTime } from "luxon";
 
 import { QuestionEditor } from "./question_editor";
 import { Form, Question, QuestionType } from "../types/form";
@@ -12,11 +13,21 @@ export function FormEditor(props: FormEditorProps) {
   const [name, setName] = useState(props.form.name || "");
   const [numQuestions, setNumQuestions] = useState(props.form.questions.length);
   const form = props.form;
+  const [deadline, setDeadline] = useState(
+    DateTime.fromSeconds(form.deadlineSeconds || 0).toFormat(
+      "yyyy-MM-dd'T'HH:mm",
+    ),
+  );
   const deleteForm = props.deleteForm;
 
   const updateName = function (name: string) {
     form.name = name;
     setName(name);
+  };
+
+  const updateDeadline = function (value: string) {
+    form.deadlineSeconds = DateTime.fromISO(value).toSeconds();
+    setDeadline(value);
   };
 
   const newQuestion = function () {
@@ -51,18 +62,34 @@ export function FormEditor(props: FormEditorProps) {
             placeholder="Name of form"
           ></input>
         </div>
-        <div className="form-check form-switch">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            role="switch"
-            id={"visible-" + form.id}
-            defaultChecked={form.isOpen}
-            onChange={(e) => (form.isOpen = e.target.checked)}
-          />
-          <label className="form-check-label" htmlFor={"visible-" + form.id}>
-            Make this form visible
-          </label>
+        <div className="row">
+          <div className="form-check form-switch col-6">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
+              id={"visible-" + form.id}
+              defaultChecked={form.isOpen}
+              onChange={(e) => (form.isOpen = e.target.checked)}
+            />
+            <label className="form-check-label" htmlFor={"visible-" + form.id}>
+              Make this form visible
+            </label>
+          </div>
+          <div className="col-2">
+            <label htmlFor={"deadline-" + form.id} className="form-label">
+              Deadline
+            </label>
+          </div>
+          <div className="col-4">
+            <input
+              className="form-control"
+              type="datetime-local"
+              value={deadline}
+              onChange={(e) => updateDeadline(e.target.value)}
+              placeholder="Name of form"
+            ></input>
+          </div>
         </div>
         <div className="mb-3">
           <label htmlFor={"description-" + form.id} className="form-label">

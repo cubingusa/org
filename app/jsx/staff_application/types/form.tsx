@@ -59,7 +59,7 @@ export interface Form {
   name: string;
   description: string;
   isOpen: boolean;
-  deadline: DateTime | null;
+  deadlineSeconds: number;
   nextQuestionId: number;
 
   questions: Question[];
