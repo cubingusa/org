@@ -1,8 +1,14 @@
 import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 import { DateTime } from "luxon";
 
+import { CompetitionData } from "../types/competition_data";
 import { QuestionEditor } from "./question_editor";
 import { Form, Question, QuestionType } from "../types/form";
+import { FilterModal } from "../filter/modal";
+import { createFilter } from "../filter/create_filter";
+import { Filter } from "../filter/filter";
+import { FilterParams } from "../filter/types/params";
 
 interface FormEditorProps {
   form: Form;
@@ -10,6 +16,10 @@ interface FormEditorProps {
 }
 
 export function FormEditor(props: FormEditorProps) {
+  const { wcif, settings } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
+
   const [name, setName] = useState(props.form.name || "");
   const [numQuestions, setNumQuestions] = useState(props.form.questions.length);
   const form = props.form;
@@ -17,6 +27,9 @@ export function FormEditor(props: FormEditorProps) {
     DateTime.fromSeconds(form.deadlineSeconds || 0).toFormat(
       "yyyy-MM-dd'T'HH:mm",
     ),
+  );
+  const [filters, setFilters] = useState(
+    (form.filters || []).map((params) => createFilter(params, settings, wcif)),
   );
   const deleteForm = props.deleteForm;
 
@@ -45,6 +58,20 @@ export function FormEditor(props: FormEditorProps) {
   const deleteQuestion = function (question: Question) {
     form.questions = form.questions.filter((q) => q.id !== question.id);
     setNumQuestions(form.questions.length);
+  };
+
+  const addFilter = function (params: FilterParams) {
+    if (form.filters === undefined) {
+      form.filters = [];
+    }
+    form.filters.push(params);
+    setFilters([...filters, createFilter(params, settings, wcif)]);
+  };
+
+  const deleteFilter = function (filterId: string) {
+    const newFilters = filters.filter((f) => f.id() !== filterId);
+    setFilters(newFilters);
+    form.filters = newFilters.map((f) => f.getParams());
   };
 
   return (
@@ -90,6 +117,31 @@ export function FormEditor(props: FormEditorProps) {
               placeholder="Name of form"
             ></input>
           </div>
+        </div>
+        <div className="mb-3">
+          <button
+            type="button"
+            className="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#filter-modal"
+          >
+            <span className="material-symbols-outlined">add</span> Add Filter
+          </button>
+          <FilterModal id="filter-modal" addFilter={addFilter} />
+          {filters.map((filter) => (
+            <span key={filter.id()}>
+              <span className="badge text-bg-primary">
+                {filter.description()}
+              </span>
+              <span
+                className="material-symbols-outlined"
+                onClick={(e) => deleteFilter(filter.id())}
+                style={{ cursor: "pointer" }}
+              >
+                delete
+              </span>
+            </span>
+          ))}
         </div>
         <div className="mb-3">
           <label htmlFor={"description-" + form.id} className="form-label">

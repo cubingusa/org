@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { FilterParams } from "../filter/types/params";
 
 export enum QuestionType {
   Null = "null",
@@ -63,4 +63,5 @@ export interface Form {
   nextQuestionId: number;
 
   questions: Question[];
+  filters: FilterParams[];
 }

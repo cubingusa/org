@@ -42,6 +42,7 @@ export function Admin() {
       deadlineSeconds: DateTime.now().toSeconds(),
       nextQuestionId: 0,
       questions: [],
+      filters: [],
     });
     setFormCount(settings.forms.length);
     settings.nextFormId += 1;

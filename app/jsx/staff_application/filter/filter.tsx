@@ -28,6 +28,9 @@ export abstract class Filter {
   idBase(): string {
     return this.computer.id();
   }
+  getParams(): FilterParams {
+    return this.baseParams;
+  }
 
   protected computer: TraitComputer;
 }

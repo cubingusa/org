@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DateTime } from "luxon";
 import { useRouteLoaderData, useParams, Link } from "react-router-dom";
+import { createFilter } from "./filter/create_filter";
 import { CompetitionData } from "./types/competition_data";
 import {
   PersonalApplicationData,
@@ -239,6 +240,9 @@ export function Application() {
   const { wcif, user, settings } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
+  const { forms } = useRouteLoaderData(
+    "application",
+  ) as PersonalApplicationData;
   const { competitionId } = useParams();
   let adminText;
   if (user?.isAdmin) {
@@ -276,7 +280,7 @@ export function Application() {
       </div>
     );
   }
-  let forms = (
+  let formsSection = (
     <div className="accordion" id="formAccordion">
       {(settings.forms || [])
         .filter((form) => {
@@ -286,6 +290,12 @@ export function Application() {
           if (form.deadlineSeconds) {
             const closeTime = DateTime.fromSeconds(form.deadlineSeconds);
             if (closeTime < DateTime.now()) {
+              return false;
+            }
+          }
+          for (const filterParams of form.filters || []) {
+            const filter = createFilter(filterParams, settings, wcif);
+            if (!filter.apply({ user, forms })) {
               return false;
             }
           }
@@ -369,7 +379,7 @@ export function Application() {
       <p />
       {props}
       <p />
-      {forms}
+      {formsSection}
     </div>
   );
 }
