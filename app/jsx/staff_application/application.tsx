@@ -343,7 +343,7 @@ export function Application() {
   let loggedIn = (
     <div>
       You are logged in as {nameElt}. Updates to your application will be sent
-      to {user.email}. If you would like to submit your application for another
+      to {user.email}. If you would like to submit an application for another
       person, please <a href="/logout">log out</a> and log back in using their
       account.
     </div>
