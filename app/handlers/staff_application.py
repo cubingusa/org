@@ -227,3 +227,16 @@ def get_view(competition_id, view_id):
       if not is_admin(user, wcif):
         return {}, 401
     return maybe_view.details, 200
+
+@bp.route('/staff_api/<competition_id>/view', methods=['GET'])
+def get_views(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    admin = is_admin(user, wcif)
+    out = []
+    for view in SavedView.query(SavedView.competition == ndb.Key(Competition, compettiion_id)).iter():
+      if admin or maybe_view.details['isPublic']:
+        out += [{maybe_view.details[key] for key in ['id', 'title', 'filters']}]
+    return out, 200
+
