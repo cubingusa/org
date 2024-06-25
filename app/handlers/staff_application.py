@@ -4,6 +4,7 @@ import datetime
 import logging
 import requests
 
+from app.cache import cache
 from app.lib import auth, common
 from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView
 from app.models.user import Roles, User
@@ -50,6 +51,7 @@ def is_admin(user, wcif):
       return 'delegate' in person.roles or 'organizer' in person.roles or 'trainee-delegate' in person.roles
   return False
 
+@cache.memoize(300)
 def get_wcif(competition_id):
   # TODO: switch this to env.WCA_HOST.
   data = requests.get('https://api.worldcubeassociation.org/competitions/' + competition_id + '/wcif/public')
@@ -235,7 +237,7 @@ def get_views(competition_id):
     wcif = get_wcif(competition_id)
     admin = is_admin(user, wcif)
     out = []
-    for view in SavedView.query(SavedView.competition == ndb.Key(Competition, compettiion_id)).iter():
+    for view in SavedView.query(SavedView.competition == ndb.Key(Competition, competition_id)).iter():
       if admin or maybe_view.details['isPublic']:
         out += [{maybe_view.details[key] for key in ['id', 'title', 'filters']}]
     return out, 200

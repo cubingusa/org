@@ -5,6 +5,7 @@ from authlib.integrations.flask_client import OAuth
 from flask import Flask, redirect, request
 
 from app.lib.secrets import get_secret
+from app.cache import cache
 
 app = Flask(__name__)
 app.secret_key = get_secret('SESSION_SECRET_KEY')
@@ -31,6 +32,13 @@ oauth.register(
     api_base_url=wca_host + '/api/v0/',
     client_kwargs={'scope': 'public email dob'},
 )
+
+cache_config = {
+  "CACHE_TYPE": "SimpleCache",
+  "CACHE_DEFAULT_TIMEOUT": 300,
+}
+app.config.from_mapping(cache_config)
+cache.init_app(app)
 
 from app.handlers.admin import bp as admin_bp
 from app.handlers.auth import create_bp as create_auth_bp
