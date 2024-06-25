@@ -5,7 +5,7 @@ import logging
 import requests
 
 from app.lib import auth, common
-from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings
+from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView
 from app.models.user import Roles, User
 from app.models.wca.competition import Competition
 
@@ -199,3 +199,31 @@ def post_properties(competition_id):
         del props[propertyId]
     ndb.put_multi(all_user_settings)
     return {}, 200
+
+@bp.route('/staff_api/<competition_id>/view/<view_id>', methods=['PUT'])
+def put_view(competition_id, view_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    req = request.json
+    if not is_admin(user, wcif):
+      return {}, 401
+    view = SavedView(id=SavedView.Key(competition_id, view_id))
+    view.competition = ndb.Key(Competition, competition_id)
+    view.view_id = view_id
+    view.details = req
+    view.put()
+    return {}, 200
+
+@bp.route('/staff_api/<competition_id>/view/<view_id>', methods=['GET'])
+def get_view(competition_id, view_id):
+  with client.context():
+    maybe_view = SavedView.get_by_id(SavedView.Key(competition_id, view_id))
+    if not maybe_view:
+      return {}, 404
+    if not maybe_view.details['isPublic']:
+      user = auth.user()
+      wcif = get_wcif(competition_id)
+      if not is_admin(user, wcif):
+        return {}, 401
+    return maybe_view.details, 200

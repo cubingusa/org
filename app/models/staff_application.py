@@ -26,3 +26,12 @@ class UserSettings(ndb.Model):
 
 class ApplicationSettings(ndb.Model):
   details = ndb.JsonProperty()
+
+class SavedView(ndb.Model):
+  view_id = ndb.StringProperty()
+  competition = ndb.KeyProperty(kind=Competition)
+  details = ndb.JsonProperty()
+
+  @staticmethod
+  def Key(competition_id, view_id):
+    return '%s_%s' % (competition_id, view_id)
