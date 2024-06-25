@@ -48,7 +48,7 @@ def is_admin(user, wcif):
     return True
   for person in wcif.persons:
     if person.wcaUserId == int(user.key.id()):
-      return 'delegate' in person.roles or 'organizer' in person.roles or 'trainee-delegate' in person.roles
+      return 'organizer' in person.roles
   return False
 
 @cache.memoize(300)
