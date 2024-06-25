@@ -59,6 +59,14 @@ export class PropertyComputer extends TraitComputer {
     return `PC-${this.params.propertyId}`;
   }
 
+  extraDataForDeserialization(): any {
+    const propertyMap = new Map<number, string>();
+    this.getProperty().values.forEach((val) =>
+      propertyMap.set(val.id, val.value),
+    );
+    return propertyMap;
+  }
+
   header(): JSX.Element {
     const property = this.getProperty();
     return property === undefined ? <>??</> : <>{property.name}</>;

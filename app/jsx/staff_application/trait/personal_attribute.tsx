@@ -151,6 +151,13 @@ export class PersonalAttributeComputer extends TraitComputer {
     }
   }
 
+  extraDataForDeserialization(): any {
+    if (this.params.attributeType == PersonalAttributeType.DelegateStatus) {
+      return delegateStatusMap;
+    }
+    return null;
+  }
+
   id(): string {
     // TODO: Also include additional parameters if set.
     return `PAC-${this.params.attributeType}`;

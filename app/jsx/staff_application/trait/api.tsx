@@ -24,4 +24,7 @@ export abstract class TraitComputer {
     params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element;
+  extraDataForDeserialization(): any {
+    return null;
+  }
 }
