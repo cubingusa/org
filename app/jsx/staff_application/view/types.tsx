@@ -19,3 +19,9 @@ export interface SavedView {
   exportTimeSeconds: number;
   exportedRows: ExportedRow[];
 }
+
+export interface ViewMetadata {
+  id: string;
+  title: string;
+  visibleTo: FilterParams[];
+}

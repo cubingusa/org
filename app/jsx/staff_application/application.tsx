@@ -17,6 +17,7 @@ import {
   YesNoQuestion,
   AcknowledgementQuestion,
 } from "./types/form";
+import { ViewList } from "./view/list";
 
 interface QuestionDisplayProps {
   question: Question;
@@ -380,6 +381,8 @@ export function Application() {
       {props}
       <p />
       {formsSection}
+      <p />
+      <ViewList />
     </div>
   );
 }
