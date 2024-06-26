@@ -14,6 +14,7 @@ import { ApplicantData } from "../types/applicant_data";
 import { CompetitionData } from "../types/competition_data";
 import { SavedView, ExportedRow } from "./types";
 import { ViewTable } from "./table";
+import { ViewSaver } from "./saver";
 import { AdminHeader } from "../admin/header";
 
 export function AdminTable() {
@@ -133,6 +134,33 @@ export function AdminTable() {
         <span className="material-symbols-outlined">add</span> Add Column
       </button>
       <ColumnModal id="column-modal" addColumn={addColumn} />
+      &nbsp;
+      <button
+        type="button"
+        className="btn btn-success"
+        data-bs-toggle="collapse"
+        data-bs-target="#save-collapse"
+      >
+        <span className="material-symbols-outlined">save</span> Save this view
+      </button>
+      <div className="row">
+        <div className="collapse" id="save-collapse">
+          <div className="card card-body">
+            <ViewSaver
+              view={{
+                id: view.id,
+                title: view.title,
+                filters: filters.map((f) => f.getParams()),
+                columns: computers.map((c) => c.getParams()),
+                exportTimeSeconds: view.exportTimeSeconds,
+                exportedRows: exportedRows,
+                isPublic: view.isPublic,
+                visibleTo: view.visibleTo,
+              }}
+            />
+          </div>
+        </div>
+      </div>
       <ViewTable
         admin={true}
         computers={computers}

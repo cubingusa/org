@@ -27,4 +27,7 @@ export abstract class TraitComputer {
   extraDataForDeserialization(): any {
     return null;
   }
+  getParams(): ComputerParams {
+    return this.baseParams;
+  }
 }

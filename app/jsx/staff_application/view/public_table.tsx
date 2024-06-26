@@ -29,13 +29,15 @@ export function PublicTable() {
 
   return (
     <>
-      <h3>{view.title}</h3>( user.admin ? (
-      <p>
-        <Link to="./admin">
-          <i>Edit this view</i>
-        </Link>
-      </p>
-      ) : null )
+      <h3>{view.title}</h3>
+      {user.isAdmin ? (
+        <div className="alert alert-primary">
+          You are logged in as an admin.{" "}
+          <Link to="./admin" relative="path">
+            Edit or snapshot this view.
+          </Link>
+        </div>
+      ) : null}
       <ViewTable
         admin={false}
         computers={computers}

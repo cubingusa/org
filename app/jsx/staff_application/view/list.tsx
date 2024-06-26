@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from "react-router-dom";
+import { useRouteLoaderData, Link } from "react-router-dom";
 
 import { ViewMetadata } from "./types";
 import { CompetitionData } from "../types/competition_data";
@@ -25,12 +25,9 @@ export function ViewList() {
       <h3>Staff List{visibleViews.length > 1 ? "s" : ""}</h3>
       <ul className="list-group">
         {visibleViews.map((view, idx) => (
-          <li className="list-group-item" key={idx}>
-            {view.title}
-            {user.isAdmin ? (
-              <span className="material-symbols-outlined">edit</span>
-            ) : null}
-          </li>
+          <Link to={`/staff/${wcif.id}/view/${view.id}`} key={idx}>
+            <li className="list-group-item">{view.title}</li>
+          </Link>
         ))}
       </ul>
     </>
