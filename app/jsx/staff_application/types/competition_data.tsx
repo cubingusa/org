@@ -3,6 +3,7 @@ import { User } from "./user";
 import { Form } from "./form";
 import { Property } from "./property";
 import { ViewMetadata } from "../view/types";
+import { SubmittedForm } from "./personal_application_data";
 
 export interface ApplicationSettings {
   isVisible: boolean;
@@ -18,4 +19,5 @@ export interface CompetitionData {
   user: User | null;
   settings: ApplicationSettings;
   views: ViewMetadata[];
+  forms: SubmittedForm[];
 }

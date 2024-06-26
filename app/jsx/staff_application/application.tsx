@@ -4,7 +4,6 @@ import { useRouteLoaderData, useParams, Link } from "react-router-dom";
 import { createFilter } from "./filter/create_filter";
 import { CompetitionData } from "./types/competition_data";
 import {
-  PersonalApplicationData,
   SubmittedForm,
   SubmittedQuestion,
 } from "./types/personal_application_data";
@@ -147,10 +146,7 @@ interface FormDisplayProps {
 function FormDisplay(props: FormDisplayProps) {
   const form = props.form;
   const [spinning, setSpinning] = useState(false);
-  const { wcif } = useRouteLoaderData("competition") as CompetitionData;
-  const { forms } = useRouteLoaderData(
-    "application",
-  ) as PersonalApplicationData;
+  const { wcif, forms } = useRouteLoaderData("competition") as CompetitionData;
   const myForm: SubmittedForm = forms.find((sf) => sf.formId == form.id) || {
     formId: form.id,
     submittedAtTs: 0,
@@ -238,12 +234,9 @@ function FormDisplay(props: FormDisplayProps) {
 }
 
 export function Application() {
-  const { wcif, user, settings } = useRouteLoaderData(
+  const { wcif, user, settings, forms } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  const { forms } = useRouteLoaderData(
-    "application",
-  ) as PersonalApplicationData;
   const { competitionId } = useParams();
   let adminText;
   if (user?.isAdmin) {

@@ -10,10 +10,7 @@ import {
 import { AdminRoutes } from "./admin/routes";
 import { ViewRoutes } from "./view/routes";
 import { Application } from "./application";
-import {
-  CompetitionDataLoader,
-  PersonalApplicationDataLoader,
-} from "./data_loader";
+import { CompetitionDataLoader } from "./data_loader";
 import { CompetitionData } from "./types/competition_data";
 
 const router = createBrowserRouter([
@@ -29,7 +26,6 @@ const router = createBrowserRouter([
             index: true,
             element: <Application />,
             id: "application",
-            loader: PersonalApplicationDataLoader,
           },
           AdminRoutes(),
           ViewRoutes(),

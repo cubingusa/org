@@ -15,7 +15,3 @@ export interface SubmittedForm {
   updatedAtTs: number;
   details: SubmittedFormDetails;
 }
-
-export interface PersonalApplicationData {
-  forms: SubmittedForm[];
-}

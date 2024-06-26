@@ -2,18 +2,14 @@ import { useRouteLoaderData, Navigate, Link } from "react-router-dom";
 
 import { createFilter } from "../filter/create_filter";
 import { createComputer } from "../trait/create_computer";
-import { PersonalApplicationData } from "../types/personal_application_data";
 import { CompetitionData } from "../types/competition_data";
 import { SavedView } from "./types";
 import { ViewTable } from "./table";
 
 export function PublicTable() {
-  const { user, wcif, settings } = useRouteLoaderData(
+  const { user, wcif, settings, forms } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  const { forms } = useRouteLoaderData(
-    "application",
-  ) as PersonalApplicationData;
   if (!user.isAdmin) {
     return <Navigate to="../.." />;
   }
