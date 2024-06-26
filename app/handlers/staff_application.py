@@ -238,7 +238,7 @@ def get_views(competition_id):
     admin = is_admin(user, wcif)
     out = []
     for view in SavedView.query(SavedView.competition == ndb.Key(Competition, competition_id)).iter():
-      if admin or maybe_view.details['isPublic']:
-        out += [{maybe_view.details[key] for key in ['id', 'title', 'visibleTo']}]
+      if admin or view.details['isPublic']:
+        out += [{key: view.details[key] for key in ['id', 'title', 'visibleTo']}]
     return out, 200
 
