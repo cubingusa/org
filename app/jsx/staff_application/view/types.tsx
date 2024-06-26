@@ -2,8 +2,9 @@ import { FilterParams } from "../filter/types/params";
 import { ComputerParams } from "../trait/params";
 import { SerializedTrait } from "../trait/serialized";
 
-interface ExportedRow {
+export interface ExportedRow {
   userName: string;
+  userId: number;
   userWcaId: string | null;
   cells: SerializedTrait[];
 }

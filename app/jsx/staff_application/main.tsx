@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import { AdminRoutes } from "./admin/routes";
+import { ViewRoutes } from "./view/routes";
 import { Application } from "./application";
 import {
   CompetitionDataLoader,
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
             loader: PersonalApplicationDataLoader,
           },
           AdminRoutes(),
+          ViewRoutes(),
         ],
       },
     ],

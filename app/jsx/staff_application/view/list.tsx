@@ -21,7 +21,7 @@ export function ViewList() {
     }
     return true;
   });
-  if (!visibleViews) {
+  if (!visibleViews.length) {
     return null;
   }
   return (
