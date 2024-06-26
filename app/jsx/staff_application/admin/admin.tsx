@@ -6,6 +6,7 @@ import { Form } from "../types/form";
 import { Property } from "../types/property";
 import { FormEditor } from "./form_editor";
 import { PropertyEditor } from "./property_editor";
+import { AdminHeader } from "./header";
 
 export function Admin() {
   const [spinning, setSpinning] = useState(false);
@@ -82,110 +83,113 @@ export function Admin() {
     spinner = <div>submitting...</div>;
   }
   return (
-    <form>
-      <div className="form-check form-switch">
-        <input
-          className="form-check-input"
-          type="checkbox"
-          role="switch"
-          id="visible"
-          defaultChecked={settings.isVisible}
-          onChange={(e) => (settings.isVisible = e.target.checked)}
-        />
-        <label className="form-check-label" htmlFor="visible">
-          Make staff application visible
-        </label>
-      </div>
-      <div className="mb-3">
-        <label htmlFor="description" className="form-label">
-          Description
-        </label>
-        <textarea
-          className="form-control"
-          id="description"
-          defaultValue={settings.description}
-          onChange={(e) => (settings.description = e.target.value)}
-          placeholder="Text to show at the top of the application page"
-        ></textarea>
-      </div>
-      <h3>Forms</h3>
-      <div>
-        You can create forms for staff to fill out, either to apply to join
-        staff or to collect information from them after they've already been
-        accepted.
-      </div>
-      <div className="accordion" id="formAccordion">
-        {(settings.forms || []).map((form) => (
-          <div className="accordion-item" key={form.id}>
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                id={"header-" + form.id}
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={"#collapsed-form-" + form.id}
+    <>
+      <AdminHeader />
+      <form>
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="visible"
+            defaultChecked={settings.isVisible}
+            onChange={(e) => (settings.isVisible = e.target.checked)}
+          />
+          <label className="form-check-label" htmlFor="visible">
+            Make staff application visible
+          </label>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">
+            Description
+          </label>
+          <textarea
+            className="form-control"
+            id="description"
+            defaultValue={settings.description}
+            onChange={(e) => (settings.description = e.target.value)}
+            placeholder="Text to show at the top of the application page"
+          ></textarea>
+        </div>
+        <h3>Forms</h3>
+        <div>
+          You can create forms for staff to fill out, either to apply to join
+          staff or to collect information from them after they've already been
+          accepted.
+        </div>
+        <div className="accordion" id="formAccordion">
+          {(settings.forms || []).map((form) => (
+            <div className="accordion-item" key={form.id}>
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  id={"header-" + form.id}
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={"#collapsed-form-" + form.id}
+                >
+                  {form.name}
+                </button>
+              </h2>
+              <div
+                id={"collapsed-form-" + form.id}
+                className="accordion-collapse collapse"
+                data-bs-parent="#formAccordion"
               >
-                {form.name}
-              </button>
-            </h2>
-            <div
-              id={"collapsed-form-" + form.id}
-              className="accordion-collapse collapse"
-              data-bs-parent="#formAccordion"
-            >
-              <FormEditor form={form} deleteForm={deleteForm}></FormEditor>
+                <FormEditor form={form} deleteForm={deleteForm}></FormEditor>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div>
-        <button className="btn btn-success mb-3" onClick={newForm}>
-          <span className="material-symbols-outlined">add</span> New Form
-        </button>
-      </div>
-      <h3>Properties</h3>
-      <div>
-        You can add properties that can be applied to applicants, for example
-        whether their application has been accepted or not, or what team they
-        have been accepted to.
-      </div>
-      <div className="accordion" id="formAccordion">
-        {(settings.properties || []).map((property) => (
-          <div className="accordion-item" key={property.id}>
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed"
-                id={"header-" + property.id}
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={"#collapsed-property-" + property.id}
+          ))}
+        </div>
+        <div>
+          <button className="btn btn-success mb-3" onClick={newForm}>
+            <span className="material-symbols-outlined">add</span> New Form
+          </button>
+        </div>
+        <h3>Properties</h3>
+        <div>
+          You can add properties that can be applied to applicants, for example
+          whether their application has been accepted or not, or what team they
+          have been accepted to.
+        </div>
+        <div className="accordion" id="formAccordion">
+          {(settings.properties || []).map((property) => (
+            <div className="accordion-item" key={property.id}>
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  id={"header-" + property.id}
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={"#collapsed-property-" + property.id}
+                >
+                  {property.name}
+                </button>
+              </h2>
+              <div
+                id={"collapsed-property-" + property.id}
+                className="accordion-collapse collapse"
+                data-bs-parent="#propertyAccordion"
               >
-                {property.name}
-              </button>
-            </h2>
-            <div
-              id={"collapsed-property-" + property.id}
-              className="accordion-collapse collapse"
-              data-bs-parent="#propertyAccordion"
-            >
-              <PropertyEditor
-                property={property}
-                deleteProperty={deleteProperty}
-              ></PropertyEditor>
+                <PropertyEditor
+                  property={property}
+                  deleteProperty={deleteProperty}
+                ></PropertyEditor>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div>
-        <button className="btn btn-success mb-3" onClick={newProperty}>
-          <span className="material-symbols-outlined">add</span> New Property
+          ))}
+        </div>
+        <div>
+          <button className="btn btn-success mb-3" onClick={newProperty}>
+            <span className="material-symbols-outlined">add</span> New Property
+          </button>
+        </div>
+        <br />
+        <button className="btn btn-primary mb-3" type="submit" onClick={submit}>
+          Save
         </button>
-      </div>
-      <br />
-      <button className="btn btn-primary mb-3" type="submit" onClick={submit}>
-        Save
-      </button>
-      {spinner}
-    </form>
+        {spinner}
+      </form>
+    </>
   );
 }

@@ -4,52 +4,67 @@ import {
   Route,
   useRouteLoaderData,
   Navigate,
-  Outlet,
   useLocation,
+  useParams,
 } from "react-router-dom";
 import classNames from "classnames";
 import { CompetitionData } from "../types/competition_data";
 
 export function AdminHeader() {
   const { user, wcif } = useRouteLoaderData("competition") as CompetitionData;
+  const { competitionId } = useParams();
   const { pathname } = useLocation();
   if (user !== null && user.isAdmin) {
+    const options = [
+      {
+        path: "",
+        elt: (
+          <>
+            <span className="material-symbols-outlined">visibility</span> Public
+            Application
+          </>
+        ),
+      },
+      {
+        path: "/admin",
+        elt: (
+          <>
+            <span className="material-symbols-outlined">edit</span> Edit
+            Application
+          </>
+        ),
+      },
+      {
+        path: "/view/admin",
+        elt: (
+          <>
+            <span className="material-symbols-outlined">groups</span> Responses
+          </>
+        ),
+      },
+    ];
     return (
       <>
         <h1>{wcif.name} Staff Admin</h1>
         <ul className="list-group">
-          <Link to="..">
-            <li className={classNames("list-group-item")}>
-              <span className="material-symbols-outlined">visibility</span>{" "}
-              Public Application
-            </li>
-          </Link>
-          <Link to=".">
-            <li
-              className={classNames("list-group-item", {
-                active: pathname.endsWith("/admin"),
-              })}
+          {options.map((option) => (
+            <Link
+              to={`/staff/${competitionId}${option.path}`}
+              key={option.path}
             >
-              <span className="material-symbols-outlined">edit</span> Edit
-              Application
-            </li>
-          </Link>
-          <Link to="responses">
-            <li
-              className={classNames("list-group-item", {
-                active: pathname.includes("/admin/responses"),
-              })}
-            >
-              <span className="material-symbols-outlined">groups</span>{" "}
-              Responses
-            </li>
-          </Link>
+              <li
+                className={classNames("list-group-item", {
+                  active: pathname === `/staff/${competitionId}${option.path}`,
+                })}
+              >
+                {option.elt}
+              </li>
+            </Link>
+          ))}
         </ul>
         <p />
-        <Outlet />
       </>
     );
-    return <Outlet />;
   } else {
     return <Navigate to=".." />;
   }

@@ -8,7 +8,6 @@ export function AdminRoutes() {
   return {
     path: "admin",
     loader: ApplicantLoader,
-    element: <AdminHeader />,
     children: [
       {
         index: true,

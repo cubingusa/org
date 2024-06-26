@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouteLoaderData, Navigate } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 
 import { ColumnModal } from "./column_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
@@ -14,14 +14,12 @@ import { ApplicantData } from "../types/applicant_data";
 import { CompetitionData } from "../types/competition_data";
 import { SavedView, ExportedRow } from "./types";
 import { ViewTable } from "./table";
+import { AdminHeader } from "../admin/header";
 
 export function AdminTable() {
   const { user, wcif, settings } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  if (!user.isAdmin) {
-    return <Navigate to="../.." />;
-  }
   const view: SavedView = (useRouteLoaderData("view") as SavedView) || {
     id: "",
     title: "",
@@ -84,6 +82,7 @@ export function AdminTable() {
 
   return (
     <>
+      <AdminHeader />
       {filters.length > 0 ? (
         <p>
           Filters:&nbsp;
