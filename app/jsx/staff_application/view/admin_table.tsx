@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useRouteLoaderData } from "react-router-dom";
+import { useRouteLoaderData, Link } from "react-router-dom";
+import { DateTime } from "luxon";
 
 import { ColumnModal } from "./column_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
@@ -84,6 +85,17 @@ export function AdminTable() {
   return (
     <>
       <AdminHeader />
+      {view.exportTimeSeconds > 0 && view.isPublic ? (
+        <div className="alert alert-primary">
+          This view was last snapshotted{" "}
+          {DateTime.fromSeconds(view.exportTimeSeconds).toLocaleString(
+            DateTime.DATETIME_MED,
+          )}{" "}
+          <Link to=".." relative="path">
+            View the public snapshot of this view.
+          </Link>
+        </div>
+      ) : null}
       {filters.length > 0 ? (
         <p>
           Filters:&nbsp;
