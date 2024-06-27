@@ -169,6 +169,7 @@ export function AdminTable() {
                 isPublic: view.isPublic,
                 visibleTo: view.visibleTo,
               }}
+              collapseId="#save-collapse"
             />
           </div>
         </div>

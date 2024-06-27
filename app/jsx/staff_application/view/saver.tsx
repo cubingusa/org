@@ -18,8 +18,9 @@ import { ViewTable } from "./table";
 
 interface ViewSaverParams {
   view: SavedView;
+  collapseId: string;
 }
-export function ViewSaver({ view }: ViewSaverParams) {
+export function ViewSaver({ view, collapseId }: ViewSaverParams) {
   const { user, wcif, settings } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
@@ -73,7 +74,6 @@ export function ViewSaver({ view }: ViewSaverParams) {
     });
     // TODO: show that it is in progress.
     // TODO: error handling.
-    navigate(`/staff/${wcif.id}/view/${view.id}`);
   };
 
   return (
@@ -167,6 +167,8 @@ export function ViewSaver({ view }: ViewSaverParams) {
         type="submit"
         className="btn btn-success"
         onClick={(e) => saveView()}
+        data-bs-toggle="collapse"
+        data-bs-target={collapseId}
       >
         <span className="material-symbols-outlined">save</span> Save
       </button>
