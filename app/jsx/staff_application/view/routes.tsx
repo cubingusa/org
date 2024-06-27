@@ -2,6 +2,7 @@ import { ViewLoader } from "./loader";
 
 import { ApplicantLoader } from "../admin/applicant_loader";
 import { AdminTable } from "./admin_table";
+import { AdminBase } from "./admin_base";
 import { PublicTable } from "./public_table";
 
 export function ViewRoutes() {
@@ -12,8 +13,16 @@ export function ViewRoutes() {
     children: [
       {
         path: "admin",
-        // TODO: make a new page admin view homepage.
-        element: <AdminTable />,
+        children: [
+          {
+            index: true,
+            element: <AdminBase />,
+          },
+          {
+            path: "new",
+            element: <AdminTable />,
+          },
+        ],
       },
       {
         path: ":viewId",

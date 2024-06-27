@@ -10,7 +10,7 @@ export function PublicTable() {
   const { user, wcif, settings, forms } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  if (!user.isAdmin) {
+  if (!user || !user.isAdmin) {
     return <Navigate to="../.." />;
   }
   const view: SavedView = useRouteLoaderData("view") as SavedView;

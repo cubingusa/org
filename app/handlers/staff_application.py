@@ -230,6 +230,16 @@ def get_view(competition_id, view_id):
         return {}, 401
     return maybe_view.details, 200
 
+@bp.route('/staff_api/<competition_id>/view/<view_id>', methods=['DELETE'])
+def delete_view(competition_id, view_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    ndb.Key(SavedView, SavedView.Key(competition_id, view_id)).delete()
+    return {}, 200
+
 @bp.route('/staff_api/<competition_id>/view', methods=['GET'])
 def get_views(competition_id):
   with client.context():
@@ -239,6 +249,5 @@ def get_views(competition_id):
     out = []
     for view in SavedView.query(SavedView.competition == ndb.Key(Competition, competition_id)).iter():
       if admin or view.details['isPublic']:
-        out += [{key: view.details[key] for key in ['id', 'title', 'visibleTo']}]
+        out += [{key: view.details[key] for key in ['id', 'title', 'visibleTo', 'isPublic']}]
     return out, 200
-

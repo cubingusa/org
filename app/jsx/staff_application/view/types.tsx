@@ -24,5 +24,6 @@ export interface SavedView {
 export interface ViewMetadata {
   id: string;
   title: string;
+  isPublic: boolean;
   visibleTo: FilterParams[];
 }
