@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { Form } from "../types/form";
 import {
-  Form,
   Question,
   QuestionType,
   TextQuestion,
   TextQuestionType,
-} from "../types/form";
+} from "../question/types";
 
 interface QuestionEditorProps {
   question: Question;

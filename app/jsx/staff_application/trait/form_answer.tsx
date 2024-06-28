@@ -5,7 +5,7 @@ import {
   ApplicationSettings,
   CompetitionData,
 } from "../types/competition_data";
-import { Question, QuestionType } from "../types/form";
+import { Question, QuestionType } from "../question/types";
 
 import { FilterParams } from "../filter/types/params";
 import { FilterType } from "../filter/types/base";

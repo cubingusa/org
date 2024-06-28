@@ -4,7 +4,8 @@ import { DateTime } from "luxon";
 
 import { CompetitionData } from "../types/competition_data";
 import { QuestionEditor } from "./question_editor";
-import { Form, Question, QuestionType } from "../types/form";
+import { Form } from "../types/form";
+import { Question, QuestionType } from "../question/types";
 import { FilterModal } from "../filter/modal";
 import { createFilter } from "../filter/create_filter";
 import { Filter } from "../filter/filter";

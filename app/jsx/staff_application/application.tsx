@@ -7,137 +7,9 @@ import {
   SubmittedForm,
   SubmittedQuestion,
 } from "./types/personal_application_data";
-import {
-  Form,
-  Question,
-  QuestionType,
-  TextQuestion,
-  TextQuestionType,
-  YesNoQuestion,
-  AcknowledgementQuestion,
-} from "./types/form";
+import { Form } from "./types/form";
+import { getApi } from "./question/questions";
 import { ViewList } from "./view/list";
-
-interface QuestionDisplayProps {
-  question: Question;
-  myQuestion: SubmittedQuestion;
-}
-
-function TextQuestionDisplay(props: QuestionDisplayProps) {
-  let question = props.question as TextQuestion;
-
-  const updateAnswer = function (newAnswer: string) {
-    props.myQuestion.textAnswer = newAnswer;
-  };
-
-  switch (question.textQuestionType) {
-    case TextQuestionType.Long:
-      return (
-        <div className="mb-3">
-          <label htmlFor={"text-input-" + question.id} className="form-label">
-            {question.name}
-          </label>
-          <textarea
-            defaultValue={props.myQuestion.textAnswer}
-            id={"text-input-" + question.id}
-            className="form-control"
-            onChange={(e) => updateAnswer(e.target.value)}
-          />
-        </div>
-      );
-    case TextQuestionType.Short:
-      return (
-        <div className="mb-3">
-          <label htmlFor={"text-input-" + question.id} className="form-label">
-            {question.name}
-          </label>
-          <input
-            type="text"
-            defaultValue={props.myQuestion.textAnswer}
-            id={"text-input-" + question.id}
-            className="form-control"
-            onChange={(e) => updateAnswer(e.target.value)}
-          />
-        </div>
-      );
-  }
-}
-
-function YesNoQuestionDisplay(props: QuestionDisplayProps) {
-  let question = props.question as YesNoQuestion;
-
-  const updateAnswer = function (newAnswer: boolean) {
-    props.myQuestion.booleanAnswer = newAnswer;
-  };
-
-  return (
-    <>
-      <div className="mb-3">
-        <label htmlFor={"yes-no-input-" + question.id} className="form-label">
-          {question.name}
-        </label>
-      </div>
-      <div className="mb-3">
-        <div className="form-check form-check-inline">
-          <input
-            className="form-check-input"
-            type="radio"
-            id={"yes-no-input-" + question.id + "-yes"}
-            defaultChecked={props.myQuestion.booleanAnswer === true}
-            onClick={(e) => updateAnswer(true)}
-          />
-          <label
-            className="form-check-label"
-            htmlFor={"yes-no-input-" + question.id + "-yes"}
-          >
-            Yes
-          </label>
-        </div>
-        <div className="form-check form-check-inline">
-          <input
-            className="form-check-input"
-            type="radio"
-            id={"yes-no-input-" + question.id + "-no"}
-            defaultChecked={props.myQuestion.booleanAnswer === false}
-            onClick={(e) => updateAnswer(false)}
-          />
-          <label
-            className="form-check-label"
-            htmlFor={"yes-no-input-" + question.id + "-no"}
-          >
-            No
-          </label>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function AcknowledgementQuestionDisplay(props: QuestionDisplayProps) {
-  let question = props.question as AcknowledgementQuestion;
-
-  const updateAnswer = function (newAnswer: boolean) {
-    props.myQuestion.booleanAnswer = newAnswer;
-  };
-
-  return (
-    <div className="form-check form-check-inline">
-      <input
-        className="form-check-input"
-        type="checkbox"
-        id={"acknowledgement-input-" + question.id + "-yes"}
-        defaultChecked={props.myQuestion.booleanAnswer === true}
-        onChange={(e) => updateAnswer(e.target.checked)}
-      />
-      <label
-        className="form-check-label"
-        htmlFor={"yes-no-input-" + question.id + "-yes"}
-      >
-        {question.name}
-      </label>
-    </div>
-  );
-}
 
 interface FormDisplayProps {
   form: Form;
@@ -178,7 +50,7 @@ function FormDisplay(props: FormDisplayProps) {
         <form>
           <div>{form.description}</div>
           <hr />
-          {form.questions.map((question) => {
+          {form.questions.map((question, idx) => {
             let myQuestion = myForm.details.questions.find(
               (sq) => sq.questionId == question.id,
             );
@@ -188,33 +60,20 @@ function FormDisplay(props: FormDisplayProps) {
               };
               myForm.details.questions.push(myQuestion);
             }
-            switch (question.questionType) {
-              case QuestionType.Text:
-                return (
-                  <TextQuestionDisplay
-                    question={question}
-                    myQuestion={myQuestion}
-                    key={question.id}
-                  />
-                );
-              case QuestionType.YesNo:
-                return (
-                  <YesNoQuestionDisplay
-                    question={question}
-                    myQuestion={myQuestion}
-                    key={question.id}
-                  />
-                );
-              case QuestionType.Acknowledgement:
-                return (
-                  <AcknowledgementQuestionDisplay
-                    question={question}
-                    myQuestion={myQuestion}
-                    key={question.id}
-                  />
-                );
-              default:
-                return null;
+            const api = getApi(question.questionType);
+            if (api) {
+              return (
+                <div key={question.id}>
+                  {api.form({
+                    question,
+                    myQuestion,
+                    onAnswerChange: (q: SubmittedQuestion) =>
+                      (myForm.details.questions[idx] = q),
+                  })}
+                </div>
+              );
+            } else {
+              return null;
             }
           })}
           <div>
