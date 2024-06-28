@@ -6,7 +6,7 @@ import {
   TextQuestion,
   TextQuestionType,
 } from "../question/types";
-import { allQuestionApis } from "../question/questions";
+import { getApi, allQuestionApis } from "../question/questions";
 
 interface QuestionEditorProps {
   question: Question;
@@ -18,19 +18,8 @@ export function QuestionEditor(props: QuestionEditorProps) {
   const [questionType, setQuestionType] = useState(question.questionType || "");
 
   const updateQuestionType = function (newType: string) {
-    switch (newType) {
-      case QuestionType.Null:
-      case QuestionType.Text:
-      case QuestionType.YesNo:
-      case QuestionType.Acknowledgement:
-        Object.assign(question, { questionType: newType });
-        break;
-    }
+    Object.assign(question, { questionType: newType });
     setQuestionType(newType);
-  };
-
-  const selectTextQuestionType = function (textQuestionType: TextQuestionType) {
-    (question as TextQuestion).textQuestionType = textQuestionType;
   };
 
   const header = (
@@ -79,51 +68,8 @@ export function QuestionEditor(props: QuestionEditorProps) {
       </div>
     </div>
   );
-  let questionDetails;
-  switch (question.questionType) {
-    case QuestionType.Text:
-      questionDetails = (
-        <div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name={"question-" + question.id + "-length"}
-              id={"question-" + question.id + "-short"}
-              defaultChecked={
-                question.textQuestionType == TextQuestionType.Short
-              }
-              onChange={(e) => selectTextQuestionType(TextQuestionType.Short)}
-            />
-            <label
-              className="form-check-label"
-              htmlFor={"question-" + question.id + "-short"}
-            >
-              Short Answer
-            </label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name={"question-" + question.id + "-length"}
-              id={"question-" + question.id + "-long"}
-              defaultChecked={
-                question.textQuestionType == TextQuestionType.Long
-              }
-              onChange={(e) => selectTextQuestionType(TextQuestionType.Long)}
-            />
-            <label
-              className="form-check-label"
-              htmlFor={"question-" + question.id + "-long"}
-            >
-              Long Answer
-            </label>
-          </div>
-        </div>
-      );
-      break;
-  }
+  const questionApi = getApi(question.questionType);
+  const questionDetails = questionApi?.editor({ question: question });
   return (
     <>
       {header}

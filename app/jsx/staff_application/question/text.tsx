@@ -1,4 +1,4 @@
-import { QuestionApi, QuestionDisplayProps } from "./api";
+import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, TextQuestion, TextQuestionType } from "./types";
 
 export class TextQuestionApi implements QuestionApi {
@@ -10,8 +10,8 @@ export class TextQuestionApi implements QuestionApi {
     return "Text";
   }
 
-  editor(): JSX.Element {
-    return null;
+  editor(props: QuestionEditorProps): JSX.Element {
+    return <TextQuestionEditor question={props.question} />;
   }
 
   form(props: QuestionDisplayProps): JSX.Element {
@@ -64,4 +64,48 @@ function TextQuestionDisplay(props: QuestionDisplayProps) {
         </div>
       );
   }
+}
+
+function TextQuestionEditor(props: QuestionEditorProps) {
+  const question = props.question as TextQuestion;
+  const selectTextQuestionType = function (textQuestionType: TextQuestionType) {
+    question.textQuestionType = textQuestionType;
+  };
+
+  return (
+    <div>
+      <div className="form-check form-check-inline">
+        <input
+          className="form-check-input"
+          type="radio"
+          name={"question-" + question.id + "-length"}
+          id={"question-" + question.id + "-short"}
+          defaultChecked={question.textQuestionType == TextQuestionType.Short}
+          onChange={(e) => selectTextQuestionType(TextQuestionType.Short)}
+        />
+        <label
+          className="form-check-label"
+          htmlFor={"question-" + question.id + "-short"}
+        >
+          Short Answer
+        </label>
+      </div>
+      <div className="form-check form-check-inline">
+        <input
+          className="form-check-input"
+          type="radio"
+          name={"question-" + question.id + "-length"}
+          id={"question-" + question.id + "-long"}
+          defaultChecked={question.textQuestionType == TextQuestionType.Long}
+          onChange={(e) => selectTextQuestionType(TextQuestionType.Long)}
+        />
+        <label
+          className="form-check-label"
+          htmlFor={"question-" + question.id + "-long"}
+        >
+          Long Answer
+        </label>
+      </div>
+    </div>
+  );
 }

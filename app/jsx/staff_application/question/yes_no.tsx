@@ -1,4 +1,4 @@
-import { QuestionApi, QuestionDisplayProps } from "./api";
+import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, YesNoQuestion } from "./types";
 
 export class YesNoQuestionApi implements QuestionApi {
@@ -10,7 +10,7 @@ export class YesNoQuestionApi implements QuestionApi {
     return "Yes / No";
   }
 
-  editor(): JSX.Element {
+  editor(props: QuestionEditorProps): JSX.Element {
     return null;
   }
 

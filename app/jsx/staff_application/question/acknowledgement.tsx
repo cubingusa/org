@@ -1,4 +1,4 @@
-import { QuestionApi, QuestionDisplayProps } from "./api";
+import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, AcknowledgementQuestion } from "./types";
 
 export class AcknowledgementQuestionApi implements QuestionApi {
@@ -10,7 +10,7 @@ export class AcknowledgementQuestionApi implements QuestionApi {
     return "Acknowledgement";
   }
 
-  editor(): JSX.Element {
+  editor(props: QuestionEditorProps): JSX.Element {
     return null;
   }
 

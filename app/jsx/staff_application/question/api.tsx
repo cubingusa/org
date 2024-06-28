@@ -7,9 +7,13 @@ export interface QuestionDisplayProps {
   onAnswerChange: (myQuestion: SubmittedQuestion) => void;
 }
 
+export interface QuestionEditorProps {
+  question: Question;
+}
+
 export interface QuestionApi {
   questionTypeName(): string;
-  editor(): JSX.Element;
+  editor(props: QuestionEditorProps): JSX.Element;
   form(props: QuestionDisplayProps): JSX.Element;
   type(): QuestionType;
 }
