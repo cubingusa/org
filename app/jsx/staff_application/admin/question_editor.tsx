@@ -6,6 +6,7 @@ import {
   TextQuestion,
   TextQuestionType,
 } from "../question/types";
+import { allQuestionApis } from "../question/questions";
 
 interface QuestionEditorProps {
   question: Question;
@@ -15,12 +16,6 @@ interface QuestionEditorProps {
 export function QuestionEditor(props: QuestionEditorProps) {
   const question = props.question;
   const [questionType, setQuestionType] = useState(question.questionType || "");
-  const types = {
-    [QuestionType.Null]: "Question Type",
-    [QuestionType.Text]: "Text",
-    [QuestionType.YesNo]: "Yes / No",
-    [QuestionType.Acknowledgement]: "Acknowledgement",
-  };
 
   const updateQuestionType = function (newType: string) {
     switch (newType) {
@@ -73,10 +68,10 @@ export function QuestionEditor(props: QuestionEditorProps) {
           value={questionType}
           onChange={(e) => updateQuestionType(e.target.value)}
         >
-          {Object.entries(types).map(([typeId, description]) => {
+          {allQuestionApis().map((api) => {
             return (
-              <option value={typeId} key={typeId}>
-                {description}
+              <option value={api.type()} key={api.type()}>
+                {api.questionTypeName()}
               </option>
             );
           })}

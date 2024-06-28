@@ -6,6 +6,10 @@ export class TextQuestionApi implements QuestionApi {
     return QuestionType.Text;
   }
 
+  questionTypeName(): string {
+    return "Text";
+  }
+
   editor(): JSX.Element {
     return null;
   }

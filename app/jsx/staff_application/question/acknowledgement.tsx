@@ -6,6 +6,10 @@ export class AcknowledgementQuestionApi implements QuestionApi {
     return QuestionType.Acknowledgement;
   }
 
+  questionTypeName(): string {
+    return "Acknowledgement";
+  }
+
   editor(): JSX.Element {
     return null;
   }

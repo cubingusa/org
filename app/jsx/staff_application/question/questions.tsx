@@ -1,11 +1,13 @@
 import { QuestionApi } from "./api";
 import { QuestionType } from "./types";
+import { NullQuestionApi } from "./null";
 import { TextQuestionApi } from "./text";
 import { YesNoQuestionApi } from "./yes_no";
 import { AcknowledgementQuestionApi } from "./acknowledgement";
 
-function allQuestionApis(): QuestionApi[] {
+export function allQuestionApis(): QuestionApi[] {
   return [
+    new NullQuestionApi(),
     new TextQuestionApi(),
     new AcknowledgementQuestionApi(),
     new YesNoQuestionApi(),

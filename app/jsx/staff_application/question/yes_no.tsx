@@ -6,6 +6,10 @@ export class YesNoQuestionApi implements QuestionApi {
     return QuestionType.YesNo;
   }
 
+  questionTypeName(): string {
+    return "Yes / No";
+  }
+
   editor(): JSX.Element {
     return null;
   }

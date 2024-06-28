@@ -8,6 +8,7 @@ export interface QuestionDisplayProps {
 }
 
 export interface QuestionApi {
+  questionTypeName(): string;
   editor(): JSX.Element;
   form(props: QuestionDisplayProps): JSX.Element;
   type(): QuestionType;
