@@ -23,6 +23,7 @@ import { Form } from "../types/form";
 import { SubmittedForm } from "../types/personal_application_data";
 
 import { Trait, TraitComputer } from "./api";
+import { TraitExtras } from "./extras";
 import { SerializedTrait } from "./serialized";
 import {
   ComputerType,
@@ -68,6 +69,9 @@ export class FormMetadataComputer extends TraitComputer {
             myForm === undefined
               ? null
               : DateTime.fromSeconds(myForm.submittedAtTs),
+          extras: {
+            timeZone: null,
+          },
         });
       case FormMetadataType.UpdateTime:
         return new DateTimeTrait({
@@ -75,6 +79,9 @@ export class FormMetadataComputer extends TraitComputer {
             myForm === undefined
               ? null
               : DateTime.fromSeconds(myForm.updatedAtTs),
+          extras: {
+            timeZone: null,
+          },
         });
     }
   }

@@ -19,6 +19,7 @@ import { StringFilterSelector } from "../filter/selector/string";
 
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
+import { TraitExtras } from "./extras";
 import { SerializedTrait } from "./serialized";
 import {
   ComputerParams,
@@ -128,12 +129,16 @@ export class PersonalAttributeComputer extends TraitComputer {
         if (applicant.user.delegateStatus) {
           return new StringEnumTrait({
             val: applicant.user.delegateStatus,
-            allValues: delegateStatusMap,
+            extras: {
+              allValues: delegateStatusMap,
+            },
           });
         } else {
           return new StringEnumTrait({
             val: null,
-            allValues: delegateStatusMap,
+            extras: {
+              allValues: delegateStatusMap,
+            },
           });
         }
       case PersonalAttributeType.ListedOrganizer:
@@ -151,9 +156,9 @@ export class PersonalAttributeComputer extends TraitComputer {
     }
   }
 
-  extraDataForDeserialization(): any {
+  extraDataForDeserialization(): TraitExtras {
     if (this.params.attributeType == PersonalAttributeType.DelegateStatus) {
-      return delegateStatusMap;
+      return { allValues: delegateStatusMap };
     }
     return null;
   }

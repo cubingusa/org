@@ -2,6 +2,7 @@ import { ApplicantData } from "../types/applicant_data";
 import { SerializedTrait } from "./serialized";
 import { ComputerParams } from "./params";
 import { FilterParams } from "../filter/types/params";
+import { TraitExtras } from "./extras";
 
 export abstract class Trait {
   abstract serialize(): SerializedTrait;
@@ -24,7 +25,7 @@ export abstract class TraitComputer {
     params: FilterParams | null,
     onFilterChange: (params: FilterParams) => void,
   ): JSX.Element;
-  extraDataForDeserialization(): any {
+  extraDataForDeserialization(): TraitExtras {
     return null;
   }
   getParams(): ComputerParams {

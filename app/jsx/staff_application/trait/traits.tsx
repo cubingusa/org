@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { SerializedTrait, TraitType } from "./serialized";
 import { Trait } from "./api";
+import { TraitExtras, DateTimeExtras, EnumExtras } from "./extras";
 
 type NumberTraitParams =
   | {
@@ -159,13 +160,16 @@ export class NullTrait extends Trait {
 type DateTimeTraitParams =
   | {
       val: DateTime | null;
+      extras: TraitExtras;
     }
   | {
       serialized: SerializedTrait;
+      extras: TraitExtras;
     };
 export class DateTimeTrait extends Trait {
   constructor(params: DateTimeTraitParams) {
     super();
+    this.extras = params.extras as DateTimeExtras;
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {
@@ -186,11 +190,14 @@ export class DateTimeTrait extends Trait {
   }
 
   render(): JSX.Element {
-    return this.val == null ? (
-      <>&ndash;</>
-    ) : (
-      <>{this.val.toLocaleString(DateTime.DATETIME_MED)}</>
-    );
+    if (this.val == null) {
+      return <>&ndash;</>;
+    }
+    const val =
+      this.extras.timeZone == null
+        ? this.val
+        : this.val.setZone(this.extras.timeZone);
+    return <>{val.toLocaleString(DateTime.DATETIME_MED)}</>;
   }
 
   value(): DateTime | null {
@@ -198,21 +205,22 @@ export class DateTimeTrait extends Trait {
   }
 
   private val: DateTime | null;
+  private extras: DateTimeExtras;
 }
 
 type EnumTraitParams<T> =
   | {
       val: T | null;
-      allValues: Map<T, string>;
+      extras: EnumExtras<T>;
     }
   | {
       serialized: SerializedTrait;
-      allValues: Map<T, string>;
+      extras: EnumExtras<T>;
     };
 export abstract class EnumTrait<T> extends Trait {
   constructor(params: EnumTraitParams<T>) {
     super();
-    this.allValues = params.allValues;
+    this.allValues = params.extras.allValues;
     if ("val" in params) {
       this.val = params.val;
     } else if ("serialized" in params) {

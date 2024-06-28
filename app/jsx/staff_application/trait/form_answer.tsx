@@ -28,6 +28,7 @@ import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
 import { TraitType } from "./serialized";
+import { TraitExtras } from "./extras";
 
 export class FormAnswerComputer extends TraitComputer {
   constructor(
@@ -140,7 +141,7 @@ export class FormAnswerComputer extends TraitComputer {
     );
   }
 
-  extraDataForDeserialization(): any {
+  extraDataForDeserialization(): TraitExtras {
     const question = this.getQuestion();
     const api = getApi(question.questionType);
     return api?.getTraitExtraData();

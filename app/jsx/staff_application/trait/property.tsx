@@ -21,6 +21,7 @@ import { Trait, TraitComputer } from "./api";
 import { SerializedTrait } from "./serialized";
 import { ComputerType, PropertyParams, ComputerParams } from "./params";
 import { NumberEnumTrait } from "./traits";
+import { TraitExtras } from "./extras";
 
 export class PropertyComputer extends TraitComputer {
   constructor(
@@ -40,18 +41,26 @@ export class PropertyComputer extends TraitComputer {
     const property = this.getProperty();
     const propertyMap = new Map<number, string>();
     if (property === undefined) {
-      return new NumberEnumTrait({ val: null, allValues: propertyMap });
+      return new NumberEnumTrait({
+        val: null,
+        extras: { allValues: propertyMap },
+      });
     }
     property.values.forEach((val) => propertyMap.set(val.id, val.value));
     const userProperty = applicant.user.properties.find(
       (p) => p.key === this.params.propertyId,
     );
     if (userProperty === undefined) {
-      return new NumberEnumTrait({ val: null, allValues: propertyMap });
+      return new NumberEnumTrait({
+        val: null,
+        extras: { allValues: propertyMap },
+      });
     }
     return new NumberEnumTrait({
       val: userProperty.value,
-      allValues: propertyMap,
+      extras: {
+        allValues: propertyMap,
+      },
     });
   }
 
@@ -59,12 +68,12 @@ export class PropertyComputer extends TraitComputer {
     return `PC-${this.params.propertyId}`;
   }
 
-  extraDataForDeserialization(): any {
+  extraDataForDeserialization(): TraitExtras {
     const propertyMap = new Map<number, string>();
     this.getProperty().values.forEach((val) =>
       propertyMap.set(val.id, val.value),
     );
-    return propertyMap;
+    return { allValues: propertyMap };
   }
 
   header(): JSX.Element {

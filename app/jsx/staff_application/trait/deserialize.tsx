@@ -1,5 +1,6 @@
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait, TraitType } from "./serialized";
+import { EnumExtras, DateTimeExtras } from "./extras";
 import {
   BooleanTrait,
   StringTrait,
@@ -24,22 +25,19 @@ export function deserialize(
     case TraitType.NullTrait:
       return new NullTrait({ serialized });
     case TraitType.DateTimeTrait:
-      return new DateTimeTrait({ serialized });
+      return new DateTimeTrait({
+        serialized,
+        extras: computer.extraDataForDeserialization() as DateTimeExtras,
+      });
     case TraitType.StringEnumTrait:
       return new StringEnumTrait({
         serialized,
-        allValues: computer.extraDataForDeserialization() as Map<
-          string,
-          string
-        >,
+        extras: computer.extraDataForDeserialization() as EnumExtras<string>,
       });
     case TraitType.NumberEnumTrait:
       return new NumberEnumTrait({
         serialized,
-        allValues: computer.extraDataForDeserialization() as Map<
-          number,
-          string
-        >,
+        extras: computer.extraDataForDeserialization() as EnumExtras<number>,
       });
   }
 }
