@@ -1,13 +1,18 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, AcknowledgementQuestion } from "./types";
+import { TraitType } from "../trait/serialized";
 
-export class AcknowledgementQuestionApi implements QuestionApi {
+export class AcknowledgementQuestionApi extends QuestionApi {
   type(): QuestionType {
     return QuestionType.Acknowledgement;
   }
 
   questionTypeName(): string {
     return "Acknowledgement";
+  }
+
+  getTraitType(): TraitType {
+    return TraitType.BooleanTrait;
   }
 
   editor(props: QuestionEditorProps): JSX.Element {

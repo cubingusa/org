@@ -5,7 +5,8 @@ import {
   ApplicationSettings,
   CompetitionData,
 } from "../types/competition_data";
-import { Question, QuestionType } from "../question/types";
+import { Question } from "../question/types";
+import { getApi } from "../question/questions";
 
 import { FilterParams } from "../filter/types/params";
 import { FilterType } from "../filter/types/base";
@@ -26,6 +27,7 @@ import { StringFilterSelector } from "../filter/selector/string";
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { StringTrait, BooleanTrait, NullTrait } from "./traits";
+import { TraitType } from "./serialized";
 
 export class FormAnswerComputer extends TraitComputer {
   constructor(
@@ -49,24 +51,17 @@ export class FormAnswerComputer extends TraitComputer {
     const myQuestion = applicant.forms
       .find((f) => f.formId == this.params.formId)
       ?.details?.questions?.find((q) => q.questionId == this.params.questionId);
-    switch (question.questionType) {
-      case QuestionType.Null:
+    const api = getApi(question.questionType);
+    switch (api?.getTraitType()) {
+      case TraitType.NullTrait:
         return new NullTrait({});
-      case QuestionType.Text:
+      case TraitType.StringTrait:
         return new StringTrait({
           val: myQuestion === undefined ? null : myQuestion.textAnswer,
         });
-      case QuestionType.YesNo:
-      case QuestionType.Acknowledgement:
+      case TraitType.BooleanTrait:
         return new BooleanTrait({
           val: myQuestion === undefined ? null : myQuestion.booleanAnswer,
-        });
-      case QuestionType.MultipleChoice:
-        // TODO: switch to EnumTrait.
-        return new StringTrait({
-          val: question.options.has(myQuestion?.numberAnswer)
-            ? question.options.get(myQuestion.numberAnswer)
-            : null,
         });
     }
   }
@@ -99,23 +94,24 @@ export class FormAnswerComputer extends TraitComputer {
     if (!question) {
       return defaultNullParams(this.params);
     }
-    switch (question.questionType) {
-      case QuestionType.Null:
+    const api = getApi(question.questionType);
+    switch (api?.getTraitType()) {
+      case TraitType.NullTrait:
         return defaultNullParams(this.params);
-      case QuestionType.Text:
+      case TraitType.StringTrait:
         return defaultStringParams(this.params);
-      case QuestionType.YesNo:
-      case QuestionType.Acknowledgement:
+      case TraitType.BooleanTrait:
         return defaultBooleanParams(this.params);
-      case QuestionType.MultipleChoice:
-      // TODO: defaultEnumParams
     }
   }
 
   isValid(): boolean {
     const question = this.getQuestion();
+    const api = getApi(question.questionType);
     return (
-      question !== undefined && question.questionType !== QuestionType.Null
+      question !== undefined &&
+      api !== null &&
+      api.getTraitType() !== TraitType.NullTrait
     );
   }
 
@@ -143,6 +139,12 @@ export class FormAnswerComputer extends TraitComputer {
       />
     );
   }
+
+  extraDataForDeserialization(): any {
+    const question = this.getQuestion();
+    const api = getApi(question.questionType);
+    return api?.getTraitExtraData();
+  }
 }
 
 interface FormAnswerFilterSelectorParams {
@@ -164,8 +166,9 @@ function FormAnswerFilterSelector({
   if (question === undefined) {
     return <></>;
   }
-  switch (question.questionType) {
-    case QuestionType.Text:
+  const api = getApi(question.questionType);
+  switch (api?.getTraitType()) {
+    case TraitType.StringTrait:
       return (
         <StringFilterSelector
           params={params as StringFilterParams}
@@ -173,8 +176,7 @@ function FormAnswerFilterSelector({
           onFilterChange={onFilterChange}
         />
       );
-    case QuestionType.YesNo:
-    case QuestionType.Acknowledgement:
+    case TraitType.BooleanTrait:
       return (
         <BooleanFilterSelector
           params={params as BooleanFilterParams}
@@ -182,8 +184,6 @@ function FormAnswerFilterSelector({
           onFilterChange={onFilterChange}
         />
       );
-    case QuestionType.MultipleChoice:
-    // TODO: Enum filter.
   }
   return <></>;
 }

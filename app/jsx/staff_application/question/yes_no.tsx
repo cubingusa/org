@@ -1,13 +1,18 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, YesNoQuestion } from "./types";
+import { TraitType } from "../trait/serialized";
 
-export class YesNoQuestionApi implements QuestionApi {
+export class YesNoQuestionApi extends QuestionApi {
   type(): QuestionType {
     return QuestionType.YesNo;
   }
 
   questionTypeName(): string {
     return "Yes / No";
+  }
+
+  getTraitType(): TraitType {
+    return TraitType.BooleanTrait;
   }
 
   editor(props: QuestionEditorProps): JSX.Element {

@@ -1,13 +1,18 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, TextQuestion, TextQuestionType } from "./types";
+import { TraitType } from "../trait/serialized";
 
-export class TextQuestionApi implements QuestionApi {
+export class TextQuestionApi extends QuestionApi {
   type(): QuestionType {
     return QuestionType.Text;
   }
 
   questionTypeName(): string {
     return "Text";
+  }
+
+  getTraitType(): TraitType {
+    return TraitType.StringTrait;
   }
 
   editor(props: QuestionEditorProps): JSX.Element {
