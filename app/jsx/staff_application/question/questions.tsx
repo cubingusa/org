@@ -1,3 +1,4 @@
+import { Competition } from "@wca/helpers";
 import { QuestionApi } from "./api";
 import { QuestionType } from "./types";
 import { NullQuestionApi } from "./null";
@@ -6,16 +7,19 @@ import { YesNoQuestionApi } from "./yes_no";
 import { DateTimeQuestionApi } from "./datetime";
 import { AcknowledgementQuestionApi } from "./acknowledgement";
 
-export function allQuestionApis(): QuestionApi[] {
+export function allQuestionApis(wcif: Competition): QuestionApi[] {
   return [
-    new NullQuestionApi(),
-    new TextQuestionApi(),
-    new AcknowledgementQuestionApi(),
-    new YesNoQuestionApi(),
-    new DateTimeQuestionApi(),
+    new NullQuestionApi(wcif),
+    new TextQuestionApi(wcif),
+    new AcknowledgementQuestionApi(wcif),
+    new YesNoQuestionApi(wcif),
+    new DateTimeQuestionApi(wcif),
   ];
 }
 
-export function getApi(type: QuestionType): QuestionApi | null {
-  return allQuestionApis().find((api) => api.type() == type);
+export function getApi(
+  type: QuestionType,
+  wcif: Competition,
+): QuestionApi | null {
+  return allQuestionApis(wcif).find((api) => api.type() == type);
 }

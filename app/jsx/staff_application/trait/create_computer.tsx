@@ -16,7 +16,7 @@ export function createComputer(
   const paramsClone = JSON.parse(JSON.stringify(params));
   switch (paramsClone.type) {
     case ComputerType.FormAnswer:
-      return new FormAnswerComputer(paramsClone, settings);
+      return new FormAnswerComputer(paramsClone, settings, wcif);
     case ComputerType.FormMetadata:
       return new FormMetadataComputer(paramsClone, settings);
     case ComputerType.PersonalAttribute:

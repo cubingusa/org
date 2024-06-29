@@ -1,5 +1,7 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { useState } from "react";
+import { DateTime } from "luxon";
+import { Competition } from "@wca/helpers";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -26,7 +28,7 @@ import { StringFilterSelector } from "../filter/selector/string";
 
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
-import { StringTrait, BooleanTrait, NullTrait } from "./traits";
+import { StringTrait, BooleanTrait, NullTrait, DateTimeTrait } from "./traits";
 import { TraitType } from "./serialized";
 import { TraitExtras } from "./extras";
 
@@ -34,6 +36,7 @@ export class FormAnswerComputer extends TraitComputer {
   constructor(
     private params: FormAnswerParams,
     private settings: ApplicationSettings,
+    private wcif: Competition,
   ) {
     super(params);
   }
@@ -52,7 +55,7 @@ export class FormAnswerComputer extends TraitComputer {
     const myQuestion = applicant.forms
       .find((f) => f.formId == this.params.formId)
       ?.details?.questions?.find((q) => q.questionId == this.params.questionId);
-    const api = getApi(question.questionType);
+    const api = getApi(question.questionType, this.wcif);
     switch (api?.getTraitType()) {
       case TraitType.NullTrait:
         return new NullTrait({});
@@ -63,6 +66,14 @@ export class FormAnswerComputer extends TraitComputer {
       case TraitType.BooleanTrait:
         return new BooleanTrait({
           val: myQuestion === undefined ? null : myQuestion.booleanAnswer,
+        });
+      case TraitType.DateTimeTrait:
+        return new DateTimeTrait({
+          val:
+            myQuestion === undefined
+              ? null
+              : DateTime.fromSeconds(myQuestion.numberAnswer),
+          extras: api.getTraitExtraData(),
         });
     }
   }
@@ -95,7 +106,7 @@ export class FormAnswerComputer extends TraitComputer {
     if (!question) {
       return defaultNullParams(this.params);
     }
-    const api = getApi(question.questionType);
+    const api = getApi(question.questionType, this.wcif);
     switch (api?.getTraitType()) {
       case TraitType.NullTrait:
         return defaultNullParams(this.params);
@@ -108,7 +119,7 @@ export class FormAnswerComputer extends TraitComputer {
 
   isValid(): boolean {
     const question = this.getQuestion();
-    const api = getApi(question.questionType);
+    const api = getApi(question.questionType, this.wcif);
     return (
       question !== undefined &&
       api !== null &&
@@ -143,7 +154,7 @@ export class FormAnswerComputer extends TraitComputer {
 
   extraDataForDeserialization(): TraitExtras {
     const question = this.getQuestion();
-    const api = getApi(question.questionType);
+    const api = getApi(question.questionType, this.wcif);
     return api?.getTraitExtraData();
   }
 }
@@ -158,7 +169,9 @@ function FormAnswerFilterSelector({
   computerParams,
   onFilterChange,
 }: FormAnswerFilterSelectorParams) {
-  const { settings } = useRouteLoaderData("competition") as CompetitionData;
+  const { settings, wcif } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
   const formAnswerParams = computerParams as FormAnswerParams;
 
   const question = settings.forms
@@ -167,7 +180,7 @@ function FormAnswerFilterSelector({
   if (question === undefined) {
     return <></>;
   }
-  const api = getApi(question.questionType);
+  const api = getApi(question.questionType, wcif);
   switch (api?.getTraitType()) {
     case TraitType.StringTrait:
       return (

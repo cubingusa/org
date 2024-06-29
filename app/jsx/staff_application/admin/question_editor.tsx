@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouteLoaderData } from "react-router-dom";
 import { Form } from "../types/form";
 import {
   Question,
@@ -6,6 +7,7 @@ import {
   TextQuestion,
   TextQuestionType,
 } from "../question/types";
+import { CompetitionData } from "../types/competition_data";
 import { getApi, allQuestionApis } from "../question/questions";
 
 interface QuestionEditorProps {
@@ -15,12 +17,13 @@ interface QuestionEditorProps {
 
 export function QuestionEditor(props: QuestionEditorProps) {
   const question = props.question;
+  const { wcif } = useRouteLoaderData("competition") as CompetitionData;
   const [questionType, setQuestionType] = useState(question.questionType || "");
 
   const updateQuestionType = function (newType: QuestionType) {
     Object.assign(
       question,
-      getApi(newType).defaultParams({
+      getApi(newType, wcif).defaultParams({
         id: question.id,
         name: question.name,
         required: question.required,
@@ -64,7 +67,7 @@ export function QuestionEditor(props: QuestionEditorProps) {
           value={questionType}
           onChange={(e) => updateQuestionType(e.target.value as QuestionType)}
         >
-          {allQuestionApis().map((api) => {
+          {allQuestionApis(wcif).map((api) => {
             return (
               <option value={api.type()} key={api.type()}>
                 {api.questionTypeName()}
@@ -75,7 +78,7 @@ export function QuestionEditor(props: QuestionEditorProps) {
       </div>
     </div>
   );
-  const questionApi = getApi(question.questionType);
+  const questionApi = getApi(question.questionType, wcif);
   const questionDetails = questionApi?.editor({ question: question });
   return (
     <>

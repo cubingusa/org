@@ -1,3 +1,4 @@
+import { Competition } from "@wca/helpers";
 import { Question, QuestionType, QuestionBase } from "./types";
 import { SubmittedQuestion } from "../types/personal_application_data";
 import { Trait } from "../trait/api";
@@ -15,6 +16,7 @@ export interface QuestionEditorProps {
 }
 
 export abstract class QuestionApi {
+  constructor(protected wcif: Competition) {}
   abstract questionTypeName(): string;
   abstract editor(props: QuestionEditorProps): JSX.Element;
   abstract form(props: QuestionDisplayProps): JSX.Element;

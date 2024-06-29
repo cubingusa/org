@@ -63,7 +63,7 @@ function FormDisplay(props: FormDisplayProps) {
               };
               myForm.details.questions.push(myQuestion);
             }
-            const api = getApi(question.questionType);
+            const api = getApi(question.questionType, wcif);
             if (api) {
               return (
                 <div key={question.id}>
