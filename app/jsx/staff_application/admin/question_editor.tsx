@@ -80,6 +80,7 @@ export function QuestionEditor(props: QuestionEditorProps) {
   return (
     <>
       {header}
+      {questionDetails == null ? null : <br />}
       {questionDetails}
     </>
   );

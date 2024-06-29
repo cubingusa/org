@@ -3,6 +3,7 @@ import { QuestionType } from "./types";
 import { NullQuestionApi } from "./null";
 import { TextQuestionApi } from "./text";
 import { YesNoQuestionApi } from "./yes_no";
+import { DateTimeQuestionApi } from "./datetime";
 import { AcknowledgementQuestionApi } from "./acknowledgement";
 
 export function allQuestionApis(): QuestionApi[] {
@@ -11,6 +12,7 @@ export function allQuestionApis(): QuestionApi[] {
     new TextQuestionApi(),
     new AcknowledgementQuestionApi(),
     new YesNoQuestionApi(),
+    new DateTimeQuestionApi(),
   ];
 }
 

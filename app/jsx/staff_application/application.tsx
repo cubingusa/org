@@ -57,6 +57,9 @@ function FormDisplay(props: FormDisplayProps) {
             if (myQuestion === undefined) {
               myQuestion = {
                 questionId: question.id,
+                numberAnswer: 0,
+                booleanAnswer: false,
+                textAnswer: "",
               };
               myForm.details.questions.push(myQuestion);
             }
