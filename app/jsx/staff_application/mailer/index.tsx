@@ -7,8 +7,10 @@ import { MailerData } from "./types";
 import { AdminHeader } from "../admin/header";
 
 export function MailerIndex() {
-  const { wcif, user } = useRouteLoaderData("competition") as CompetitionData;
-  const { templates, settings } = useRouteLoaderData("mailer") as MailerData;
+  const { wcif, user, templates } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
+  const { settings } = useRouteLoaderData("mailer") as MailerData;
   const [renderedTemplates, setRenderedTemplates] = useState(templates);
   const [deleteId, setDeleteId] = useState("");
   const [spinning, setSpinning] = useState(false);

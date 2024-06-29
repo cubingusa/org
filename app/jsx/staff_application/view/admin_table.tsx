@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 
 import { ColumnModal } from "./column_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
+import { SendEmailModal } from "./send_email_modal";
 import { Filter } from "../filter/filter";
 import { FilterModal } from "../filter/modal";
 import { FilterParams } from "../filter/types/params";
@@ -115,6 +116,17 @@ export function AdminTable() {
           ))}
         </p>
       ) : null}
+      <button
+        type="button"
+        className="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#email-modal"
+        disabled={selectedIds.length == 0}
+      >
+        <span className="material-symbols-outlined">mail</span> Email
+      </button>
+      <SendEmailModal id="email-modal" personIds={selectedIds} />
+      &nbsp;
       <button
         type="button"
         className="btn btn-success"

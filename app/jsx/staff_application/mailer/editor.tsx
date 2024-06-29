@@ -9,15 +9,16 @@ import {
 import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
 
 import { CompetitionData } from "../types/competition_data";
-import { MailerData, MailTemplate } from "./types";
+import { MailTemplate } from "./types";
 import { AdminHeader } from "../admin/header";
 
 interface MailerEditorParams {
   mode: "clone" | "edit" | "new";
 }
 export function MailerEditor({ mode }: MailerEditorParams) {
-  const { wcif } = useRouteLoaderData("competition") as CompetitionData;
-  const { templates } = useRouteLoaderData("mailer") as MailerData;
+  const { wcif, templates } = useRouteLoaderData(
+    "competition",
+  ) as CompetitionData;
   const { templateId, competitionId } = useParams();
   const [spinning, setSpinning] = useState(false);
   const navigate = useNavigate();

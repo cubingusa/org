@@ -12,6 +12,5 @@ interface MailerSettings {
 }
 
 export interface MailerData {
-  templates: MailTemplate[];
   settings: MailerSettings;
 }
