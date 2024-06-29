@@ -46,6 +46,19 @@ export function MailerIndex() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
+                      className="btn btn-success"
+                      onClick={(e) =>
+                        navigate(
+                          `/staff/${wcif.id}/mailer/template/${template.id}/clone`,
+                        )
+                      }
+                    >
+                      <span className="material-symbols-outlined">
+                        content_copy
+                      </span>{" "}
+                      Copy
+                    </button>
+                    <button
                       className="btn btn-danger"
                       onClick={(e) => onDeleteClick(e, template.id)}
                       data-bs-toggle="modal"

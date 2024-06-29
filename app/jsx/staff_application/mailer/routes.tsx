@@ -14,11 +14,20 @@ export function MailerRoutes() {
       },
       {
         path: "template/new",
-        element: <MailerEditor />,
+        element: <MailerEditor mode="new" />,
       },
       {
         path: "template/:templateId",
-        element: <MailerEditor />,
+        children: [
+          {
+            index: true,
+            element: <MailerEditor mode="edit" />,
+          },
+          {
+            path: "clone",
+            element: <MailerEditor mode="clone" />,
+          },
+        ],
       },
     ],
   };

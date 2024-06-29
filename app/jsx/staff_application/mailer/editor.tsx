@@ -4,6 +4,7 @@ import {
   Link,
   useParams,
   useNavigate,
+  redirect,
 } from "react-router-dom";
 import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
 
@@ -11,24 +12,48 @@ import { CompetitionData } from "../types/competition_data";
 import { MailerData, MailTemplate } from "./types";
 import { AdminHeader } from "../admin/header";
 
-export function MailerEditor() {
+interface MailerEditorParams {
+  mode: "clone" | "edit" | "new";
+}
+export function MailerEditor({ mode }: MailerEditorParams) {
   const { templates } = useRouteLoaderData("mailer") as MailerData;
   const { templateId, competitionId } = useParams();
+  console.log(templates);
+  console.log(templateId);
   const [spinning, setSpinning] = useState(false);
-  let template = templates.find((t) => t.id == templateId);
-  const isNew = template === undefined;
   const navigate = useNavigate();
+  let template: MailTemplate;
+  let isNew = false;
+  let hasDesign = false;
+  switch (mode) {
+    case "clone":
+      template = structuredClone(templates.find((t) => t.id == templateId));
+      if (template === undefined) {
+        throw redirect(`/staff/${competitionId}/mailer`);
+      }
+      template.id = "";
+      template.title = "New Email Template";
+      isNew = true;
+      hasDesign = true;
+      break;
+    case "edit":
+      template = templates.find((t) => t.id == templateId);
+      if (template === undefined) {
+        throw redirect(`/staff/${competitionId}/mailer`);
+      }
+      hasDesign = true;
+      break;
+    case "new":
+      isNew = true;
+      template = {
+        id: "",
+        title: "New Email Template",
+        design: {},
+        html: "",
+      };
+  }
   const emailEditorRef = useRef<EditorRef>(null);
   const [submitDisabled, setSubmitDisabled] = useState(true);
-
-  if (isNew) {
-    template = {
-      id: "",
-      title: "New Email Template",
-      design: {},
-      html: "",
-    };
-  }
 
   const setTitle = function (newTitle: string) {
     template.title = newTitle;
@@ -61,7 +86,7 @@ export function MailerEditor() {
   };
 
   const onReady: EmailEditorProps["onReady"] = (unlayer) => {
-    if (!isNew) {
+    if (hasDesign) {
       unlayer.loadDesign(template.design);
     }
     setSubmitDisabled(false);
