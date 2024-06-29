@@ -79,7 +79,7 @@ export class FormAnswerComputer extends TraitComputer {
             myQuestion === undefined
               ? null
               : DateTime.fromSeconds(myQuestion.numberAnswer),
-          extras: api.getTraitExtraData(),
+          extras: api.getTraitExtraData(question),
         });
     }
   }
@@ -163,7 +163,7 @@ export class FormAnswerComputer extends TraitComputer {
   extraDataForDeserialization(): TraitExtras {
     const question = this.getQuestion();
     const api = getApi(question.questionType, this.wcif);
-    return api?.getTraitExtraData();
+    return api?.getTraitExtraData(question);
   }
 }
 

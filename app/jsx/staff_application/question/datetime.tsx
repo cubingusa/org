@@ -3,7 +3,13 @@ import { useRouteLoaderData } from "react-router-dom";
 import { DateTime } from "luxon";
 
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, DateTimeQuestion, QuestionBase } from "./types";
+import {
+  QuestionType,
+  DateTimeQuestion,
+  QuestionBase,
+  Question,
+} from "./types";
+import { DateTimeExtras } from "../trait/extras";
 import { TraitType } from "../trait/serialized";
 import { CompetitionData } from "../types/competition_data";
 
@@ -41,6 +47,14 @@ export class DateTimeQuestionApi extends QuestionApi {
       startTimeSeconds: DateTime.local().toSeconds(),
       endTimeSeconds: DateTime.local().toSeconds(),
     });
+  }
+
+  getTraitExtraData(question: Question): DateTimeExtras {
+    return {
+      timeZone: (question as DateTimeQuestion).userLocalTime
+        ? null
+        : this.wcif.schedule.venues[0].timezone,
+    };
   }
 }
 

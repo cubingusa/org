@@ -21,7 +21,7 @@ export abstract class QuestionApi {
   abstract editor(props: QuestionEditorProps): JSX.Element;
   abstract form(props: QuestionDisplayProps): JSX.Element;
   abstract getTraitType(): TraitType;
-  getTraitExtraData(): TraitExtras {
+  getTraitExtraData(question: Question): TraitExtras {
     return {};
   }
   abstract type(): QuestionType;
