@@ -83,6 +83,14 @@ def enable(competition_id):
     existing_settings = ApplicationSettings.get_by_id(competition_id)
     if not existing_settings:
       settings = ApplicationSettings(id=competition_id)
+      settings.details = {
+        "isVisible": False,
+        "description": "",
+        "forms": [],
+        "nextFormId": 0,
+        "properties": [],
+        "nextPropertyId": 0,
+      }
       settings.put()
     return redirect('/staff/%s' % competition_id)
 
@@ -329,7 +337,7 @@ def put_mailer_settings(competition_id):
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
-    settings = ApplicationSettings(id=competition_id)
+    settings = ApplicationSettings.get_by_id(competition_id)
     settings.sender_address = request.json['senderAddress']
     settings.sender_name = request.json['senderName']
     settings.put()
