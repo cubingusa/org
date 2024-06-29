@@ -26,6 +26,8 @@ class UserSettings(ndb.Model):
 
 class ApplicationSettings(ndb.Model):
   details = ndb.JsonProperty()
+  sender_address = ndb.StringProperty()
+  sender_name = ndb.StringProperty()
 
 class SavedView(ndb.Model):
   view_id = ndb.StringProperty()

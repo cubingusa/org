@@ -7,9 +7,10 @@ import { AdminHeader } from "../admin/header";
 
 export function MailerIndex() {
   const { wcif } = useRouteLoaderData("competition") as CompetitionData;
-  const { templates } = useRouteLoaderData("mailer") as MailerData;
+  const { templates, settings } = useRouteLoaderData("mailer") as MailerData;
   const [renderedTemplates, setRenderedTemplates] = useState(templates);
   const [deleteId, setDeleteId] = useState("");
+  const [spinning, setSpinning] = useState(false);
   const navigate = useNavigate();
 
   const onDeleteClick = function (e: React.MouseEvent, templateId: string) {
@@ -27,9 +28,64 @@ export function MailerIndex() {
     navigate(".", { replace: true });
   };
 
+  const setSenderAddress = function (newAddress: string) {
+    settings.senderAddress = newAddress;
+  };
+  const setSenderName = function (newName: string) {
+    settings.senderName = newName;
+  };
+  const submitSettings = async function () {
+    event.preventDefault();
+    setSpinning(true);
+    await fetch(`/staff_api/${wcif.id}/mailer_settings`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(settings),
+    });
+    setSpinning(false);
+  };
+
   return (
     <>
       <AdminHeader />
+      <h3>Email Settings</h3>
+      <div className="row">
+        <div className="col-4 mb-3">
+          <label htmlFor="email-title" className="form-label">
+            Email Sender Address
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="email-title"
+            defaultValue={settings.senderAddress}
+            onChange={(e) => setSenderAddress(e.target.value)}
+          />
+        </div>
+        <div className="col-4 mb-3">
+          <label htmlFor="email-title" className="form-label">
+            Email Sender Name
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="email-title"
+            defaultValue={settings.senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+          />
+        </div>
+        <div className="col-4">
+          <button
+            className="btn btn-primary mb-3"
+            type="submit"
+            onClick={submitSettings}
+          >
+            Save
+          </button>
+          {spinning ? <>Saving...</> : null}
+        </div>
+      </div>
+      <br />
       <h3>Email Templates</h3>
       <ul className="list-group">
         {renderedTemplates.map((template) => (

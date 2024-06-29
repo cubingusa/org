@@ -6,6 +6,12 @@ export interface MailTemplate {
   html: string;
 }
 
+interface MailerSettings {
+  senderAddress: string;
+  senderName: string;
+}
+
 export interface MailerData {
   templates: MailTemplate[];
+  settings: MailerSettings;
 }

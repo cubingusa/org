@@ -310,3 +310,27 @@ def delete_template(competition_id, template_id):
       return {}, 401
     template.key.delete()
     return {}, 200
+
+@bp.route('/staff_api/<competition_id>/mailer_settings', methods=['GET'])
+def get_mailer_settings(competition_id):
+  with client.context():
+    settings = ApplicationSettings.get_by_id(competition_id)
+    if not settings:
+      return {}, 404
+    return {
+      'senderAddress': settings.sender_address,
+      'senderName': settings.sender_name,
+    }, 200
+
+@bp.route('/staff_api/<competition_id>/mailer_settings', methods=['PUT'])
+def put_mailer_settings(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    settings = ApplicationSettings(id=competition_id)
+    settings.sender_address = request.json['senderAddress']
+    settings.sender_name = request.json['senderName']
+    settings.put()
+    return {}, 200
