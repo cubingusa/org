@@ -3,6 +3,7 @@ from google.cloud import ndb
 import datetime
 import logging
 import requests
+import uuid
 
 from app.cache import cache
 from app.lib import auth, common
@@ -252,6 +253,12 @@ def get_views(competition_id):
         out += [{key: view.details[key] for key in ['id', 'title', 'visibleTo', 'isPublic']}]
     return out, 200
 
+def template_to_frontend(template):
+  return {
+    "id": template.key.id(),
+    "title": template.title,
+  }
+
 @bp.route('/staff_api/<competition_id>/template', methods=['GET'])
 def get_templates(competition_id):
   with client.context():
@@ -259,10 +266,8 @@ def get_templates(competition_id):
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
-    out = [{
-      "id": template.key.id(),
-      "title": template.title,
-    } for template in MailTemplate.query(MailTemplate.competition == ndb.Key(Competition, competition_id)).iter()]
+    out = [template_to_frontend(template) for template in
+           MailTemplate.query(MailTemplate.competition == ndb.Key(Competition, competition_id)).iter()]
     return out, 200
 
 @bp.route('/staff_api/<competition_id>/template', methods=['PUT'], defaults={'template_id': None})
@@ -279,11 +284,11 @@ def put_template(competition_id, template_id):
       if template.competition.id() != competition_id:
         return {}, 401
     else:
-      template = MailTemplate()
+      template = MailTemplate(id=uuid.uuid4().hex)
       template.competition = ndb.Key(Competition, competition_id)
     template.title = req['title']
     template.put()
-    return out, 200
+    return template_to_frontend(template), 200
 
 @bp.route('/staff_api/<competition_id>/template/<template_id>', methods=['DELETE'])
 def delete_template(competition_id, template_id):
@@ -292,5 +297,10 @@ def delete_template(competition_id, template_id):
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
-    ndb.Key(MailTemplate, MailTemplate.Key(competition_id, template_id)).delete()
+    template = MailTemplate.get_by_id(template_id)
+    if not template:
+      return {}, 404
+    if template.competition.id() != competition_id:
+      return {}, 401
+    template.key.delete()
     return {}, 200

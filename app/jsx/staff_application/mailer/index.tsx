@@ -8,6 +8,7 @@ import { AdminHeader } from "../admin/header";
 export function MailerIndex() {
   const { wcif } = useRouteLoaderData("competition") as CompetitionData;
   const { templates } = useRouteLoaderData("mailer") as MailerData;
+  const [renderedTemplates, setRenderedTemplates] = useState(templates);
   const [deleteId, setDeleteId] = useState("");
   const navigate = useNavigate();
 
@@ -20,6 +21,9 @@ export function MailerIndex() {
     await fetch(`/staff_api/${wcif.id}/template/${deleteId}`, {
       method: "DELETE",
     });
+    setRenderedTemplates(
+      renderedTemplates.filter((template) => template.id !== deleteId),
+    );
     navigate(".", { replace: true });
   };
 
@@ -28,7 +32,7 @@ export function MailerIndex() {
       <AdminHeader />
       <h3>Email Templates</h3>
       <ul className="list-group">
-        {templates.map((template) => (
+        {renderedTemplates.map((template) => (
           <Link
             key={template.id}
             to={`/staff/${wcif.id}/mailer/template/${template.id}`}
@@ -84,7 +88,7 @@ export function MailerIndex() {
         </div>
       </div>
       <div>
-        <Link to="new" relative="path">
+        <Link to="template/new" relative="path">
           <button type="button" className="btn btn-success">
             <span className="material-symbols-outlined">add</span>
             New template

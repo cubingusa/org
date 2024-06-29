@@ -1,4 +1,5 @@
 import { MailTemplateLoader } from "./loader";
+import { MailerEditor } from "./editor";
 import { MailerIndex } from "./index";
 
 export function MailerRoutes() {
@@ -10,6 +11,14 @@ export function MailerRoutes() {
       {
         index: true,
         element: <MailerIndex />,
+      },
+      {
+        path: "template/new",
+        element: <MailerEditor />,
+      },
+      {
+        path: "template/:template_id",
+        element: <MailerEditor />,
       },
     ],
   };
