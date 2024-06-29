@@ -1,7 +1,8 @@
-import { Question, QuestionType } from "./types";
+import { Question, QuestionType, QuestionBase } from "./types";
 import { SubmittedQuestion } from "../types/personal_application_data";
 import { Trait } from "../trait/api";
 import { TraitType } from "../trait/serialized";
+import { TraitExtras } from "../trait/extras";
 
 export interface QuestionDisplayProps {
   question: Question;
@@ -18,8 +19,9 @@ export abstract class QuestionApi {
   abstract editor(props: QuestionEditorProps): JSX.Element;
   abstract form(props: QuestionDisplayProps): JSX.Element;
   abstract getTraitType(): TraitType;
-  getTraitExtraData(): any {
-    return null;
+  getTraitExtraData(): TraitExtras {
+    return {};
   }
   abstract type(): QuestionType;
+  abstract defaultParams(base: QuestionBase): Question;
 }

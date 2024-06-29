@@ -1,5 +1,5 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, AcknowledgementQuestion } from "./types";
+import { QuestionType, AcknowledgementQuestion, QuestionBase } from "./types";
 import { TraitType } from "../trait/serialized";
 
 export class AcknowledgementQuestionApi extends QuestionApi {
@@ -27,6 +27,12 @@ export class AcknowledgementQuestionApi extends QuestionApi {
         onAnswerChange={props.onAnswerChange}
       />
     );
+  }
+
+  defaultParams(base: QuestionBase): AcknowledgementQuestion {
+    return Object.assign(base as AcknowledgementQuestion, {
+      questionType: QuestionType.Acknowledgement,
+    });
   }
 }
 

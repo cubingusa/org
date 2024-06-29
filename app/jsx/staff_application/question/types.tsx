@@ -4,6 +4,14 @@ export enum QuestionType {
   YesNo = "yes_no",
   MultipleChoice = "multiple_choice",
   Acknowledgement = "acknowledgement",
+  DateTime = "date_time",
+}
+
+export interface DateTimeQuestion extends QuestionBase {
+  questionType: QuestionType.DateTime;
+  userLocalTime: boolean;
+  startTimeSeconds: number;
+  endTimeSeconds: number;
 }
 
 export interface AcknowledgementQuestion extends QuestionBase {
@@ -35,7 +43,7 @@ export interface NullQuestion extends QuestionBase {
   questionType: QuestionType.Null;
 }
 
-interface QuestionBase {
+export interface QuestionBase {
   // Unique within a form.
   id: number;
 
@@ -48,4 +56,5 @@ export type Question =
   | TextQuestion
   | NullQuestion
   | MultipleChoiceQuestion
-  | AcknowledgementQuestion;
+  | AcknowledgementQuestion
+  | DateTimeQuestion;

@@ -1,5 +1,5 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType } from "./types";
+import { QuestionType, NullQuestion, QuestionBase } from "./types";
 import { TraitType } from "../trait/serialized";
 
 export class NullQuestionApi extends QuestionApi {
@@ -21,5 +21,11 @@ export class NullQuestionApi extends QuestionApi {
 
   form(props: QuestionDisplayProps): JSX.Element {
     return <></>;
+  }
+
+  defaultParams(base: QuestionBase): NullQuestion {
+    return Object.assign(base as NullQuestion, {
+      questionType: QuestionType.Null,
+    });
   }
 }

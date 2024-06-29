@@ -1,5 +1,5 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, YesNoQuestion } from "./types";
+import { QuestionType, YesNoQuestion, QuestionBase } from "./types";
 import { TraitType } from "../trait/serialized";
 
 export class YesNoQuestionApi extends QuestionApi {
@@ -27,6 +27,12 @@ export class YesNoQuestionApi extends QuestionApi {
         onAnswerChange={props.onAnswerChange}
       />
     );
+  }
+
+  defaultParams(base: QuestionBase): YesNoQuestion {
+    return Object.assign(base as YesNoQuestion, {
+      questionType: QuestionType.YesNo,
+    });
   }
 }
 

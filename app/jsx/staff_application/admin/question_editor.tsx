@@ -17,8 +17,15 @@ export function QuestionEditor(props: QuestionEditorProps) {
   const question = props.question;
   const [questionType, setQuestionType] = useState(question.questionType || "");
 
-  const updateQuestionType = function (newType: string) {
-    Object.assign(question, { questionType: newType });
+  const updateQuestionType = function (newType: QuestionType) {
+    Object.assign(
+      question,
+      getApi(newType).defaultParams({
+        id: question.id,
+        name: question.name,
+        required: question.required,
+      }),
+    );
     setQuestionType(newType);
   };
 
@@ -55,7 +62,7 @@ export function QuestionEditor(props: QuestionEditorProps) {
         <select
           className="form-select"
           value={questionType}
-          onChange={(e) => updateQuestionType(e.target.value)}
+          onChange={(e) => updateQuestionType(e.target.value as QuestionType)}
         >
           {allQuestionApis().map((api) => {
             return (

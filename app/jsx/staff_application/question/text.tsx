@@ -1,5 +1,10 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, TextQuestion, TextQuestionType } from "./types";
+import {
+  QuestionType,
+  TextQuestion,
+  TextQuestionType,
+  QuestionBase,
+} from "./types";
 import { TraitType } from "../trait/serialized";
 
 export class TextQuestionApi extends QuestionApi {
@@ -27,6 +32,13 @@ export class TextQuestionApi extends QuestionApi {
         onAnswerChange={props.onAnswerChange}
       />
     );
+  }
+
+  defaultParams(base: QuestionBase): TextQuestion {
+    return Object.assign(base as TextQuestion, {
+      questionType: QuestionType.Text,
+      textQuestionType: TextQuestionType.Short,
+    });
   }
 }
 
