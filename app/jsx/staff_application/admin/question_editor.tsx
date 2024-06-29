@@ -12,7 +12,7 @@ import { getApi, allQuestionApis } from "../question/questions";
 
 interface QuestionEditorProps {
   question: Question;
-  deleteQuestion: Function;
+  deleteQuestion: (question: Question) => void;
 }
 
 export function QuestionEditor(props: QuestionEditorProps) {
@@ -75,6 +75,15 @@ export function QuestionEditor(props: QuestionEditorProps) {
             );
           })}
         </select>
+      </div>
+      <div className="col">
+        <button
+          type="button"
+          className="btn btn-danger"
+          onClick={(e) => props.deleteQuestion(question)}
+        >
+          <span className="material-symbols-outlined">delete</span>
+        </button>
       </div>
     </div>
   );
