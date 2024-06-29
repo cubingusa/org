@@ -19,8 +19,6 @@ export function MailerEditor({ mode }: MailerEditorParams) {
   const { wcif } = useRouteLoaderData("competition") as CompetitionData;
   const { templates } = useRouteLoaderData("mailer") as MailerData;
   const { templateId, competitionId } = useParams();
-  console.log(templates);
-  console.log(templateId);
   const [spinning, setSpinning] = useState(false);
   const navigate = useNavigate();
   let template: MailTemplate;
