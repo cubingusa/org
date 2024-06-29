@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { QuestionType, YesNoQuestion, QuestionBase } from "./types";
 import { TraitType } from "../trait/serialized";
@@ -38,10 +39,12 @@ export class YesNoQuestionApi extends QuestionApi {
 
 function YesNoQuestionDisplay(props: QuestionDisplayProps) {
   let question = props.question as YesNoQuestion;
+  const [answer, setAnswer] = useState(props.myQuestion.booleanAnswer);
 
   const updateAnswer = function (newAnswer: boolean) {
     props.myQuestion.booleanAnswer = newAnswer;
     props.onAnswerChange(props.myQuestion);
+    setAnswer(newAnswer);
   };
 
   return (
@@ -57,8 +60,8 @@ function YesNoQuestionDisplay(props: QuestionDisplayProps) {
             className="form-check-input"
             type="radio"
             id={"yes-no-input-" + question.id + "-yes"}
-            defaultChecked={props.myQuestion.booleanAnswer === true}
-            onClick={(e) => updateAnswer(true)}
+            checked={answer === true}
+            onChange={(e) => updateAnswer(true)}
           />
           <label
             className="form-check-label"
@@ -72,8 +75,8 @@ function YesNoQuestionDisplay(props: QuestionDisplayProps) {
             className="form-check-input"
             type="radio"
             id={"yes-no-input-" + question.id + "-no"}
-            defaultChecked={props.myQuestion.booleanAnswer === false}
-            onClick={(e) => updateAnswer(false)}
+            checked={answer === false}
+            onChange={(e) => updateAnswer(false)}
           />
           <label
             className="form-check-label"
