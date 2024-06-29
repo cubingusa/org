@@ -35,3 +35,7 @@ class SavedView(ndb.Model):
   @staticmethod
   def Key(competition_id, view_id):
     return '%s_%s' % (competition_id, view_id)
+
+class MailTemplate(ndb.Model):
+  competition = ndb.KeyProperty(kind=Competition)
+  title = ndb.StringProperty()

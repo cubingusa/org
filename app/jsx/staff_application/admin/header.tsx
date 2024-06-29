@@ -42,6 +42,14 @@ export function AdminHeader() {
           </>
         ),
       },
+      {
+        path: "/mailer",
+        elt: (
+          <>
+            <span className="material-symbols-outlined">mail</span> Mailer
+          </>
+        ),
+      },
     ];
     return (
       <>

@@ -6,7 +6,7 @@ import requests
 
 from app.cache import cache
 from app.lib import auth, common
-from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView
+from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView, MailTemplate
 from app.models.user import Roles, User
 from app.models.wca.competition import Competition
 
@@ -251,3 +251,46 @@ def get_views(competition_id):
       if admin or view.details['isPublic']:
         out += [{key: view.details[key] for key in ['id', 'title', 'visibleTo', 'isPublic']}]
     return out, 200
+
+@bp.route('/staff_api/<competition_id>/template', methods=['GET'])
+def get_templates(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    out = [{
+      "id": template.key.id(),
+      "title": template.title,
+    } for template in MailTemplate.query(MailTemplate.competition == ndb.Key(Competition, competition_id)).iter()]
+    return out, 200
+
+@bp.route('/staff_api/<competition_id>/template', methods=['PUT'], defaults={'template_id': None})
+@bp.route('/staff_api/<competition_id>/template/<template_id>', methods=['PUT'])
+def put_template(competition_id, template_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    req = request.json
+    if template_id:
+      template = MailTemplate.get_by_id(template_id)
+      if template.competition.id() != competition_id:
+        return {}, 401
+    else:
+      template = MailTemplate()
+      template.competition = ndb.Key(Competition, competition_id)
+    template.title = req['title']
+    template.put()
+    return out, 200
+
+@bp.route('/staff_api/<competition_id>/template/<template_id>', methods=['DELETE'])
+def delete_template(competition_id, template_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    ndb.Key(MailTemplate, MailTemplate.Key(competition_id, template_id)).delete()
+    return {}, 200
