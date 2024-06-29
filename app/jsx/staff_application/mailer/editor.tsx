@@ -16,6 +16,7 @@ interface MailerEditorParams {
   mode: "clone" | "edit" | "new";
 }
 export function MailerEditor({ mode }: MailerEditorParams) {
+  const { wcif } = useRouteLoaderData("competition") as CompetitionData;
   const { templates } = useRouteLoaderData("mailer") as MailerData;
   const { templateId, competitionId } = useParams();
   console.log(templates);
@@ -48,6 +49,7 @@ export function MailerEditor({ mode }: MailerEditorParams) {
       template = {
         id: "",
         title: "New Email Template",
+        subjectLine: `[${wcif.shortName}]`,
         design: {},
         html: "",
       };
@@ -57,6 +59,10 @@ export function MailerEditor({ mode }: MailerEditorParams) {
 
   const setTitle = function (newTitle: string) {
     template.title = newTitle;
+  };
+
+  const setSubjectLine = function (newSubjectLine: string) {
+    template.subjectLine = newSubjectLine;
   };
 
   const submit = async function () {
@@ -98,7 +104,7 @@ export function MailerEditor({ mode }: MailerEditorParams) {
       <h3>Email Template Editor</h3>
       <div className="mb-3">
         <label htmlFor="email-title" className="form-label">
-          Email Title
+          Email Name (only visible to admins)
         </label>
         <input
           type="text"
@@ -106,6 +112,18 @@ export function MailerEditor({ mode }: MailerEditorParams) {
           id="email-title"
           defaultValue={template.title}
           onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
+      <div className="mb-3">
+        <label htmlFor="email-title" className="form-label">
+          Subject Line
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="email-title"
+          defaultValue={template.subjectLine}
+          onChange={(e) => setSubjectLine(e.target.value)}
         />
       </div>
       <EmailEditor ref={emailEditorRef} onReady={onReady} />

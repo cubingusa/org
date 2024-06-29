@@ -259,6 +259,7 @@ def template_to_frontend(template):
     "title": template.title,
     "design": template.design,
     "html": template.html,
+    "subjectLine": template.subject_line,
   }
 
 @bp.route('/staff_api/<competition_id>/template', methods=['GET'])
@@ -289,6 +290,7 @@ def put_template(competition_id, template_id):
       template = MailTemplate(id=uuid.uuid4().hex)
       template.competition = ndb.Key(Competition, competition_id)
     template.title = req['title']
+    template.subject_line = req['subjectLine']
     template.design = req['design']
     template.html = req['html']
     template.put()
