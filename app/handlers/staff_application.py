@@ -128,7 +128,7 @@ def put_settings(competition_id):
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
-    settings = ApplicationSettings(id=competition_id)
+    settings = ApplicationSettings.get_by_id(competition_id) or ApplicationSettings(id=competition_id)
     settings.details = request.json
     settings.put()
     return {}, 200
