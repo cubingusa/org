@@ -1,21 +1,37 @@
 import { useState } from "react";
 import { useRouteLoaderData, Link, useNavigate } from "react-router-dom";
+import { Toast } from "react-bootstrap";
 
 import { CompetitionData } from "../types/competition_data";
 import { MailerData } from "./types";
 import { AdminHeader } from "../admin/header";
 
 export function MailerIndex() {
-  const { wcif } = useRouteLoaderData("competition") as CompetitionData;
+  const { wcif, user } = useRouteLoaderData("competition") as CompetitionData;
   const { templates, settings } = useRouteLoaderData("mailer") as MailerData;
   const [renderedTemplates, setRenderedTemplates] = useState(templates);
   const [deleteId, setDeleteId] = useState("");
   const [spinning, setSpinning] = useState(false);
+  const [showEmailToast, setShowEmailToast] = useState(false);
   const navigate = useNavigate();
 
-  const onDeleteClick = function (e: React.MouseEvent, templateId: string) {
+  const onDeleteClick = function (templateId: string) {
     event.preventDefault();
     setDeleteId(templateId);
+  };
+
+  const emailMe = async function (templateId: string) {
+    event.preventDefault();
+    await fetch(`/staff_api/${wcif.id}/send_email`, {
+      method: "POST",
+      body: JSON.stringify({
+        templateId,
+        userIds: [user.id],
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    setShowEmailToast(true);
+    setTimeout(() => setShowEmailToast(false), 5000);
   };
 
   const deleteTemplate = async function () {
@@ -116,12 +132,19 @@ export function MailerIndex() {
                     </button>
                     <button
                       className="btn btn-danger"
-                      onClick={(e) => onDeleteClick(e, template.id)}
+                      onClick={(e) => onDeleteClick(template.id)}
                       data-bs-toggle="modal"
                       data-bs-target="#delete-modal"
                     >
                       <span className="material-symbols-outlined">delete</span>{" "}
                       Delete
+                    </button>
+                    <button
+                      className="btn btn-success"
+                      onClick={(e) => emailMe(template.id)}
+                    >
+                      <span className="material-symbols-outlined">email</span>{" "}
+                      Send to me
                     </button>
                   </div>
                 </div>
@@ -164,6 +187,12 @@ export function MailerIndex() {
           </button>
         </Link>
       </div>
+      <Toast
+        show={showEmailToast}
+        className="position-fixed bottom-0 end-0 p-3"
+      >
+        <Toast.Body>Email sent!</Toast.Body>
+      </Toast>
     </>
   );
 }

@@ -7,6 +7,7 @@ import uuid
 
 from app.cache import cache
 from app.lib import auth, common
+from app.lib.staff_email import send_email
 from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView, MailTemplate
 from app.models.user import Roles, User
 from app.models.wca.competition import Competition
@@ -341,4 +342,22 @@ def put_mailer_settings(competition_id):
     settings.sender_address = request.json['senderAddress']
     settings.sender_name = request.json['senderName']
     settings.put()
+    return {}, 200
+
+@bp.route('/staff_api/<competition_id>/send_email', methods=['POST'])
+def post_send_email(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    settings = ApplicationSettings.get_by_id(competition_id)
+    req = request.json
+    template = MailTemplate.get_by_id(req['templateId'])
+    if template.competition.id() != competition_id:
+      return {}, 401
+    users = ndb.get_multi([ndb.Key(User, user_id) for user_id in req['userIds']])
+    for user in users:
+      if user:
+        send_email(user.email, user.name, template, settings)
     return {}, 200
