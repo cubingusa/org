@@ -22,9 +22,15 @@ import {
   StringFilterType,
   defaultStringParams,
 } from "../filter/types/string";
+import {
+  DateTimeFilterParams,
+  DateTimeFilterType,
+  defaultDateTimeParams,
+} from "../filter/types/date_time";
 import { defaultNullParams } from "../filter/types/null";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { StringFilterSelector } from "../filter/selector/string";
+import { DateTimeFilterSelector } from "../filter/selector/date_time";
 
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
@@ -114,6 +120,8 @@ export class FormAnswerComputer extends TraitComputer {
         return defaultStringParams(this.params);
       case TraitType.BooleanTrait:
         return defaultBooleanParams(this.params);
+      case TraitType.DateTimeTrait:
+        return defaultDateTimeParams(this.params);
     }
   }
 
@@ -194,6 +202,14 @@ function FormAnswerFilterSelector({
       return (
         <BooleanFilterSelector
           params={params as BooleanFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      );
+    case TraitType.DateTimeTrait:
+      return (
+        <DateTimeFilterSelector
+          params={params as DateTimeFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
         />
