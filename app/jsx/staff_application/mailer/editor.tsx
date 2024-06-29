@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   useRouteLoaderData,
   Link,
   useParams,
   useNavigate,
 } from "react-router-dom";
+import EmailEditor, { EditorRef, EmailEditorProps } from "react-email-editor";
 
 import { CompetitionData } from "../types/competition_data";
 import { MailerData, MailTemplate } from "./types";
@@ -17,11 +18,15 @@ export function MailerEditor() {
   let template = templates.find((t) => t.id == templateId);
   const isNew = template === undefined;
   const navigate = useNavigate();
+  const emailEditorRef = useRef<EditorRef>(null);
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
   if (isNew) {
     template = {
       id: "",
       title: "New Email Template",
+      design: {},
+      html: "",
     };
   }
 
@@ -35,18 +40,31 @@ export function MailerEditor() {
     const url = isNew
       ? `/staff_api/${competitionId}/template`
       : `/staff_api/${competitionId}/template/${templateId}`;
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(template),
+    const unlayer = emailEditorRef.current?.editor;
+    unlayer?.exportHtml(async (data) => {
+      const { design, html } = data;
+      template.design = design;
+      template.html = html;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(template),
+      });
+      setSpinning(false);
+      if (response.status == 200) {
+        const body = (await response.json()) as MailTemplate;
+        window.location.replace(
+          `/staff/${competitionId}/mailer/template/${body.id}`,
+        );
+      }
     });
-    setSpinning(false);
-    if (response.status == 200) {
-      const body = (await response.json()) as MailTemplate;
-      window.location.replace(
-        `/staff/${competitionId}/mailer/template/${body.id}`,
-      );
+  };
+
+  const onReady: EmailEditorProps["onReady"] = (unlayer) => {
+    if (!isNew) {
+      unlayer.loadDesign(template.design);
     }
+    setSubmitDisabled(false);
   };
 
   return (
@@ -65,7 +83,13 @@ export function MailerEditor() {
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <button className="btn btn-primary mb-3" type="submit" onClick={submit}>
+      <EmailEditor ref={emailEditorRef} onReady={onReady} />
+      <button
+        className="btn btn-primary mb-3"
+        type="submit"
+        disabled={submitDisabled}
+        onClick={submit}
+      >
         Save
       </button>
     </>

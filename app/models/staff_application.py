@@ -39,3 +39,5 @@ class SavedView(ndb.Model):
 class MailTemplate(ndb.Model):
   competition = ndb.KeyProperty(kind=Competition)
   title = ndb.StringProperty()
+  design = ndb.JsonProperty()
+  html = ndb.TextProperty()

@@ -17,7 +17,7 @@ export function MailerRoutes() {
         element: <MailerEditor />,
       },
       {
-        path: "template/:template_id",
+        path: "template/:templateId",
         element: <MailerEditor />,
       },
     ],
