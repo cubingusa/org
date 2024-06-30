@@ -151,6 +151,15 @@ def save_form(competition_id, form_id):
     form.updated_at = datetime.datetime.now()
     form.details = request.json
     form.put()
+    for hook in MailHook.query(ndb.AND(MailHook.competition == form.competition,
+                                       MailHook.hook_type == "FormSubmitted",
+                                       MailHook.form_id == form_id)):
+      settings = ApplicationSettings.get_by_id(competition_id)
+      template = hook.template.get()
+      if hook.recipient == 'User':
+        send_email(user.email, user.name, template, settings)
+      else:
+        send_email(hook.recipient, hook.recipient, template, settings)
     return {}, 200
 
 @bp.route('/staff_api/<competition_id>/my_forms', methods=['GET'])
@@ -210,6 +219,18 @@ def post_properties(competition_id):
       elif propertyId in props:
         del props[propertyId]
     ndb.put_multi(all_user_settings)
+    for hook in MailHook.query(ndb.AND(MailHook.competition == form.competition,
+                                       MailHook.hook_type == "PropertyAssigned",
+                                       MailHook.property_id == propertyId,
+                                       MailHook.value_id == valueId)):
+      settings = ApplicationSettings.get_by_id(competition_id)
+      template = hook.template.get()
+      if hook.recipient == 'User':
+        for user in ndb.get_multi([ndb.Key(User, user_id) for user_id in personIds]):
+          if user:
+            send_email(user.email, user.name, template, settings)
+      else:
+        send_email(hook.recipient, hook.recipient, template, settings)
     return {}, 200
 
 @bp.route('/staff_api/<competition_id>/view/<view_id>', methods=['PUT'])

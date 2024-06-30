@@ -3,6 +3,9 @@ from mailjet_rest import Client
 from app.lib.secrets import get_secret
 
 def send_email(user_email, user_name, template, settings):
+  if not template:
+    logging.info('Template is not defined.')
+    return
   if not get_secret('MAILJET_API_KEY') or not get_secret('MAILJET_API_SECRET'):
     logging.info('Mailjet API keys not available, not sending email to ' + user_email)
     return
