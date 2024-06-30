@@ -157,9 +157,9 @@ def save_form(competition_id, form_id):
       settings = ApplicationSettings.get_by_id(competition_id)
       template = hook.template.get()
       if hook.recipient == 'User':
-        send_email(user.email, user.name, template, settings)
+        send_email(user.email, user.name, template, settings, {'applicant': user})
       else:
-        send_email(hook.recipient, hook.recipient, template, settings)
+        send_email(hook.recipient, hook.recipient, template, settings, {'applicant': user})
     return {}, 200
 
 @bp.route('/staff_api/<competition_id>/my_forms', methods=['GET'])
@@ -228,9 +228,9 @@ def post_properties(competition_id):
       if hook.recipient == 'User':
         for user in ndb.get_multi([ndb.Key(User, user_id) for user_id in personIds]):
           if user:
-            send_email(user.email, user.name, template, settings)
+            send_email(user.email, user.name, template, settings, {'applicant': user})
       else:
-        send_email(hook.recipient, hook.recipient, template, settings)
+        send_email(hook.recipient, hook.recipient, template, settings, {'applicant': user})
     return {}, 200
 
 @bp.route('/staff_api/<competition_id>/view/<view_id>', methods=['PUT'])
@@ -380,7 +380,7 @@ def post_send_email(competition_id):
     users = ndb.get_multi([ndb.Key(User, user_id) for user_id in req['userIds']])
     for user in users:
       if user:
-        send_email(user.email, user.name, template, settings)
+        send_email(user.email, user.name, template, settings, {'applicant': user})
     return {}, 200
 
 def hook_to_frontend(hook):

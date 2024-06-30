@@ -1,8 +1,11 @@
 import logging
+import re
+
 from mailjet_rest import Client
 from app.lib.secrets import get_secret
+from app.models.user import User
 
-def send_email(user_email, user_name, template, settings):
+def send_email(user_email, user_name, template, settings, substitutions):
   if not template:
     logging.info('Template is not defined.')
     return
@@ -14,7 +17,13 @@ def send_email(user_email, user_name, template, settings):
     return
   mailjet = Client(auth=(get_secret('MAILJET_API_KEY'), get_secret('MAILJET_API_SECRET')),
                    version='v3.1')
-  # TODO: substitute parameters.
+  html = template.html
+  subject = template.subject_line
+  for key, obj in substitutions.items():
+    if isinstance(obj, User):
+      html = re.sub('{{' + key + '.name}}', obj.name, html)
+      subject = re.sub('{{' + key + '.name}}', obj.name, subject)
+
   data = {
     'Messages': [
       {
@@ -29,8 +38,8 @@ def send_email(user_email, user_name, template, settings):
             'Name': user_name,
           },
         ],
-        'Subject': template.subject_line,
-        'HtmlPart': template.html,
+        'Subject': subject,
+        'HtmlPart': html,
       }
     ]
   }

@@ -125,6 +125,10 @@ export function MailerEditor({ mode }: MailerEditorParams) {
           onChange={(e) => setSubjectLine(e.target.value)}
         />
       </div>
+      <div>
+        You can use &#123;&#123;applicant.name&#125;&#125; to print the name of
+        the applicant.
+      </div>
       <EmailEditor ref={emailEditorRef} onReady={onReady} />
       <button
         className="btn btn-primary mb-3"
