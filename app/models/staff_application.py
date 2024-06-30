@@ -44,3 +44,16 @@ class MailTemplate(ndb.Model):
   subject_line = ndb.StringProperty()
   design = ndb.JsonProperty()
   html = ndb.TextProperty()
+
+class MailHook(ndb.Model):
+  competition = ndb.KeyProperty(kind=Competition)
+  # Values: FormSubmitted, PropertyAssigned.
+  hook_type = ndb.StringProperty()
+  template = ndb.KeyProperty(kind=MailTemplate)
+  # For FormSubmitted..
+  form_id = ndb.IntegerProperty()
+  # For PropertyAssigned.
+  property_id = ndb.IntegerProperty()
+  property_value = ndb.IntegerProperty()
+  # Either "User" or an email address.
+  recipient = ndb.StringProperty()

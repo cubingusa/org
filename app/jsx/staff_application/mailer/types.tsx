@@ -1,3 +1,24 @@
+export type HookType = "FormSubmitted" | "PropertyAssigned";
+
+interface MailHookBase {
+  id: string;
+  templateId: string;
+  recipient: string;
+}
+
+export interface FormSubmittedMailHook extends MailHookBase {
+  type: "FormSubmitted";
+  formId: number;
+}
+
+export interface PropertyAssignedMailHook extends MailHookBase {
+  type: "PropertyAssigned";
+  propertyId: number;
+  propertyValue: number;
+}
+
+export type MailHook = FormSubmittedMailHook | PropertyAssignedMailHook;
+
 export interface MailTemplate {
   id: string;
   title: string;
@@ -12,5 +33,6 @@ interface MailerSettings {
 }
 
 export interface MailerData {
-  settings: MailerSettings;
+  mailerSettings: MailerSettings;
+  hooks: MailHook[];
 }

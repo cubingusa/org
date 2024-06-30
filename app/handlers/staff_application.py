@@ -8,7 +8,7 @@ import uuid
 from app.cache import cache
 from app.lib import auth, common
 from app.lib.staff_email import send_email
-from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView, MailTemplate
+from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView, MailTemplate, MailHook
 from app.models.user import Roles, User
 from app.models.wca.competition import Competition
 
@@ -360,4 +360,71 @@ def post_send_email(competition_id):
     for user in users:
       if user:
         send_email(user.email, user.name, template, settings)
+    return {}, 200
+
+def hook_to_frontend(hook):
+  out = {
+    'id': hook.key.id(),
+    'type': hook.hook_type,
+    'templateId': hook.template.id()
+  }
+  if hook.hook_type == 'FormSubmitted':
+    out['formId'] = hook.form_id
+  if hook.hook_type == 'PropertyAssigned':
+    out['propertyId'] = hook.property_id
+    out['valueId'] = hook.value_id
+  out['recipient'] = hook.recipient
+  return out
+
+@bp.route('/staff_api/<competition_id>/hook', methods=['GET'])
+def get_hooks(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    out = [hook_to_frontend(hook) for hook in
+           MailHook.query(MailHook.competition == ndb.Key(Competition, competition_id)).iter()]
+    return out, 200
+
+@bp.route('/staff_api/<competition_id>/hook', methods=['PUT'], defaults={'hook_id': None})
+@bp.route('/staff_api/<competition_id>/hook/<hook_id>', methods=['PUT'])
+def put_hook(competition_id, hook_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    req = request.json
+    if hook_id:
+      hook = MailHook.get_by_id(hook_id)
+      if hook.competition.id() != competition_id:
+        return {}, 401
+    else:
+      hook = MailHook(id=uuid.uuid4().hex)
+      hook.competition = ndb.Key(Competition, competition_id)
+    hook.template = ndb.Key(MailTemplate, req['templateId'])
+    hook.hook_type = req['type']
+    hook.recipient = req['recipient']
+    if hook.hook_type == 'FormSubmitted':
+      hook.form_id = req['formId']
+    if hook.hook_type == 'PropertyAssigned':
+      hook.property_id = req['propertyId']
+      hook.value_id = req['valueId']
+    hook.put()
+    return hook_to_frontend(hook), 200
+
+@bp.route('/staff_api/<competition_id>/hook/<hook_id>', methods=['DELETE'])
+def delete_hook(competition_id, hook_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    hook = MailHook.get_by_id(hook_id)
+    if not hook:
+      return {}, 404
+    if hook.competition.id() != competition_id:
+      return {}, 401
+    hook.key.delete()
     return {}, 200
