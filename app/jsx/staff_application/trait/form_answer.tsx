@@ -32,11 +32,17 @@ import {
   defaultNumberEnumParams,
   EnumFilterValue,
 } from "../filter/types/enum";
+import {
+  EventListFilterParams,
+  defaultEventListParams,
+  EventListFilterType,
+} from "../filter/types/event_list";
 import { defaultNullParams } from "../filter/types/null";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { StringFilterSelector } from "../filter/selector/string";
 import { DateTimeFilterSelector } from "../filter/selector/date_time";
 import { NumberEnumFilterSelector } from "../filter/selector/enum";
+import { EventListFilterSelector } from "../filter/selector/event_list";
 
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
@@ -46,6 +52,7 @@ import {
   NullTrait,
   DateTimeTrait,
   NumberEnumTrait,
+  EventListTrait,
 } from "./traits";
 import { TraitType } from "./serialized";
 import { TraitExtras, EnumExtras } from "./extras";
@@ -98,6 +105,10 @@ export class FormAnswerComputer extends TraitComputer {
           val: myQuestion === undefined ? null : myQuestion.numberAnswer,
           extras: api.getTraitExtraData(question) as EnumExtras<number>,
         });
+      case TraitType.EventListTrait:
+        return new EventListTrait({
+          val: myQuestion === undefined ? [] : myQuestion.textListAnswer,
+        });
     }
   }
 
@@ -147,6 +158,8 @@ export class FormAnswerComputer extends TraitComputer {
           extras.push({ key, value });
         });
         return defaultNumberEnumParams(this.params, extras);
+      case TraitType.EventListTrait:
+        return defaultEventListParams(this.params, this.wcif);
     }
   }
 
@@ -248,6 +261,14 @@ function FormAnswerFilterSelector({
           values={
             (api.getTraitExtraData(question) as EnumExtras<number>).allValues
           }
+        />
+      );
+    case TraitType.EventListTrait:
+      return (
+        <EventListFilterSelector
+          params={params as EventListFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
         />
       );
   }

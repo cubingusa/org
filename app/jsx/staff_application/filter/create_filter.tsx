@@ -9,6 +9,7 @@ import { NumberFilter } from "./number";
 import { StringFilter } from "./string";
 import { StringEnumFilter, NumberEnumFilter } from "./enum";
 import { DateTimeFilter } from "./date_time";
+import { EventListFilter } from "./event_list";
 
 export function createFilter(
   params: FilterParams,
@@ -29,5 +30,7 @@ export function createFilter(
       return new StringEnumFilter(paramsClone, settings, wcif);
     case FilterType.NumberEnumFilter:
       return new NumberEnumFilter(paramsClone, settings, wcif);
+    case FilterType.EventListFilter:
+      return new EventListFilter(paramsClone, settings, wcif);
   }
 }

@@ -8,6 +8,7 @@ export enum FilterType {
   DateTimeFilter = "date_time",
   NumberEnumFilter = "number_enum",
   StringEnumFilter = "string_enum",
+  EventListFilter = "event_list",
 }
 
 export interface FilterParamsBase {

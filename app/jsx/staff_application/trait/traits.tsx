@@ -282,3 +282,52 @@ export class NumberEnumTrait extends EnumTrait<number> {
     };
   }
 }
+
+type EventListTraitParams =
+  | {
+      val: string[];
+    }
+  | {
+      serialized: SerializedTrait;
+    };
+export class EventListTrait extends Trait {
+  constructor(params: EventListTraitParams) {
+    super();
+    if ("val" in params) {
+      this.val = params.val;
+    } else if ("serialized" in params) {
+      this.val = params.serialized.stringValues;
+    }
+  }
+
+  serialize(): SerializedTrait {
+    return {
+      traitType: TraitType.EventListTrait,
+      numberValues: [],
+      stringValues: this.val,
+    };
+  }
+
+  render(): JSX.Element {
+    return (
+      <>
+        {(this.val || []).map((evt) => (
+          <span
+            key={evt}
+            className={"cubing-icon event-" + evt}
+            style={{
+              fontSize: "16px",
+              padding: "4px",
+            }}
+          ></span>
+        ))}
+      </>
+    );
+  }
+
+  value(): string[] {
+    return this.val;
+  }
+
+  private val: string[];
+}

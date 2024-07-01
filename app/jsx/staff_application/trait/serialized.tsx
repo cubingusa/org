@@ -6,6 +6,7 @@ export enum TraitType {
   DateTimeTrait = "date_time",
   StringEnumTrait = "string_enum",
   NumberEnumTrait = "number_enum",
+  EventListTrait = "event_list",
 }
 
 export interface SerializedTrait {

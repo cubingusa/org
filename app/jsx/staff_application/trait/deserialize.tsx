@@ -9,6 +9,7 @@ import {
   DateTimeTrait,
   StringEnumTrait,
   NumberEnumTrait,
+  EventListTrait,
 } from "./traits";
 
 export function deserialize(
@@ -39,5 +40,7 @@ export function deserialize(
         serialized,
         extras: computer.extraDataForDeserialization() as EnumExtras<number>,
       });
+    case TraitType.EventListTrait:
+      return new EventListTrait({ serialized });
   }
 }

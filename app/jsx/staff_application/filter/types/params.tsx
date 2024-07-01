@@ -3,6 +3,7 @@ import { NullFilterParams } from "./null";
 import { StringFilterParams } from "./string";
 import { BooleanFilterParams } from "./boolean";
 import { DateTimeFilterParams } from "./date_time";
+import { EventListFilterParams } from "./event_list";
 import { NumberEnumFilterParams, StringEnumFilterParams } from "./enum";
 
 export type FilterParams =
@@ -12,4 +13,5 @@ export type FilterParams =
   | BooleanFilterParams
   | DateTimeFilterParams
   | NumberEnumFilterParams
-  | StringEnumFilterParams;
+  | StringEnumFilterParams
+  | EventListFilterParams;

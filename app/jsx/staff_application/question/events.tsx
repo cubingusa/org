@@ -15,7 +15,7 @@ export class EventsQuestionApi extends QuestionApi {
   }
 
   getTraitType(): TraitType {
-    return TraitType.NumberEnumTrait;
+    return TraitType.EventListTrait;
   }
 
   editor(props: QuestionEditorProps): JSX.Element {
