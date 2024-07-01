@@ -8,19 +8,37 @@ import { FilterType } from "../filter/types/base";
 import {
   BooleanFilterParams,
   BooleanFilterType,
+  defaultBooleanParams,
 } from "../filter/types/boolean";
-import { StringEnumFilterParams } from "../filter/types/enum";
-import { StringFilterParams, StringFilterType } from "../filter/types/string";
-import { NumberFilterParams, NumberFilterType } from "../filter/types/number";
+import {
+  StringEnumFilterParams,
+  defaultStringEnumParams,
+} from "../filter/types/enum";
+import {
+  StringFilterParams,
+  StringFilterType,
+  defaultStringParams,
+} from "../filter/types/string";
+import {
+  NumberFilterParams,
+  NumberFilterType,
+  defaultNumberParams,
+} from "../filter/types/number";
+import {
+  EventListFilterParams,
+  EventListFilterType,
+  defaultEventListParams,
+} from "../filter/types/event_list";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { StringEnumFilterSelector } from "../filter/selector/enum";
 import { NumberFilterSelector } from "../filter/selector/number";
 import { StringFilterSelector } from "../filter/selector/string";
+import { EventListFilterSelector } from "../filter/selector/event_list";
 
 import { ApplicantData } from "../types/applicant_data";
 import { Trait, TraitComputer } from "./api";
 import { TraitExtras } from "./extras";
-import { SerializedTrait } from "./serialized";
+import { SerializedTrait, TraitType } from "./serialized";
 import {
   ComputerParams,
   ComputerType,
@@ -32,48 +50,54 @@ import {
   NumberTrait,
   BooleanTrait,
   StringEnumTrait,
+  EventListTrait,
 } from "./traits";
 
 const personalAttributes = [
   {
     type: PersonalAttributeType.Name,
     name: "Name",
-    filter: FilterType.StringFilter,
+    trait: TraitType.StringTrait,
   },
   {
     type: PersonalAttributeType.WcaId,
     name: "WCA ID",
-    filter: FilterType.StringFilter,
+    trait: TraitType.StringTrait,
   },
   {
     type: PersonalAttributeType.WcaUserId,
     name: "WCA User ID",
-    filter: FilterType.NumberFilter,
+    trait: TraitType.NumberTrait,
   },
   {
     type: PersonalAttributeType.Age,
     name: "Age",
-    filter: FilterType.NumberFilter,
+    trait: TraitType.NumberTrait,
   },
   {
     type: PersonalAttributeType.DelegateStatus,
     name: "Delegate Status",
-    filter: FilterType.StringEnumFilter,
+    trait: TraitType.StringEnumTrait,
   },
   {
     type: PersonalAttributeType.ListedOrganizer,
     name: "Listed Organizer",
-    filter: FilterType.BooleanFilter,
+    trait: TraitType.BooleanTrait,
   },
   {
     type: PersonalAttributeType.ListedDelegate,
     name: "Listed Delegate",
-    filter: FilterType.BooleanFilter,
+    trait: TraitType.BooleanTrait,
   },
   {
     type: PersonalAttributeType.Registered,
     name: "Registered",
-    filter: FilterType.BooleanFilter,
+    trait: TraitType.BooleanTrait,
+  },
+  {
+    type: PersonalAttributeType.RegisteredEvents,
+    name: "Registered Events",
+    trait: TraitType.EventListTrait,
   },
 ];
 
@@ -81,8 +105,8 @@ function personalAttributeName(type: PersonalAttributeType): string {
   return personalAttributes.find((p) => p.type === type).name;
 }
 
-function personalAttributeFilterType(type: PersonalAttributeType): FilterType {
-  return personalAttributes.find((p) => p.type === type).filter;
+function personalAttributeTraitType(type: PersonalAttributeType): TraitType {
+  return personalAttributes.find((p) => p.type === type).trait;
 }
 
 const delegateStatuses = [
@@ -153,6 +177,13 @@ export class PersonalAttributeComputer extends TraitComputer {
         return new BooleanTrait({
           val: this.getPerson(applicant)?.registration?.status === "accepted",
         });
+      case PersonalAttributeType.RegisteredEvents:
+        return new EventListTrait({
+          val:
+            this.getPerson(applicant)?.registration?.status === "accepted"
+              ? this.getPerson(applicant).registration.eventIds
+              : [],
+        });
     }
   }
 
@@ -180,36 +211,18 @@ export class PersonalAttributeComputer extends TraitComputer {
   }
 
   defaultFilterParams(): FilterParams {
-    switch (personalAttributeFilterType(this.params.attributeType)) {
-      case FilterType.StringFilter:
-        return {
-          trait: this.params,
-          type: FilterType.StringFilter,
-          stringType: StringFilterType.Equals,
-          reference: "",
-        };
-      case FilterType.NumberFilter:
-        return {
-          trait: this.params,
-          type: FilterType.NumberFilter,
-          numberType: NumberFilterType.Equals,
-          reference: 0,
-        };
-      case FilterType.BooleanFilter:
-        return {
-          trait: this.params,
-          type: FilterType.BooleanFilter,
-          booleanType: BooleanFilterType.IsTrue,
-        };
-      case FilterType.StringEnumFilter:
-        if (this.params.attributeType == PersonalAttributeType.DelegateStatus) {
-          return {
-            trait: this.params,
-            type: FilterType.StringEnumFilter,
-            allowedValues: [],
-            allValuesForDebugging: delegateStatuses,
-          };
-        }
+    switch (personalAttributeTraitType(this.params.attributeType)) {
+      case TraitType.StringTrait:
+        return defaultStringParams(this.params);
+      case TraitType.NumberTrait:
+        return defaultNumberParams(this.params);
+      case TraitType.BooleanTrait:
+        return defaultBooleanParams(this.params);
+      case TraitType.StringEnumTrait:
+        // TODO: If other String Enum attributes are added, use the right extras.
+        return defaultStringEnumParams(this.params, delegateStatuses);
+      case TraitType.EventListTrait:
+        return defaultEventListParams(this.params, this.wcif);
     }
   }
 
@@ -255,9 +268,9 @@ function PersonalAttributeFilterSelector({
 }: PersonalAttributeFilterSelectorParams) {
   const attributeType = (computerParams as PersonalAttributeParams)
     .attributeType;
-  const filterType = personalAttributeFilterType(attributeType);
-  switch (filterType) {
-    case FilterType.NumberFilter:
+  const traitType = personalAttributeTraitType(attributeType);
+  switch (traitType) {
+    case TraitType.NumberTrait:
       return (
         <NumberFilterSelector
           params={params as NumberFilterParams}
@@ -265,7 +278,7 @@ function PersonalAttributeFilterSelector({
           onFilterChange={onFilterChange}
         />
       );
-    case FilterType.StringFilter:
+    case TraitType.StringTrait:
       return (
         <StringFilterSelector
           params={params as StringFilterParams}
@@ -273,7 +286,7 @@ function PersonalAttributeFilterSelector({
           onFilterChange={onFilterChange}
         />
       );
-    case FilterType.BooleanFilter:
+    case TraitType.BooleanTrait:
       return (
         <BooleanFilterSelector
           params={params as BooleanFilterParams}
@@ -281,7 +294,7 @@ function PersonalAttributeFilterSelector({
           onFilterChange={onFilterChange}
         />
       );
-    case FilterType.StringEnumFilter:
+    case TraitType.StringEnumTrait:
       if (
         (computerParams as PersonalAttributeParams).attributeType ==
         PersonalAttributeType.DelegateStatus
@@ -295,6 +308,14 @@ function PersonalAttributeFilterSelector({
           />
         );
       }
+    case TraitType.EventListTrait:
+      return (
+        <EventListFilterSelector
+          params={params as EventListFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+        />
+      );
   }
 }
 

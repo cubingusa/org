@@ -14,6 +14,7 @@ export enum PersonalAttributeType {
   ListedOrganizer = "listed_organizer",
   ListedDelegate = "listed_delegate",
   Registered = "registered",
+  RegisteredEvents = "registered_events",
 }
 
 export interface PersonalAttributeParams {
