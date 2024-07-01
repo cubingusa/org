@@ -5,6 +5,12 @@ export enum QuestionType {
   MultipleChoice = "multiple_choice",
   Acknowledgement = "acknowledgement",
   DateTime = "date_time",
+  Events = "events",
+}
+
+export interface EventsQuestion extends QuestionBase {
+  questionType: QuestionType.Events;
+  maxEvents: number;
 }
 
 export interface DateTimeQuestion extends QuestionBase {
@@ -62,4 +68,5 @@ export type Question =
   | NullQuestion
   | MultipleChoiceQuestion
   | AcknowledgementQuestion
-  | DateTimeQuestion;
+  | DateTimeQuestion
+  | EventsQuestion;

@@ -3,6 +3,7 @@ export interface SubmittedQuestion {
   booleanAnswer?: boolean;
   textAnswer?: string;
   numberAnswer?: number;
+  textListAnswer?: string[];
 }
 
 export interface SubmittedFormDetails {
