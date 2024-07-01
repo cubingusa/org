@@ -1,8 +1,10 @@
 import { ApplicantData } from "../types/applicant_data";
-import { SerializedTrait } from "./serialized";
+import { SerializedTrait, TraitType } from "./serialized";
 import { ComputerParams } from "./params";
 import { FilterParams } from "../filter/types/params";
 import { TraitExtras } from "./extras";
+import { Question } from "../question/types";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export abstract class Trait {
   abstract serialize(): SerializedTrait;
@@ -31,4 +33,22 @@ export abstract class TraitComputer {
   getParams(): ComputerParams {
     return this.baseParams;
   }
+}
+
+export abstract class TraitTypeApi {
+  abstract type(): TraitType;
+  abstract deserialize(
+    serialized: SerializedTrait,
+    computer: TraitComputer,
+  ): Trait;
+  abstract fromQuestion(
+    question: Question,
+    myQuestion: SubmittedQuestion,
+  ): Trait;
+  abstract defaultFilterParams(params: ComputerParams): FilterParams;
+  abstract filterSelector(
+    params: FilterParams | null,
+    computer: TraitComputer,
+    onFilterChange: (params: FilterParams) => void,
+  ): JSX.Element;
 }
