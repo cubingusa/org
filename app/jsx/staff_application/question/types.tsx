@@ -18,9 +18,14 @@ export interface AcknowledgementQuestion extends QuestionBase {
   questionType: QuestionType.Acknowledgement;
 }
 
+interface Option {
+  id: number;
+  value: string;
+}
+
 export interface MultipleChoiceQuestion extends QuestionBase {
   questionType: QuestionType.MultipleChoice;
-  options: Map<number, string>;
+  options: Option[];
   nextOptionId: number;
   multipleAllowed: boolean;
 }

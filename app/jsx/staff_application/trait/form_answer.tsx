@@ -27,16 +27,28 @@ import {
   DateTimeFilterType,
   defaultDateTimeParams,
 } from "../filter/types/date_time";
+import {
+  NumberEnumFilterParams,
+  defaultNumberEnumParams,
+  EnumFilterValue,
+} from "../filter/types/enum";
 import { defaultNullParams } from "../filter/types/null";
 import { BooleanFilterSelector } from "../filter/selector/boolean";
 import { StringFilterSelector } from "../filter/selector/string";
 import { DateTimeFilterSelector } from "../filter/selector/date_time";
+import { NumberEnumFilterSelector } from "../filter/selector/enum";
 
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
-import { StringTrait, BooleanTrait, NullTrait, DateTimeTrait } from "./traits";
+import {
+  StringTrait,
+  BooleanTrait,
+  NullTrait,
+  DateTimeTrait,
+  NumberEnumTrait,
+} from "./traits";
 import { TraitType } from "./serialized";
-import { TraitExtras } from "./extras";
+import { TraitExtras, EnumExtras } from "./extras";
 
 export class FormAnswerComputer extends TraitComputer {
   constructor(
@@ -81,6 +93,11 @@ export class FormAnswerComputer extends TraitComputer {
               : DateTime.fromSeconds(myQuestion.numberAnswer),
           extras: api.getTraitExtraData(question),
         });
+      case TraitType.NumberEnumTrait:
+        return new NumberEnumTrait({
+          val: myQuestion === undefined ? null : myQuestion.numberAnswer,
+          extras: api.getTraitExtraData(question) as EnumExtras<number>,
+        });
     }
   }
 
@@ -122,6 +139,14 @@ export class FormAnswerComputer extends TraitComputer {
         return defaultBooleanParams(this.params);
       case TraitType.DateTimeTrait:
         return defaultDateTimeParams(this.params);
+      case TraitType.NumberEnumTrait:
+        const extras = [] as EnumFilterValue<number>[];
+        (
+          api.getTraitExtraData(question) as EnumExtras<number>
+        ).allValues.forEach((value, key) => {
+          extras.push({ key, value });
+        });
+        return defaultNumberEnumParams(this.params, extras);
     }
   }
 
@@ -212,6 +237,17 @@ function FormAnswerFilterSelector({
           params={params as DateTimeFilterParams}
           trait={computerParams}
           onFilterChange={onFilterChange}
+        />
+      );
+    case TraitType.NumberEnumTrait:
+      return (
+        <NumberEnumFilterSelector
+          params={params as NumberEnumFilterParams}
+          trait={computerParams}
+          onFilterChange={onFilterChange}
+          values={
+            (api.getTraitExtraData(question) as EnumExtras<number>).allValues
+          }
         />
       );
   }

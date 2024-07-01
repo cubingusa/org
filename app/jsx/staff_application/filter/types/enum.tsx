@@ -1,7 +1,7 @@
 import { FilterType, FilterParamsBase } from "./base";
 import { ComputerParams } from "../../trait/params";
 
-interface EnumFilterValue<T> {
+export interface EnumFilterValue<T> {
   key: T;
   value: string;
 }
