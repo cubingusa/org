@@ -10,16 +10,11 @@ import {
 import { Question } from "../question/types";
 import { getApi } from "../question/questions";
 
-import { FilterParams } from "../filter/types/params";
-import { FilterType } from "../filter/types/base";
-
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
 import { TraitType } from "./serialized";
-import { TraitExtras, EnumExtras } from "./extras";
+import { TraitExtras } from "./extras";
 import { NullTrait } from "../trait/types/null";
-import { getTraitApi } from "../trait/types/traits";
-import { defaultNullParams } from "../filter/types/null";
 
 export class FormAnswerComputer extends TraitComputer {
   constructor(
@@ -71,18 +66,6 @@ export class FormAnswerComputer extends TraitComputer {
     };
   }
 
-  defaultFilterParams(): FilterParams {
-    const question = this.getQuestion();
-    if (!question) {
-      return defaultNullParams(this.params);
-    }
-    const api = getApi(question.questionType, this.wcif);
-    return getTraitApi(api.getTraitType(), this.wcif).defaultFilterParams(
-      this.params,
-      this,
-    );
-  }
-
   isValid(): boolean {
     const question = this.getQuestion();
     const api = getApi(question.questionType, this.wcif);
@@ -105,56 +88,20 @@ export class FormAnswerComputer extends TraitComputer {
     );
   }
 
-  filterSelector(
-    params: FilterParams | null,
-    onFilterChange: (params: FilterParams) => void,
-  ): JSX.Element {
-    return (
-      <FormAnswerFilterSelector
-        params={params}
-        computer={this}
-        computerParams={this.params}
-        onFilterChange={onFilterChange}
-      />
-    );
-  }
-
   extraDataForDeserialization(): TraitExtras {
     const question = this.getQuestion();
     const api = getApi(question.questionType, this.wcif);
     return api?.getTraitExtraData(question);
   }
-}
 
-interface FormAnswerFilterSelectorParams {
-  params: FilterParams | null;
-  computerParams: ComputerParams;
-  computer: TraitComputer;
-  onFilterChange: (params: FilterParams) => void;
-}
-function FormAnswerFilterSelector({
-  params,
-  computerParams,
-  computer,
-  onFilterChange,
-}: FormAnswerFilterSelectorParams) {
-  const { settings, wcif } = useRouteLoaderData(
-    "competition",
-  ) as CompetitionData;
-  const formAnswerParams = computerParams as FormAnswerParams;
-
-  const question = settings.forms
-    .find((f) => f.id == formAnswerParams.formId)
-    ?.questions?.find((q) => q.id == formAnswerParams.questionId);
-  if (question === undefined) {
-    return <></>;
+  getTraitType(): TraitType {
+    const question = this.getQuestion();
+    if (question === undefined) {
+      return TraitType.NullTrait;
+    }
+    const api = getApi(question.questionType, this.wcif);
+    return api.getTraitType();
   }
-  const api = getApi(question.questionType, wcif);
-  return getTraitApi(api.getTraitType(), wcif).filterSelector(
-    params,
-    computer,
-    onFilterChange,
-  );
 }
 
 interface FormAnswerSelectorParams {

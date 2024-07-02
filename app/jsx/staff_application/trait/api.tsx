@@ -23,11 +23,7 @@ export abstract class TraitComputer {
     onTraitChange: (params: ComputerParams) => void,
   ): JSX.Element;
   abstract isValid(): boolean;
-  abstract defaultFilterParams(): FilterParams;
-  abstract filterSelector(
-    params: FilterParams | null,
-    onFilterChange: (params: FilterParams) => void,
-  ): JSX.Element;
+  abstract getTraitType(): TraitType;
   extraDataForDeserialization(): TraitExtras {
     return null;
   }

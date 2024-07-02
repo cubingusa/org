@@ -4,6 +4,7 @@ import { useRouteLoaderData } from "react-router-dom";
 import { ComputerParams } from "../../trait/params";
 import { createComputer } from "../../trait/create_computer";
 import { TraitSelector } from "../../trait/selector";
+import { getTraitApi } from "../../trait/types/traits";
 import { CompetitionData } from "../../types/competition_data";
 import { FilterParams } from "../types/params";
 
@@ -30,10 +31,13 @@ export function FilterSelector({
 
   const onTraitChange = function (trait: ComputerParams) {
     const newComputer = createComputer(trait, settings, wcif);
-    const newParams = newComputer.defaultFilterParams();
+    const traitApi = getTraitApi(newComputer.getTraitType(), wcif);
+    const newParams = traitApi.defaultFilterParams(trait, newComputer);
     setActiveParams(newParams);
     onChange(newParams);
   };
+
+  const traitApi = getTraitApi(activeComputer.getTraitType(), wcif);
 
   return (
     <>
@@ -42,7 +46,7 @@ export function FilterSelector({
         onChange={onTraitChange}
         setValid={setValid}
       />
-      {activeComputer.filterSelector(activeParams, onFilterChange)}
+      {traitApi.filterSelector(activeParams, activeComputer, onFilterChange)}
     </>
   );
 }

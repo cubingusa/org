@@ -3,14 +3,6 @@ import { useRouteLoaderData } from "react-router-dom";
 
 import { Person, Competition } from "@wca/helpers";
 
-import { FilterParams } from "../filter/types/params";
-import { FilterType } from "../filter/types/base";
-import {
-  NumberEnumFilterParams,
-  defaultNumberEnumParams,
-} from "../filter/types/enum";
-import { NumberEnumFilterSelector } from "../filter/selector/enum";
-
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -18,7 +10,7 @@ import {
 } from "../types/competition_data";
 import { Property } from "../types/property";
 import { Trait, TraitComputer } from "./api";
-import { SerializedTrait } from "./serialized";
+import { TraitType } from "./serialized";
 import { ComputerType, PropertyParams, ComputerParams } from "./params";
 import { NumberEnumTrait } from "./traits";
 import { TraitExtras } from "./extras";
@@ -89,16 +81,8 @@ export class PropertyComputer extends TraitComputer {
     };
   }
 
-  defaultFilterParams(): FilterParams {
-    return defaultNumberEnumParams(
-      this.params,
-      this.getProperty()?.values.map((v) => {
-        return {
-          key: v.id,
-          value: v.value,
-        };
-      }) || [],
-    );
+  getTraitType(): TraitType {
+    return TraitType.NumberEnumTrait;
   }
 
   isValid(): boolean {
@@ -116,47 +100,6 @@ export class PropertyComputer extends TraitComputer {
       />
     );
   }
-
-  filterSelector(
-    params: FilterParams | null,
-    onFilterChange: (params: FilterParams) => void,
-  ): JSX.Element {
-    return (
-      <PropertyFilterSelector
-        params={params}
-        computerParams={this.params}
-        onFilterChange={onFilterChange}
-      />
-    );
-  }
-}
-
-interface PropertyFilterSelectorParams {
-  params: FilterParams | null;
-  computerParams: ComputerParams;
-  onFilterChange: (params: FilterParams) => void;
-}
-function PropertyFilterSelector({
-  params,
-  computerParams,
-  onFilterChange,
-}: PropertyFilterSelectorParams) {
-  const { settings } = useRouteLoaderData("competition") as CompetitionData;
-  const map = new Map<number, string>();
-  const propertyParams = computerParams as PropertyParams;
-  const property = settings.properties.find(
-    (p) => p.id == propertyParams.propertyId,
-  );
-  property.values.forEach((v) => map.set(v.id, v.value));
-
-  return (
-    <NumberEnumFilterSelector
-      params={params as NumberEnumFilterParams}
-      trait={computerParams}
-      values={map}
-      onFilterChange={onFilterChange}
-    />
-  );
 }
 
 interface PropertySelectorParams {

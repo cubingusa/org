@@ -2,18 +2,6 @@ import { DateTime } from "luxon";
 import { useState } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 
-import { FilterParams } from "../filter/types/params";
-import { FilterType } from "../filter/types/base";
-import {
-  BooleanFilterParams,
-  defaultBooleanParams,
-} from "../filter/types/boolean";
-import { BooleanFilterSelector } from "../filter/selector/boolean";
-import {
-  DateTimeFilterParams,
-  defaultDateTimeParams,
-} from "../filter/types/date_time";
-import { DateTimeFilterSelector } from "../filter/selector/date_time";
 import { ApplicantData } from "../types/applicant_data";
 import {
   ApplicationSettings,
@@ -23,23 +11,39 @@ import { Form } from "../types/form";
 import { SubmittedForm } from "../types/personal_application_data";
 
 import { Trait, TraitComputer } from "./api";
-import { TraitExtras } from "./extras";
-import { SerializedTrait } from "./serialized";
+import { TraitType } from "./serialized";
 import {
+  ComputerParams,
   ComputerType,
   FormMetadataParams,
   FormMetadataType,
-  ComputerParams,
 } from "./params";
 import { DateTimeTrait, BooleanTrait } from "./traits";
 
 const metadataTypes = [
-  { type: FormMetadataType.Submitted, name: "Submitted" },
-  { type: FormMetadataType.SubmitTime, name: "Submit Time" },
-  { type: FormMetadataType.UpdateTime, name: "Update Time" },
+  {
+    type: FormMetadataType.Submitted,
+    name: "Submitted",
+    traitType: TraitType.BooleanTrait,
+  },
+  {
+    type: FormMetadataType.SubmitTime,
+    name: "Submit Time",
+    traitType: TraitType.DateTimeTrait,
+  },
+  {
+    type: FormMetadataType.UpdateTime,
+    name: "Update Time",
+    traitType: TraitType.DateTimeTrait,
+  },
 ];
-function formMetadataName(type: FormMetadataType) {
-  return metadataTypes.find((t) => t.type === type).name;
+function formMetadataName(type: FormMetadataType): string {
+  return metadataTypes.find((t) => t.type === type)?.name || "";
+}
+function traitType(type: FormMetadataType): TraitType {
+  return (
+    metadataTypes.find((t) => t.type === type)?.traitType || TraitType.NullTrait
+  );
 }
 
 export class FormMetadataComputer extends TraitComputer {
@@ -110,18 +114,8 @@ export class FormMetadataComputer extends TraitComputer {
     };
   }
 
-  defaultFilterParams(): FilterParams {
-    switch (this.params.metadataType) {
-      case FormMetadataType.Submitted:
-        return defaultBooleanParams(this.params);
-      case FormMetadataType.SubmitTime:
-      case FormMetadataType.UpdateTime:
-        return defaultDateTimeParams(this.params);
-    }
-    return {
-      type: FilterType.NullFilter,
-      trait: this.params,
-    };
+  getTraitType(): TraitType {
+    return traitType(this.params.metadataType);
   }
 
   isValid(): boolean {
@@ -139,55 +133,6 @@ export class FormMetadataComputer extends TraitComputer {
       />
     );
   }
-
-  filterSelector(
-    params: FilterParams | null,
-    onFilterChange: (params: FilterParams) => void,
-  ): JSX.Element {
-    return (
-      <FormMetadataFilterSelector
-        params={params}
-        computerParams={this.params}
-        onFilterChange={onFilterChange}
-      />
-    );
-  }
-}
-
-interface FormMetadataFilterSelectorParams {
-  params: FilterParams | null;
-  computerParams: ComputerParams;
-  onFilterChange: (params: FilterParams) => void;
-}
-function FormMetadataFilterSelector({
-  params,
-  computerParams,
-  onFilterChange,
-}: FormMetadataFilterSelectorParams) {
-  const metadataType = (computerParams as FormMetadataParams).metadataType;
-  const filterType =
-    metadataType == FormMetadataType.Submitted
-      ? FilterType.BooleanFilter
-      : FilterType.DateTimeFilter;
-  switch (filterType) {
-    case FilterType.BooleanFilter:
-      return (
-        <BooleanFilterSelector
-          params={params as BooleanFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      );
-    case FilterType.DateTimeFilter:
-      return (
-        <DateTimeFilterSelector
-          params={params as DateTimeFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      );
-  }
-  return <></>;
 }
 
 interface FormMetadataSelectorParams {
