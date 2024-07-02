@@ -1,8 +1,6 @@
 import { TraitTypeApi, TraitComputer, Trait } from "../api";
 import { ComputerParams } from "../params";
 import { TraitType, SerializedTrait } from "../serialized";
-import { Question, QuestionType } from "../../question/types";
-import { SubmittedQuestion } from "../../types/personal_application_data";
 import { FilterParams } from "../../filter/types/params";
 import {
   defaultStringParams,
@@ -57,13 +55,6 @@ export class StringTraitApi extends TraitTypeApi {
 
   deserialize(serialized: SerializedTrait, computer: TraitComputer): Trait {
     return new StringTrait({ serialized });
-  }
-
-  fromQuestion(question: Question, myQuestion: SubmittedQuestion): Trait {
-    switch (question.questionType) {
-      case QuestionType.Text:
-        return new StringTrait({ val: myQuestion.textAnswer });
-    }
   }
 
   defaultFilterParams(params: ComputerParams): FilterParams {

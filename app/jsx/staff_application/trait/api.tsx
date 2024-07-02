@@ -41,10 +41,6 @@ export abstract class TraitTypeApi {
     serialized: SerializedTrait,
     computer: TraitComputer,
   ): Trait;
-  abstract fromQuestion(
-    question: Question,
-    myQuestion: SubmittedQuestion,
-  ): Trait;
   abstract defaultFilterParams(params: ComputerParams): FilterParams;
   abstract filterSelector(
     params: FilterParams | null,
