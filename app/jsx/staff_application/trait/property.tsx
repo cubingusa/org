@@ -12,7 +12,7 @@ import { Property } from "../types/property";
 import { Trait, TraitComputer } from "./api";
 import { TraitType } from "./serialized";
 import { ComputerType, PropertyParams, ComputerParams } from "./params";
-import { NumberEnumTrait } from "./traits";
+import { NumberEnumTrait } from "./types/enum";
 import { TraitExtras } from "./extras";
 
 export class PropertyComputer extends TraitComputer {

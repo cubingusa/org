@@ -6,7 +6,7 @@ import {
   TextQuestionType,
   QuestionBase,
 } from "./types";
-import { StringTrait } from "../trait/traits";
+import { StringTrait } from "../trait/types/string";
 import { TraitType } from "../trait/serialized";
 import { SubmittedQuestion } from "../types/personal_application_data";
 

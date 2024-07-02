@@ -8,7 +8,7 @@ import {
 } from "./types";
 import { TraitType } from "../trait/serialized";
 import { EnumExtras } from "../trait/extras";
-import { NumberEnumTrait } from "../trait/traits";
+import { NumberEnumTrait } from "../trait/types/enum";
 import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class MultipleChoiceQuestionApi extends QuestionApi {

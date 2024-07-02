@@ -13,13 +13,11 @@ import {
   PersonalAttributeParams,
   PersonalAttributeType,
 } from "./params";
-import {
-  StringTrait,
-  NumberTrait,
-  BooleanTrait,
-  StringEnumTrait,
-  EventListTrait,
-} from "./traits";
+import { StringTrait } from "./types/string";
+import { NumberTrait } from "./types/number";
+import { BooleanTrait } from "./types/boolean";
+import { StringEnumTrait } from "./types/enum";
+import { EventListTrait } from "./types/event_list";
 
 const personalAttributes = [
   {

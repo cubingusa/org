@@ -10,7 +10,7 @@ import {
   Question,
 } from "./types";
 import { DateTimeExtras } from "../trait/extras";
-import { DateTimeTrait } from "../trait/traits";
+import { DateTimeTrait } from "../trait/types/date_time";
 import { TraitType } from "../trait/serialized";
 import { CompetitionData } from "../types/competition_data";
 import { SubmittedQuestion } from "../types/personal_application_data";

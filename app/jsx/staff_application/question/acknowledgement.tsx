@@ -5,7 +5,7 @@ import {
   QuestionBase,
   Question,
 } from "./types";
-import { BooleanTrait } from "../trait/traits";
+import { BooleanTrait } from "../trait/types/boolean";
 import { TraitType } from "../trait/serialized";
 import { SubmittedQuestion } from "../types/personal_application_data";
 

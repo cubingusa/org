@@ -18,7 +18,8 @@ import {
   FormMetadataParams,
   FormMetadataType,
 } from "./params";
-import { DateTimeTrait, BooleanTrait } from "./traits";
+import { DateTimeTrait } from "./types/date_time";
+import { BooleanTrait } from "./types/boolean";
 
 const metadataTypes = [
   {

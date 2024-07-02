@@ -1,16 +1,13 @@
 import { Trait, TraitComputer } from "./api";
 import { SerializedTrait, TraitType } from "./serialized";
 import { EnumExtras, DateTimeExtras } from "./extras";
-import {
-  BooleanTrait,
-  StringTrait,
-  NumberTrait,
-  NullTrait,
-  DateTimeTrait,
-  StringEnumTrait,
-  NumberEnumTrait,
-  EventListTrait,
-} from "./traits";
+import { BooleanTrait } from "./types/boolean";
+import { StringTrait } from "./types/string";
+import { NumberTrait } from "./types/number";
+import { NullTrait } from "./types/null";
+import { DateTimeTrait } from "./types/date_time";
+import { StringEnumTrait, NumberEnumTrait } from "./types/enum";
+import { EventListTrait } from "./types/event_list";
 
 export function deserialize(
   serialized: SerializedTrait,

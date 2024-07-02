@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "react-router-dom";
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { Question, QuestionType, EventsQuestion, QuestionBase } from "./types";
 import { TraitType } from "../trait/serialized";
-import { EventListTrait } from "../trait/traits";
+import { EventListTrait } from "../trait/types/event_list";
 import { CompetitionData } from "../types/competition_data";
 import { SubmittedQuestion } from "../types/personal_application_data";
 
