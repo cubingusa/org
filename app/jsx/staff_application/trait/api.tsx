@@ -1,3 +1,4 @@
+import { Competition } from "@wca/helpers";
 import { ApplicantData } from "../types/applicant_data";
 import { SerializedTrait, TraitType } from "./serialized";
 import { ComputerParams } from "./params";
@@ -36,12 +37,16 @@ export abstract class TraitComputer {
 }
 
 export abstract class TraitTypeApi {
+  constructor(protected wcif: Competition) {}
   abstract type(): TraitType;
   abstract deserialize(
     serialized: SerializedTrait,
     computer: TraitComputer,
   ): Trait;
-  abstract defaultFilterParams(params: ComputerParams): FilterParams;
+  abstract defaultFilterParams(
+    params: ComputerParams,
+    computer: TraitComputer,
+  ): FilterParams;
   abstract filterSelector(
     params: FilterParams | null,
     computer: TraitComputer,
