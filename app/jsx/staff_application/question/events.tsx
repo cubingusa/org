@@ -3,7 +3,9 @@ import { useRouteLoaderData } from "react-router-dom";
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import { Question, QuestionType, EventsQuestion, QuestionBase } from "./types";
 import { TraitType } from "../trait/serialized";
+import { EventListTrait } from "../trait/traits";
 import { CompetitionData } from "../types/competition_data";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class EventsQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -37,6 +39,10 @@ export class EventsQuestionApi extends QuestionApi {
       questionType: QuestionType.Events,
       maxEvents: 1,
     });
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): EventListTrait {
+    return new EventListTrait({ val: myQuestion.textListAnswer });
   }
 }
 

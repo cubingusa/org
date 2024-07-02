@@ -24,6 +24,7 @@ export abstract class QuestionApi {
   getTraitExtraData(question: Question): TraitExtras {
     return {};
   }
+  abstract toTrait(question: Question, myQuestion: SubmittedQuestion): Trait;
   abstract type(): QuestionType;
   abstract defaultParams(base: QuestionBase): Question;
 }

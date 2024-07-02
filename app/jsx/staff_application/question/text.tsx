@@ -1,11 +1,14 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
 import {
+  Question,
   QuestionType,
   TextQuestion,
   TextQuestionType,
   QuestionBase,
 } from "./types";
+import { StringTrait } from "../trait/traits";
 import { TraitType } from "../trait/serialized";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class TextQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -39,6 +42,10 @@ export class TextQuestionApi extends QuestionApi {
       questionType: QuestionType.Text,
       textQuestionType: TextQuestionType.Short,
     });
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): StringTrait {
+    return new StringTrait({ val: myQuestion.textAnswer });
   }
 }
 

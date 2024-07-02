@@ -1,6 +1,13 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, AcknowledgementQuestion, QuestionBase } from "./types";
+import {
+  QuestionType,
+  AcknowledgementQuestion,
+  QuestionBase,
+  Question,
+} from "./types";
+import { BooleanTrait } from "../trait/traits";
 import { TraitType } from "../trait/serialized";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class AcknowledgementQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -33,6 +40,10 @@ export class AcknowledgementQuestionApi extends QuestionApi {
     return Object.assign(base as AcknowledgementQuestion, {
       questionType: QuestionType.Acknowledgement,
     });
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): BooleanTrait {
+    return new BooleanTrait({ val: myQuestion.booleanAnswer });
   }
 }
 

@@ -8,6 +8,8 @@ import {
 } from "./types";
 import { TraitType } from "../trait/serialized";
 import { EnumExtras } from "../trait/extras";
+import { NumberEnumTrait } from "../trait/traits";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class MultipleChoiceQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -51,6 +53,13 @@ export class MultipleChoiceQuestionApi extends QuestionApi {
       questionType: QuestionType.MultipleChoice,
       nextOptionId: 0,
       options: [],
+    });
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): NumberEnumTrait {
+    return new NumberEnumTrait({
+      val: myQuestion.numberAnswer,
+      extras: this.getTraitExtraData(question),
     });
   }
 }

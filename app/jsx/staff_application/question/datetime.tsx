@@ -10,8 +10,10 @@ import {
   Question,
 } from "./types";
 import { DateTimeExtras } from "../trait/extras";
+import { DateTimeTrait } from "../trait/traits";
 import { TraitType } from "../trait/serialized";
 import { CompetitionData } from "../types/competition_data";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class DateTimeQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -55,6 +57,13 @@ export class DateTimeQuestionApi extends QuestionApi {
         ? null
         : this.wcif.schedule.venues[0].timezone,
     };
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): DateTimeTrait {
+    return new DateTimeTrait({
+      val: DateTime.fromSeconds(myQuestion.numberAnswer),
+      extras: this.getTraitExtraData(question),
+    });
   }
 }
 

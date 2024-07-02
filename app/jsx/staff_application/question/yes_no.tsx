@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, YesNoQuestion, QuestionBase } from "./types";
+import { Question, QuestionType, YesNoQuestion, QuestionBase } from "./types";
+import { BooleanTrait } from "../trait/traits";
 import { TraitType } from "../trait/serialized";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class YesNoQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -34,6 +36,10 @@ export class YesNoQuestionApi extends QuestionApi {
     return Object.assign(base as YesNoQuestion, {
       questionType: QuestionType.YesNo,
     });
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): BooleanTrait {
+    return new BooleanTrait({ val: myQuestion.booleanAnswer });
   }
 }
 

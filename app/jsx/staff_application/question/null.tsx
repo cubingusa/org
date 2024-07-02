@@ -1,6 +1,8 @@
 import { QuestionApi, QuestionDisplayProps, QuestionEditorProps } from "./api";
-import { QuestionType, NullQuestion, QuestionBase } from "./types";
+import { Question, QuestionType, NullQuestion, QuestionBase } from "./types";
+import { NullTrait } from "../trait/traits";
 import { TraitType } from "../trait/serialized";
+import { SubmittedQuestion } from "../types/personal_application_data";
 
 export class NullQuestionApi extends QuestionApi {
   type(): QuestionType {
@@ -27,5 +29,9 @@ export class NullQuestionApi extends QuestionApi {
     return Object.assign(base as NullQuestion, {
       questionType: QuestionType.Null,
     });
+  }
+
+  toTrait(question: Question, myQuestion: SubmittedQuestion): NullTrait {
+    return new NullTrait({});
   }
 }
