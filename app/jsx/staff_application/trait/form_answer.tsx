@@ -12,50 +12,14 @@ import { getApi } from "../question/questions";
 
 import { FilterParams } from "../filter/types/params";
 import { FilterType } from "../filter/types/base";
-import {
-  BooleanFilterParams,
-  BooleanFilterType,
-  defaultBooleanParams,
-} from "../filter/types/boolean";
-import {
-  StringFilterParams,
-  StringFilterType,
-  defaultStringParams,
-} from "../filter/types/string";
-import {
-  DateTimeFilterParams,
-  DateTimeFilterType,
-  defaultDateTimeParams,
-} from "../filter/types/date_time";
-import {
-  NumberEnumFilterParams,
-  defaultNumberEnumParams,
-  EnumFilterValue,
-} from "../filter/types/enum";
-import {
-  EventListFilterParams,
-  defaultEventListParams,
-  EventListFilterType,
-} from "../filter/types/event_list";
-import { defaultNullParams } from "../filter/types/null";
-import { BooleanFilterSelector } from "../filter/selector/boolean";
-import { StringFilterSelector } from "../filter/selector/string";
-import { DateTimeFilterSelector } from "../filter/selector/date_time";
-import { NumberEnumFilterSelector } from "../filter/selector/enum";
-import { EventListFilterSelector } from "../filter/selector/event_list";
 
 import { Trait, TraitComputer } from "./api";
 import { ComputerType, FormAnswerParams, ComputerParams } from "./params";
-import {
-  StringTrait,
-  BooleanTrait,
-  NullTrait,
-  DateTimeTrait,
-  NumberEnumTrait,
-  EventListTrait,
-} from "./traits";
 import { TraitType } from "./serialized";
 import { TraitExtras, EnumExtras } from "./extras";
+import { NullTrait } from "../trait/types/null";
+import { getTraitApi } from "../trait/types/traits";
+import { defaultNullParams } from "../filter/types/null";
 
 export class FormAnswerComputer extends TraitComputer {
   constructor(
@@ -81,35 +45,7 @@ export class FormAnswerComputer extends TraitComputer {
       .find((f) => f.formId == this.params.formId)
       ?.details?.questions?.find((q) => q.questionId == this.params.questionId);
     const api = getApi(question.questionType, this.wcif);
-    switch (api?.getTraitType()) {
-      case TraitType.NullTrait:
-        return new NullTrait({});
-      case TraitType.StringTrait:
-        return new StringTrait({
-          val: myQuestion === undefined ? null : myQuestion.textAnswer,
-        });
-      case TraitType.BooleanTrait:
-        return new BooleanTrait({
-          val: myQuestion === undefined ? null : myQuestion.booleanAnswer,
-        });
-      case TraitType.DateTimeTrait:
-        return new DateTimeTrait({
-          val:
-            myQuestion === undefined
-              ? null
-              : DateTime.fromSeconds(myQuestion.numberAnswer),
-          extras: api.getTraitExtraData(question),
-        });
-      case TraitType.NumberEnumTrait:
-        return new NumberEnumTrait({
-          val: myQuestion === undefined ? null : myQuestion.numberAnswer,
-          extras: api.getTraitExtraData(question) as EnumExtras<number>,
-        });
-      case TraitType.EventListTrait:
-        return new EventListTrait({
-          val: myQuestion === undefined ? [] : myQuestion.textListAnswer,
-        });
-    }
+    return api.toTrait(question, myQuestion);
   }
 
   id(): string {
@@ -141,26 +77,10 @@ export class FormAnswerComputer extends TraitComputer {
       return defaultNullParams(this.params);
     }
     const api = getApi(question.questionType, this.wcif);
-    switch (api?.getTraitType()) {
-      case TraitType.NullTrait:
-        return defaultNullParams(this.params);
-      case TraitType.StringTrait:
-        return defaultStringParams(this.params);
-      case TraitType.BooleanTrait:
-        return defaultBooleanParams(this.params);
-      case TraitType.DateTimeTrait:
-        return defaultDateTimeParams(this.params);
-      case TraitType.NumberEnumTrait:
-        const extras = [] as EnumFilterValue<number>[];
-        (
-          api.getTraitExtraData(question) as EnumExtras<number>
-        ).allValues.forEach((value, key) => {
-          extras.push({ key, value });
-        });
-        return defaultNumberEnumParams(this.params, extras);
-      case TraitType.EventListTrait:
-        return defaultEventListParams(this.params, this.wcif);
-    }
+    return getTraitApi(api.getTraitType(), this.wcif).defaultFilterParams(
+      this.params,
+      this,
+    );
   }
 
   isValid(): boolean {
@@ -192,6 +112,7 @@ export class FormAnswerComputer extends TraitComputer {
     return (
       <FormAnswerFilterSelector
         params={params}
+        computer={this}
         computerParams={this.params}
         onFilterChange={onFilterChange}
       />
@@ -208,11 +129,13 @@ export class FormAnswerComputer extends TraitComputer {
 interface FormAnswerFilterSelectorParams {
   params: FilterParams | null;
   computerParams: ComputerParams;
+  computer: TraitComputer;
   onFilterChange: (params: FilterParams) => void;
 }
 function FormAnswerFilterSelector({
   params,
   computerParams,
+  computer,
   onFilterChange,
 }: FormAnswerFilterSelectorParams) {
   const { settings, wcif } = useRouteLoaderData(
@@ -227,52 +150,11 @@ function FormAnswerFilterSelector({
     return <></>;
   }
   const api = getApi(question.questionType, wcif);
-  switch (api?.getTraitType()) {
-    case TraitType.StringTrait:
-      return (
-        <StringFilterSelector
-          params={params as StringFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      );
-    case TraitType.BooleanTrait:
-      return (
-        <BooleanFilterSelector
-          params={params as BooleanFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      );
-    case TraitType.DateTimeTrait:
-      return (
-        <DateTimeFilterSelector
-          params={params as DateTimeFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      );
-    case TraitType.NumberEnumTrait:
-      return (
-        <NumberEnumFilterSelector
-          params={params as NumberEnumFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-          values={
-            (api.getTraitExtraData(question) as EnumExtras<number>).allValues
-          }
-        />
-      );
-    case TraitType.EventListTrait:
-      return (
-        <EventListFilterSelector
-          params={params as EventListFilterParams}
-          trait={computerParams}
-          onFilterChange={onFilterChange}
-        />
-      );
-  }
-  return <></>;
+  return getTraitApi(api.getTraitType(), wcif).filterSelector(
+    params,
+    computer,
+    onFilterChange,
+  );
 }
 
 interface FormAnswerSelectorParams {

@@ -1,6 +1,7 @@
 import { TraitTypeApi, TraitComputer, Trait } from "../api";
 import { ComputerParams } from "../params";
 import { TraitType, SerializedTrait } from "../serialized";
+import { FilterParams } from "../../filter/types/params";
 import {
   defaultNumberParams,
   NumberFilterParams,

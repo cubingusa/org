@@ -22,7 +22,7 @@ export function allTraitApis(wcif: Competition): TraitTypeApi[] {
   ];
 }
 
-export function getApi(
+export function getTraitApi(
   type: TraitType,
   wcif: Competition,
 ): TraitTypeApi | null {
