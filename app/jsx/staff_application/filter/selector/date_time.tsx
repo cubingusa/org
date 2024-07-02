@@ -18,11 +18,13 @@ interface DateTimeFilterSelectorParams {
   params: DateTimeFilterParams | null;
   trait: ComputerParams;
   onFilterChange: (params: FilterParams) => void;
+  idBase: string;
 }
 export function DateTimeFilterSelector({
   params,
   trait,
   onFilterChange,
+  idBase,
 }: DateTimeFilterSelectorParams) {
   const { wcif } = useRouteLoaderData("competition") as CompetitionData;
   const activeParams = params || defaultDateTimeParams(trait);

@@ -51,6 +51,7 @@ export class NullTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return null;
   }

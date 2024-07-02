@@ -15,11 +15,13 @@ interface EventListFilterSelectorParams {
   params: EventListFilterParams | null;
   trait: ComputerParams;
   onFilterChange: (params: FilterParams) => void;
+  idBase: string;
 }
 export function EventListFilterSelector({
   params,
   trait,
   onFilterChange,
+  idBase,
 }: EventListFilterSelectorParams) {
   const { wcif } = useRouteLoaderData("competition") as CompetitionData;
   const activeParams = params || defaultEventListParams(trait, wcif);

@@ -77,12 +77,14 @@ export class EventListTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <EventListFilterSelector
         params={params as EventListFilterParams}
         trait={params.trait}
         onFilterChange={onFilterChange}
+        idBase={idBase}
       />
     );
   }

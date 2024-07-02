@@ -38,6 +38,7 @@ export function FilterModal({ id, addFilter }: FilterModalParams) {
               params={params}
               onChange={onTraitChange}
               setValid={setIsValid}
+              idBase={id}
             />
           </div>
           <div className="modal-footer">

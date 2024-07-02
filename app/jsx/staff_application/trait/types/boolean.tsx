@@ -75,12 +75,14 @@ export class BooleanTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <BooleanFilterSelector
         params={params as BooleanFilterParams}
         trait={params.trait}
         onFilterChange={onFilterChange}
+        idBase={idBase}
       />
     );
   }

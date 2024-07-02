@@ -47,5 +47,6 @@ export abstract class TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element;
 }

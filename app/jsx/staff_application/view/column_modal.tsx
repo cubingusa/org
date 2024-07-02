@@ -37,6 +37,7 @@ export function ColumnModal({ id, addColumn }: ColumnModalParams) {
               params={params}
               onChange={onTraitChange}
               setValid={setIsValid}
+              idBase={id}
             />
           </div>
           <div className="modal-footer">

@@ -13,11 +13,13 @@ interface BooleanFilterSelectorParams {
   params: BooleanFilterParams | null;
   trait: ComputerParams;
   onFilterChange: (params: FilterParams) => void;
+  idBase: string;
 }
 export function BooleanFilterSelector({
   params,
   trait,
   onFilterChange,
+  idBase,
 }: BooleanFilterSelectorParams) {
   const activeParams = params || defaultBooleanParams(trait);
   const [booleanType, setBooleanType] = useState(activeParams.booleanType);

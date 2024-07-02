@@ -14,11 +14,13 @@ interface StringFilterSelectorParams {
   params: StringFilterParams | null;
   trait: ComputerParams;
   onFilterChange: (params: FilterParams) => void;
+  idBase: string;
 }
 export function StringFilterSelector({
   params,
   trait,
   onFilterChange,
+  idBase,
 }: StringFilterSelectorParams) {
   const activeParams = params || defaultStringParams(trait);
   const [stringType, setStringType] = useState(activeParams.stringType);

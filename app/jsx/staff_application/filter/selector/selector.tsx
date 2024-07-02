@@ -12,11 +12,13 @@ interface FilterSelectorParams {
   params: FilterParams;
   onChange: (newParams: FilterParams) => void;
   setValid: (isValid: boolean) => void;
+  idBase: string;
 }
 export function FilterSelector({
   params,
   onChange,
   setValid,
+  idBase,
 }: FilterSelectorParams) {
   const [activeParams, setActiveParams] = useState(params);
   const { settings, wcif } = useRouteLoaderData(
@@ -50,9 +52,15 @@ export function FilterSelector({
         params={params.trait}
         onChange={onTraitChange}
         setValid={onUpdateValid}
+        idBase={idBase}
       />
       {localValid
-        ? traitApi.filterSelector(activeParams, activeComputer, onFilterChange)
+        ? traitApi.filterSelector(
+            activeParams,
+            activeComputer,
+            onFilterChange,
+            idBase,
+          )
         : null}
     </>
   );

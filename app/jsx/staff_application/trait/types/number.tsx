@@ -68,12 +68,14 @@ export class NumberTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <NumberFilterSelector
         params={params as NumberFilterParams}
         trait={params.trait}
         onFilterChange={onFilterChange}
+        idBase={idBase}
       />
     );
   }

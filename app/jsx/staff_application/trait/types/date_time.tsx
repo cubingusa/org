@@ -85,12 +85,14 @@ export class DateTimeTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <DateTimeFilterSelector
         params={params as DateTimeFilterParams}
         trait={params.trait}
         onFilterChange={onFilterChange}
+        idBase={idBase}
       />
     );
   }

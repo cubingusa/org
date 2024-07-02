@@ -14,11 +14,13 @@ interface NumberFilterSelectorParams {
   params: NumberFilterParams | null;
   trait: ComputerParams;
   onFilterChange: (params: FilterParams) => void;
+  idBase: string;
 }
 export function NumberFilterSelector({
   params,
   trait,
   onFilterChange,
+  idBase,
 }: NumberFilterSelectorParams) {
   const activeParams = params || defaultNumberParams(trait);
   const [numberType, setNumberType] = useState(activeParams.numberType);

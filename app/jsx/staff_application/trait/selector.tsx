@@ -21,11 +21,13 @@ interface TraitSelectorParams {
   params: ComputerParams;
   onChange: (newParams: ComputerParams, newComputer: TraitComputer) => void;
   setValid: (isValid: boolean) => void;
+  idBase: string;
 }
 export function TraitSelector({
   params,
   onChange,
   setValid,
+  idBase,
 }: TraitSelectorParams) {
   const [activeParams, setActiveParams] = useState(params);
   const { settings, wcif } = useRouteLoaderData(
@@ -95,12 +97,15 @@ export function TraitSelector({
             className="form-check-input"
             name="column-type"
             type="radio"
-            id={"radio-" + type}
+            id={`${idBase}-radio-${type}`}
             value={type}
             defaultChecked={activeParams.type == type}
             onChange={(evt) => onTraitTypeChange(type, defaultParams)}
           />
-          <label className="form-check-label" htmlFor={"radio-" + type}>
+          <label
+            className="form-check-label"
+            htmlFor={`${idBase}-radio-${type}`}
+          >
             {name}
           </label>
         </div>

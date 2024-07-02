@@ -14,6 +14,7 @@ interface FilterSelectorParams<T, U> {
   trait: ComputerParams;
   values: Map<U, string>;
   onFilterChange: (params: FilterParams) => void;
+  idBase: string;
 }
 
 export function StringEnumFilterSelector({
@@ -21,6 +22,7 @@ export function StringEnumFilterSelector({
   trait,
   values,
   onFilterChange,
+  idBase,
 }: FilterSelectorParams<StringEnumFilterParams, string>) {
   const allValues = Array.from(values).map(([key, value]) => {
     return { key, value };
@@ -49,9 +51,12 @@ export function StringEnumFilterSelector({
             type="checkbox"
             defaultChecked={allowed.includes(id)}
             onChange={(e) => updateAllowed(id, e.target.checked)}
-            id={`enum-check-${id}`}
+            id={`${idBase}-enum-check-${id}`}
           />
-          <label className="form-check-label" htmlFor={`enum-check-${id}`}>
+          <label
+            className="form-check-label"
+            htmlFor={`${idBase}-enum-check-${id}`}
+          >
             {value}
           </label>
         </div>
@@ -65,6 +70,7 @@ export function NumberEnumFilterSelector({
   trait,
   values,
   onFilterChange,
+  idBase,
 }: FilterSelectorParams<NumberEnumFilterParams, number>) {
   const allValues = Array.from(values).map(([key, value]) => {
     return { key, value };
@@ -93,9 +99,12 @@ export function NumberEnumFilterSelector({
             type="checkbox"
             defaultChecked={allowed.includes(id)}
             onChange={(e) => updateAllowed(id, e.target.checked)}
-            id={`enum-check-${id}`}
+            id={`${idBase}-enum-check-${id}`}
           />
-          <label className="form-check-label" htmlFor={`enum-check-${id}`}>
+          <label
+            className="form-check-label"
+            htmlFor={`${idBase}-enum-check-${id}`}
+          >
             {value}
           </label>
         </div>

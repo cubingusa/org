@@ -68,12 +68,14 @@ export class StringTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <StringFilterSelector
         params={params as StringFilterParams}
         trait={params.trait}
         onFilterChange={onFilterChange}
+        idBase={idBase}
       />
     );
   }

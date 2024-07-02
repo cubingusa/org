@@ -119,6 +119,7 @@ export class NumberEnumTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <NumberEnumFilterSelector
@@ -129,6 +130,7 @@ export class NumberEnumTraitApi extends TraitTypeApi {
           (computer.extraDataForDeserialization() as EnumExtras<number>)
             .allValues
         }
+        idBase={idBase}
       />
     );
   }
@@ -163,6 +165,7 @@ export class StringEnumTraitApi extends TraitTypeApi {
     params: FilterParams | null,
     computer: TraitComputer,
     onFilterChange: (params: FilterParams) => void,
+    idBase: string,
   ): JSX.Element {
     return (
       <StringEnumFilterSelector
@@ -173,6 +176,7 @@ export class StringEnumTraitApi extends TraitTypeApi {
           (computer.extraDataForDeserialization() as EnumExtras<string>)
             .allValues
         }
+        idBase={idBase}
       />
     );
   }
