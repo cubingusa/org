@@ -23,6 +23,13 @@ export function FilterSelector({
     "competition",
   ) as CompetitionData;
   const activeComputer = createComputer(activeParams.trait, settings, wcif);
+  const traitApi = getTraitApi(activeComputer.getTraitType(), wcif);
+  const [localValid, setLocalValid] = useState(activeComputer.isValid());
+
+  const onUpdateValid = function (newValid: boolean) {
+    setLocalValid(newValid);
+    setValid(newValid);
+  };
 
   const onFilterChange = function (params: FilterParams) {
     setActiveParams(params);
@@ -37,16 +44,16 @@ export function FilterSelector({
     onChange(newParams);
   };
 
-  const traitApi = getTraitApi(activeComputer.getTraitType(), wcif);
-
   return (
     <>
       <TraitSelector
         params={params.trait}
         onChange={onTraitChange}
-        setValid={setValid}
+        setValid={onUpdateValid}
       />
-      {traitApi.filterSelector(activeParams, activeComputer, onFilterChange)}
+      {localValid
+        ? traitApi.filterSelector(activeParams, activeComputer, onFilterChange)
+        : null}
     </>
   );
 }
