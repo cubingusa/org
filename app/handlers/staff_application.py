@@ -452,25 +452,25 @@ def delete_hook(competition_id, hook_id):
     hook.key.delete()
     return {}, 200
 
-@bp.route('/staff_api/<competition_id>/review/forms', methods=['GET'])
-def get_review_forms(competition_id):
+@bp.route('/staff_api/<competition_id>/review/settings', methods=['GET'])
+def get_review_settings(competition_id):
   with client.context():
     user = auth.user()
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
     settings = ApplicationSettings.get_by_id(competition_id)
-    return settings.review_forms or []
+    return settings.review_settings or []
 
-@bp.route('/staff_api/<competition_id>/review/forms', methods=['PUT'])
-def set_review_forms(competition_id):
+@bp.route('/staff_api/<competition_id>/review/settings', methods=['PUT'])
+def set_review_settings(competition_id):
   with client.context():
     user = auth.user()
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
     settings = ApplicationSettings.get_by_id(competition_id)
-    settings.review_forms = request.json
+    settings.review_settings = request.json
     return {}, 200
 
 @bp.route('/staff_api/<competition_id>/review/request', methods=['POST'])
