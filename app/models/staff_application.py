@@ -28,6 +28,7 @@ class ApplicationSettings(ndb.Model):
   details = ndb.JsonProperty()
   sender_address = ndb.StringProperty()
   sender_name = ndb.StringProperty()
+  review_forms = ndb.JsonProperty()
 
 class SavedView(ndb.Model):
   view_id = ndb.StringProperty()
@@ -57,3 +58,20 @@ class MailHook(ndb.Model):
   property_value = ndb.IntegerProperty()
   # Either "User" or an email address.
   recipient = ndb.StringProperty()
+
+class Review(ndb.Model):
+  user = ndb.KeyProperty(kind=User)
+  reviewers = ndb.KeyProperty(kind=User, repeated=True)
+  declined_reviewers = ndb.KeyProperty(kind=User, repeated=True)
+  declined_reviewer_timestamps = ndb.DateTimeProperty(repeated=True)
+  competition = ndb.KeyProperty(kind=Competition)
+  review_form_id = ndb.IntegerProperty()
+  submitted_at = ndb.DateTimeProperty()
+  deadline = ndb.DateTimeProperty()
+  updated_at = ndb.DateTimeProperty()
+  updated_by = ndb.KeyProperty(kind=User)
+  details = ndb.JsonProperty()
+
+  @staticmethod
+  def Key(competition_id, review_form_id, user_id):
+    return '%s_%d_%s' % (competition_id, review_form_id, user_id)

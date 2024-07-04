@@ -15,7 +15,7 @@ from app.models.wca.competition import Competition
 bp = Blueprint('staff_application', __name__)
 client = ndb.Client()
 
-def user_to_frontend(user, wcif, settings, user_settings):
+def user_to_frontend(user, wcif, settings, user_settings, public_attributes_only=False):
   admin = is_admin(user, wcif)
   if user_settings:
     props = [{'key': int(k), 'value': v} for k, v in user_settings.properties.items() if v > -1]
@@ -24,16 +24,18 @@ def user_to_frontend(user, wcif, settings, user_settings):
   if not admin:
     visible_props = [prop['id'] for prop in settings.details['properties'] if prop['visible']]
     props = [p for p in props if p['key'] in visible_props]
-  return {
+  out = {
     'id': user.key.id(),
     'name': user.name,
     'wcaId': user.wca_person.id() if user.wca_person else '',
-    'email': user.email,
     'isAdmin': admin,
-    'birthdate': user.birthdate.isoformat(),
     'delegateStatus': user.delegate_status,
-    'properties': props,
   }
+  if not public_attributes_only:
+    out['email'] = user.email
+    out['birthdate'] = user.birthdate.isoformat()
+    out['properties'] = props
+  return out
 
 def form_to_frontend(form):
   return {
@@ -449,3 +451,89 @@ def delete_hook(competition_id, hook_id):
       return {}, 401
     hook.key.delete()
     return {}, 200
+
+@bp.route('/staff_api/<competition_id>/review/forms', methods=['GET'])
+def get_review_forms(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    settings = ApplicationSettings.get_by_id(competition_id)
+    return settings.review_forms or []
+
+@bp.route('/staff_api/<competition_id>/review/forms', methods=['PUT'])
+def set_review_forms(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    settings = ApplicationSettings.get_by_id(competition_id)
+    settings.review_forms = request.json
+    return {}, 200
+
+@bp.route('/staff_api/<competition_id>/review/request', methods=['POST'])
+def request_review(competition_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    req = request.json
+    keys = [ndb.Key(Review, Review.Key(competition_id, req['reviewFormId'], user_id)) for user_id in req['userIds']]
+    reviews = ndb.get_multi(keys)
+    for idx, user_id in enumerate(req['userIds']):
+      key = keys[idx]
+      review = reviews[idx]
+      if not review:
+        review = Review(id=key.id())
+        review.competition = ndb.Key(Competition, competition_id)
+        review.review_form_id = req['reviewFormId']
+        reviews[idx] = review
+      review.deadline = datetime.datetime.fromtimestamp(req['deadlineSeconds'])
+      for reviewer_id in req['reviewerId']:
+        key = ndb.Key(User, reviewer_id)
+        if key not in review.reviewers and key.id() != user_id:
+          review.reviewers += [key]
+    ndb.put_multi(reviews)
+    return {}, 200
+
+@bp.route('/staff_api/<competition_id>/review/mine', methods=['GET'])
+def my_reviews(competition_id):
+  with client.context():
+    user = auth.user()
+    if not user:
+      return {}, 401
+    settings = ApplicationSettings.get_by_id(competition_id)
+    reviews = list(Review.query(ndb.AND(Review.reviewer == user.key,
+                                        Review.competition == ndb.Key(Competition, competition_id))).iter())
+    user_keys = [review.user for review in reviews]
+    reviewer_keys = [reviewer for review in reviews for reviewer in review.reviewers]
+    person_keys = list(set(user_keys + reviewer_keys))
+    users = {user.key.id() : user for user in ndb.get_multi(person_keys).iter()}
+    review_forms_by_id = {form['id']: form for form in settings.review_forms}
+    return [
+      {
+        'user': user_to_frontend(users[review.user.id()], wcif, settings, None, public_attributes_only=True),
+        'reviewForm': review_forms_by_id[review.id],
+        'reviewers': [user_to_frontend(users[reviewer.id()], wcif, settings, None) for reviewer in reviews.reviewers],
+      } for review in reviews if review.id in review_forms_by_id
+    ], 200
+
+@bp.route('/staff_api/<competition_id>/review/decline', methods=['POST'])
+def decline_review(competition_id):
+  with client.context():
+    user = auth.user()
+    if not user:
+      return {}, 401
+    req = request.json
+    review = Review.get_by_id(Review.Key(competition_id, req['reviewFormId'], req['revieweeId']))
+    if review:
+      review.reviewers = [r for r in review.reviewers if r.id() != user.key.id()]
+      review.declined_reviewers += [user.key]
+      review.declined_reviewer_timestamps += [datetime.datetime.now()]
+      review.put()
+      return {}, 200
+    else:
+      return {}, 404
