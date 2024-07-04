@@ -11,7 +11,7 @@ import {
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
-import { StringTrait } from "../trait/traits";
+import { StringTrait } from "../trait/types/string";
 import { ApplicationSettings } from "../types/competition_data";
 
 export class StringFilter extends Filter {

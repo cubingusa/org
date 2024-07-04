@@ -10,7 +10,7 @@ import {
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
-import { EventListTrait } from "../trait/traits";
+import { EventListTrait } from "../trait/types/event_list";
 import { ApplicationSettings } from "../types/competition_data";
 
 export class EventListFilter extends Filter {

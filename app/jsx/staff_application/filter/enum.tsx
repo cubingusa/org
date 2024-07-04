@@ -8,7 +8,7 @@ import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
-import { EnumTrait } from "../trait/traits";
+import { EnumTrait } from "../trait/types/enum";
 import { ApplicationSettings } from "../types/competition_data";
 
 class EnumFilterBase<T> extends Filter {

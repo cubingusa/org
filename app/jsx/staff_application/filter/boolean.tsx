@@ -8,7 +8,7 @@ import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
-import { BooleanTrait } from "../trait/traits";
+import { BooleanTrait } from "../trait/types/boolean";
 import { ApplicationSettings } from "../types/competition_data";
 
 export class BooleanFilter extends Filter {

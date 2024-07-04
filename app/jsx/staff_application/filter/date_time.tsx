@@ -14,7 +14,7 @@ import { FilterType } from "./types/base";
 import { Filter } from "./filter";
 import { Trait } from "../trait/api";
 import { ComputerParams } from "../trait/params";
-import { DateTimeTrait } from "../trait/traits";
+import { DateTimeTrait } from "../trait/types/date_time";
 import { ApplicationSettings } from "../types/competition_data";
 
 export class DateTimeFilter extends Filter {
