@@ -1,0 +1,41 @@
+import { FilterParams } from "../filter/types/params";
+import { Question } from "../question/types";
+import { SubmittedQuestion } from "../types/personal_application_data";
+import { User } from "../types/user";
+
+export interface SubmittedReview {
+  user: User;
+  reviewFormId: number;
+  reviewers: User[];
+  submittedBy: number | undefined;
+  submittedAtSeconds: number | undefined;
+  deadlineSeconds: number;
+
+  questions: SubmittedQuestion[];
+}
+
+export interface DefaultAssignment {
+  filters: FilterParams[];
+  personIds: number[];
+}
+
+export interface ReviewForm {
+  id: number;
+  name: string;
+  description: string;
+  eligibleReviewerFilter: FilterParams[];
+
+  questions: Question[];
+  nextQuestionId: number;
+}
+
+export interface ReviewsData {
+  forms: ReviewForm[];
+  nextFormId: number;
+}
+
+export interface ReviewAssignment {
+  user: User;
+  reviewForm: ReviewForm;
+  reviewers: User[];
+}

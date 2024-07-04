@@ -50,6 +50,14 @@ export function AdminHeader() {
           </>
         ),
       },
+      {
+        path: "/reviews",
+        elt: (
+          <>
+            <span className="material-symbols-outlined">reviews</span> Reviews
+          </>
+        ),
+      },
     ];
     return (
       <>

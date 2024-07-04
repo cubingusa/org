@@ -10,6 +10,7 @@ import {
 import { AdminRoutes } from "./admin/routes";
 import { ViewRoutes } from "./view/routes";
 import { MailerRoutes } from "./mailer/routes";
+import { ReviewsRoutes } from "./reviews/routes";
 import { Application } from "./application";
 import { CompetitionDataLoader } from "./data_loader";
 import { CompetitionData } from "./types/competition_data";
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
           AdminRoutes(),
           ViewRoutes(),
           MailerRoutes(),
+          ReviewsRoutes(),
         ],
       },
     ],
