@@ -1,18 +1,18 @@
 import { ViewLoader } from "./loader";
 
-import { ApplicantLoader } from "../admin/applicant_loader";
 import { AdminTable } from "./admin_table";
 import { AdminBase } from "./admin_base";
 import { PublicTable } from "./public_table";
+import { AdminViewLoader } from "./loader";
 
 export function ViewRoutes() {
   return {
     path: "view",
-    loader: ApplicantLoader,
-    id: "applicants",
     children: [
       {
         path: "admin",
+        id: "admin",
+        loader: AdminViewLoader,
         children: [
           {
             index: true,
@@ -20,7 +20,7 @@ export function ViewRoutes() {
           },
           {
             path: "new",
-            element: <AdminTable />,
+            element: <AdminTable adminRouterId="admin" />,
           },
         ],
       },
@@ -35,9 +35,9 @@ export function ViewRoutes() {
           },
           {
             path: "admin",
-            element: <AdminTable />,
-            loader: ApplicantLoader,
-            id: "admin",
+            element: <AdminTable adminRouterId="view_admin" />,
+            loader: AdminViewLoader,
+            id: "view_admin",
           },
         ],
       },

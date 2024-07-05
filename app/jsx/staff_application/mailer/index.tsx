@@ -9,10 +9,12 @@ import { AdminHeader } from "../admin/header";
 import { EditHookModal } from "./edit_hook_modal";
 
 export function MailerIndex() {
-  const { wcif, user, templates, settings } = useRouteLoaderData(
+  const { wcif, user, settings } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  const { mailerSettings, hooks } = useRouteLoaderData("mailer") as MailerData;
+  const { mailerSettings, hooks, templates } = useRouteLoaderData(
+    "mailer",
+  ) as MailerData;
   const [renderedTemplates, setRenderedTemplates] = useState(templates);
   const [deleteId, setDeleteId] = useState("");
   const [renderedHooks, setRenderedHooks] = useState(hooks);

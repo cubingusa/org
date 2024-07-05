@@ -1,10 +1,10 @@
-import { MailHook, MailTemplate } from "./types";
+import { MailHook, MailMetadata } from "./types";
 import { ApplicationSettings } from "../types/competition_data";
 
 export function hookToText(
   hook: MailHook,
   settings: ApplicationSettings,
-  templates: MailTemplate[],
+  templates: MailMetadata[],
 ): string {
   let triggerPart = "When <broken condition>";
   switch (hook.type) {

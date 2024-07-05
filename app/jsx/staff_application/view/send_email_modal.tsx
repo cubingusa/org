@@ -1,15 +1,20 @@
 import { useRouteLoaderData, useParams } from "react-router-dom";
 import { useState } from "react";
-import { CompetitionData } from "../types/competition_data";
+import { ViewData } from "./types";
+import { MailMetadata } from "../mailer/types";
 
 interface SendEmailModalParams {
   id: string;
   personIds: Number[];
+  templates: MailMetadata[];
 }
 
-export function SendEmailModal({ id, personIds }: SendEmailModalParams) {
+export function SendEmailModal({
+  id,
+  personIds,
+  templates,
+}: SendEmailModalParams) {
   const { competitionId } = useParams();
-  const { templates } = useRouteLoaderData("competition") as CompetitionData;
   const [templateId, setTemplateId] = useState(
     templates.length ? templates[0].id : "",
   );

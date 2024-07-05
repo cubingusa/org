@@ -285,25 +285,39 @@ def get_views(competition_id):
         out += [{key: view.details[key] for key in ['id', 'title', 'visibleTo', 'isPublic']}]
     return out, 200
 
-def template_to_frontend(template):
-  return {
+def template_to_frontend(template, metadata_only=False):
+  out = {
     "id": template.key.id(),
     "title": template.title,
-    "design": template.design,
-    "html": template.html,
-    "subjectLine": template.subject_line,
   }
+  if not metadata_only:
+    out["design"] = template.design
+    out["html"] = template.html
+    out["subjectLine"] = template.subject_line
+  return out
 
-@bp.route('/staff_api/<competition_id>/template', methods=['GET'])
-def get_templates(competition_id):
+@bp.route('/staff_api/<competition_id>/template_metadata', methods=['GET'])
+def get_template_metadata(competition_id):
   with client.context():
     user = auth.user()
     wcif = get_wcif(competition_id)
     if not is_admin(user, wcif):
       return {}, 401
-    out = [template_to_frontend(template) for template in
+    out = [template_to_frontend(template, metadata_only=True) for template in
            MailTemplate.query(MailTemplate.competition == ndb.Key(Competition, competition_id)).iter()]
     return out, 200
+
+@bp.route('/staff_api/<competition_id>/template/<template_id>', methods=['GET'])
+def get_template(competition_id, template_id):
+  with client.context():
+    user = auth.user()
+    wcif = get_wcif(competition_id)
+    if not is_admin(user, wcif):
+      return {}, 401
+    template = MailTemplate.get_by_id(template_id)
+    if template.competition.id() != competition_id:
+      return {}, 401
+    return template_to_frontend(template, metadata_only=False), 200
 
 @bp.route('/staff_api/<competition_id>/template', methods=['PUT'], defaults={'template_id': None})
 @bp.route('/staff_api/<competition_id>/template/<template_id>', methods=['PUT'])
@@ -482,9 +496,9 @@ def request_review(competition_id):
     if not is_admin(user, wcif):
       return {}, 401
     req = request.json
-    keys = [ndb.Key(Review, Review.Key(competition_id, req['reviewFormId'], user_id)) for user_id in req['userIds']]
+    keys = [ndb.Key(Review, Review.Key(competition_id, req['reviewFormId'], user['id'])) for user in req['users']]
     reviews = ndb.get_multi(keys)
-    for idx, user_id in enumerate(req['userIds']):
+    for idx, user in enumerate(req['users']):
       key = keys[idx]
       review = reviews[idx]
       if not review:
@@ -493,9 +507,9 @@ def request_review(competition_id):
         review.review_form_id = req['reviewFormId']
         reviews[idx] = review
       review.deadline = datetime.datetime.fromtimestamp(req['deadlineSeconds'])
-      for reviewer_id in req['reviewerId']:
+      for reviewer_id in user['reviewerIds']:
         key = ndb.Key(User, reviewer_id)
-        if key not in review.reviewers and key.id() != user_id:
+        if key not in review.reviewers and key.id() != user['id']:
           review.reviewers += [key]
     ndb.put_multi(reviews)
     return {}, 200

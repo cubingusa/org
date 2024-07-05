@@ -16,9 +16,8 @@ interface MailerEditorParams {
   mode: "clone" | "edit" | "new";
 }
 export function MailerEditor({ mode }: MailerEditorParams) {
-  const { wcif, templates } = useRouteLoaderData(
-    "competition",
-  ) as CompetitionData;
+  const { wcif } = useRouteLoaderData("competition") as CompetitionData;
+  const inTemplate = useRouteLoaderData("template") as MailTemplate;
   const { templateId, competitionId } = useParams();
   const [spinning, setSpinning] = useState(false);
   const navigate = useNavigate();
@@ -27,7 +26,7 @@ export function MailerEditor({ mode }: MailerEditorParams) {
   let hasDesign = false;
   switch (mode) {
     case "clone":
-      template = structuredClone(templates.find((t) => t.id == templateId));
+      template = structuredClone(inTemplate);
       if (template === undefined) {
         throw redirect(`/staff/${competitionId}/mailer`);
       }
@@ -37,7 +36,7 @@ export function MailerEditor({ mode }: MailerEditorParams) {
       hasDesign = true;
       break;
     case "edit":
-      template = templates.find((t) => t.id == templateId);
+      template = inTemplate;
       if (template === undefined) {
         throw redirect(`/staff/${competitionId}/mailer`);
       }

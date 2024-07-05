@@ -27,6 +27,11 @@ export interface MailTemplate {
   html: string;
 }
 
+export interface MailMetadata {
+  id: string;
+  title: string;
+}
+
 interface MailerSettings {
   senderAddress: string;
   senderName: string;
@@ -35,4 +40,5 @@ interface MailerSettings {
 export interface MailerData {
   mailerSettings: MailerSettings;
   hooks: MailHook[];
+  templates: MailMetadata[];
 }

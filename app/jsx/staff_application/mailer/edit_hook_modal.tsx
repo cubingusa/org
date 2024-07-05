@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { EventId, getEventName } from "@wca/helpers";
 import { CompetitionData } from "../types/competition_data";
 import {
+  MailerData,
   MailHook,
   HookType,
   PropertyAssignedMailHook,
@@ -14,9 +15,10 @@ interface EditHookModalParams {
   hook: MailHook;
 }
 export function EditHookModal({ id, hook }: EditHookModalParams) {
-  const { settings, wcif, templates } = useRouteLoaderData(
+  const { settings, wcif } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
+  const { templates } = useRouteLoaderData("mailer") as MailerData;
   if (hook == null) {
     hook = {
       id: "",

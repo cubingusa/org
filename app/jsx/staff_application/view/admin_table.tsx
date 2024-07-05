@@ -12,14 +12,16 @@ import { createFilter } from "../filter/create_filter";
 import { ComputerParams } from "../trait/params";
 import { TraitComputer } from "../trait/api";
 import { createComputer } from "../trait/create_computer";
-import { ApplicantData } from "../types/applicant_data";
 import { CompetitionData } from "../types/competition_data";
-import { SavedView, ExportedRow } from "./types";
+import { SavedView, ExportedRow, ViewData } from "./types";
 import { ViewTable } from "./table";
 import { ViewSaver } from "./saver";
 import { AdminHeader } from "../admin/header";
 
-export function AdminTable() {
+interface AdminTableParams {
+  adminRouterId: string;
+}
+export function AdminTable({ adminRouterId }: AdminTableParams) {
   const { user, wcif, settings } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
@@ -34,7 +36,9 @@ export function AdminTable() {
     exportTimeSeconds: 0,
     exportedRows: [],
   };
-  const applicants = useRouteLoaderData("applicants") as ApplicantData[];
+  const { templates, applicants } = useRouteLoaderData(
+    adminRouterId,
+  ) as ViewData;
   const [selectedIds, setSelectedIds] = useState([] as Number[]);
   const [computers, setComputers] = useState(
     view.columns.map((params) => createComputer(params, settings, wcif)),
@@ -125,7 +129,11 @@ export function AdminTable() {
       >
         <span className="material-symbols-outlined">mail</span> Email
       </button>
-      <SendEmailModal id="email-modal" personIds={selectedIds} />
+      <SendEmailModal
+        id="email-modal"
+        personIds={selectedIds}
+        templates={templates}
+      />
       &nbsp;
       <button
         type="button"

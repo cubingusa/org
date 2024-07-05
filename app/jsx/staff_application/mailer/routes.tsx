@@ -1,11 +1,11 @@
-import { MailTemplateLoader } from "./loader";
+import { MailSettingsLoader, MailTemplateLoader } from "./loader";
 import { MailerEditor } from "./editor";
 import { MailerIndex } from "./index";
 
 export function MailerRoutes() {
   return {
     path: "mailer",
-    loader: MailTemplateLoader,
+    loader: MailSettingsLoader,
     id: "mailer",
     children: [
       {
@@ -18,6 +18,8 @@ export function MailerRoutes() {
       },
       {
         path: "template/:templateId",
+        id: "template",
+        loader: MailTemplateLoader,
         children: [
           {
             index: true,
