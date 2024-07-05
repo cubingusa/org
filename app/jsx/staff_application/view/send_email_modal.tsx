@@ -5,7 +5,7 @@ import { MailMetadata } from "../mailer/types";
 
 interface SendEmailModalParams {
   id: string;
-  personIds: Number[];
+  personIds: number[];
   templates: MailMetadata[];
 }
 

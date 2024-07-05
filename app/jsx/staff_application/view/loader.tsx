@@ -8,9 +8,14 @@ export async function AdminViewLoader({ params }: any): Promise<ViewData> {
   const templates = await fetch(
     `/staff_api/${params.competitionId}/template_metadata`,
   );
+  const reviewSettings = await fetch(
+    `/staff_api/${params.competitionId}/review/settings`,
+  );
+
   return {
     applicants: await applicants.json(),
     templates: await templates.json(),
+    reviewSettings: await reviewSettings.json(),
   };
 }
 

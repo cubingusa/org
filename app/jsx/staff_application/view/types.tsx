@@ -3,6 +3,7 @@ import { ComputerParams } from "../trait/params";
 import { SerializedTrait } from "../trait/serialized";
 import { ApplicantData } from "../types/applicant_data";
 import { MailMetadata } from "../mailer/types";
+import { ReviewsData } from "../reviews/types";
 
 export interface ExportedRow {
   userName: string;
@@ -33,4 +34,5 @@ export interface ViewMetadata {
 export interface ViewData {
   applicants: ApplicantData[];
   templates: MailMetadata[];
+  reviewSettings: ReviewsData;
 }

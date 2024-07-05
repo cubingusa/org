@@ -27,6 +27,8 @@ export interface ReviewForm {
 
   questions: Question[];
   nextQuestionId: number;
+
+  defaults: DefaultAssignment[];
 }
 
 export interface ReviewsData {

@@ -37,6 +37,7 @@ export function ReviewsIndex() {
         eligibleReviewerFilters: [],
         questions: [],
         nextQuestionId: 0,
+        defaults: [],
       },
     ];
     settings.forms = newForms;

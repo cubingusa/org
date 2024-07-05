@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import { ColumnModal } from "./column_modal";
 import { EditPropertiesModal } from "./edit_properties_modal";
 import { SendEmailModal } from "./send_email_modal";
+import { ReviewsModal } from "./reviews_modal";
 import { Filter } from "../filter/filter";
 import { FilterModal } from "../filter/modal";
 import { FilterParams } from "../filter/types/params";
@@ -36,10 +37,10 @@ export function AdminTable({ adminRouterId }: AdminTableParams) {
     exportTimeSeconds: 0,
     exportedRows: [],
   };
-  const { templates, applicants } = useRouteLoaderData(
+  const { templates, applicants, reviewSettings } = useRouteLoaderData(
     adminRouterId,
   ) as ViewData;
-  const [selectedIds, setSelectedIds] = useState([] as Number[]);
+  const [selectedIds, setSelectedIds] = useState([] as number[]);
   const [computers, setComputers] = useState(
     view.columns.map((params) => createComputer(params, settings, wcif)),
   );
@@ -146,6 +147,23 @@ export function AdminTable({ adminRouterId }: AdminTableParams) {
         {selectedIds.length} {selectedIds.length == 1 ? "person" : "people"}
       </button>
       <EditPropertiesModal id="properties-modal" personIds={selectedIds} />
+      &nbsp;
+      <button
+        type="button"
+        className="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#reviews-modal"
+        disabled={selectedIds.length == 0}
+      >
+        <span className="material-symbols-outlined">reviews</span> Request
+        Reviews
+      </button>
+      <ReviewsModal
+        id="reviews-modal"
+        personIds={selectedIds}
+        allApplicants={applicants}
+        reviewSettings={reviewSettings}
+      />
       &nbsp;
       <button
         type="button"

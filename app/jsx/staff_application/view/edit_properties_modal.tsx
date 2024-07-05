@@ -5,7 +5,7 @@ import { CompetitionData } from "../types/competition_data";
 
 interface EditPropertiesModalParams {
   id: string;
-  personIds: Number[];
+  personIds: number[];
 }
 
 export function EditPropertiesModal({
