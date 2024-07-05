@@ -23,7 +23,7 @@ export interface ReviewForm {
   id: number;
   name: string;
   description: string;
-  eligibleReviewerFilter: FilterParams[];
+  eligibleReviewerFilters: FilterParams[];
 
   questions: Question[];
   nextQuestionId: number;
