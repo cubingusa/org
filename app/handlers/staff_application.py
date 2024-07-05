@@ -460,7 +460,7 @@ def get_review_settings(competition_id):
     if not is_admin(user, wcif):
       return {}, 401
     settings = ApplicationSettings.get_by_id(competition_id)
-    return settings.review_settings or []
+    return settings.review_settings or {}, 200
 
 @bp.route('/staff_api/<competition_id>/review/settings', methods=['PUT'])
 def set_review_settings(competition_id):
@@ -471,6 +471,7 @@ def set_review_settings(competition_id):
       return {}, 401
     settings = ApplicationSettings.get_by_id(competition_id)
     settings.review_settings = request.json
+    settings.put()
     return {}, 200
 
 @bp.route('/staff_api/<competition_id>/review/request', methods=['POST'])
