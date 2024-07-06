@@ -2,6 +2,7 @@ import { FilterParams } from "../filter/types/params";
 import { Question } from "../question/types";
 import { SubmittedQuestion } from "../types/personal_application_data";
 import { User } from "../types/user";
+import { ApplicantData } from "../types/applicant_data";
 
 export interface SubmittedReview {
   user: User;
@@ -34,6 +35,7 @@ export interface ReviewForm {
 export interface ReviewsData {
   forms: ReviewForm[];
   nextFormId: number;
+  applicants: ApplicantData[];
 }
 
 export interface ReviewAssignment {
