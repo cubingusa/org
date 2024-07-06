@@ -99,6 +99,8 @@ function FormDisplay(props: FormDisplayProps) {
 interface ReviewFormDisplayProps {
   form: ReviewForm;
   review: SubmittedReview;
+  id: string;
+  declineReview: () => void;
 }
 
 function ReviewFormDisplay(props: ReviewFormDisplayProps) {
@@ -127,13 +129,61 @@ function ReviewFormDisplay(props: ReviewFormDisplayProps) {
     <div className="card">
       <div className="card-body">
         <form>
+          <div className="row">
+            <div className="col-10">
+              Candidate: {review.user.name}{" "}
+              {review.user.wcaId ? (
+                <a href={`https://wca.link/${review.user.wcaId}`}>
+                  {review.user.wcaId}
+                </a>
+              ) : null}
+            </div>
+            <div className="col-2">
+              <div className="float-end">
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#decline-review-modal-${props.id}`}
+                >
+                  <span className="material-symbols-outlined">close</span>{" "}
+                  Decline
+                </button>
+              </div>
+              <div
+                className="modal fade"
+                id={`decline-review-modal-${props.id}`}
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h1 className="modal-title fs-5">Decline this review?</h1>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={(e) => props.declineReview()}
+                        data-bs-dismiss="modal"
+                      >
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div>
-            Candidate: {review.user.name}{" "}
-            {review.user.wcaId ? (
-              <a href={`https://wca.link/${review.user.wcaId}`}>
-                {review.user.wcaId}
-              </a>
-            ) : null}
+            Reviewers:
+            {review.reviewers.map((reviewer) => reviewer.name).join(", ")}
           </div>
           <div>{form.description}</div>
           <hr />
@@ -189,6 +239,7 @@ export function Application() {
   const { wcif, user, settings, forms, myReviews } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
+  const [reviews, setReviews] = useState(myReviews.reviews);
   const { competitionId } = useParams();
   let adminText;
   if (user?.isAdmin) {
@@ -316,8 +367,8 @@ export function Application() {
   );
   let reviewsSection;
 
-  if (myReviews.reviews.length > 0) {
-    const reviewsAndForms = myReviews.reviews.map((review) => {
+  if (reviews.length > 0) {
+    const reviewsAndForms = reviews.map((review) => {
       return {
         review,
         form: myReviews.reviewForms.find(
@@ -325,6 +376,24 @@ export function Application() {
         ),
       };
     });
+
+    const declineReview = async (review: SubmittedReview) => {
+      await fetch(`/staff_api/${wcif.id}/review/decline`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: review.user.id,
+          reviewFormId: review.reviewFormId,
+        }),
+      });
+      setReviews(
+        reviews.filter(
+          (r) =>
+            r.reviewFormId !== review.reviewFormId ||
+            r.user.id !== review.user.id,
+        ),
+      );
+    };
     reviewsSection = (
       <>
         <h3>Staff Reviews</h3>
@@ -359,7 +428,12 @@ export function Application() {
                 className="accordion-collapse collapse"
                 data-bs-parent="#reviews-accordion"
               >
-                <ReviewFormDisplay form={form} review={review} />
+                <ReviewFormDisplay
+                  form={form}
+                  review={review}
+                  id={`${review.reviewFormId}-${review.user.id}`}
+                  declineReview={() => declineReview(review)}
+                />
               </div>
             </div>
           ))}

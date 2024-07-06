@@ -555,7 +555,7 @@ def decline_review(competition_id):
     if not user:
       return {}, 401
     req = request.json
-    review = Review.get_by_id(Review.Key(competition_id, req['reviewFormId'], req['revieweeId']))
+    review = Review.get_by_id(Review.Key(competition_id, req['reviewFormId'], req['userId']))
     if review:
       review.reviewers = [r for r in review.reviewers if r.id() != user.key.id()]
       review.declined_reviewers += [user.key]
