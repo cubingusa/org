@@ -8,7 +8,7 @@ import uuid
 from app.cache import cache
 from app.lib import auth, common
 from app.lib.staff_email import send_email
-from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView, MailTemplate, MailHook
+from app.models.staff_application import ApplicationSettings, SubmittedForm, UserSettings, SavedView, MailTemplate, MailHook, Review
 from app.models.user import Roles, User
 from app.models.wca.competition import Competition
 
@@ -504,37 +504,49 @@ def request_review(competition_id):
       if not review:
         review = Review(id=key.id())
         review.competition = ndb.Key(Competition, competition_id)
+        review.user = ndb.Key(User, str(user['id']))
         review.review_form_id = req['reviewFormId']
         reviews[idx] = review
       review.deadline = datetime.datetime.fromtimestamp(req['deadlineSeconds'])
       for reviewer_id in user['reviewerIds']:
-        key = ndb.Key(User, reviewer_id)
-        if key not in review.reviewers and key.id() != user['id']:
+        key = ndb.Key(User, str(reviewer_id))
+        # TODO: Uncomment this.
+        if key not in review.reviewers: # and key.id() != user['id']:
           review.reviewers += [key]
     ndb.put_multi(reviews)
     return {}, 200
+
+def review_to_frontend(review, wcif, settings, users):
+  out = {
+    'user': user_to_frontend(users[review.user.id()], wcif, settings, None, public_attributes_only=True),
+    'reviewers': [user_to_frontend(users[reviewer.id()], wcif, settings, None) for reviewer in review.reviewers],
+    'reviewFormId': review.review_form_id,
+    'questions': review.details,
+  }
+  if review.submitted_at:
+    out['submittedAtSeconds'] = review.submitted_at.timestamp()
+  if review.deadline:
+    out['deadline'] = review.deadline.timestamp()
+  return out
 
 @bp.route('/staff_api/<competition_id>/review/mine', methods=['GET'])
 def my_reviews(competition_id):
   with client.context():
     user = auth.user()
+    wcif = get_wcif(competition_id)
     if not user:
       return {}, 401
     settings = ApplicationSettings.get_by_id(competition_id)
-    reviews = list(Review.query(ndb.AND(Review.reviewer == user.key,
+    reviews = list(Review.query(ndb.AND(Review.reviewers == user.key,
                                         Review.competition == ndb.Key(Competition, competition_id))).iter())
     user_keys = [review.user for review in reviews]
     reviewer_keys = [reviewer for review in reviews for reviewer in review.reviewers]
     person_keys = list(set(user_keys + reviewer_keys))
-    users = {user.key.id() : user for user in ndb.get_multi(person_keys).iter()}
-    review_forms_by_id = {form['id']: form for form in settings.review_forms}
-    return [
-      {
-        'user': user_to_frontend(users[review.user.id()], wcif, settings, None, public_attributes_only=True),
-        'reviewForm': review_forms_by_id[review.id],
-        'reviewers': [user_to_frontend(users[reviewer.id()], wcif, settings, None) for reviewer in reviews.reviewers],
-      } for review in reviews if review.id in review_forms_by_id
-    ], 200
+    users = {user.key.id() : user for user in ndb.get_multi(person_keys)}
+    return {
+      'reviewForms': [form for form in settings.review_settings['forms'] if form['id'] in [review.review_form_id for review in reviews]],
+      'reviews': [review_to_frontend(review, wcif, settings, users) for review in reviews],
+    }, 200
 
 @bp.route('/staff_api/<competition_id>/review/decline', methods=['POST'])
 def decline_review(competition_id):
@@ -552,3 +564,20 @@ def decline_review(competition_id):
       return {}, 200
     else:
       return {}, 404
+
+@bp.route('/staff_api/<competition_id>/review/submit', methods=['POST'])
+def submit_review(competition_id):
+  with client.context():
+    user = auth.user()
+    if not user:
+      return {}, 401
+    req = request.json
+    review = Review.get_by_id(Review.Key(competition_id, req['reviewFormId'], req['user']['id']))
+    if not review.submitted_at:
+      review.submitted_at = datetime.datetime.now()
+      review.submitted_by = user.key
+    review.updated_at = datetime.datetime.now()
+    review.updated_by = user.key
+    review.details = req['questions']
+    review.put()
+    return {}, 200

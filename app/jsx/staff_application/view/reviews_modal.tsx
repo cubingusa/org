@@ -34,7 +34,7 @@ export function ReviewsModal({
     reviewSettings.forms.length == 0 || reviewForm == undefined;
 
   const formSection =
-    reviewSettings.forms.length == 0 ? (
+    reviewSettings.forms.length > 0 ? (
       <div className="row g-2 align-items-center">
         <div className="col-auto">
           <label htmlFor="form-selector" className="form-label">
@@ -88,7 +88,9 @@ export function ReviewsModal({
       }
       return true;
     });
-    if (!eligibleReviewers.map((r) => r.user.id).includes(selectedReviewerId)) {
+    if (
+      !eligibleReviewers.map((r) => +r.user.id).includes(selectedReviewerId)
+    ) {
       disabledSubmit = true;
     }
     manualSection = (

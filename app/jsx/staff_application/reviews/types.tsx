@@ -10,7 +10,7 @@ export interface SubmittedReview {
   reviewers: User[];
   submittedBy: number | undefined;
   submittedAtSeconds: number | undefined;
-  deadlineSeconds: number;
+  deadlineSeconds: number | undefined;
 
   questions: SubmittedQuestion[];
 }
@@ -42,4 +42,9 @@ export interface ReviewAssignment {
   user: User;
   reviewForm: ReviewForm;
   reviewers: User[];
+}
+
+export interface MyReviews {
+  reviewForms: ReviewForm[];
+  reviews: SubmittedReview[];
 }

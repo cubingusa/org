@@ -3,6 +3,7 @@ import { User } from "./user";
 import { Form } from "./form";
 import { Property } from "./property";
 import { ViewMetadata } from "../view/types";
+import { MyReviews } from "../reviews/types";
 import { SubmittedForm } from "./personal_application_data";
 
 export interface ApplicationSettings {
@@ -20,4 +21,5 @@ export interface CompetitionData {
   settings: ApplicationSettings;
   views: ViewMetadata[];
   forms: SubmittedForm[];
+  myReviews: MyReviews;
 }

@@ -10,6 +10,7 @@ import {
 import { Form } from "./types/form";
 import { getApi } from "./question/questions";
 import { ViewList } from "./view/list";
+import { ReviewForm, SubmittedReview } from "./reviews/types";
 
 interface FormDisplayProps {
   form: Form;
@@ -95,8 +96,97 @@ function FormDisplay(props: FormDisplayProps) {
   );
 }
 
+interface ReviewFormDisplayProps {
+  form: ReviewForm;
+  review: SubmittedReview;
+}
+
+function ReviewFormDisplay(props: ReviewFormDisplayProps) {
+  const form = props.form;
+  const review = props.review;
+  const [spinning, setSpinning] = useState(false);
+  const { wcif, forms } = useRouteLoaderData("competition") as CompetitionData;
+
+  const submit = async function () {
+    event.preventDefault();
+    setSpinning(true);
+    await fetch(`/staff_api/${wcif.id}/review/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(review),
+    });
+    setSpinning(false);
+  };
+
+  let spinner;
+  if (spinning) {
+    spinner = <div>submitting...</div>;
+  }
+
+  return (
+    <div className="card">
+      <div className="card-body">
+        <form>
+          <div>
+            Candidate: {review.user.name}{" "}
+            {review.user.wcaId ? (
+              <a href={`https://wca.link/${review.user.wcaId}`}>
+                {review.user.wcaId}
+              </a>
+            ) : null}
+          </div>
+          <div>{form.description}</div>
+          <hr />
+          {form.questions.map((question, idx) => {
+            let myQuestion = (review.questions || []).find(
+              (sq) => sq.questionId == question.id,
+            );
+            if (myQuestion === undefined) {
+              if (review.questions == null) {
+                review.questions = [];
+              }
+              myQuestion = {
+                questionId: question.id,
+                numberAnswer: 0,
+                booleanAnswer: false,
+                textAnswer: "",
+              };
+              review.questions.push(myQuestion);
+            }
+            const api = getApi(question.questionType, wcif);
+            if (api) {
+              return (
+                <div key={question.id}>
+                  {api.form({
+                    question,
+                    myQuestion,
+                    onAnswerChange: (q: SubmittedQuestion) =>
+                      (review.questions[idx] = q),
+                  })}
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+          <div>
+            <button
+              className="btn btn-primary mb-3"
+              type="submit"
+              onClick={submit}
+            >
+              Submit
+            </button>
+            {spinner}
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export function Application() {
-  const { wcif, user, settings, forms } = useRouteLoaderData(
+  const { wcif, user, settings, forms, myReviews } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
   const { competitionId } = useParams();
@@ -224,6 +314,60 @@ export function Application() {
       })}
     </>
   );
+  let reviewsSection;
+
+  if (myReviews.reviews.length > 0) {
+    const reviewsAndForms = myReviews.reviews.map((review) => {
+      return {
+        review,
+        form: myReviews.reviewForms.find(
+          (form) => form.id == review.reviewFormId,
+        ),
+      };
+    });
+    reviewsSection = (
+      <>
+        <h3>Staff Reviews</h3>
+        <div className="accordion" id="reviews-accordion">
+          {reviewsAndForms.map(({ review, form }) => (
+            <div
+              className="accordion-item"
+              key={`${review.reviewFormId}-${review.user.id}`}
+            >
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#collapsed-form-${review.reviewFormId}-${review.user.id}`}
+                >
+                  {form.name} for {review.user.name}
+                  {review.deadlineSeconds ? (
+                    <>
+                      {" "}
+                      (Due{" "}
+                      {DateTime.fromSeconds(
+                        review.deadlineSeconds,
+                      ).toLocaleString(DateTime.DATETIME_MED)}{" "}
+                      )
+                    </>
+                  ) : null}
+                </button>
+              </h2>
+              <div
+                id={`collapsed-form-${review.reviewFormId}-${review.user.id}`}
+                className="accordion-collapse collapse"
+                data-bs-parent="#reviews-accordion"
+              >
+                <ReviewFormDisplay form={form} review={review} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <p />
+      </>
+    );
+  }
 
   return (
     <div>
@@ -237,6 +381,7 @@ export function Application() {
       <p />
       {formsSection}
       <p />
+      {reviewsSection}
       <ViewList />
     </div>
   );
