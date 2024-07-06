@@ -33,8 +33,6 @@ export interface ReviewForm {
 }
 
 export interface ReviewsData {
-  forms: ReviewForm[];
-  nextFormId: number;
   applicants: ApplicantData[];
 }
 
@@ -42,9 +40,4 @@ export interface ReviewAssignment {
   user: User;
   reviewForm: ReviewForm;
   reviewers: User[];
-}
-
-export interface MyReviews {
-  reviewForms: ReviewForm[];
-  reviews: SubmittedReview[];
 }

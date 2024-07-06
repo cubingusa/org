@@ -161,6 +161,7 @@ export function ViewSaver({ view, collapseId }: ViewSaverParams) {
           ) : null}
         </div>
       </div>
+      // TODO: don't include review-based filters.
       <FilterModal id="saved-view-filter-modal" addFilter={addFilter} />
       &nbsp;
       <button

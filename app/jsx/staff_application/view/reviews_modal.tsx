@@ -3,38 +3,35 @@ import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { ApplicantData } from "../types/applicant_data";
 import { CompetitionData } from "../types/competition_data";
-import { ReviewsData } from "../reviews/types";
 import { createFilter } from "../filter/create_filter";
 
 interface ReviewsModalParams {
   id: string;
   personIds: number[];
-  reviewSettings: ReviewsData;
   allApplicants: ApplicantData[];
 }
 
 export function ReviewsModal({
   id,
   personIds,
-  reviewSettings,
   allApplicants,
 }: ReviewsModalParams) {
   const { settings, wcif } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
   const [formId, setFormId] = useState(
-    reviewSettings.forms.length == 0 ? 0 : reviewSettings.forms[0].id,
+    settings.reviewForms.length == 0 ? 0 : settings.reviewForms[0].id,
   );
-  const reviewForm = reviewSettings.forms.find((f) => f.id == formId);
+  const reviewForm = settings.reviewForms.find((f) => f.id == formId);
   const [action, setAction] = useState("auto");
   const [selectedReviewerId, setSelectedReviewerId] = useState(-1);
   const [deadlineSeconds, setDeadlineSeconds] = useState(0);
 
   let disabledSubmit =
-    reviewSettings.forms.length == 0 || reviewForm == undefined;
+    settings.reviewForms.length == 0 || reviewForm == undefined;
 
   const formSection =
-    reviewSettings.forms.length > 0 ? (
+    settings.reviewForms.length > 0 ? (
       <div className="row g-2 align-items-center">
         <div className="col-auto">
           <label htmlFor="form-selector" className="form-label">
@@ -48,7 +45,7 @@ export function ReviewsModal({
             value={formId}
             onChange={(e) => setFormId(+e.target.value)}
           >
-            {reviewSettings.forms.map((f) => (
+            {settings.reviewForms.map((f) => (
               <option value={f.id} key={f.id}>
                 {f.name}
               </option>

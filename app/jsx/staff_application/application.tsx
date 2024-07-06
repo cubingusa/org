@@ -239,7 +239,7 @@ export function Application() {
   const { wcif, user, settings, forms, myReviews } = useRouteLoaderData(
     "competition",
   ) as CompetitionData;
-  const [reviews, setReviews] = useState(myReviews.reviews);
+  const [reviews, setReviews] = useState(myReviews);
   const { competitionId } = useParams();
   let adminText;
   if (user?.isAdmin) {
@@ -292,7 +292,7 @@ export function Application() {
           }
           for (const filterParams of form.filters || []) {
             const filter = createFilter(filterParams, settings, wcif);
-            if (!filter.apply({ user, forms })) {
+            if (!filter.apply({ user, forms, reviews: [] })) {
               return false;
             }
           }
@@ -371,7 +371,7 @@ export function Application() {
     const reviewsAndForms = reviews.map((review) => {
       return {
         review,
-        form: myReviews.reviewForms.find(
+        form: settings.reviewForms.find(
           (form) => form.id == review.reviewFormId,
         ),
       };

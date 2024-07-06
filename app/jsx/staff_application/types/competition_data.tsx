@@ -3,7 +3,7 @@ import { User } from "./user";
 import { Form } from "./form";
 import { Property } from "./property";
 import { ViewMetadata } from "../view/types";
-import { MyReviews } from "../reviews/types";
+import { SubmittedReview, ReviewForm } from "../reviews/types";
 import { SubmittedForm } from "./personal_application_data";
 
 export interface ApplicationSettings {
@@ -13,6 +13,8 @@ export interface ApplicationSettings {
   nextFormId: number;
   properties: Property[];
   nextPropertyId: number;
+  reviewForms: ReviewForm[];
+  nextReviewFormId: number;
 }
 
 export interface CompetitionData {
@@ -21,5 +23,5 @@ export interface CompetitionData {
   settings: ApplicationSettings;
   views: ViewMetadata[];
   forms: SubmittedForm[];
-  myReviews: MyReviews;
+  myReviews: SubmittedReview[];
 }

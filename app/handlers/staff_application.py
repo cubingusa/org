@@ -45,6 +45,19 @@ def form_to_frontend(form):
     'details': form.details
   }
 
+def review_to_frontend(review, wcif, settings, users):
+  out = {
+    'user': user_to_frontend(users[review.user.id()], wcif, settings, None, public_attributes_only=True),
+    'reviewers': [user_to_frontend(users[reviewer.id()], wcif, settings, None) for reviewer in review.reviewers],
+    'reviewFormId': review.review_form_id,
+    'questions': review.details,
+  }
+  if review.submitted_at:
+    out['submittedAtSeconds'] = review.submitted_at.timestamp()
+  if review.deadline:
+    out['deadline'] = review.deadline.timestamp()
+  return out
+
 def is_admin(user, wcif):
   if not user:
     return False
@@ -121,7 +134,17 @@ def get_settings(competition_id):
       return {}, 404
     if settings.details is None:
       return {}
-    return settings.details
+    out = settings.details
+    # TODO: restrict form visibility to ones assigned to you?
+    if 'forms' in settings.review_settings:
+      out['reviewForms'] = settings.review_settings['forms']
+    else:
+      out['reviewForms'] = []
+    if 'nextFormId' in settings.review_settings:
+      out['nextReviewFormId'] = settings.review_settings['nextFormId']
+    else:
+      out['nextReviewFormId'] = 0
+    return out
 
 @bp.route('/staff_api/<competition_id>/settings', methods=['PUT'])
 def put_settings(competition_id):
@@ -185,12 +208,15 @@ def get_all_users(competition_id):
     all_forms = list(SubmittedForm.query(SubmittedForm.competition == ndb.Key(Competition, competition_id)).iter())
     user_keys = list(set([form.user for form in all_forms]))
     users = ndb.get_multi(user_keys)
+    users_by_id = {user.key.id() : user for user in users}
     user_settings_keys = [ndb.Key(UserSettings, UserSettings.Key(competition_id, int(user.key.id()))) for user in users]
     user_settings = ndb.get_multi(user_settings_keys)
+    all_reviews = list(Review.query(Review.competition == ndb.Key(Competition, competition_id)).iter())
     return [
       {
         'user': user_to_frontend(user, wcif, settings, user_settings),
-        'forms': [form_to_frontend(form) for form in all_forms if form.user == user.key]
+        'forms': [form_to_frontend(form) for form in all_forms if form.user == user.key],
+        'reviews': [review_to_frontend(review, wcif, settings, users_by_id) for review in all_reviews if review.user == user.key],
       } for user, user_settings in zip(users, user_settings)
     ]
 
@@ -466,16 +492,6 @@ def delete_hook(competition_id, hook_id):
     hook.key.delete()
     return {}, 200
 
-@bp.route('/staff_api/<competition_id>/review/settings', methods=['GET'])
-def get_review_settings(competition_id):
-  with client.context():
-    user = auth.user()
-    wcif = get_wcif(competition_id)
-    if not is_admin(user, wcif):
-      return {}, 401
-    settings = ApplicationSettings.get_by_id(competition_id)
-    return settings.review_settings or {}, 200
-
 @bp.route('/staff_api/<competition_id>/review/settings', methods=['PUT'])
 def set_review_settings(competition_id):
   with client.context():
@@ -516,19 +532,6 @@ def request_review(competition_id):
     ndb.put_multi(reviews)
     return {}, 200
 
-def review_to_frontend(review, wcif, settings, users):
-  out = {
-    'user': user_to_frontend(users[review.user.id()], wcif, settings, None, public_attributes_only=True),
-    'reviewers': [user_to_frontend(users[reviewer.id()], wcif, settings, None) for reviewer in review.reviewers],
-    'reviewFormId': review.review_form_id,
-    'questions': review.details,
-  }
-  if review.submitted_at:
-    out['submittedAtSeconds'] = review.submitted_at.timestamp()
-  if review.deadline:
-    out['deadline'] = review.deadline.timestamp()
-  return out
-
 @bp.route('/staff_api/<competition_id>/review/mine', methods=['GET'])
 def my_reviews(competition_id):
   with client.context():
@@ -543,10 +546,7 @@ def my_reviews(competition_id):
     reviewer_keys = [reviewer for review in reviews for reviewer in review.reviewers]
     person_keys = list(set(user_keys + reviewer_keys))
     users = {user.key.id() : user for user in ndb.get_multi(person_keys)}
-    return {
-      'reviewForms': [form for form in settings.review_settings['forms'] if form['id'] in [review.review_form_id for review in reviews]],
-      'reviews': [review_to_frontend(review, wcif, settings, users) for review in reviews],
-    }, 200
+    return [review_to_frontend(review, wcif, settings, users) for review in reviews], 200
 
 @bp.route('/staff_api/<competition_id>/review/decline', methods=['POST'])
 def decline_review(competition_id):

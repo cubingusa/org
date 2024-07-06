@@ -128,6 +128,7 @@ export function FormEditor(props: FormEditorProps) {
           >
             <span className="material-symbols-outlined">add</span> Add Filter
           </button>
+          // TODO: don't allow review-based filters.
           <FilterModal id="filter-modal" addFilter={addFilter} />
           {filters.map((filter) => (
             <span key={filter.id()}>

@@ -37,7 +37,7 @@ export function AdminTable({ adminRouterId }: AdminTableParams) {
     exportTimeSeconds: 0,
     exportedRows: [],
   };
-  const { templates, applicants, reviewSettings } = useRouteLoaderData(
+  const { templates, applicants } = useRouteLoaderData(
     adminRouterId,
   ) as ViewData;
   const [selectedIds, setSelectedIds] = useState([] as number[]);
@@ -162,7 +162,6 @@ export function AdminTable({ adminRouterId }: AdminTableParams) {
         id="reviews-modal"
         personIds={selectedIds}
         allApplicants={applicants}
-        reviewSettings={reviewSettings}
       />
       &nbsp;
       <button

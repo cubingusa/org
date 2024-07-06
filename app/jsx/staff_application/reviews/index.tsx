@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useRouteLoaderData, Link, useParams } from "react-router-dom";
 
 import { ReviewsData, ReviewForm } from "./types";
+import { CompetitionData } from "../types/competition_data";
 import { ReviewFormEditor } from "./editor";
 import { AdminHeader } from "../admin/header";
 
 export function ReviewsIndex() {
+  const { settings } = useRouteLoaderData("competition") as CompetitionData;
   const { competitionId } = useParams();
-  const settings = useRouteLoaderData("reviews") as ReviewsData;
-  const [forms, setForms] = useState(settings.forms || []);
+  const [forms, setForms] = useState(settings.reviewForms || []);
   const [spinning, setSpinning] = useState(false);
 
   const submit = async function () {
@@ -17,21 +18,24 @@ export function ReviewsIndex() {
     await fetch(`/staff_api/${competitionId}/review/settings`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(settings),
+      body: JSON.stringify({
+        reviewForms: settings.reviewForms,
+        nextReviewFormId: settings.nextReviewFormId,
+      }),
     });
     setSpinning(false);
   };
 
   const newForm = function () {
     event.preventDefault();
-    if (settings.nextFormId === undefined) {
-      settings.nextFormId = 0;
+    if (settings.nextReviewFormId === undefined) {
+      settings.nextReviewFormId = 0;
     }
 
     const newForms = [
       ...forms,
       {
-        id: settings.nextFormId,
+        id: settings.nextReviewFormId,
         name: "New Review Form",
         description: "",
         eligibleReviewerFilters: [],
@@ -40,14 +44,14 @@ export function ReviewsIndex() {
         defaults: [],
       },
     ];
-    settings.forms = newForms;
-    settings.nextFormId += 1;
+    settings.reviewForms = newForms;
+    settings.nextReviewFormId += 1;
     setForms(newForms);
   };
 
   const deleteForm = function (form: ReviewForm) {
-    settings.forms = settings.forms.filter((f) => f.id !== form.id);
-    setForms(settings.forms);
+    settings.reviewForms = settings.reviewForms.filter((f) => f.id !== form.id);
+    setForms(settings.reviewForms);
   };
 
   let spinner;

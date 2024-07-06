@@ -11,7 +11,7 @@ export function ViewList() {
   const visibleViews = views.filter((view) => {
     for (const filterParams of view.visibleTo) {
       const filter = createFilter(filterParams, settings, wcif);
-      if (!filter.apply({ user, forms })) {
+      if (!filter.apply({ user, forms, reviews: [] })) {
         return false;
       }
     }

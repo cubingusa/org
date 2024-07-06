@@ -19,7 +19,7 @@ export function PublicTable() {
   }
   for (const filterParams of view.filters) {
     const filter = createFilter(filterParams, settings, wcif);
-    if (!filter.apply({ user, forms })) {
+    if (!filter.apply({ user, forms, reviews: [] })) {
       return <Navigate to="../.." />;
     }
   }
