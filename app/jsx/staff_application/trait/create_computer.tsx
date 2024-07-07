@@ -7,6 +7,7 @@ import { FormAnswerComputer } from "./form_answer";
 import { FormMetadataComputer } from "./form_metadata";
 import { PersonalAttributeComputer } from "./personal_attribute";
 import { PropertyComputer } from "./property";
+import { ReviewMetadataComputer } from "./review_metadata";
 
 export function createComputer(
   params: ComputerParams,
@@ -23,5 +24,7 @@ export function createComputer(
       return new PersonalAttributeComputer(paramsClone, wcif);
     case ComputerType.Property:
       return new PropertyComputer(paramsClone, settings);
+    case ComputerType.ReviewMetadata:
+      return new ReviewMetadataComputer(paramsClone, settings);
   }
 }

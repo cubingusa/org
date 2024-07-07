@@ -16,6 +16,7 @@ import { FormAnswerComputer } from "./form_answer";
 import { FormMetadataComputer } from "./form_metadata";
 import { PersonalAttributeComputer } from "./personal_attribute";
 import { PropertyComputer } from "./property";
+import { ReviewMetadataComputer } from "./review_metadata";
 
 interface TraitSelectorParams {
   params: ComputerParams;
@@ -57,6 +58,11 @@ export function TraitSelector({
       type: ComputerType.Property,
       name: "Property",
       defaultParams: PropertyComputer.defaultParams(settings),
+    },
+    {
+      type: ComputerType.ReviewMetadata,
+      name: "Review Metadata",
+      defaultParams: ReviewMetadataComputer.defaultParams(settings),
     },
   ];
 
