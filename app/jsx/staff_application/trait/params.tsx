@@ -4,6 +4,7 @@ export enum ComputerType {
   FormMetadata = "form_metadata",
   Property = "property",
   ReviewMetadata = "review_metadata",
+  ReviewAnswer = "review_answer",
 }
 
 export enum PersonalAttributeType {
@@ -57,9 +58,16 @@ export interface ReviewMetadataParams {
   reviewFormId: number;
 }
 
+export interface ReviewAnswerParams {
+  type: ComputerType.ReviewAnswer;
+  reviewFormId: number;
+  questionId: number;
+}
+
 export type ComputerParams =
   | PersonalAttributeParams
   | FormAnswerParams
   | FormMetadataParams
   | PropertyParams
-  | ReviewMetadataParams;
+  | ReviewMetadataParams
+  | ReviewAnswerParams;
