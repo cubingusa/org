@@ -25,6 +25,25 @@ nac_bp = Blueprint('nac', __name__, url_prefix='/nac')
 worlds_bp = Blueprint('worlds', __name__, url_prefix='/worlds')
 client = ndb.Client()
 
+events = {
+  '333': '3x3x3 Cube',
+  '222': '2x2x2 Cube',
+  '444': '4x4x4 Cube',
+  '555': '5x5x5 Cube',
+  '666': '6x6x6 Cube',
+  '777': '7x7x7 Cube',
+  '333bf': '3x3x3 Blindfolded',
+  '333fm': '3x3x3 Fewest Moves',
+  '333oh': '3x3x3 One-Handed',
+  'clock': 'Clock',
+  'minx': 'Megaminx',
+  'pyram': 'Pyraminx',
+  'skewb': 'Skewb',
+  'sq1': 'Square-1',
+  '444bf': '4x4x4 Blindfolded',
+  '555bf': '5x5x5 Blindfolded',
+  '333mbf': '3x3x3 Multi-Blind',
+}
 @bp.route('/')
 def nats():
   with client.context():
@@ -175,6 +194,43 @@ def nac2024unofficial():
 def nac2024volunteers():
   with client.context():
     return render_template('nationals/2024/volunteers.html', c=Common())
+
+@nac_bp.route('/2024/finals_projector/<eventId>')
+def nac2024projector(eventId):
+  with client.context():
+    wca_host = os.environ.get('WCA_HOST')
+    data = requests.get(wca_host + '/api/v0/competitions/CubingUSANationals2023/wcif/public')
+    if data.status_code != 200:
+      abort(data.status_code)
+    competition = data.json()
+    people_by_id = {person['registrantId'] : (person['name'], person['countryIso2']) for person in competition['persons']}
+    next_events = {'666': 'minx',
+                   'minx': 'sq1',
+                   'sq1': '777',
+                   'clock': '555',
+                   '555': 'pyram',
+                   'pyram': '444',
+                   '444': 'skewb',
+                   'skewb': '333oh',
+                   '333oh': '222',
+                   '222': '333bf',
+                   '333bf': '333'}
+    next_event_id = next_events[eventId] if eventId in next_events else None
+    next_event_name = events[next_event_id] if next_event_id else None
+
+    for evt in competition['events']:
+      if evt['id'] != eventId:
+        continue
+      semis = evt['rounds'][-2]['results']
+      people = {result['ranking'] : people_by_id[result['personId']] for result in semis if result['ranking'] <= 20}
+      finalists = [(i+1, people[i+1][0], people[i+1][1].lower()) for i in range(20)]
+      return render_template('nationals/2024/finals_projector.html',
+                             finalists=list(zip(finalists, finalists[1:]))[0::2],
+                             event_id=eventId,
+                             next_event_id=next_event_id,
+                             event_names=events)
+    return '', 404
+
 
 @nac_bp.route('/person_states')
 def person_states():
