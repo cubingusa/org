@@ -80,7 +80,9 @@ export function EditHookModal({ id, hook }: EditHookModalParams) {
           onChange={(e) => updateHookType(e.target.value as HookType)}
           id="trigger-select"
         >
-          <option value="PropertyAssigned">Property assigned to form</option>
+          <option value="PropertyAssigned">
+            Property assigned to applicant
+          </option>
           <option value="FormSubmitted">Applicant submits form</option>
         </select>
       </div>
