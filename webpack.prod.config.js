@@ -4,10 +4,10 @@ const path = require('path');
 
 module.exports = {
   entry: './app/jsx/staff_application/main.tsx',
-  mode: 'development',
+  mode: 'production',
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'app/static/js/react/staff_application'),
+    path: path.resolve(__dirname, 'app/static/js/react/prod/staff_application'),
     publicPath: '/'
   },
   module: {

@@ -30,6 +30,17 @@ oauth.register(
     authorize_url=wca_host + '/oauth/authorize',
     authorize_params=None,
     api_base_url=wca_host + '/api/v0/',
+    client_kwargs={'scope': 'public email'},
+)
+oauth.register(
+    name='wca_staff',
+    client_id=get_secret('WCA_STAFF_APPLICATION_CLIENT_ID') or get_secret('WCA_CLIENT_ID'),
+    client_secret=get_secret('WCA_STAFF_APPLICATION_CLIENT_SECRET') or get_secret('WCA_CLIENT_SECRET'),
+    access_token_url=wca_host + '/oauth/token',
+    access_token_params=None,
+    authorize_url=wca_host + '/oauth/authorize',
+    authorize_params=None,
+    api_base_url=wca_host + '/api/v0/',
     client_kwargs={'scope': 'public email dob'},
 )
 
@@ -54,7 +65,8 @@ from app.handlers.status import bp as status_bp
 from app.handlers.user import bp as user_bp
 
 app.register_blueprint(admin_bp)
-app.register_blueprint(create_auth_bp(oauth))
+app.register_blueprint(create_auth_bp(oauth.wca))
+app.register_blueprint(create_auth_bp(oauth.wca_staff), url_prefix='/staff_oauth')
 app.register_blueprint(champions_table_bp)
 app.register_blueprint(nac_bp)
 app.register_blueprint(nationals_bp)

@@ -8,5 +8,9 @@
 {% block content %}
   <div id="jsx-container">
   </div>
-  <script src="{{ url_for('static', filename='js/react/staff_application/main.bundle.js') }}"></script>
+  {% if c.is_prod() %}
+    <script src="{{ url_for('static', filename='js/react/prod/staff_application/main.bundle.js') }}"></script>
+  {% else %}
+    <script src="{{ url_for('static', filename='js/react/dev/staff_application/main.bundle.js') }}"></script>
+  {% endif %}
 {% endblock %}

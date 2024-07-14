@@ -82,6 +82,9 @@ def get_wcif(competition_id):
 @bp.route('/staff/<competition_id>/<path:path>')
 def apply(competition_id, path):
   with client.context():
+    user = auth.user()
+    if user and not user.birthdate:
+      return redirect('/staff_oauth/login')
     settings = ApplicationSettings.get_by_id(competition_id)
     if not settings:
       return redirect('/')

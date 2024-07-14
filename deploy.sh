@@ -64,6 +64,11 @@ rm -r -f app/static/css/prod
 mkdir -p app/static/css/prod
 external/dart-sass/sass --update app/scss:app/static/css/prod --style compressed
 
+echo "Building react bundle."
+rm -r -f app/static/js/react/prod
+mkdir -p app/static/js/react/prod
+npx webpack --config ./webpack.prod.config.js
+
 echo "Deploying to App Engine."
 CMD="gcloud app deploy app.yaml --project $PROJECT"
 if [ ! -z "$VERSION" ]

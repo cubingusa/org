@@ -10,20 +10,20 @@ from app.models.wca.rank import RankSingle, RankAverage
 
 client = ndb.Client()
 
-def create_bp(oauth):
-  bp = Blueprint('auth', __name__)
+def create_bp(oauth_client):
+  bp = Blueprint('auth_' + oauth_client.name, __name__)
 
   @bp.route('/login')
   def login():
     redirect_uri = url_for('auth.oauth_callback', _external=True)
     session['referrer'] = request.referrer
-    return oauth.wca.authorize_redirect(redirect_uri)
+    return oauth_client.authorize_redirect(redirect_uri)
 
   @bp.route('/oauth_callback')
   def oauth_callback():
     with client.context():
-      token = oauth.wca.authorize_access_token()
-      resp = oauth.wca.get('me')
+      token = oauth_client.authorize_access_token()
+      resp = oauth_client.get('me')
       resp.raise_for_status()
 
       wca_info = resp.json()['me']
@@ -57,8 +57,6 @@ def create_bp(oauth):
 
       if 'dob' in wca_info:
         user.birthdate = datetime.date.fromisoformat(wca_info['dob'])
-      else:
-        del user.birthdate
 
       user.roles = [role for role in user.roles if role not in Roles.DelegateRoles()]
       if 'delegate_status' in wca_info:

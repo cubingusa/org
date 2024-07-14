@@ -9,7 +9,7 @@
   "scripts": {
     "site": "source env/bin/activate && pip install -r requirements.txt && $(gcloud beta emulators datastore env-init) && gunicorn -b :8083 app.flask:app --reload $(find app/templates -type f -name '*.html' -exec echo --reload-extra-file {} \\;)",
     "sass": "./run_sass.sh",
-    "all": "concurrently --kill-others \"npm run site\" \"npm run sass\" \"npx webpack --watch\"",
+    "all": "concurrently --kill-others \"npm run site\" \"npm run sass\" \"npx webpack --watch --config ./webpack.dev.config.js\"",
     "prepare": "husky install"
   },
   "repository": {

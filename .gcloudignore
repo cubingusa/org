@@ -12,3 +12,4 @@ env/
 .env.dev
 /jsx/
 node_modules/
+/react/dev/
