@@ -141,11 +141,12 @@ export function MailerIndex() {
                   >
                     <button
                       className="btn btn-success"
-                      onClick={(e) =>
+                      onClick={(e) => {
+                        e.preventDefault();
                         navigate(
                           `/staff/${wcif.id}/mailer/template/${template.id}/clone`,
-                        )
-                      }
+                        );
+                      }}
                     >
                       <span className="material-symbols-outlined">
                         content_copy
