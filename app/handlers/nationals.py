@@ -198,8 +198,7 @@ def nac2024volunteers():
 @nac_bp.route('/2024/finals_projector/<eventId>')
 def nac2024projector(eventId):
   with client.context():
-    wca_host = os.environ.get('WCA_HOST')
-    data = requests.get(wca_host + '/api/v0/competitions/CubingUSANationals2023/wcif/public')
+    data = requests.get('https://api.worldcubeassociation.org/competitions/NAC2024/wcif/public')
     if data.status_code != 200:
       abort(data.status_code)
     competition = data.json()
@@ -222,8 +221,18 @@ def nac2024projector(eventId):
       if evt['id'] != eventId:
         continue
       semis = evt['rounds'][-2]['results']
-      people = {result['ranking'] : people_by_id[result['personId']] for result in semis if result['ranking'] <= 20}
-      finalists = [(i+1, people[i+1][0], people[i+1][1].lower()) for i in range(20)]
+      people = {result['ranking'] : people_by_id[result['personId']] for result in semis if result['ranking'] <= 21}
+      if eventId == 'minx':
+        finalists = [(i+1, people[i+1][0], people[i+1][1].lower()) for i in range(14)] + [
+          (17, people[17][0], people[17][1]),
+          (16, people[16][0], people[16][1]),
+          (19, people[19][0], people[19][1]),
+          (18, people[18][0], people[18][1]),
+          (21, people[21][0], people[21][1]),
+          (20, people[20][0], people[20][1]),
+        ]
+      else:
+        finalists = [(i+1, people[i+1][0], people[i+1][1].lower()) for i in range(20)]
       return render_template('nationals/2024/finals_projector.html',
                              finalists=list(zip(finalists, finalists[1:]))[0::2],
                              event_id=eventId,
