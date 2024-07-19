@@ -62,7 +62,7 @@ def handle_contact_request(template, subject_base, recipient):
     if user:
       name = user.name
       email = user.email
-      wca_id = user.wca_person.id()
+      wca_id = user.wca_person.id() if user.wca_person else ""
       validated = True
     else:
       name = request.form['name']
