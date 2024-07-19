@@ -8,16 +8,16 @@
   <div class="container">
   <p>
   <div class="card" id="main-card">
-    <figure>
-      <img class="card-img-top" src="/static/img/group-photo-2015.jpg"
-           alt="Competitors, spectators, and staff at Nationals 2015">
-      <figcaption>
-        Photo Credit: <a href="https://www.flickr.com/photos/topherolson/19632948834/in/album-72157656315692998/" target="_blank">Chris Olson</a>
-      </figcaption>
-    </figure>
+    <div id="twitch-embed"></div>
+    <script src="https://embed.twitch.tv/embed/v1.js"></script>
+    <script type="text/javascript">
+      new Twitch.Embed("twitch-embed", {
+        width: "100%",
+        height: 480,
+        channel: "worldcubeassociation",
+      });
+    </script>
     <div class="card-body">
-      <div class="photo-credit">
-      </div>
       <h1 class="card-title">CubingUSA</h1>
       <div class="card-text">
         <p>CubingUSA's goal is to support and grow the US speedcubing community.  We organize the US National Championships every summer, and support a number of other competitions throughout the year.</p>

@@ -5,6 +5,15 @@
   {{ css.css(c, 'nationals/2024/index') }}
 {% endblock %}
 {% block content %}
+  <div id="twitch-embed"></div>
+  <script src="https://embed.twitch.tv/embed/v1.js"></script>
+  <script type="text/javascript">
+    new Twitch.Embed("twitch-embed", {
+      width: "100%",
+      height: 480,
+      channel: "worldcubeassociation",
+    });
+  </script>
   <div class="nats-top-row">
     <div class="top-info">
       <h2 class="d-none d-xs-block">Rubik's WCA North American Championship 2024</h2>
@@ -41,6 +50,22 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h4><span class="material-symbols-outlined">videocam</span> Streaming</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            The competition will be live streamed Friday through Sunday!
+          </li>
+          <li class="list-group-item">
+            <a href="https://www.twitch.tv/worldcubeassociation">WCA Twitch</a>
+          </li>
+          <li class="list-group-item">
+            <a href="https://www.youtube.com/channel/UC5OUMUnS8PvY1RvtB1pQZ0g">WCA YouTube</a>
+          </li>
+        </ul>
       </div>
       <div class="card">
         <div class="card-header">
@@ -99,6 +124,16 @@
             <img src="/static/img/rubiks_new.png" class="rubiks-logo">
             <img src="/static/img/wca-logo.svg" class="wca-logo">
             <img src="/static/img/cubicle.png" class="cubicle-logo"><br/>
+          </li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h4><span class="material-symbols-outlined">shopping_bag</span> Vendor</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            The Cubicle will be vending at the competition! Stop by their booth for cubes and official competition merchandise.
           </li>
         </ul>
       </div>
