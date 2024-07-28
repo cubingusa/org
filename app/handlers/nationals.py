@@ -231,6 +231,13 @@ def nac2024projector(eventId):
           (21, people[21][0], people[21][1]),
           (20, people[20][0], people[20][1]),
         ]
+      elif eventId == '444':
+        finalists = [(i+1, people[i+1][0], people[i+1][1].lower()) for i in range(14)] + [
+          (17, people[17][0], people[17][1]),
+          (20, people[16][0], people[16][1]),
+          (19, people[19][0], people[19][1]),
+          (21, people[18][0], people[18][1]),
+        ]
       else:
         finalists = [(i+1, people[i+1][0], people[i+1][1].lower()) for i in range(20)]
       return render_template('nationals/2024/finals_projector.html',
