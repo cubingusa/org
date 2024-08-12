@@ -30,16 +30,16 @@ flags.DEFINE_string('new_export_id', '', 'ID of the new export.')
 flags.DEFINE_string('export_base', '', 'Base directory of exports.')
 
 def get_tables():
-  return [('Continents', Continent),
-          ('Countries', Country),
-          ('Events', Event),
-          ('Formats', Format),
-          ('RoundTypes', RoundType),
-          ('Persons', Person),
-          ('RanksSingle', RankSingle),
-          ('RanksAverage', RankAverage),
-          ('Competitions', Competition),
-          ('Results', Result),
+  return [('Continents', Continent, 1),
+          ('Countries', Country, 1),
+          ('Events', Event, 1),
+          ('Formats', Format, 1),
+          ('RoundTypes', RoundType, 1),
+          ('Persons', Person, 1),
+          ('RanksSingle', RankSingle, 5),
+          ('RanksAverage', RankAverage, 5),
+          ('Competitions', Competition, 5),
+          ('Results', Result, 10),
          ]
 
 
@@ -59,7 +59,7 @@ def get_modifier(table):
   return None
 
 
-def read_table(path, cls, apply_filter):
+def read_table(path, cls, apply_filter, shard, shards):
   filter_fn = lambda row: True
   if apply_filter:
     filter_fn = cls.Filter()
@@ -76,7 +76,9 @@ def read_table(path, cls, apply_filter):
           for field in fields_to_write:
             if field in row:
               to_write[field] = row[field]
-          out[cls.GetId(row)] = to_write
+          row_id = cls.GetId(row)
+          if row_id % shards == shards:
+            out[row_id] = to_write
   except:
     # This is fine, the file might just not exist.
     pass
@@ -88,7 +90,7 @@ def write_table(path, rows, cls):
   with open(path, 'r') as csvfile:
     reader = csv.DictReader(csvfile, dialect='excel-tab')
     use_id = 'id' in reader.fieldnames
-  with open(path, 'w') as csvfile:
+  with open(path + '.filtered', 'w') as csvfile:
     fields_to_write = cls.ColumnsUsed()
     if use_id:
       fields_to_write += ['id']
@@ -100,12 +102,14 @@ def write_table(path, rows, cls):
 
 def process_export(old_export_path, new_export_path):
   client = ndb.Client()
-  for table, cls in get_tables():
+  for table, cls, shards in get_tables():
     logging.info('Processing ' + table)
     table_suffix = '/WCA_export_' + table + '.tsv'
     with client.context():
-      old_rows = read_table(old_export_path + table_suffix, cls, False)
-      new_rows = read_table(new_export_path + table_suffix, cls, True)
+      for shard in range(shards):
+        logging.info('Shard %d/%d' % (shard + 1, shards))
+      old_rows = read_table(old_export_path + table_suffix + '.filtered', cls, False, shard, shards)
+      new_rows = read_table(new_export_path + table_suffix, cls, True, shard, shards)
       logging.info('Old: %d' % len(old_rows))
       logging.info('New: %d' % len(new_rows))
       write_table(new_export_path + table_suffix, new_rows, cls)
