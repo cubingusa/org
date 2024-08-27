@@ -79,7 +79,7 @@ def read_table(path, cls, apply_filter, shard, shards):
           row_id = cls.GetId(row)
           if hash(row_id) % shards == shard:
             out[row_id] = to_write
-  except Exception as e:
+  except FileNotFoundError as e:
     # This is fine, the file might just not exist.
     logging.exception(e)
     pass
