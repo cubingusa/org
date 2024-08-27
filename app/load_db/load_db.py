@@ -105,48 +105,46 @@ def process_export(old_export_path, new_export_path):
   for table, cls, shards in get_tables():
     logging.info('Processing ' + table)
     table_suffix = '/WCA_export_' + table + '.tsv'
-    with client.context():
-      for shard in range(shards):
-        logging.info('Shard %d/%d' % (shard + 1, shards))
-      old_rows = read_table(old_export_path + table_suffix + '.filtered', cls, False, shard, shards)
-      new_rows = read_table(new_export_path + table_suffix, cls, True, shard, shards)
-      logging.info('Old: %d' % len(old_rows))
-      logging.info('New: %d' % len(new_rows))
-      write_table(new_export_path + table_suffix, new_rows, cls)
-
-      objects_to_put = []
-      keys_to_delete = []
-
-      modifier = get_modifier(table)
-      for key in new_rows:
-        row = new_rows[key]
-        if key in old_rows and old_rows[key] == row:
-          continue
-        else:
-          obj = cls(id=key)
-          obj.ParseFromDict(row)
-          if modifier:
-            modifier(obj)
-          objects_to_put += [obj]
-      for key, row in old_rows.items():
-        if key in new_rows:
-          continue
-        else:
-          keys_to_delete += [ndb.Key(cls, key)]
-
-    logging.info('Putting %d objects' % len(objects_to_put))
-    while objects_to_put:
-      batch_size = 5000
-      logging.info('%d left' % len(objects_to_put))
-      subslice = objects_to_put[:batch_size]
-      objects_to_put = objects_to_put[batch_size:]
+    for shard in range(shards):
       with client.context():
-        ndb.put_multi(subslice)
+        logging.info('Shard %d/%d' % (shard + 1, shards))
+        old_rows = read_table(old_export_path + table_suffix + '.filtered', cls, False, shard, shards)
+        new_rows = read_table(new_export_path + table_suffix, cls, True, shard, shards)
+        logging.info('Old: %d' % len(old_rows))
+        logging.info('New: %d' % len(new_rows))
+        write_table(new_export_path + table_suffix, new_rows, cls)
 
-    logging.info('Deleting %d objects' % len(keys_to_delete))
-    client = ndb.Client()
-    with client.context():
-      ndb.delete_multi(keys_to_delete)
+        objects_to_put = []
+        keys_to_delete = []
+
+        modifier = get_modifier(table)
+        for key in new_rows:
+          row = new_rows[key]
+          if key in old_rows and old_rows[key] == row:
+            continue
+          else:
+            obj = cls(id=key)
+            obj.ParseFromDict(row)
+            if modifier:
+              modifier(obj)
+            objects_to_put += [obj]
+        for key, row in old_rows.items():
+          if key in new_rows:
+            continue
+          else:
+            keys_to_delete += [ndb.Key(cls, key)]
+
+        logging.info('Putting %d objects' % len(objects_to_put))
+        while objects_to_put:
+          batch_size = 5000
+          logging.info('%d left' % len(objects_to_put))
+          subslice = objects_to_put[:batch_size]
+          objects_to_put = objects_to_put[batch_size:]
+          ndb.put_multi(subslice)
+
+        logging.info('Deleting %d objects' % len(keys_to_delete))
+        client = ndb.Client()
+        ndb.delete_multi(keys_to_delete)
 
 
 def main(argv):
