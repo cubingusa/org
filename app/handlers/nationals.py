@@ -293,6 +293,11 @@ def worlds2025():
   with client.context():
     return render_template('nationals/2025/index.html', c=Common())
 
+@worlds_bp.route('/policies')
+def worlds2025policies():
+  with client.context():
+    return render_template('nationals/2025/policies.html', c=Common())
+
 @worlds_bp.route('/qualification')
 def worlds2025qualification():
   with client.context():
