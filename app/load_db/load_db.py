@@ -85,17 +85,18 @@ def read_table(path, cls, apply_filter, shard, shards):
   return out
 
 
-def write_table(path, rows, cls):
+def write_table(path, rows, cls, shard):
   use_id = False
   with open(path, 'r') as csvfile:
     reader = csv.DictReader(csvfile, dialect='excel-tab')
     use_id = 'id' in reader.fieldnames
-  with open(path + '.filtered', 'w') as csvfile:
+  with open(path + '.filtered', 'w' if shard == 0 else 'a') as csvfile:
     fields_to_write = cls.ColumnsUsed()
     if use_id:
       fields_to_write += ['id']
     writer = csv.DictWriter(csvfile, dialect='excel-tab', fieldnames=fields_to_write)
-    writer.writeheader()
+    if shard == 0:
+      writer.writeheader()
     for row in rows.items():
       writer.writerow({k: v for k, v in row[1].items() if k in fields_to_write})
 
@@ -112,7 +113,7 @@ def process_export(old_export_path, new_export_path):
         new_rows = read_table(new_export_path + table_suffix, cls, True, shard, shards)
         logging.info('Old: %d' % len(old_rows))
         logging.info('New: %d' % len(new_rows))
-        write_table(new_export_path + table_suffix, new_rows, cls)
+        write_table(new_export_path + table_suffix, new_rows, cls, shard)
 
         objects_to_put = []
         keys_to_delete = []
