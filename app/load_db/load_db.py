@@ -77,7 +77,7 @@ def read_table(path, cls, apply_filter, shard, shards):
             if field in row:
               to_write[field] = row[field]
           row_id = cls.GetId(row)
-          if row_id % shards == shards:
+          if row_id % shards == shard:
             out[row_id] = to_write
   except:
     # This is fine, the file might just not exist.
