@@ -7,6 +7,7 @@ from google.cloud import ndb
 
 from app.models.champion import Champion
 from app.models.championship import Championship
+from app.models.eligibility import LockedResidency
 from app.models.eligibility import RegionalChampionshipEligibility
 from app.models.eligibility import StateChampionshipEligibility
 from app.models.state import State
@@ -26,21 +27,6 @@ def ComputeEligibleCompetitors(championship, competition, results):
   users = User.query(User.wca_person.IN(competitors)).fetch()
   user_keys = [user.key for user in users]
 
-  # Load the saved eligibilities, so that one person can't be eligible for two
-  # championships of the same type.
-  if championship.region:
-    eligibility_class = RegionalChampionshipEligibility
-    def eligibility_field(user):
-      if not user.regional_eligibilities:
-        user.regional_eligibilities = []
-      return user.regional_eligibilities
-  else:
-    eligibility_class = StateChampionshipEligibility
-    def eligibility_field(user):
-      if not user.state_eligibilities:
-        user.state_eligibilities = []
-      return user.state_eligibilities
-
   valid_state_keys = championship.GetEligibleStateKeys()
   residency_deadline = (championship.residency_deadline or
       datetime.datetime.combine(competition.start_date, datetime.time(0, 0, 0)))
@@ -55,13 +41,10 @@ def ComputeEligibleCompetitors(championship, competition, results):
 
   for user in users:
     resolution = Resolution.UNRESOLVED
-    for eligibility in eligibility_field(user):
-      other_championship = eligibility.championship.get()
-      if eligibility.year != championship.year:
+    for locked_residency in user.locked_residencies:
+      if locked_residency.year != championship.year:
         continue
-      if other_championship.is_pbq != championship.is_pbq:
-        continue
-      if eligibility.championship == championship.key:
+      if locked_residency.state in valid_state_keys:
         resolution = Resolution.ELIGIBLE
       else:
         resolution = Resolution.INELIGIBLE
@@ -76,9 +59,10 @@ def ComputeEligibleCompetitors(championship, competition, results):
       if state and state in valid_state_keys:
         # This competitor is eligible, so save this on their User.
         resolution = Resolution.ELIGIBLE
-        eligibility = eligibility_class()
-        eligibility.championship = championship.key
-        eligibility_field(user).append(eligibility)
+        locked_residency = LockedResidency()
+        locked_residency.year = championship.year
+        locked_residency.state = state
+        user.locked_residencies.push(locked_residency)
         competitors_to_put.append(user)
       else:
         resolution = Resolution.INELIGIBLE

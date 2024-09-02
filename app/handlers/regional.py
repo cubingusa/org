@@ -106,6 +106,7 @@ def regional_eligibility(region, year, pbq):
   with client.context():
     championship = Championship.get_by_id('%s_%d%s' % (region, int(year), '_pbq' if pbq else ''))
     competition_id = championship.competition.id()
+    competition_model = championship.competition.get()
     wca_host = os.environ.get('WCA_HOST')
     data = requests.get(wca_host + '/api/v0/competitions/' + competition_id + '/wcif/public')
     if data.status_code != 200:
@@ -120,8 +121,34 @@ def regional_eligibility(region, year, pbq):
       eligible_states = [key.id() for key in State.query(State.region == region.key).fetch(keys_only=True)]
     elif championship.state:
       eligible_states = [championship.state.id()]
-    eligible_users = [user for user in users if user and user.state and (user.state.id() in eligible_states)]
-    ineligible_users = [user for user in users if user and (not user.state or user.state.id() not in eligible_states)]
+    residency_deadline = (championship.residency_deadline or
+      datetime.datetime.combine(competition_model.start_date, datetime.time(0, 0, 0)))
+
+    eligible_users = []
+    ineligible_users = []
+
+    for user in users:
+      locked_state = None
+      for locked_residency in user.locked_residencies:
+        if locked_residency.year == year:
+          locked_state = locked_residency.state
+      if locked_state:
+        if locked_state in eligible_states:
+          eligible_users += [{'user': user, 'state': locked_state}]
+        else:
+          ineligible_users += [{'user': user, 'state': locked_state}]
+        continue
+      current_state = None
+      for update in user.updates or []:
+        if update.update_time < residency_deadline:
+          current_state = update.state
+      if not user.updates:
+        current_state = user.state
+      if current_state and current_state in eligible_states:
+        eligible_users += [{'user': user, 'state': current_state}]
+      else:
+        ineligible_users += [{'user': user, 'state': current_state}]
+
     for user, person in zip(users, competition['persons']):
       if user is None:
         new_user = User()

@@ -5,11 +5,11 @@
     <p>
       <h3>{{ competition['name'] }} Eligible Competitors</h3>
       <ul>
-        {% for competitor in eligible_users %}
-          {% if competitor.wca_person != None %}
-            <li>{{ competitor.name }} {{ competitor.wca_person.id() }} ({{ competitor.state.id() }})</li>
+        {% for entry in eligible_users %}
+          {% if entry['user'].wca_person != None %}
+            <li>{{ entry['user'].name }} {{ entry['user'].wca_person.id() }} ({{ entry['state'].id() }})</li>
           {% else %}
-            <li>{{ competitor.name }} ({{ competitor.state.id() }})</li>
+            <li>{{ entry['user'].name }} ({{ entry['state'].id() }})</li>
           {% endif %}
         {% endfor %}
       </ul>
@@ -17,11 +17,11 @@
     <p>
       <h3>{{ competition['name'] }} Ineligible Competitors</h3>
       <ul>
-        {% for competitor in ineligible_users %}
-          {% if competitor.state != None %}
-            <li>{{ competitor.name }} ({{ competitor.state.id() }})</li>
+        {% for entry in ineligible_users %}
+          {% if entry['state'] != None %}
+            <li>{{ entry['user'].name }} ({{ entry['state'].id() }})</li>
           {% else %}
-            <li>{{ competitor.name }} (No state set)</li>
+            <li>{{ entry['user'].name }} (No state set)</li>
           {% endif %}
         {% endfor %}
       </ul>

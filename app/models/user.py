@@ -1,5 +1,6 @@
 from google.cloud import ndb
 
+from app.models.eligibility import LockedResidency
 from app.models.eligibility import RegionalChampionshipEligibility
 from app.models.eligibility import StateChampionshipEligibility
 from app.models.state import State
@@ -34,7 +35,7 @@ class UserLocationUpdate(ndb.Model):
   update_time = ndb.DateTimeProperty()
   # Defined at end of file (it's a circular reference so we can't define here)
   # updater = ndb.KeyProperty(kind=User)
- 
+
 
 class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
@@ -53,6 +54,7 @@ class User(ndb.Model):
   updates = ndb.StructuredProperty(UserLocationUpdate, repeated=True)
   regional_eligibilities = ndb.StructuredProperty(RegionalChampionshipEligibility, repeated=True)
   state_eligibilities = ndb.StructuredProperty(StateChampionshipEligibility, repeated=True)
+  locked_residencies = ndb.StructuredProperty(LockedResidency, repeated=True)
 
   def HasAnyRole(self, roles):
     for role in self.roles:
