@@ -62,7 +62,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
         locked_residency = LockedResidency()
         locked_residency.year = championship.year
         locked_residency.state = state
-        user.locked_residencies.push(locked_residency)
+        user.locked_residencies.append(locked_residency)
         competitors_to_put.append(user)
       else:
         resolution = Resolution.INELIGIBLE
