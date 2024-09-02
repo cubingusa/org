@@ -15,5 +15,5 @@ class StateChampionshipEligibility(ndb.Model):
   state = ndb.ComputedProperty(lambda self: self.championship.get().state)
 
 class LockedResidency(ndb.Model):
-  year = ndb.NumberProperty()
+  year = ndb.IntegerProperty()
   state = ndb.KeyProperty(kind=State)
