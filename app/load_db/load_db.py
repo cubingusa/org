@@ -138,7 +138,8 @@ def process_export(old_export_path, new_export_path):
         if key in new_rows:
           continue
         else:
-          keys_to_delete += [ndb.Key(cls, key)]
+          with client.context():
+            keys_to_delete += [ndb.Key(cls, key)]
 
       logging.info('Putting %d objects' % len(objects_to_put))
       while objects_to_put:
