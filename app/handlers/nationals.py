@@ -381,16 +381,16 @@ def worlds2025qualification():
     ]
     # THESE AREN'T REAL DATES
     open_times = [
-      datetime.datetime.fromisoformat('2024-09-01T06:00-07:00'),
-      datetime.datetime.fromisoformat('2024-09-03T06:00-07:00'),
-      datetime.datetime.fromisoformat('2024-09-05T06:00-08:00'),
-      datetime.datetime.fromisoformat('2024-09-08T06:00-08:00'),
+      datetime.datetime.fromisoformat('2024-11-08T06:00-08:00'),
+      datetime.datetime.fromisoformat('2024-11-22T06:00-08:00'),
+      datetime.datetime.fromisoformat('2024-12-13T06:00-08:00'),
+      datetime.datetime.fromisoformat('2024-01-03T06:00-08:00'),
     ]
     close_times = [
-      datetime.datetime.fromisoformat('2024-09-02T06:00-07:00'),
-      datetime.datetime.fromisoformat('2024-09-04T06:00-08:00'),
-      datetime.datetime.fromisoformat('2024-09-06T06:00-08:00'),
-      datetime.datetime.fromisoformat('2025-05-30T06:00-07:00'),
+      datetime.datetime.fromisoformat('2024-11-17T06:00-08:00'),
+      datetime.datetime.fromisoformat('2024-12-06T06:00-08:00'),
+      datetime.datetime.fromisoformat('2024-12-27T06:00-08:00'),
+      datetime.datetime.fromisoformat('2025-05-28T11:59-07:00'),
     ]
     prs = {}
     person = None
@@ -433,3 +433,31 @@ def worlds2025qualification():
                            earliest_phase=earliest_phase,
                            open_times=open_times,
                            close_times=close_times)
+
+@worlds_bp.route('/schedule')
+def worlds2025schedule():
+  with client.context():
+    return render_template('nationals/2025/schedule.html', c=Common())
+
+@worlds_bp.route('/travel')
+def worlds2025travel():
+  with client.context():
+    return render_template('nationals/2025/travel.html', c=Common())
+
+@worlds_bp.route('/volunteers')
+def worlds2025volunteers():
+  with client.context():
+    return render_template('nationals/2025/volunteers.html', c=Common())
+
+@worlds_bp.route('/contact', methods=['GET', 'POST'])
+def worlds2025contact():
+  with client.context():
+    return contact.handle_contact_request('worlds/2025/contact.html',
+                                          'Worlds 2025',
+                                          'worlds-organizers@cubingusa.org')
+
+@worlds_bp.route('/events')
+def worlds2025events():
+  with client.context():
+    return redirect('https://www.worldcubeassociation.org/competitions/WC2025#competition-events')
+
