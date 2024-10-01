@@ -452,7 +452,7 @@ def worlds2025volunteers():
 @worlds_bp.route('/contact', methods=['GET', 'POST'])
 def worlds2025contact():
   with client.context():
-    return contact.handle_contact_request('worlds/2025/contact.html',
+    return contact.handle_contact_request('nationals/2025/contact.html',
                                           'Worlds 2025',
                                           'worlds-organizers@cubingusa.org')
 
