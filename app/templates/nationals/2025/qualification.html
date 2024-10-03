@@ -10,7 +10,7 @@
     All events at the WCA World Championship 2025 will have qualification times, which you will need to beat at other WCA competitions in order to register.
   </p>
   <p>
-    We will have four registration periods, beginning in late 2024 or early 2025. Each registration period will have its own qualification times. In order to register during a certain registration period, you only need to qualify for one event.
+    We will have four registration periods. Each registration period will have its own qualification times. In order to register during a certain registration period, you only need to qualify for one event.
   </p>
   <p>
     Please do not make travel plans until your registration has been accepted. We do not know if the competition will fill, or if competitors in later phases will have an opportunity to register.
@@ -31,7 +31,7 @@
     </p>
   {% elif earliest_phase %}
     <p>
-      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b><!--, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span>--></b>.
+      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b>, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span></b>.
     </p>
   {% else %}
     <p>
@@ -68,7 +68,6 @@
           {% endfor %}
         </tr>
       {% endfor %}
-      <!--
       <tr>
         <td>
           Registration Open
@@ -85,7 +84,6 @@
           <td class="qualcell ts" data-ts="{{ time.timestamp() }}" data-divider="<br/>"></td>
         {% endfor %}
       </tr>
-      -->
     </table>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>

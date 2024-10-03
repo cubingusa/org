@@ -379,7 +379,6 @@ def worlds2025qualification():
         '555bf': 60000,
       },
     ]
-    # THESE AREN'T REAL DATES
     open_times = [
       datetime.datetime.fromisoformat('2024-11-08T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-11-22T06:00-08:00'),
@@ -390,7 +389,7 @@ def worlds2025qualification():
       datetime.datetime.fromisoformat('2024-11-17T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-12-06T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-12-27T06:00-08:00'),
-      datetime.datetime.fromisoformat('2025-05-28T11:59-07:00'),
+      datetime.datetime.fromisoformat('2025-05-28T23:59-07:00'),
     ]
     prs = {}
     person = None
