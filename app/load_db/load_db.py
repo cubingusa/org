@@ -29,6 +29,12 @@ flags.DEFINE_string('old_export_id', '', 'ID of the old export.')
 flags.DEFINE_string('new_export_id', '', 'ID of the new export.')
 flags.DEFINE_string('export_base', '', 'Base directory of exports.')
 
+flags.DEFINE_boolean('only_load_db', False, 'Whether to only load the new database.')
+flags.DEFINE_boolean('only_update_championships', False, 'Whether to only update championships.')
+flags.DEFINE_boolean('only_update_champions', False, 'Whether to only update champions.')
+flags.DEFINE_boolean('only_update_state_records', False, 'Whether to only update state records.')
+flags.DEFINE_boolean('only_email_organizers', False, 'Whether to only update state records.')
+
 def get_tables():
   return [('Continents', Continent, 1),
           ('Countries', Country, 1),
@@ -156,22 +162,38 @@ def process_export(old_export_path, new_export_path):
 
 
 def main(argv):
-  old_export_path = FLAGS.export_base + FLAGS.old_export_id
-  new_export_path = FLAGS.export_base + FLAGS.new_export_id
+  do_everything = (
+    not FLAGS.only_load_db and
+    not FLAGS.only_update_champions and
+    not FLAGS.only_update_championships and
+    not FLAGS.only_update_state_records and
+    not FLAGS.only_email_organizers
+  )
 
-  logging.info(old_export_path)
-  logging.info(new_export_path)
+  if do_everything or FLAGS.only_load_db:
+    old_export_path = FLAGS.export_base + FLAGS.old_export_id
+    new_export_path = FLAGS.export_base + FLAGS.new_export_id
 
-  # A new client context is created for each write here, to avoid a memory leak.
-  process_export(old_export_path, new_export_path)
+    logging.info(old_export_path)
+    logging.info(new_export_path)
+
+    # A new client context is created for each write here, to avoid a memory leak.
+    process_export(old_export_path, new_export_path)
+
+    client = ndb.Client()
+    with client.context():
+      set_latest_export(FLAGS.new_export_id)
 
   client = ndb.Client()
   with client.context():
-    set_latest_export(FLAGS.new_export_id)
-    UpdateChampionships()
-    UpdateChampions()
-    UpdateStateRecords()
-    EmailChampionshipOrganizers()
+    if do_everything or FLAGS.only_update_championships:
+      UpdateChampionships()
+    if do_everything or FLAGS.only_update_champions:
+      UpdateChampions()
+    if do_everything or FLAGS.only_update_state_records:
+      UpdateStateRecords()
+    if do_everything or FLAGS.only_email_organizers:
+      EmailChampionshipOrganizers()
 
 if __name__ == '__main__':
   app.run(main)
