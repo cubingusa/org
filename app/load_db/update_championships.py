@@ -28,7 +28,7 @@ def UpdateChampionships():
     area_name = None
     championship = None
     if 'World' in competition.name and 'Championship' in competition.name:
-      championship = Championship(id=Championship.WorldChampionshipId(competition.year))
+      championship = Championship(id=Championship.WorldsId(competition.year))
       championship.is_pbq = False
       championship.competition = competition.key
       to_write += [championship]

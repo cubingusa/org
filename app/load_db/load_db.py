@@ -33,7 +33,7 @@ flags.DEFINE_boolean('only_load_db', False, 'Whether to only load the new databa
 flags.DEFINE_boolean('only_update_championships', False, 'Whether to only update championships.')
 flags.DEFINE_boolean('only_update_champions', False, 'Whether to only update champions.')
 flags.DEFINE_boolean('only_update_state_records', False, 'Whether to only update state records.')
-flags.DEFINE_boolean('only_email_organizers', False, 'Whether to only update state records.')
+flags.DEFINE_boolean('only_email_organizers', False, 'Whether to only email championship organizers.')
 
 def get_tables():
   return [('Continents', Continent, 1),
