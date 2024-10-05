@@ -23,6 +23,8 @@ def ComputeEligibleCompetitors(championship, competition, results):
     # We don't save this in the datastore because it's easy enough to compute.
     return set([r.person.id() for r in results
                 if r.person_country == ndb.Key(Country, 'USA')])
+  if championship.world_championship:
+    return set([r.person.id() for r in results])
   competitors = set([r.person for r in results])
   users = User.query(User.wca_person.IN(competitors)).fetch()
   user_keys = [user.key for user in users]
