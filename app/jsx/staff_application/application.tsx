@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Toast } from "react-bootstrap";
 import { DateTime } from "luxon";
 import { useRouteLoaderData, useParams, Link } from "react-router-dom";
 import { createFilter } from "./filter/create_filter";
@@ -12,8 +13,14 @@ import { getApi } from "./question/questions";
 import { ViewList } from "./view/list";
 import { ReviewForm, SubmittedReview } from "./reviews/types";
 
+interface ApplicationCallbacks {
+  onSuccess: () => void;
+  onFailure: () => void;
+}
+
 interface FormDisplayProps {
   form: Form;
+  callbacks: ApplicationCallbacks;
 }
 
 function FormDisplay(props: FormDisplayProps) {
@@ -32,12 +39,17 @@ function FormDisplay(props: FormDisplayProps) {
   const submit = async function () {
     event.preventDefault();
     setSpinning(true);
-    await fetch(`/staff_api/${wcif.id}/form_submission/${form.id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(myForm.details),
-    });
-    setSpinning(false);
+    try {
+      await fetch(`/staff_api/${wcif.id}/form_submission/${form.id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(myForm.details),
+      });
+      setSpinning(false);
+      props.callbacks.onSuccess();
+    } catch (e) {
+      props.callbacks.onFailure();
+    }
   };
 
   let spinner;
@@ -101,6 +113,7 @@ interface ReviewFormDisplayProps {
   review: SubmittedReview;
   id: string;
   declineReview: () => void;
+  callbacks: ApplicationCallbacks;
 }
 
 function ReviewFormDisplay(props: ReviewFormDisplayProps) {
@@ -112,12 +125,17 @@ function ReviewFormDisplay(props: ReviewFormDisplayProps) {
   const submit = async function () {
     event.preventDefault();
     setSpinning(true);
-    await fetch(`/staff_api/${wcif.id}/review/submit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(review),
-    });
-    setSpinning(false);
+    try {
+      await fetch(`/staff_api/${wcif.id}/review/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(review),
+      });
+      setSpinning(false);
+      props.callbacks.onSuccess();
+    } catch (e) {
+      props.callbacks.onFailure();
+    }
   };
 
   let spinner;
@@ -241,6 +259,22 @@ export function Application() {
   ) as CompetitionData;
   const [reviews, setReviews] = useState(myReviews);
   const { competitionId } = useParams();
+  const [successToast, setSuccessToast] = useState(false);
+  const [failureToast, setFailureToast] = useState(false);
+
+  const callbacks: ApplicationCallbacks = {
+    onSuccess: () => {
+      setSuccessToast(true);
+      setFailureToast(false);
+      setTimeout(() => setSuccessToast(false), 5000);
+    },
+    onFailure: () => {
+      setFailureToast(true);
+      setSuccessToast(false);
+      setTimeout(() => setFailureToast(false), 10000);
+    },
+  };
+
   let adminText;
   if (user?.isAdmin) {
     adminText = (
@@ -326,7 +360,7 @@ export function Application() {
               className="accordion-collapse collapse"
               data-bs-parent="#formAccordion"
             >
-              <FormDisplay form={form}></FormDisplay>
+              <FormDisplay form={form} callbacks={callbacks}></FormDisplay>
             </div>
           </div>
         ))}
@@ -378,21 +412,26 @@ export function Application() {
     });
 
     const declineReview = async (review: SubmittedReview) => {
-      await fetch(`/staff_api/${wcif.id}/review/decline`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: review.user.id,
-          reviewFormId: review.reviewFormId,
-        }),
-      });
-      setReviews(
-        reviews.filter(
-          (r) =>
-            r.reviewFormId !== review.reviewFormId ||
-            r.user.id !== review.user.id,
-        ),
-      );
+      try {
+        await fetch(`/staff_api/${wcif.id}/review/decline`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: review.user.id,
+            reviewFormId: review.reviewFormId,
+          }),
+        });
+        callbacks.onSuccess();
+        setReviews(
+          reviews.filter(
+            (r) =>
+              r.reviewFormId !== review.reviewFormId ||
+              r.user.id !== review.user.id,
+          ),
+        );
+      } catch (e) {
+        callbacks.onFailure();
+      }
     };
     reviewsSection = (
       <>
@@ -433,6 +472,7 @@ export function Application() {
                   review={review}
                   id={`${review.reviewFormId}-${review.user.id}`}
                   declineReview={() => declineReview(review)}
+                  callbacks={callbacks}
                 />
               </div>
             </div>
@@ -457,6 +497,18 @@ export function Application() {
       <p />
       {reviewsSection}
       <ViewList />
+      <Toast
+        show={successToast}
+        className="position-fixed bottom-0 end-0 p-3 bg-success-subtle"
+      >
+        <Toast.Body>Saved successfully!</Toast.Body>
+      </Toast>
+      <Toast
+        show={failureToast}
+        className="position-fixed bottom-0 end-0 p-3 bg-danger-subtle"
+      >
+        <Toast.Body>Error submitting!</Toast.Body>
+      </Toast>
     </div>
   );
 }

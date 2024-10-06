@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
+import { Toast } from "react-bootstrap";
 import { ApplicantData } from "../types/applicant_data";
 import { CompetitionData } from "../types/competition_data";
 import { createFilter } from "../filter/create_filter";
@@ -26,6 +27,7 @@ export function ReviewsModal({
   const [action, setAction] = useState("auto");
   const [selectedReviewerId, setSelectedReviewerId] = useState(-1);
   const [deadlineSeconds, setDeadlineSeconds] = useState(0);
+  const [failureToast, setFailureToast] = useState(false);
 
   let disabledSubmit =
     settings.reviewForms.length == 0 || reviewForm == undefined;
@@ -164,12 +166,17 @@ export function ReviewsModal({
       }),
       deadlineSeconds: deadlineSeconds,
     };
-    await fetch(`/staff_api/${wcif.id}/review/request`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    window.location.reload();
+    try {
+      await fetch(`/staff_api/${wcif.id}/review/request`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      window.location.reload();
+    } catch (e) {
+      setFailureToast(true);
+      setTimeout(() => setFailureToast(false), 10000);
+    }
   };
 
   return (
@@ -205,6 +212,12 @@ export function ReviewsModal({
           </div>
         </div>
       </div>
+      <Toast
+        show={failureToast}
+        className="position-fixed bottom-0 end-0 p-3 bg-danger-subtle"
+      >
+        <Toast.Body>Error submitting!</Toast.Body>
+      </Toast>
     </div>
   );
 }

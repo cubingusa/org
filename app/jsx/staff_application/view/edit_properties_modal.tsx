@@ -1,5 +1,6 @@
 import { useRouteLoaderData } from "react-router-dom";
 import { FormEvent, useState } from "react";
+import { Toast } from "react-bootstrap";
 import { EventId, getEventName } from "@wca/helpers";
 import { CompetitionData } from "../types/competition_data";
 
@@ -20,6 +21,7 @@ export function EditPropertiesModal({
   );
   const property = settings.properties.find((p) => p.id == propertyId);
   const [valueId, setValueId] = useState(-1);
+  const [failureToast, setFailureToast] = useState(false);
 
   const disabledSubmit =
     settings.properties.length == 0 || property == undefined;
@@ -80,16 +82,21 @@ export function EditPropertiesModal({
     );
 
   const doSubmit = async function () {
-    await fetch(`/staff_api/${wcif.id}/properties`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        personIds,
-        propertyId,
-        valueId,
-      }),
-    });
-    window.location.reload();
+    try {
+      await fetch(`/staff_api/${wcif.id}/properties`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          personIds,
+          propertyId,
+          valueId,
+        }),
+      });
+      window.location.reload();
+    } catch (e) {
+      setFailureToast(true);
+      setTimeout(() => setFailureToast(false), 10000);
+    }
   };
 
   return (
@@ -123,6 +130,12 @@ export function EditPropertiesModal({
           </div>
         </div>
       </div>
+      <Toast
+        show={failureToast}
+        className="position-fixed bottom-0 end-0 p-3 bg-danger-subtle"
+      >
+        <Toast.Body>Error submitting!</Toast.Body>
+      </Toast>
     </div>
   );
 }

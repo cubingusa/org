@@ -1,5 +1,6 @@
 import { useRouteLoaderData, useParams } from "react-router-dom";
 import { useState } from "react";
+import { Toast } from "react-bootstrap";
 import { ViewData } from "./types";
 import { MailMetadata } from "../mailer/types";
 
@@ -18,18 +19,29 @@ export function SendEmailModal({
   const [templateId, setTemplateId] = useState(
     templates.length ? templates[0].id : "",
   );
+  const [successToast, setSuccessToast] = useState(false);
+  const [failureToast, setFailureToast] = useState(false);
 
   const disabledSubmit = templates.length == 0;
 
   const doSubmit = async function () {
-    await fetch(`/staff_api/${competitionId}/send_email`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userIds: personIds,
-        templateId,
-      }),
-    });
+    try {
+      await fetch(`/staff_api/${competitionId}/send_email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userIds: personIds,
+          templateId,
+        }),
+      });
+      setSuccessToast(true);
+      setFailureToast(false);
+      setTimeout(() => setSuccessToast(false), 5000);
+    } catch (e) {
+      setFailureToast(true);
+      setSuccessToast(false);
+      setTimeout(() => setFailureToast(false), 10000);
+    }
   };
 
   return (
@@ -79,6 +91,18 @@ export function SendEmailModal({
           </div>
         </div>
       </div>
+      <Toast
+        show={successToast}
+        className="position-fixed bottom-0 end-0 p-3 bg-success-subtle"
+      >
+        <Toast.Body>Saved successfully!</Toast.Body>
+      </Toast>
+      <Toast
+        show={failureToast}
+        className="position-fixed bottom-0 end-0 p-3 bg-danger-subtle"
+      >
+        <Toast.Body>Error submitting!</Toast.Body>
+      </Toast>
     </div>
   );
 }
