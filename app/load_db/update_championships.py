@@ -27,6 +27,13 @@ def UpdateChampionships():
     pbq_match = pbq_re.match(competition.name)
     area_name = None
     championship = None
+    if 'World' in competition.name and 'Championship' in competition.name:
+      championship = Championship(id=Championship.WorldsId(competition.year))
+      championship.is_pbq = False
+      championship.competition = competition.key
+      championship.world_championship = True
+      to_write += [championship]
+      continue
     if pbq_match:
       area_name = pbq_match.group(2)
       is_pbq = True

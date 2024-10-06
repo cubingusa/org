@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/external/cubing-icons.css">
+    <link rel="stylesheet" href="/static/css/prod/nationals/2024/finals_projector.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+  </head>
+  <body>
+    <h3><span class="cubing-icon event-{{ event_id }}"></span> {{ event_names[event_id] }} Final</h3>
+    <table>
+      <tr>
+        <th class="blue">Blue Stage</th>
+        <th rowspan="11">
+          <img src="/static/img/nac-2024-logo.png">
+        </th>
+        <th class="red">Red Stage</th>
+      </tr>
+      {% for row in finalists %}
+        <tr>
+          <td class="blue">{{ row[0][0] }}. {{ row[0][1] }} <span class="fi fi-{{ row[0][2] }}"></span></td>
+          <td class="red">{{ row[1][0] }}. {{ row[1][1] }} <span class="fi fi-{{ row[1][2] }}"></span></td>
+        </tr>
+      {% endfor %}
+    </table>
+    {% if next_event_id %}
+      <h5>Next up: <a href="/nac/2024/finals_projector/{{ next_event_id }}"><span class="cubing-icon event-{{ next_event_id }}"></span></a> {{ event_names[next_event_id] }}</h5>
+    {% endif %}
+  </body>
+</html>

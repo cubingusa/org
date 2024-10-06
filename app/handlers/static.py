@@ -52,14 +52,9 @@ def supported():
 @bp.route('/groups')
 def groups():
   with client.context():
-    return redirect('https://www.competitiongroups.com/competitions/CubingUSANationals2023')
-
-@bp.route('/fto')
-def fto():
-  with client.context():
-    return redirect('https://tinyurl.com/FTOInterest2023')
+    return redirect('https://www.competitiongroups.com/competitions/NAC2024')
 
 @bp.route('/results')
 def results():
   with client.context():
-    return redirect('https://live.worldcubeassociation.org/competitions/2227')
+    return redirect('https://live.worldcubeassociation.org/competitions/5399')
