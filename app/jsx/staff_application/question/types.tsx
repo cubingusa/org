@@ -6,6 +6,7 @@ export enum QuestionType {
   Acknowledgement = "acknowledgement",
   DateTime = "date_time",
   Events = "events",
+  Number = "number",
 }
 
 export interface EventsQuestion extends QuestionBase {
@@ -54,6 +55,12 @@ export interface NullQuestion extends QuestionBase {
   questionType: QuestionType.Null;
 }
 
+export interface NumberQuestion extends QuestionBase {
+  questionType: QuestionType.Number;
+  minValue: number;
+  maxValue: number;
+}
+
 export interface QuestionBase {
   // Unique within a form.
   id: number;
@@ -66,6 +73,7 @@ export type Question =
   | YesNoQuestion
   | TextQuestion
   | NullQuestion
+  | NumberQuestion
   | MultipleChoiceQuestion
   | AcknowledgementQuestion
   | DateTimeQuestion

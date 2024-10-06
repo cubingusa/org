@@ -3,6 +3,7 @@ import { QuestionApi } from "./api";
 import { QuestionType } from "./types";
 import { MultipleChoiceQuestionApi } from "./multiple_choice";
 import { NullQuestionApi } from "./null";
+import { NumberQuestionApi } from "./number";
 import { TextQuestionApi } from "./text";
 import { YesNoQuestionApi } from "./yes_no";
 import { DateTimeQuestionApi } from "./datetime";
@@ -18,6 +19,7 @@ export function allQuestionApis(wcif: Competition): QuestionApi[] {
     new DateTimeQuestionApi(wcif),
     new MultipleChoiceQuestionApi(wcif),
     new EventsQuestionApi(wcif),
+    new NumberQuestionApi(wcif),
   ];
 }
 
