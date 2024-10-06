@@ -31,6 +31,7 @@ def UpdateChampionships():
       championship = Championship(id=Championship.WorldsId(competition.year))
       championship.is_pbq = False
       championship.competition = competition.key
+      championship.world_championship = True
       to_write += [championship]
       continue
     if pbq_match:
