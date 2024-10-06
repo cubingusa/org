@@ -75,6 +75,7 @@ export function ViewSaver({ view, collapseId }: ViewSaverParams) {
     // TODO: show that it is in progress.
     // TODO: error handling.
   };
+  // TODO: don't include review-based filters.
 
   return (
     <>
@@ -161,7 +162,6 @@ export function ViewSaver({ view, collapseId }: ViewSaverParams) {
           ) : null}
         </div>
       </div>
-      // TODO: don't include review-based filters.
       <FilterModal id="saved-view-filter-modal" addFilter={addFilter} />
       &nbsp;
       <button

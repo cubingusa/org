@@ -63,9 +63,9 @@ def is_admin(user, wcif):
     return False
   if user.HasAnyRole(Roles.AdminRoles()):
     return True
-  for person in wcif.persons:
-    if person.wcaUserId == int(user.key.id()):
-      return 'organizer' in person.roles
+  for person in wcif['persons']:
+    if person['wcaUserId'] == int(user.key.id()):
+      return 'organizer' in person['roles']
   return False
 
 @cache.memoize(300)
@@ -139,11 +139,11 @@ def get_settings(competition_id):
       return {}
     out = settings.details
     # TODO: restrict form visibility to ones assigned to you?
-    if 'forms' in settings.review_settings:
+    if 'forms' in (settings.review_settings or {}):
       out['reviewForms'] = settings.review_settings['forms']
     else:
       out['reviewForms'] = []
-    if 'nextFormId' in settings.review_settings:
+    if 'nextFormId' in (settings.review_settings or {}):
       out['nextReviewFormId'] = settings.review_settings['nextFormId']
     else:
       out['nextReviewFormId'] = 0
@@ -250,7 +250,7 @@ def post_properties(competition_id):
       elif propertyId in props:
         del props[propertyId]
     ndb.put_multi(all_user_settings)
-    for hook in MailHook.query(ndb.AND(MailHook.competition == form.competition,
+    for hook in MailHook.query(ndb.AND(MailHook.competition == ndb.Key(Competition, competition_id),
                                        MailHook.hook_type == "PropertyAssigned",
                                        MailHook.property_id == propertyId,
                                        MailHook.value_id == valueId)):
@@ -438,7 +438,7 @@ def hook_to_frontend(hook):
     out['formId'] = hook.form_id
   if hook.hook_type == 'PropertyAssigned':
     out['propertyId'] = hook.property_id
-    out['valueId'] = hook.value_id
+    out['propertyValue'] = hook.property_value
   out['recipient'] = hook.recipient
   return out
 
@@ -476,7 +476,7 @@ def put_hook(competition_id, hook_id):
       hook.form_id = req['formId']
     if hook.hook_type == 'PropertyAssigned':
       hook.property_id = req['propertyId']
-      hook.value_id = req['valueId']
+      hook.property_value = req['propertyValue']
     hook.put()
     return hook_to_frontend(hook), 200
 

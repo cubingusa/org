@@ -11,11 +11,12 @@ from app.models.wca.rank import RankSingle, RankAverage
 client = ndb.Client()
 
 def create_bp(oauth_client):
-  bp = Blueprint('auth_' + oauth_client.name, __name__)
+  name = 'auth_' + oauth_client.name
+  bp = Blueprint(name, __name__)
 
   @bp.route('/login')
   def login():
-    redirect_uri = url_for('auth.oauth_callback', _external=True)
+    redirect_uri = url_for(name + '.oauth_callback', _external=True)
     session['referrer'] = request.referrer
     return oauth_client.authorize_redirect(redirect_uri)
 

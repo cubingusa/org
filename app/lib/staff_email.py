@@ -34,7 +34,8 @@ def send_email(user_email, user_name, template, settings, substitutions):
         'To': [
           {
             # TODO: don't hard-code my email.
-            'Email': 'tim@cubingusa.org' or user_email,
+            # 'Email': 'tim@cubingusa.org' or user_email,
+            'Email': user_email,
             'Name': user_name,
           },
         ],

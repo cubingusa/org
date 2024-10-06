@@ -74,6 +74,7 @@ export function FormEditor(props: FormEditorProps) {
     setFilters(newFilters);
     form.filters = newFilters.map((f) => f.getParams());
   };
+  // TODO: don't allow review-based filters.
 
   return (
     <div className="card">
@@ -124,12 +125,11 @@ export function FormEditor(props: FormEditorProps) {
             type="button"
             className="btn btn-success"
             data-bs-toggle="modal"
-            data-bs-target="#filter-modal"
+            data-bs-target={`#filter-modal-${form.id}`}
           >
             <span className="material-symbols-outlined">add</span> Add Filter
           </button>
-          // TODO: don't allow review-based filters.
-          <FilterModal id="filter-modal" addFilter={addFilter} />
+          <FilterModal id={`filter-modal-${form.id}`} addFilter={addFilter} />
           {filters.map((filter) => (
             <span key={filter.id()}>
               <span className="badge text-bg-primary">
