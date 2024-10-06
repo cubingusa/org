@@ -5,6 +5,7 @@ from app.models.state import State
 from app.models.wca.competition import Competition
 
 class Championship(ndb.Model):
+  world_championship = ndb.BooleanProperty()
   national_championship = ndb.BooleanProperty()
   region = ndb.KeyProperty(kind=Region)
   state = ndb.KeyProperty(kind=State)
@@ -17,6 +18,10 @@ class Championship(ndb.Model):
 
   residency_deadline = ndb.DateTimeProperty()
   residency_timezone = ndb.StringProperty()
+
+  @staticmethod
+  def WorldsId(year):
+    return 'wc' + str(year)
 
   @staticmethod
   def NationalsId(year):
