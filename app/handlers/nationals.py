@@ -383,7 +383,7 @@ def worlds2025qualification():
       datetime.datetime.fromisoformat('2024-11-08T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-11-22T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-12-13T06:00-08:00'),
-      datetime.datetime.fromisoformat('2024-01-03T06:00-08:00'),
+      datetime.datetime.fromisoformat('2025-01-03T06:00-08:00'),
     ]
     close_times = [
       datetime.datetime.fromisoformat('2024-11-17T06:00-08:00'),
