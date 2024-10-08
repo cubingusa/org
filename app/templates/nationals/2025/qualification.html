@@ -1,16 +1,16 @@
 {% import "components/css.html" as css %}
 {% import "components/faq.html" as faq %}
 {% extends "nationals/2025/base.html" %}
-{% block title%}Worlds 2025 - Qualification{% endblock %}
+{% block title%}Rubik's WCA World Championship 2025 - Qualification{% endblock %}
 {% block style %}
   {{ css.css(c, 'nationals/2025/qualifying') }}
 {% endblock %}
 {% block content %}
   <p>
-    All events at the WCA World Championship 2025 will have qualification times, which you will need to beat at other WCA competitions in order to register.
+    All events at Rubik's WCA World Championship 2025 will have qualification times, which you will need to beat at other WCA competitions in order to register.
   </p>
   <p>
-    We will have four registration periods, beginning in late 2024 or early 2025. Each registration period will have its own qualification times. In order to register during a certain registration period, you only need to qualify for one event.
+    We will have four registration periods. Each registration period will have its own qualification times. In order to register during a certain registration period, you only need to qualify for one event.
   </p>
   <p>
     Please do not make travel plans until your registration has been accepted. We do not know if the competition will fill, or if competitors in later phases will have an opportunity to register.
@@ -31,11 +31,11 @@
     </p>
   {% elif earliest_phase %}
     <p>
-      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b><!--, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span>--></b>.
+      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b>, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span></b>.
     </p>
   {% else %}
     <p>
-      You currently do not have any qualification times, so currently you are not able to register for WCA World Championship 2025.
+      You currently do not have any qualification times, so currently you are not able to register for Rubik's WCA World Championship 2025.
     </p>
   {% endif %}
   <div id="qualtable-container">
@@ -68,7 +68,6 @@
           {% endfor %}
         </tr>
       {% endfor %}
-      <!--
       <tr>
         <td>
           Registration Open
@@ -85,7 +84,6 @@
           <td class="qualcell ts" data-ts="{{ time.timestamp() }}" data-divider="<br/>"></td>
         {% endfor %}
       </tr>
-      -->
     </table>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
