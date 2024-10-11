@@ -20,7 +20,7 @@ def main(argv):
     logging.info('Saving ' + latest_export)
     exports = sorted([f for f in os.listdir(FLAGS.export_base)
                       if not os.path.isfile(os.path.join(FLAGS.export_base, f))
-                      and f != latest_export])
+                      and latest_export not in f])
 
     for export in exports[:-5]:
       logging.info('Deleting ' + export)
