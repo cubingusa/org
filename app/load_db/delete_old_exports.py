@@ -22,7 +22,7 @@ def main(argv):
                       if not os.path.isfile(os.path.join(FLAGS.export_base, f))
                       and latest_export not in f])
 
-    for export in exports[:-5]:
+    for export in exports[:-8]:
       logging.info('Deleting ' + export)
       shutil.rmtree(os.path.join(FLAGS.export_base, export))
 
