@@ -291,7 +291,7 @@ def person_states():
 @worlds_bp.route('/')
 def worlds2025():
   with client.context():
-    return render_template('nationals/2025/index.html', c=Common())
+    return render_template('nationals/2025/index.html', c=Common(wca_disclaimer=True))
 
 @worlds_bp.route('/policies')
 def worlds2025policies():
