@@ -128,12 +128,14 @@ def regional_eligibility(region, year, pbq):
     ineligible_users = []
 
     for user in users:
+      if not user:
+        continue
       locked_state = None
       for locked_residency in user.locked_residencies:
         if locked_residency.year == year:
           locked_state = locked_residency.state
       if locked_state:
-        if locked_state in eligible_states:
+        if locked_state.id() in eligible_states:
           eligible_users += [{'user': user, 'state': locked_state}]
         else:
           ineligible_users += [{'user': user, 'state': locked_state}]
@@ -144,7 +146,7 @@ def regional_eligibility(region, year, pbq):
           current_state = update.state
       if not user.updates:
         current_state = user.state
-      if current_state and current_state in eligible_states:
+      if current_state and current_state.id() in eligible_states:
         eligible_users += [{'user': user, 'state': current_state}]
       else:
         ineligible_users += [{'user': user, 'state': current_state}]
@@ -155,9 +157,9 @@ def regional_eligibility(region, year, pbq):
         new_user.name = person['name']
         if person['wcaId']:
           new_user.wca_person = ndb.Key(Person, person['wcaId'])
-        ineligible_users += [new_user]
-    eligible_users.sort(key=lambda u: u.name)
-    ineligible_users.sort(key=lambda u: u.name)
+        ineligible_users += [{'user': new_user, 'state': None}]
+    eligible_users.sort(key=lambda u: u['user'].name)
+    ineligible_users.sort(key=lambda u: u['user'].name)
     return render_template('regional_eligibility.html',
                            c=common.Common(),
                            eligible_users=eligible_users,
