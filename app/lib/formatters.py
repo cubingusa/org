@@ -45,7 +45,7 @@ def FormatMultiBlindOld(time, verbose, trim_zeros, short_units):
     return '%d/%d %s' % (solved, attempted,
                          FormatStandard(time_in_seconds * 100, trim_zeros))
 
-def FormatMultiBlind(time, verbose, trim_zeros, short_units):
+def FormatMultiBlind(time, verbose, trim_zeros, short_units, multi_blind_points):
   missed = time % 100
   res = time // 100
   time_in_seconds = res % 100000
@@ -53,7 +53,9 @@ def FormatMultiBlind(time, verbose, trim_zeros, short_units):
   solved = missed + delta
   attempted = solved + missed
 
-  if verbose:
+  if multi_blind_points:
+    return str(delta) + ' pts'
+  elif verbose:
     return '%d out of %d cubes in %s' % (
                solved, attempted,
                FormatStandard(time_in_seconds * 100, trim_zeros))
@@ -73,7 +75,7 @@ def FormatFewestMoves(time, is_average, verbose, short_units):
     return result
 
 def FormatTime(time, event_key, is_average, verbose=False,
-               trim_zeros=False, short_units=False):
+               trim_zeros=False, short_units=False, multi_blind_points=False):
   if time == -1:
     return 'DNF'
   elif time == -2:
@@ -84,7 +86,7 @@ def FormatTime(time, event_key, is_average, verbose=False,
     if time > 1000000000:
       return FormatMultiBlindOld(time, verbose, trim_zeros, short_units)
     else:
-      return FormatMultiBlind(time, verbose, trim_zeros, short_units)
+      return FormatMultiBlind(time, verbose, trim_zeros, short_units, multi_blind_points)
   elif verbose:
     return FormatVerbose(time, trim_zeros, short_units)
   else:

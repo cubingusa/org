@@ -31,7 +31,7 @@
     </p>
   {% elif earliest_phase %}
     <p>
-      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b>, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span></b>.
+      Based on your WCA results, the earliest you will be able to register is <b>Phase {{ earliest_phase }}</b>, which opens <b><span class="ts" data-ts="{{ open_times[earliest_phase - 1].timestamp() }}" data-divider=" "></span></b>. Please note that, after you set times in a WCA competition, it can take a few days for this page to update.
     </p>
   {% else %}
     <p>
@@ -52,6 +52,9 @@
             {{ event.name }}
             {% if 'bf' in event.key.id() %}
               (single)
+            {% endif %}
+            {% if event.key.id() in prs %}
+              &ndash; {{ c.formatters.FormatTime(prs[event.key.id()], event.key, 'bf' not in event.key.id(), short_units=True, multi_blind_points=True) }}
             {% endif %}
           </td>
           {% for quals in qualifications %}

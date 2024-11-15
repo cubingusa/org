@@ -248,14 +248,14 @@ def nac2024projector(eventId):
     return '', 404
 
 
-@nac_bp.route('/person_states')
+@worlds_bp.route('/person_states')
 def person_states():
   with client.context():
     me = auth.user()
     if not me:
       return redirect('/login')
     wca_host = os.environ.get('WCA_HOST')
-    data = requests.get(wca_host + '/api/v0/competitions/NAC2024/wcif/public')
+    data = requests.get(wca_host + '/api/v0/competitions/WC2025/wcif/public')
     if data.status_code != 200:
       abort(data.status_code)
     competition = data.json()
@@ -267,7 +267,9 @@ def person_states():
       abort(403)
       return
     regions = list(Region.query().iter())
-    person_keys = [ndb.Key(User, str(person['wcaUserId'])) for person in competition['persons']]
+    person_keys = [ndb.Key(User, str(person['wcaUserId'])) for person in competition['persons']
+                   if person['registration'] is not None and
+                   person['registration']['status'] == 'accepted']
     users = ndb.get_multi(person_keys)
     state_to_region = {state.key.id(): state.region.id() for state in State.query().iter()}
     times = {}
@@ -431,7 +433,8 @@ def worlds2025qualification():
                            all_maybe_events=all_maybe_events,
                            earliest_phase=earliest_phase,
                            open_times=open_times,
-                           close_times=close_times)
+                           close_times=close_times,
+                           prs=prs)
 
 @worlds_bp.route('/schedule')
 def worlds2025schedule():
