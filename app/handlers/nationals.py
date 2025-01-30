@@ -391,7 +391,7 @@ def worlds2025qualification():
       datetime.datetime.fromisoformat('2024-11-17T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-12-06T06:00-08:00'),
       datetime.datetime.fromisoformat('2024-12-27T06:00-08:00'),
-      datetime.datetime.fromisoformat('2025-05-28T23:59-07:00'),
+      datetime.datetime.fromisoformat('2025-01-10T06:00-08:00'),
     ]
     prs = {}
     person = None

@@ -29,48 +29,32 @@
     <p>
       <div class="card">
         <div class="card-header">
-          <h4><span class="material-symbols-outlined">calendar_month</span> 2024 Regional Championships</h4>
+          <h4><span class="material-symbols-outlined">calendar_month</span> {{ year }} Regional Championships</h4>
         </div>
         <ul class="list-group list-group-flush">
-          {% for unannounced in unannounced_championships %}
+          {% for championship in championships %}
             <li class="list-group-item">
               <div class="row">
-                {% if unannounced[0] in championships %}
-                  {% set competition = championships[unannounced[0]].competition.get() %}
-                  <div class="competition-name-col competition-table-col">
-                    <a href="{{ competition.GetWCALink() }}">
-                      {{ competition.name }}
-                    </a>
-                  </div>
-                  <div class="competition-name-col competition-table-col">
-                    <span class="material-symbols-outlined">pin_drop</span>
-                    {{ competition.city_name }}, {{ competition.state.get().name }}
-                  </div>
-                  <div class="competition-name-col competition-table-col">
-                    <span class="material-symbols-outlined">calendar_month</span>
-                    {% autoescape False %}
-                      {{ c.format_date_range(competition.start_date, competition.end_date,
-                                             include_year=False, full_months=True) }}
-                    {% endautoescape %}
-                  </div>
-                {% else %}
-                  <div class="competition-name-col competition-table-col">
-                    CubingUSA {{ unannounced[1] }} Championship 2024
-                  </div>
-                  <div class="competition-name-col competition-table-col">
-                    <span class="material-symbols-outlined">pin_drop</span>
-                    {{ unannounced[2] }}
-                  </div>
-                  <div class="competition-name-col competition-table-col">
-                    <span class="material-symbols-outlined">calendar_month</span>
-                    {% autoescape False %}
-                      {{ unannounced[3] }}
-                    {% endautoescape %}
-                  </div>
-                {% endif %} 
+                {% set competition = championship.competition.get() %}
+                <div class="competition-name-col competition-table-col">
+                  <a href="{{ competition.GetWCALink() }}">
+                    {{ competition.name }}
+                  </a>
+                </div>
+                <div class="competition-name-col competition-table-col">
+                  <span class="material-symbols-outlined">pin_drop</span>
+                  {{ competition.city_name }}, {{ competition.state.get().name }}
+                </div>
+                <div class="competition-name-col competition-table-col">
+                  <span class="material-symbols-outlined">calendar_month</span>
+                  {% autoescape False %}
+                    {{ c.format_date_range(competition.start_date, competition.end_date,
+                                           include_year=False, full_months=True) }}
+                  {% endautoescape %}
+                </div>
               </div>
-              {% if unannounced[0] in pbq_championships %}
-                {% set competition = pbq_championships[unannounced[0]].competition.get() %}
+              {% if championship.region in pbq_championships %}
+                {% set competition = pbq_championships[championship.region].competition.get() %}
                 <hr class="pbq-divider">
                 <div class="row">
                   <div class="pbq-name-col competition-table-col">
@@ -97,13 +81,6 @@
                   </div>
                 </div>
               {% endif %}
-            </li>
-          {% endfor %}
-          {% for region in regions_missing_championships %}
-            <li class="list-group-item">
-              <span class="missing-region">
-                CubingUSA {{ region.championship_name }} Championship {{ year }}: to be announced soon!
-              <span>
             </li>
           {% endfor %}
         </ul>

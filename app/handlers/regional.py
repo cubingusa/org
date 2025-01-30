@@ -19,7 +19,7 @@ client = ndb.Client()
 @bp.route('/regional')
 def regional():
   with client.context():
-    year = 2024
+    year = 2025
 
     championships_list = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()
@@ -34,27 +34,10 @@ def regional():
                                    if not region.obsolete],
                                   key=lambda x: x[1])
 
-    championships = {championship.region.id() : championship
-                     for championship in championships_list if not championship.is_pbq}
+    championships = sorted(championships_list, key=lambda c: c.competition.get().start_date)
     pbq_championships = {championship.region.id() : championship
                          for championship in championships_list if championship.is_pbq}
-    championship_regions = [championship.region for championship in championships.values()]
-    unannounced_championships = [
-      ('hl', 'Heartland', 'Sioux Falls, South Dakota', 'June 7 - 9'),
-      ('ro', 'Rocky Mountain', 'Provo, Utah', 'June 20 - 22'),
-      ('se', 'Southeast', 'Spartanburg, South Carolina', 'June 28 - 30'),
-      ('nw', 'Northwest', 'Lynnwood, Washington', 'June 28 - 30'),
-      ('w', 'Western', 'San Diego, California', 'August 2 - 4'),
-      ('s', 'Southern', 'Oklahoma City, Oklahoma', 'August 2 - 4'),
-      ('nwe', 'New England', 'Providence, Rhode Island', 'August 23 - 25'),
-      ('gl', 'Great Lakes', 'Louisville, Kentucky', 'October 4 - 6'),
-      ('mda', 'Mid-Atlantic', 'Richmond, Virginia', 'October 12 - 14'),
-    ]
-    regions_missing_championships = [
-      r for r in regions if r.key.id() not in championships and
-      r.key.id() not in [c[0] for c in unannounced_championships] and
-      not r.obsolete
-    ]
+    championship_regions = [championship.region for championship in championships]
 
     return render_template('regional.html',
                            c=common.Common(wca_disclaimer=True),
@@ -62,9 +45,7 @@ def regional():
                            championship_years=all_championship_years,
                            championships=championships,
                            pbq_championships=pbq_championships,
-                           unannounced_championships=unannounced_championships,
-                           championship_regions=regions_for_dropdown,
-                           regions_missing_championships=regions_missing_championships)
+                           championship_regions=regions_for_dropdown)
 
 @bp.route('/state_championships')
 def state():
