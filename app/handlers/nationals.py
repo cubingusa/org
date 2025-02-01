@@ -293,12 +293,12 @@ def person_states():
 @worlds_bp.route('/')
 def worlds2025():
   with client.context():
-    return render_template('nationals/2025/index.html', c=Common(wca_disclaimer=True))
+    return render_template('nationals/wc2025/index.html', c=Common(wca_disclaimer=True))
 
 @worlds_bp.route('/policies')
 def worlds2025policies():
   with client.context():
-    return render_template('nationals/2025/policies.html', c=Common())
+    return render_template('nationals/wc2025/policies.html', c=Common())
 
 @worlds_bp.route('/qualification')
 def worlds2025qualification():
@@ -424,7 +424,7 @@ def worlds2025qualification():
       if len(maybe_events_by_phase[i]) or len(events_by_phase[i]):
         earliest_phase = i + 1
         break
-    return render_template('nationals/2025/qualification.html',
+    return render_template('nationals/wc2025/qualification.html',
                            c=Common(),
                            qualifications=qualifications,
                            events_by_phase=events_by_phase,
@@ -439,22 +439,22 @@ def worlds2025qualification():
 @worlds_bp.route('/schedule')
 def worlds2025schedule():
   with client.context():
-    return render_template('nationals/2025/schedule.html', c=Common())
+    return render_template('nationals/wc2025/schedule.html', c=Common())
 
 @worlds_bp.route('/travel')
 def worlds2025travel():
   with client.context():
-    return render_template('nationals/2025/travel.html', c=Common())
+    return render_template('nationals/wc2025/travel.html', c=Common())
 
 @worlds_bp.route('/volunteers')
 def worlds2025volunteers():
   with client.context():
-    return render_template('nationals/2025/volunteers.html', c=Common())
+    return render_template('nationals/wc2025/volunteers.html', c=Common())
 
 @worlds_bp.route('/contact', methods=['GET', 'POST'])
 def worlds2025contact():
   with client.context():
-    return contact.handle_contact_request('nationals/2025/contact.html',
+    return contact.handle_contact_request('nationals/wc2025/contact.html',
                                           'Worlds 2025',
                                           'worlds-organizers@cubingusa.org')
 
