@@ -1,0 +1,196 @@
+{% import "components/css.html" as css %}
+{% extends "nationals/2023/base.html" %}
+{% block title%}Nationals 2023 Schedule{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2023/schedule') }}
+{% endblock %}
+{% block content %}
+  <h1>CubingUSA Nationals 2023 Schedule</h1>
+  <p>
+    This schedule is subject to change and is only an estimate. We plan to release a final schedule by the end of June, along with individual competitors' group assignments.
+  </p>
+  <p>
+    Competitors must check in before their first event. Check-in will be open starting at <strong>8:00 AM</strong> on Thursday, Friday, and Saturday. You do not need to check in on Thursday if you do not have any events on Thursday.
+  </p>
+  <p>
+    Competitors in 3x3 Multi-Blind must submit their cubes for scrambling by <strong>10:00 AM</strong> on the day of the attempt.
+  </p>
+  <p>
+    All times are Eastern Daylight Time (EDT) (UTC-4).
+  </p>
+  <div class="schedule-container">
+    <div class="day-container key">
+      <h3>Color Key</h3>
+      <div class="time-block time-block-main">
+        <div class="col-12">
+          Main Stage
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="col-12">
+          Side Room
+        </div>
+      </div>
+      <div class="time-block time-block-finals">
+        <div class="col-12">
+          Final
+        </div>
+      </div>
+    </div>
+    <div class="day-container">
+      <h3>Thursday, July 27</h3>
+      <div class="time-block time-block-main">
+        <div class="event-times">9:00 AM<span class="end-time"> &ndash; 12:00 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('clock') }}"> Clock Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('minx') }}"> Megaminx Round 1
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="event-times">11:45 AM <span class="end-time">&mdash; 1:15 PM</span></div>
+        <div class="events">
+          <img src="{{ c.IconUrl('333mbf') }}"> Multi-Blind Attempt 1
+        </div>
+      </div>
+      <div class="time-block time-block-main">
+        <div class="event-times">1:00 PM <span class="end-time">&ndash; 6:00 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('777') }}"> 7x7x7 Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('333oh') }}"> 3x3x3 One-Handed Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('555') }}"> 5x5x5 Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('minx') }}"> Megaminx Round 2
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="event-times">6:00 PM <span class="end-time">&mdash; 7:15 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333fm') }}"> Fewest Moves Attempt 1
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="schedule-container">
+    <div class="day-container">
+      <h3>Friday, July 28</h3>
+      <p>
+        Note: the WCA website's schedule lists 6x6, 2x2, 3x3, and Pyraminx from 10:00 AM - 11:00 AM. This is a special section for competitors who have requested a religious accommodation. If you have not done so, you will compete in these events during the normal time listed on this schedule.
+      </p>
+      <div class="time-block time-block-main">
+        <div class="event-times">8:20 AM<span class="end-time"> &ndash; 12:00 PM</span></span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333bf') }}"> 3x3x3 Blindfolded Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('444') }}"> 4x4x4 Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('clock') }}"> Clock Round 2
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="event-times">12:00 PM <span class="end-time">&mdash; 1:30 PM</span></div>
+        <div class="events">
+          <img src="{{ c.IconUrl('333mbf') }}"> Multi-Blind Attempt 2
+        </div>
+      </div>
+      <div class="time-block time-block-main">
+        <div class="event-times">1:15 PM <span class="end-time">&mdash; 5:00 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('666') }}"> 6x6x6 Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('skewb') }}"> Skewb Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('sq1') }}"> Square-1 Round 1
+        </div>
+      </div>
+      <div class="time-block time-block-finals">
+        <div class="event-times">5:00 PM <span class="end-time">&mdash; 6:30 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('777') }}"> 7x7x7 Final<br>
+          <img class="icon" src="{{ c.IconUrl('clock') }}"> Clock Final<br>
+          <img class="icon" src="{{ c.IconUrl('minx') }}"> Megaminx Final<br>
+          <img class="icon" src="{{ c.IconUrl('666') }}"> 6x6x6 Final
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="event-times">6:35 PM <span class="end-time">&mdash; 7:45 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333fm') }}"> Fewest Moves Attempt 2
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="schedule-container">
+    <div class="day-container">
+      <h3>Saturday, July 29</h3>
+      <div class="time-block time-block-main">
+        <div class="event-times">9:00 AM <span class="end-time">&mdash; 12:30 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('222') }}"> 2x2x2 Round 1<br>
+          <img class="icon" src="{{ c.IconUrl('pyram') }}"> Pyraminx Round 1
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="event-times">12:15 PM <span class="end-time">&mdash; 1:45 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333fm') }}"> 5x5x5 Blindfolded
+        </div>
+      </div>
+      <div class="time-block time-block-main">
+        <div class="event-times">1:30 PM <span class="end-time">&mdash; 6:00 PM</span></div>
+        <div class="events">
+          <img src="{{ c.IconUrl('333') }}"> 3x3x3 Round 1<br>
+          <img src="{{ c.IconUrl('444') }}"> 4x4x4 Round 2<br>
+          <img src="{{ c.IconUrl('222') }}"> 2x2x2 Round 2
+        </div>
+      </div>
+      <div class="time-block time-block-side">
+        <div class="event-times">6:00 PM <span class="end-time">&mdash; 7:15 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333fm') }}"> Fewest Moves Attempt 3
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="schedule-container">
+    <div class="day-container">
+      <h3>Sunday, July 30</h3>
+      <div class="time-block time-block-finals">
+        <div class="event-times">8:15 AM <span class="end-time">&mdash; 9:00 AM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('444bf') }}"> 4x4x4 Blindfolded Final
+        </div>
+      </div>
+      <div class="time-block time-block-main">
+        <div class="event-times">9:00 AM <span class="end-time">&mdash; 12:30 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333') }}"> 3x3x3 Round 2<br>
+          <img class="icon" src="{{ c.IconUrl('555') }}"> 5x5x5 Round 2<br>
+          <img class="icon" src="{{ c.IconUrl('333oh') }}"> 3x3x3 One-Handed Round 2<br>
+          <img class="icon" src="{{ c.IconUrl('222') }}"> 2x2x2 Round 3<br>
+          <img class="icon" src="{{ c.IconUrl('pyram') }}"> Pyraminx Round 2<br>
+          <img class="icon" src="{{ c.IconUrl('skewb') }}"> Skewb Round 2<br>
+          <img class="icon" src="{{ c.IconUrl('333') }}"> 3x3x3 Round 3<br>
+          <img class="icon" src="{{ c.IconUrl('333bf') }}"> 3x3x3 Blindfolded Round 2
+        </div>
+      </div>
+      <div class="time-block time-block-finals">
+        <div class="event-times">1:20 PM <span class="end-time">&mdash; 4:00 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('sq1') }}"> Square-1 Final<br>
+          <img class="icon" src="{{ c.IconUrl('pyram') }}"> Pyraminx Final<br>
+          <img class="icon" src="{{ c.IconUrl('555') }}"> 5x5x5 Final<br>
+          <img class="icon" src="{{ c.IconUrl('skewb') }}"> Skewb Final<br>
+          <img class="icon" src="{{ c.IconUrl('444') }}"> 4x4x4 Final<br>
+          <img class="icon" src="{{ c.IconUrl('222') }}"> 2x2x2 Final<br>
+          <img class="icon" src="{{ c.IconUrl('333oh') }}"> 3x3x3 One-Handed Final<br>
+          <img class="icon" src="{{ c.IconUrl('333bf') }}"> 3x3x3 Blindfolded Final
+        </div>
+      </div>
+      <div class="time-block time-block-finals">
+        <div class="event-times">4:15 PM <span class="end-time">&mdash; 6:00 PM</span></div>
+        <div class="events">
+          <img class="icon" src="{{ c.IconUrl('333') }}"> 3x3x3 Final
+        </div>
+      </div>
+      <div class="time-block time-block-main">
+        <div class="event-times">6:00 PM <span class="end-time">&mdash; 6:30 PM</span></div>
+        <div class="events">Awards</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
