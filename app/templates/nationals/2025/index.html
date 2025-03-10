@@ -18,7 +18,7 @@
       </p>
     </div>
     <div class="image-container">
-      <img src="/static/img/nats-logo-2025.png" alt="CubingUSA Nationals 2025 Logo">
+      <img src="/static/img/cubingUSA_2023_color.svg" alt="CubingUSA Nationals 2025 Logo">
     </div>
   </div>
   <div class="row">
@@ -41,6 +41,8 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="info-box-container">
       <div class="card">
         <div class="card-header">
           <h4><span class="material-symbols-outlined">edit</span> Registration</h4>
@@ -67,38 +69,24 @@
         </div>
         <div class="card-body">
           <div class="info-box-row">
-            <span class="info-box-label">{% event_icon.event_icon('333', 'evt') %}:</span> Top 32
+            <span class="info-box-label">Top 32:</span> {{ event_icon.event_icon(c.event('333'), 'evt') }}
           </div>
           <div class="info-box-row">
-            <span class="info-box-label">
+            <span class="info-box-label">Top 16:</span>
               {% for evt in ['222', '444', '555', '333oh', 'pyram', 'skewb'] %}
-                {% event_icon.event_icon(evt, 'evt') %}
+                {{ event_icon.event_icon(c.event(evt), 'evt') }}
               {% endfor %}
-              :
-            </span> Top 16
           </div>
           <div class="info-box-row">
-            <span class="info-box-label">
+            <span class="info-box-label">Top 8:</span>
               {% for evt in ['666', '777', '333bf', '333fm', 'clock', 'minx', 'sq1', '444bf', '555bf', '333mbf'] %}
-                {% event_icon.event_icon(evt, 'evt') %}
+                {{ event_icon.event_icon(c.event(evt), 'evt') }}
               {% endfor %}
-              :
-            </span> Top 8
+          </div>
+          <div class="info-box-row">
+            <span class="info-box-label">Deadline:</span> September 15, 2025
           </div>
         </div>
-      </div>
-    </div>
-    <div class="info-box-container">
-      <div class="card">
-        <div class="card-header">
-          <h4><span class="material-symbols-outlined">trophy</span> Sponsor and Prizes</h4>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <img src="/static/img/cubicle.png" class="cubicle-logo"><br/>
-            Huge thanks to our sponsor, <a href="https://www.thecubicle.com/">TheCubicle</a>! TheCubicle will be at the competition selling cubes and official merchandise.
-          </li>
-        </ul>
       </div>
     </div>
   </div>

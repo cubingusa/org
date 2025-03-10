@@ -2,10 +2,10 @@
 {% import "components/nav.html" as nav %}
 {% extends "base.html" %}
 {% block head %}
-  <meta property="og:image" content="https://www.cubingusa.org/static/img/nats-logo-2023-og-image.png"/>
+  <meta property="og:image" content="https://www.cubingusa.org/static/img/cubingUSA_2023_color.svg"/>
 {% endblock %}
 {% block style %}
-  {{ css.css(c, 'nationals/2023/base') }}
+  {{ css.css(c, 'nationals/2025/base') }}
 {% endblock %}
 {% block navbar_secondary %}
   <div class="navbar-secondary">
@@ -22,14 +22,12 @@
       </button>
       <div class="collapse navbar-collapse" id="second_nav">
         <ul class="navbar-left">
-          {% call nav.navitem(c, '/nationals/2023') %} Nationals 2023 {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/events') %} Events {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/qualifying') %} Qualifying {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/volunteers') %} Volunteers {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/schedule') %} Schedule {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/unofficial') %} Unofficial Events {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/travel') %} Travel {% endcall %}
-          {% call nav.navitem(c, '/nationals/2023/contact') %} FAQ and Contact {% endcall %}
+          {% call nav.navitem(c, '/nationals/2025') %} All-Star Championship 2025 {% endcall %}
+          {% call nav.navitem(c, '/nationals/2025/registration') %} Registration {% endcall %}
+          {% call nav.navitem(c, '/nationals/2025/volunteers') %} Volunteers {% endcall %}
+          {% call nav.navitem(c, '/nationals/2025/spectators') %} Spectators {% endcall %}
+          {% call nav.navitem(c, '/nationals/2025/schedule') %} Schedule {% endcall %}
+          {% call nav.navitem(c, '/nationals/2025/contact') %} FAQ and Contact {% endcall %}
         </ul>
       </div>
     </div>

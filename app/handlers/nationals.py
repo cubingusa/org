@@ -476,27 +476,27 @@ def nats2025contact():
                                           'Nationals 2025',
                                           'nats-organizers@cubingusa.org')
 
-@bp.route('/2025/events')
-def nats2025events():
-  with client.context():
-    return redirect('https://www.worldcubeassociation.org/competitions/CubingUSANationals2025#competition-events')
-
 @bp.route('/2025/schedule')
 def nats2025schedule():
   with client.context():
-    return render_template('nationals/2025/schedule.html', c=Common())
+    return redirect('https://www.worldcubeassociation.org/competitions/CubingUSANationals2025#competition-schedule')
 
 @bp.route('/2025/travel')
 def nats2025travel():
   with client.context():
     return render_template('nationals/2025/travel.html', c=Common())
 
-@bp.route('/2025/qualifying')
+@bp.route('/2025/registration')
 def nats2025qualifying():
   with client.context():
-    return render_template('nationals/2025/qualifying.html', c=Common())
+    return render_template('nationals/2025/registration.html', c=Common())
 
 @bp.route('/2025/volunteers')
 def nats2025volunteers():
   with client.context():
     return render_template('nationals/2025/volunteers.html', c=Common())
+
+@bp.route('/2025/spectators')
+def nats2025spectators():
+  with client.context():
+    return render_template('nationals/2025/spectators.html', c=Common())

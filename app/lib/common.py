@@ -72,6 +72,9 @@ class Common(object):
             (include_mbo or e.key.id() != '333mbo') and
             (include_feet or e.key.id() != '333ft')]
 
+  def event(self, event_id):
+    return Event.get_by_id(event_id)
+
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
 
