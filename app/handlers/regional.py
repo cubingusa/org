@@ -34,7 +34,9 @@ def regional():
                                    if not region.obsolete],
                                   key=lambda x: x[1])
 
-    championships = sorted(championships_list, key=lambda c: c.competition.get().start_date)
+    championships = [championship for championship in
+                     sorted(championships_list, key=lambda c: c.competition.get().start_date)
+                     if not championship.is_pbq]
     pbq_championships = {championship.region.id() : championship
                          for championship in championships_list if championship.is_pbq}
     championship_regions = [championship.region for championship in championships]
