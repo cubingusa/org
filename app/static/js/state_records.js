@@ -8,7 +8,11 @@ var stateRecordsModule = (function() {
   var activeAverage = '';
 
   updateTable = function() {
-    if ((!activeStateId && !activeEventId) || activeAverage === '') {
+    if (!activeStateId && !activeEventId) {
+      eventSelectorModule.setEvent('333');
+      return;
+    }
+    if (activeAverage === '') {
       return;
     }
     var req = new XMLHttpRequest();
@@ -80,7 +84,6 @@ var stateRecordsModule = (function() {
 })();
 
 eventSelectorModule.setSelectListener(stateRecordsModule.setEvent);
-eventSelectorModule.setDefaultEvt('333');
 stateSelectorModule.setSelectListener(stateRecordsModule.setState);
 
 onloadModule.register(function() {

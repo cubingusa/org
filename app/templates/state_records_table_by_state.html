@@ -1,15 +1,22 @@
 {% autoescape true %}
-{% macro ranking_row(ranking) %}
+{% macro ranking_row(ranking, regional=False) %}
   {% set person = people_by_id[ranking.person.id()] %}
-  <div class="ranking-row-container">
+  <div class="ranking-row-container {{ 'regional' if regional else '' }}">
     <div class="row">
       <div class="rank-col">
-        {{ states_by_id[ranking.state.id()].name }}
+        {% if regional %}
+          {{ states_by_id[ranking.state.id()].region.get().name }}
+        {% else %}
+          {{ states_by_id[ranking.state.id()].name }}
+        {% endif %}
       </div>
       <div class="person-col">
         <a href="{{ ranking.person.get().GetWCALink() }}" target="_blank">
           {{ ranking.person.get().name }}
         </a>
+        {% if regional %}
+          ({{ ranking.state.get().name }})
+        {% endif %}
       </div>
       <div class="time-col">
         {{ c.formatters.FormatTime(ranking.best, ranking.event, is_average) }}
@@ -18,7 +25,12 @@
   </div>
 {% endmacro %}
 
-{% for ranking in rankings %}
-  {{ ranking_row(ranking) }}
+{% for region in regions %}
+  {{ ranking_row(regional_records[region.key.id()], regional=True) }}
+  {% for state in states_by_region[region.key.id()] %}
+    {% if state.key.id() in state_records %}
+      {{ ranking_row(state_records[state.key.id()]) }}
+    {% endif %}
+  {% endfor %}
 {% endfor %}
 {% endautoescape %}
