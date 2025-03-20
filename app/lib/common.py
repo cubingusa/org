@@ -64,7 +64,7 @@ class Common(object):
     return [state for state in State.query().order(State.name).iter()]
 
   def regions(self):
-    return [r for r in Region.query().order(Region.name).iter()]
+    return [r for r in Region.query(Region.obsolete==False).order(Region.name).iter()]
 
   def events(self, include_magic, include_mbo, include_feet):
     return [e for e in Event.query().order(Event.rank).iter()

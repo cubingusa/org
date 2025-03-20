@@ -43,6 +43,11 @@
   }
 }
 
+.regional {
+  background-color: #cccccc !important;
+  font-weight: bold;
+}
+
 .ranking-row-container {
   @extend .card;
   margin-top: 2px;
