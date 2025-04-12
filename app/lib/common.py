@@ -88,7 +88,7 @@ class Common(object):
     items = [('Home', '/'),
              ('Competitions', [
                  ('Rubik\'s WCA North American Championship 2024', '/nac/2024'),
-                 ('Worlds 2025', '/worlds'),
+                 ('Rubik\'s WCA World Championship 2025', '/worlds'),
                  ('Regional Championships', '/regional'),
                  ('State Championships', '/state_championships'),
              ]),

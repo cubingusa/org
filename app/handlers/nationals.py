@@ -300,6 +300,11 @@ def worlds2025policies():
   with client.context():
     return render_template('nationals/wc2025/policies.html', c=Common())
 
+@worlds_bp.route('/unofficial')
+def worlds2025unofficial():
+  with client.context():
+    return render_template('nationals/wc2025/unofficial.html', c=Common())
+
 @worlds_bp.route('/qualification')
 def worlds2025qualification():
   with client.context():
