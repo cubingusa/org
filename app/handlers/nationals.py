@@ -479,7 +479,7 @@ def nats2025contact():
 @bp.route('/2025/schedule')
 def nats2025schedule():
   with client.context():
-    return redirect('https://www.worldcubeassociation.org/competitions/CubingUSAAllStarChampionship2025#competition-schedule')
+    return render_template('nationals/2025/events.html', c=Common())
 
 @bp.route('/2025/travel')
 def nats2025travel():

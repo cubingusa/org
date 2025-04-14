@@ -9,7 +9,7 @@
 {% block content %}
   <div class="nats-top-row">
     <div class="top-info">
-      <h2 class="d-none d-xs-block">CubingUSA All-Star Championship 2025</h2>
+      <h2 class="d-none d-xs-block">Rubik's x TheCubicle CubingUSA All-Stars 2025</h2>
       <p>
         CubingUSA is excited to bring you a special event: a two-day, 17-event, all-star National Championship! This competition will give the top solvers across the country the opportunity to vie for the title of US National Champion. 
       </p>
@@ -18,7 +18,7 @@
       </p>
     </div>
     <div class="image-container">
-      <img src="/static/img/cubingUSA_2023_color.svg" alt="CubingUSA Nationals 2025 Logo">
+      <img src="/static/img/nats-2025-logo.jpg" alt="Rubik's x TheCubicle CubingUSA All-Stars 2025 Logo">
     </div>
   </div>
   <div class="row">
@@ -38,6 +38,9 @@
             <div class="info-box-row">
               <span class="material-symbols-outlined">location_city</span> <span class="info-box-label">Venue:</span> <a href="https://mcvinneyauditorium.org/" target="_blank">McVinney Auditorium</a>
             </div>
+            <div class="info-box-row">
+              <span class="material-symbols-outlined">payments</span> <span class="info-box-label">Spectators:</span> $20 (sales coming soon)
+            </div>
           </div>
         </div>
       </div>
@@ -50,19 +53,17 @@
         <div class="card-body">
           <div class="card-text">
             <div class="info-box-row">
-              <span class="info-box-label">Registration Open:</span> April 15, 2025
+              <span class="info-box-label">Registration Open:</span> May 1, 2025
             </div>
             <div class="info-box-row">
-              <span class="info-box-label">Registration Close:</span> September 1, 2025
+              <span class="info-box-label">Registration Close:</span> September 2, 2025
             </div>
             <div class="info-box-row">
-              <span class="info-box-label">Accepted Competitors Notified By:</span> October 14, 2025
+              <span class="info-box-label">Competitor List Announced:</span> October 1, 2025
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="info-box-container">
       <div class="card">
         <div class="card-header">
           <h4><span class="material-symbols-outlined">avg_time</span> Qualification</h4>
@@ -78,15 +79,35 @@
               {% endfor %}
           </div>
           <div class="info-box-row">
+            <span class="info-box-label">Top 12:</span>
+              {% for evt in ['333fm'] %}
+                {{ event_icon.event_icon(c.event(evt), 'evt') }}
+              {% endfor %}
+          </div>
+          <div class="info-box-row">
             <span class="info-box-label">Top 8:</span>
               {% for evt in ['666', '777', '333bf', '333fm', 'clock', 'minx', 'sq1', '444bf', '555bf', '333mbf'] %}
                 {{ event_icon.event_icon(c.event(evt), 'evt') }}
               {% endfor %}
           </div>
           <div class="info-box-row">
-            <span class="info-box-label">Deadline:</span> September 1, 2025
+            <span class="info-box-label">Deadline:</span> September 2, 2025
           </div>
         </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><span class="material-symbols-outlined">handshake</span> Sponsors</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            Huge thanks for our generous sponsors!
+            <img src="/static/img/rubiks_new.png" class="rubiks-logo"><br/>
+            <img src="/static/img/cubicle.png" class="cubicle-logo">
+          </li>
+        </ul>
       </div>
     </div>
   </div>
