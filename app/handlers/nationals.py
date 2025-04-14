@@ -468,3 +468,40 @@ def worlds2025events():
   with client.context():
     return redirect('https://www.worldcubeassociation.org/competitions/WC2025#competition-events')
 
+@bp.route('/2025')
+def nats2025():
+  with client.context():
+    return render_template('nationals/2025/index.html',
+                           c=Common(wca_disclaimer=True))
+
+@bp.route('/2025/contact', methods=['GET', 'POST'])
+def nats2025contact():
+  with client.context():
+    return contact.handle_contact_request('nationals/2025/contact.html',
+                                          'Nationals 2025',
+                                          'nats-organizers@cubingusa.org')
+
+@bp.route('/2025/schedule')
+def nats2025schedule():
+  with client.context():
+    return render_template('nationals/2025/events.html', c=Common())
+
+@bp.route('/2025/travel')
+def nats2025travel():
+  with client.context():
+    return render_template('nationals/2025/travel.html', c=Common())
+
+@bp.route('/2025/registration')
+def nats2025qualifying():
+  with client.context():
+    return render_template('nationals/2025/registration.html', c=Common())
+
+@bp.route('/2025/volunteers')
+def nats2025volunteers():
+  with client.context():
+    return render_template('nationals/2025/volunteers.html', c=Common())
+
+@bp.route('/2025/spectators')
+def nats2025spectators():
+  with client.context():
+    return render_template('nationals/2025/spectators.html', c=Common())
