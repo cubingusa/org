@@ -92,6 +92,7 @@ class Common(object):
              ('Competitions', [
                  ('Rubik\'s WCA North American Championship 2024', '/nac/2024'),
                  ('Rubik\'s WCA World Championship 2025', '/worlds'),
+                 ('Rubik\'s x TheCubicle CubingUSA All-Stars 2025', '/nationals/2025'),
                  ('Regional Championships', '/regional'),
                  ('State Championships', '/state_championships'),
              ]),

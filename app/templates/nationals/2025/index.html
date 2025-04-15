@@ -39,7 +39,7 @@
               <span class="material-symbols-outlined">location_city</span> <span class="info-box-label">Venue:</span> <a href="https://mcvinneyauditorium.org/" target="_blank">McVinney Auditorium</a>
             </div>
             <div class="info-box-row">
-              <span class="material-symbols-outlined">payments</span> <span class="info-box-label">Spectators:</span> $20 (sales coming soon)
+              <span class="material-symbols-outlined">payments</span> <span class="info-box-label">Spectators:</span> $20, available on <a href="https://www.thecubicle.com/products/rubiks-x-thecubicle-cubingusa-all-stars-live-ticket-2-day-pass">TheCubicle</a>.
             </div>
           </div>
         </div>
@@ -86,7 +86,7 @@
           </div>
           <div class="info-box-row">
             <span class="info-box-label">Top 8:</span>
-              {% for evt in ['666', '777', '333bf', '333fm', 'clock', 'minx', 'sq1', '444bf', '555bf', '333mbf'] %}
+              {% for evt in ['666', '777', '333bf', 'clock', 'minx', 'sq1', '444bf', '555bf', '333mbf'] %}
                 {{ event_icon.event_icon(c.event(evt), 'evt') }}
               {% endfor %}
           </div>

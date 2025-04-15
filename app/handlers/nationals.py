@@ -47,7 +47,7 @@ events = {
 @bp.route('/')
 def nats():
   with client.context():
-    return redirect('/nationals/2023')
+    return redirect('/nationals/2025')
 
 @bp.route('/2018')
 def nats2018():
