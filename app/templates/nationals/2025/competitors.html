@@ -15,7 +15,7 @@
     <ol>
       {% for person, bests in by_event[evt.key.id()] %}
       <li><a href="https://wca.link/{{ person['wcaId'] }}">{{ person['name'] }}</a>:
-        {% if 'bf' in evt.id %}
+        {% if 'bf' in evt.key.id() %}
           {{ c.formatters.FormatTime(bests[0], evt.key, False) }}
         {% else %}
           {{ c.formatters.FormatTime(bests[1], evt.key, True) }}
