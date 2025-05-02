@@ -23,7 +23,8 @@ with client.context():
                          'username': username,
                          'password': password,
                          'scope': 'public manage_competitions'}).json()
-  wcif = requests.get('https://www.worldcubeassociation.org/api/v0/competitions/CubingUSAAllStars2025/wcif', headers=$
+  wcif = requests.get('https://www.worldcubeassociation.org/api/v0/competitions/CubingUSAAllStars2025/wcif',
+                      headers={'Authorization': 'Bearer ' + token['access_token']}).json()
   storage_client = storage.Client()
   bucket = storage_client.lookup_bucket('nats2025')
   blob = bucket.get_blob('wcif.json')
@@ -31,4 +32,6 @@ with client.context():
 
   service = build('sheets', 'v4')
   sheet = service.spreadsheets().values().get(spreadsheetId="1EWEsh-OOq4g-gKXBBaeMDxBxjLHaxUjnoJUlkqyqA6I", range="C:C").execute()
-  print(sheet)
+
+  blob = bucket.get_blob('competitors.csv')
+  blob.upload_from_string('\n'.join([v[0] for v in sheet['values']]))
