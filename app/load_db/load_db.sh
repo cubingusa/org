@@ -8,6 +8,9 @@ then
   $(gcloud beta emulators datastore env-init)
 fi
 
+echo "Loading Nats 2025 WCIF"
+python3 app/load_db/load_nats2025_wcif.py
+
 echo "Deleting old exports"
 python3 app/load_db/delete_old_exports.py \
     --export_base=exports/
