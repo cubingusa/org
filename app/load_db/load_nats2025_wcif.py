@@ -1,5 +1,6 @@
 from google.cloud import ndb
 from google.cloud import storage
+from googleapiclient.discovery import build
 
 import base64
 import json
@@ -27,3 +28,7 @@ with client.context():
   bucket = storage_client.lookup_bucket('nats2025')
   blob = bucket.get_blob('wcif.json')
   blob.upload_from_string(json.dumps(wcif))
+
+  service = build('sheets', 'v4')
+  sheet = service.spreadsheets().values().get(spreadsheetId="1EWEsh-OOq4g-gKXBBaeMDxBxjLHaxUjnoJUlkqyqA6I", range="C:C").execute()
+  print(sheet)

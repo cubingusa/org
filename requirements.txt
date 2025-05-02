@@ -4,6 +4,9 @@ gunicorn==22.0.0
 python-dotenv==0.19.2
 absl-py
 python-dateutil
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
 google-cloud-logging
 google-cloud-ndb
 google-cloud-recaptcha-enterprise
