@@ -10,6 +10,8 @@ fi
 
 echo "Loading Nats 2025 WCIF"
 GOOGLE_APPLICATION_CREDENTIALS=service-account.json python3 app/load_db/load_nats2025_wcif.py
+echo "Loading Worlds 2025 WCIF"
+GOOGLE_APPLICATION_CREDENTIALS=service-account.json python3 app/load_db/load_wc2025_stream_people.py
 
 echo "Deleting old exports"
 python3 app/load_db/delete_old_exports.py \
