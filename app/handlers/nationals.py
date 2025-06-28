@@ -464,6 +464,11 @@ def worlds2025stream():
   with client.context():
     return render_template('nationals/wc2025/stream.html', c=Common())
 
+@worlds_bp.route('/venue')
+def worlds2025venue():
+  with client.context():
+    return render_template('nationals/wc2025/venue.html', c=Common())
+
 @worlds_bp.route('/contact', methods=['GET', 'POST'])
 def worlds2025contact():
   with client.context():
