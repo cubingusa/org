@@ -39,6 +39,8 @@ class UserLocationUpdate(ndb.Model):
 
 class User(ndb.Model):
   wca_person = ndb.KeyProperty(kind=Person)
+  # WARNING: this is only updated when the user logs in, and may be outdated.
+  # Prefer wca_person.name when possible.
   name = ndb.StringProperty()
   email = ndb.StringProperty()
   roles = ndb.StringProperty(repeated=True)
