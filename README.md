@@ -21,6 +21,29 @@ git submodule update --init --recursive
 
 If this is your first time running the CubingUSA website locally, follow the instructions in `doc/deploy.md` to set up your local development server.
 
+### Google cloud
+
+You will need to install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) and run
+
+```sh
+gcloud auth login
+gcloud config set project staging-cubingusa-org
+```
+
+#### Setup Cloud Datastore
+
+We use Google Cloud Datastore, which you will need to run locally. Run the command
+
+```sh
+gcloud beta emulators datastore start
+```
+
+Configure the app to use the local datastore:
+
+```sh
+$(gcloud beta emulators datastore env-init)
+```
+
 ### sass
 
 Run
@@ -31,19 +54,15 @@ Run
 
 This command will keep running, and watch for updates to the scss files.
 
-### Setup Cloud Datastore
-
-We use Google Cloud Datastore, which you will need to run locally. Run the command
-
-```sh
-gcloud beta emulators datastore start
-```
-
-### Run the app
+### virtualenv
 
 Run the following commands in the same terminal:
 
 Enable the virtualenv:
+
+```sh
+virtualenv -p python3 env
+```
 
 ```sh
 source env/bin/activate
@@ -55,13 +74,9 @@ Install python dependencies:
 pip install -r requirements.txt
 ```
 
-Configure the app to use the local datastore:
+### Running the app
 
-```sh
-$(gcloud beta emulators datastore env-init)
-```
-
-Run the app:
+Start the local dev server:
 
 ```sh
 gunicorn -b :8083 app.flask:app --reload
