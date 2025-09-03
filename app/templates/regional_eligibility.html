@@ -19,9 +19,17 @@
       <ul>
         {% for entry in ineligible_users %}
           {% if entry['state'] != None %}
-            <li>{{ entry['user'].wca_person.get().name }} ({{ entry['state'].id() }})</li>
+            {% if entry['user'].wca_person != None %}
+              <li>{{ entry['user'].wca_person.get().name }} {{ entry['user'].wca_person.id() }} ({{ entry['state'].id() }})</li>
+            {% else %}
+              <li>{{ entry['user'].name }} ({{ entry['state'].id() }})</li>
+            {% endif %}
           {% else %}
-            <li>{{ entry['user'].name }} (No state set)</li>
+            {% if entry['user'].wca_person != None %}
+              <li>{{ entry['user'].wca_person.get().name }} {{ entry['user'].wca_person.id() }} (No state set)</li>
+            {% else %}
+              <li>{{ entry['user'].name }} (No state set)</li>
+            {% endif %}
           {% endif %}
         {% endfor %}
       </ul>
