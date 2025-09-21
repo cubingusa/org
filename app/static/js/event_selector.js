@@ -61,6 +61,9 @@ var eventSelectorModule = (function() {
     setUnselectListener: function(listener) { unselectListener = listener; },
     setDefaultEvt: function(evt) { defaultEvt = evt; },
     getDefaultEvt: function() { return defaultEvt; },
+    setEvent: function(evt) {
+      document.getElementById('event-selector-link-' + evt).click();
+    }
   }
 })();
 

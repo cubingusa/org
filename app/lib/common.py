@@ -64,13 +64,16 @@ class Common(object):
     return [state for state in State.query().order(State.name).iter()]
 
   def regions(self):
-    return [r for r in Region.query().order(Region.name).iter()]
+    return [r for r in Region.query(Region.obsolete==False).order(Region.name).iter()]
 
   def events(self, include_magic, include_mbo, include_feet):
     return [e for e in Event.query().order(Event.rank).iter()
             if (include_magic or e.key.id() not in ['magic', 'mmagic']) and
             (include_mbo or e.key.id() != '333mbo') and
             (include_feet or e.key.id() != '333ft')]
+
+  def event(self, event_id):
+    return Event.get_by_id(event_id)
 
   def years(self):
     return reversed(range(2004, datetime.date.today().year + 2))
@@ -88,7 +91,8 @@ class Common(object):
     items = [('Home', '/'),
              ('Competitions', [
                  ('Rubik\'s WCA North American Championship 2024', '/nac/2024'),
-                 ('Worlds 2025', '/worlds'),
+                 ('Rubik\'s WCA World Championship 2025', '/worlds'),
+                 ('Rubik\'s x TheCubicle CubingUSA All-Stars 2025', '/nationals/2025'),
                  ('Regional Championships', '/regional'),
                  ('State Championships', '/state_championships'),
              ]),

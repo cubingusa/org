@@ -13,3 +13,5 @@ src/static/css/
 exports/
 
 .comp_data.*
+
+service-account.json

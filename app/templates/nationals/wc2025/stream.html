@@ -1,0 +1,229 @@
+{% extends "nationals/wc2025/base.html" %}
+{% import "components/css.html" as css %}
+{% import "components/event_icon.html" as event_icon %}
+{% block title%}Rubik's WCA World Championship 2025 - Live Stream{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/wc2025/stream') }}
+{% endblock %}
+{% block content %}
+  <h3>Live Stream</h3>
+  <p>
+    We are pleased to announce that all four days of the competition will be live streamed on the <a href="https://www.youtube.com/@WorldCubeAssociationOfficial">WCA YouTube channel!</a> The stream is brought to you by <a href="https://www.happyftproductions.com/">HappyFt Productions</a>.
+  </p>
+  <h4>Schedule</h4>
+  <p>We'll be streaming live each day of the competition! Check out <a href="https://www.competitiongroups.com/competitions/WC2025/stream">CompetitionGroups</a> to see which competitors you can expect to see on the stream! In addition to lightning fast official solves, we have an exciting schedule of interviews planned throughout the weekend. Our full planned schedule is below (please note that times are approximate, and some interviews may move earlier or later).</p>
+  <h5>Thursday (10:30 AM &ndash; 8:30 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Event on Stream</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td>10:30 AM</td><td>{{ event_icon.event_icon(c.event("clock"), "event-icon") }}Clock Group 5</td>				<td><span class="italic"></span></td>		</tr>
+<tr><td>10:45 AM</td><td>{{ event_icon.event_icon(c.event("clock"), "event-icon") }}Clock Group 6</td>					<td></td>	</tr>
+<tr><td>11:00 AM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Group 1</td>	<td><a href="https://wca.link/2016CHAP04">Stanley Chapel</a></td>					</tr>
+<tr><td>11:20 AM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Group 2</td>	<td><a href="https://wca.link/2018MURR03">Jasper Murray</a></td>					</tr>
+<tr><td>11:40 AM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Group 3</td>		<td>5x5 Blindfolded Winner</td>				</tr>
+<tr><td>12:05 PM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Group 4</td>	<td><a href="https://wca.link/2007STRO01">Sarah Strong</a></td>					</tr>
+<tr><td>12:25 PM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Group 5</td>	<td><a href="https://wca.link/2012PONC02">Patrick Ponce</a></td>					</tr>
+<tr class="italic"><td>12:45 PM</td><td>Lunch break</td>			<td></td>			</tr>
+<tr><td>1:45 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 1</td>	<td><a href="https://wca.link/2012BEAH01">Ciarán Beahan</a></td>					</tr>
+<tr><td>2:00 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 2</td>					<td></td>	</tr>
+<tr><td>2:15 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 3</td>	<td><a href="https://wca.link/2013NAHM01">Seung Hyuk Nahm (남승혁)</a></td>					</tr>
+<tr><td>2:30 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 4</td>	<td><a href="https://wca.link/2016KOLA02">Tymon Kolasiński</a></td>					</tr>
+<tr><td>2:45 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 5</td>					<td></td>	</tr>
+<tr><td>3:00 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 6</td>	<td><a href="https://wca.link/2019TARA09">Timofei Tarasenko</a></td>					</tr>
+<tr><td>3:15 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 7</td>	<td><a href="https://wca.link/2010WEYE02">Sebastian Weyer</a></td>					</tr>
+<tr><td>3:30 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Group 8</td>					<td></td>	</tr>
+<tr><td>3:45 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 1</td>	<td><a href="https://wca.link/2022KAPU01">Volodymyr Kapustianskyi</a></td>					</tr>
+<tr><td>4:00 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 2</td>					<td></td>	</tr>
+<tr><td>4:10 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 3</td>	<td><a href="https://wca.link/2017GARR05">Luke Garrett</a></td>					</tr>
+<tr><td>4:25 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 4</td>					<td></td>	</tr>
+<tr><td>4:35 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 5</td>	<td><a href="https://wca.link/2007HESS01">Rowe Hessler</a></td>					</tr>
+<tr><td>4:50 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 6</td>					<td></td>	</tr>
+<tr><td>5:00 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Group 7</td>					<td></td>	</tr>
+<tr class="bold"><td>5:15 PM</td><td>{{ event_icon.event_icon(c.event("clock"), "event-icon") }}Clock Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>5:35 PM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>6:00 PM</td><td>Opening Ceremony</td>			<td></td>			</tr>
+<tr class="bold"><td>7:00 PM</td><td>Rubik's Nations Cup</td>			<td></td>			</tr>
+<tr class="italic"><td>8:30 PM</td><td>End of Day</td>			<td></td>			</tr>
+    </tbody>
+  </table>
+  <h5>Friday (9:00 AM &ndash; 7:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Event on Stream</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td>9:00 AM</td><td>{{ event_icon.event_icon(c.event("777"), "event-icon") }}7x7x7 Group 1</td>					<td></td>	</tr>
+<tr><td>9:25 AM</td><td>{{ event_icon.event_icon(c.event("777"), "event-icon") }}7x7x7 Group 2</td>	<td><a href="https://wca.link/2017AGGA01">Sameer Aggarwal</a></td>					</tr>
+<tr><td>9:50 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 1</td>	<td><a href="https://wca.link/2016INAB01">Matty Hiroto Inaba</a></td>					</tr>
+<tr><td>10:05 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 2</td>					<td></td>	</tr>
+<tr><td>10:20 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 3</td>	<td><a href="https://wca.link/2022OKOR01">David Okoro-Sokoh</a></td>					</tr>
+<tr><td>10:35 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 4</td>					<td></td>	</tr>
+<tr><td>10:50 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 5</td>	<td><a href="https://wca.link/2019EGGI02">Charlie Eggins</a></td>					</tr>
+<tr><td>11:05 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 6</td>					<td></td>	</tr>
+<tr><td>11:20 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 7</td>	<td><a href="https://wca.link/2018KHAN28">Zayn Khanani</a></td>					</tr>
+<tr><td>11:35 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 8</td>					<td></td>	</tr>
+<tr><td>11:50 AM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Group 9</td>					<td></td>	</tr>
+<tr class="bold"><td>12:05 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>12:25 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Semi-Final</td>			<td></td>			</tr>
+<tr class=""><td>12:45 PM</td><td></td>			<td>Rubik's Content Creator Panel:<br/><a href="https://wca.link/2017GUID01">Carolina Guidetti</a><br/><a href="https://wca.link/2017TRAN24">Delphine Tran</a><br/><a href="https://wca.link/2014RICH04">Sam Richard</a><br/><a href="https://wca.link/2017HUYN02">SoupTimmy (Timothy Huynh)</a></td>			</tr>
+<tr><td>1:15 PM</td><td></td>	<td><a href="https://wca.link/2015SCHO05">George Scholey (Rubik's)</a></td>					</tr>
+<tr><td>1:45 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Group 1</td>	<td><a href="https://wca.link/2018TING05">Ming Dao Ting (Tingman)</a></td>					</tr>
+<tr><td>2:05 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Group 2</td>	<td><a href="https://wca.link/2019WANY36">Yiheng Wang (王艺衡)</a></td>					</tr>
+<tr><td>2:30 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Group 3</td>	<td><a href="https://wca.link/2015CHER07">Tommy Cherry</a></td>					</tr>
+<tr><td>2:50 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Group 4</td>	<td><a href="https://wca.link/2017STRU01">Milan Struyf (CubeHead)</a></td>					</tr>
+<tr><td>3:10 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Group 5</td>		<td>Schwan Park</td>				</tr>
+<tr><td>3:35 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Group 6</td>					<td></td>	</tr>
+<tr><td>3:55 PM</td><td>{{ event_icon.event_icon(c.event("minx"), "event-icon") }}Megaminx Group 1</td>					<td><a href="https://wca.link/2018RUSH01">Daniel Rush</a></td>	</tr>
+<tr><td>4:15 PM</td><td>{{ event_icon.event_icon(c.event("minx"), "event-icon") }}Megaminx Group 2</td>					<td><a href="https://wca.link/2017GUTM01">Manuel Gutman</a></td>	</tr>
+<tr><td>4:35 PM</td><td>{{ event_icon.event_icon(c.event("minx"), "event-icon") }}Megaminx Group 3</td>	<td><a href="https://wca.link/2023STOT01">Owen Stotts (STUCube)</a></td>					</tr>
+<tr><td>4:55 PM</td><td>{{ event_icon.event_icon(c.event("minx"), "event-icon") }}Megaminx Group 4</td>					<td></td>	</tr>
+<tr class="bold"><td>5:20 PM</td><td>{{ event_icon.event_icon(c.event("555"), "event-icon") }}5x5x5 Final</td>			<td></td>			</tr>
+<tr class="bold"><td>5:45 PM</td><td>{{ event_icon.event_icon(c.event("clock"), "event-icon") }}Clock Final</td>			<td></td>			</tr>
+<tr class="bold"><td>6:10 PM</td><td>{{ event_icon.event_icon(c.event("pyram"), "event-icon") }}Pyraminx Final</td>			<td></td>			</tr>
+<tr class="bold"><td>6:35 PM</td><td>{{ event_icon.event_icon(c.event("333oh"), "event-icon") }}3x3x3 One-Handed Final</td>			<td></td>			</tr>
+<tr class="italic"><td>7:00 PM</td><td>End of Day</td>			<td></td>			</tr>
+    </tbody>
+  </table>
+  <h5>Saturday (9:00 AM &ndash; 7:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Event on Stream</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td>9:00 AM</td><td>{{ event_icon.event_icon(c.event("333bf"), "event-icon") }}3x3x3 Blindfolded Group 1</td>					<td></td>	</tr>
+<tr><td>9:20 AM</td><td>{{ event_icon.event_icon(c.event("333bf"), "event-icon") }}3x3x3 Blindfolded Group 2</td>					<td></td>	</tr>
+<tr><td>9:40 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 1</td>	<td><a href="https://wca.link/2014SEBA01">Juliette Sébastien</a></td>					</tr>
+<tr><td>9:55 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 2</td>					<td></td>	</tr>
+<tr><td>10:10 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 3</td>					<td></td>	</tr>
+<tr><td>10:25 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 4</td>					<td></td>	</tr>
+<tr><td>10:40 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 5</td>	<td><a href="https://wca.link/2015KUCA01">Carter Kucala</a></td>					</tr>
+<tr><td>10:55 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 6</td>					<td></td>	</tr>
+<tr><td>11:10 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Group 7</td>					<td></td>	</tr>
+<tr class="bold"><td>11:25 AM</td><td>{{ event_icon.event_icon(c.event("777"), "event-icon") }}7x7x7 Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>11:45 AM</td><td>{{ event_icon.event_icon(c.event("minx"), "event-icon") }}Megaminx Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>12:05 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>12:25 PM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Semi-Final</td>			<td></td>			</tr>
+<tr><td>12:45 PM</td><td></td>	<td><a href="https://wca.link/2007BARR01">Kian Barry (CubingUSA)</a></td>					</tr>
+<tr><td>1:05 PM</td><td></td>	<td><a href="https://wca.link/2010YUPH01">Phil Yu (TheCubicle)</a></td>					</tr>
+<tr><td>1:25 PM</td><td></td>	<td><a href="https://wca.link/2019JARM01">Kerrie Jarman (WCA Board)</a></td>					</tr>
+<tr><td>1:45 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 1</td>					<td></td>	</tr>
+<tr><td>2:00 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 2</td>					<td></td>	</tr>
+<tr><td>2:15 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 3</td>					<td></td>	</tr>
+<tr><td>2:30 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 4</td>	<td><a href="https://wca.link/2009ZEMD01">Feliks Zemdegs</a></td>					</tr>
+<tr><td>2:45 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 5</td>					<td></td>	</tr>
+<tr><td>3:00 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 6</td>					<td></td>	</tr>
+<tr><td>3:15 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 7</td>					<td></td>	</tr>
+<tr><td>3:30 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 8</td>					<td></td>	</tr>
+<tr><td>3:45 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 9</td>					<td></td>	</tr>
+<tr><td>4:00 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Group 10</td>					<td></td>	</tr>
+<tr><td>4:15 PM</td><td>{{ event_icon.event_icon(c.event("666"), "event-icon") }}6x6x6 Group 1</td>	<td><a href="https://wca.link/2023GENG02">Xuanyi Geng (耿暄一)</a>, <a href="https://wca.link/2023CAOQ01">Qixian Cao (曹岂娴)</a></tr>
+<tr><td>4:35 PM</td><td>{{ event_icon.event_icon(c.event("666"), "event-icon") }}6x6x6 Group 2</td>					<td></td>	</tr>
+<tr><td>4:55 PM</td><td>{{ event_icon.event_icon(c.event("666"), "event-icon") }}6x6x6 Group 3</td>		<td>Multi Blind Winner</td>				</tr>
+<tr class="bold"><td>5:20 PM</td><td>{{ event_icon.event_icon(c.event("444"), "event-icon") }}4x4x4 Final</td>			<td></td>			</tr>
+<tr class="bold"><td>5:45 PM</td><td>{{ event_icon.event_icon(c.event("minx"), "event-icon") }}Megaminx Final</td>			<td></td>			</tr>
+<tr class="bold"><td>6:10 PM</td><td>{{ event_icon.event_icon(c.event("222"), "event-icon") }}2x2x2 Final</td>			<td></td>			</tr>
+<tr class="bold"><td>6:35 PM</td><td>{{ event_icon.event_icon(c.event("777"), "event-icon") }}7x7x7 Final</td>			<td></td>			</tr>
+<tr class="italic"><td>7:00 PM</td><td>End of Day</td>			<td></td>			</tr>
+    </tbody>
+  </table>
+  <h5>Sunday (9:00 AM &ndash; 7:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Event on Stream</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td>9:00 AM</td><td>{{ event_icon.event_icon(c.event("444bf"), "event-icon") }}4x4x4 Blindfolded</td>					<td></td>	</tr>
+<tr><td>9:30 AM</td><td>{{ event_icon.event_icon(c.event("sq1"), "event-icon") }}Square-1 Group 1</td>		<td>4x4x4 Blindfolded Winner</td>				</tr>
+<tr><td>9:50 AM</td><td>{{ event_icon.event_icon(c.event("sq1"), "event-icon") }}Square-1 Group 2</td>		<td>Fewest Moves Winner</td>				</tr>
+<tr><td>10:10 AM</td><td>{{ event_icon.event_icon(c.event("sq1"), "event-icon") }}Square-1 Group 3</td>					<td></td>	</tr>
+<tr><td>10:30 AM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Round 2 Group 1</td>					<td></td>	</tr>
+<tr><td>10:45 AM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Round 2 Group 2</td>					<td></td>	</tr>
+<tr><td>11:00 AM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Round 2 Group 3</td>					<td></td>	</tr>
+<tr><td>11:15 AM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Round 2 Group 4</td>					<td></td>	</tr>
+<tr class="bold"><td>11:30 AM</td><td>{{ event_icon.event_icon(c.event("666"), "event-icon") }}6x6x6 Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>11:50 AM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>12:10 PM</td><td>{{ event_icon.event_icon(c.event("333bf"), "event-icon") }}3x3x3 Blindfolded Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>12:30 PM</td><td>{{ event_icon.event_icon(c.event("sq1"), "event-icon") }}Square-1 Semi-Final</td>			<td></td>			</tr>
+<tr><td>12:50 PM</td><td>Unofficial Event Finals</td>					<td></td>	</tr>
+<tr class="bold"><td>1:50 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Semi-Final</td>			<td></td>			</tr>
+<tr class="bold"><td>2:25 PM</td><td>{{ event_icon.event_icon(c.event("skewb"), "event-icon") }}Skewb Final</td>			<td></td>			</tr>
+<tr class="bold"><td>2:50 PM</td><td>{{ event_icon.event_icon(c.event("666"), "event-icon") }}6x6x6 Final</td>			<td></td>			</tr>
+<tr class="bold"><td>3:15 PM</td><td>{{ event_icon.event_icon(c.event("sq1"), "event-icon") }}Square-1 Final</td>			<td></td>			</tr>
+<tr class="bold"><td>3:40 PM</td><td>{{ event_icon.event_icon(c.event("333bf"), "event-icon") }}3x3x3 Blindfolded Final</td>			<td></td>			</tr>
+<tr class="bold"><td>4:15 PM</td><td>{{ event_icon.event_icon(c.event("333"), "event-icon") }}3x3x3 Final</td>			<td></td>			</tr>
+<tr><td>5:45 PM</td><td></td>		<td>3x3 Winner</td>				</tr>
+<tr class="bold"><td>6:00 PM</td><td>Awards</td>			<td></td>			</tr>
+<tr class="italic"><td>7:00 PM</td><td>End of Day</td>			<td></td>			</tr>
+    </tbody>
+  </table>
+  <h4 id="glossary">Glossary</h4>
+  <p>
+    New to cubing? Here are some of the terms you might hear on the stream!
+  </p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Term</th>
+        <th scope="col">Definition</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td>Ao5; avg5</td><td>Average of 5: Final result drops the best and worst attempt and takes the average of the remaining 3 attempts; format used for most WCA events</td></tr>
+<tr><td>Mo3</td><td>Mean of 3: Final result is an average of all three attempts; format used for 6x6x6 Cube, 7x7x7 Cube and FMC</td></tr>
+<tr><td>Bo1 / Bo2 / Bo3</td><td>Best of X: Final result is the best of the attempts; format used for blindfolded events</td></tr>
+<tr><td>DNF</td><td>Did Not Finish</td></tr>
+<tr><td>Plus 2</td><td>A penalty that adds two seconds to a competitor's time, which most commonly occurs when the puzzle is off by one turn at the end of the solve</td></tr>
+<tr><td>TPS</td><td>Turns Per Second: A measurement of turning speed</td></tr>
+<tr><td>CN</td><td>Color Neutral: Ability to start a solve with any side/colour, common amongst top solvers (alternatively, many solvers are "white/yellow neutral", meaning they can start with the white or yellow face)</td></tr>
+<tr><td>Inspection</td><td>The 15-second period after the puzzle cover is lifted and before the competitor starts the timer, used by competitors to plan the solve</td></tr>
+<tr><td>BPA</td><td>Best Possible Average: A competitor’s average of 5 result after 4 solves if they get their best time on their 5th solve</td></tr>
+<tr><td>WPA</td><td>Worst Possible Average: A competitor’s average of 5 result after 4 solves if they get their worst time on their 5th solve</td></tr>
+<tr><td>PR</td><td>Personal Record: A competitor’s all-time best official result in an event</td></tr>
+<tr><td>NR</td><td>National Record</td></tr>
+<tr><td>NAR</td><td>North American Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>SAR</td><td>South American Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>ER</td><td>European Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>AFR</td><td>African Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>ASR</td><td>Asian Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>OCR</td><td>Oceanic Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>WR</td><td>World Record</td></tr>
+<tr><td>FWR</td><td>Female World Record</td></tr>
+<tr><td>CFOP</td><td>Cross-F2L-OLL-PLL: The most common method for solving 3x3</td></tr>
+<tr><td>Cross</td><td>The first step of a CFOP solve</td></tr>
+<tr><td>F2L</td><td>First 2 Layers: Solving 4 different “slots” or "pairs" to finish the first 2 layers of a 3x3</td></tr>
+<tr><td>X-Cross</td><td>Solving the cross and the first F2L pair together, commonly used by advanced solvers to speed up the first 2 steps of CFOP</td></tr>
+<tr><td>LL</td><td>Last Layer: The last step(s) of a CFOP solve, after F2L</td></tr>
+<tr><td>OLL</td><td>Orient Last Layer: Second-last step of a CFOP solve, to solve the face of all last layer pieces</td></tr>
+<tr><td>PLL</td><td>Permute Last Layer: Last step of a CFOP solve, to solve the positions of all last layer pieces</td></tr>
+<tr><td>AUF</td><td>Adjust U Face: Adjusting the last layer right after the last algorithm to solve the puzzle</td></tr>
+<tr><td>Roux</td><td>A method for solving 3x3; common in one-handed solving due to move optimization</td></tr>
+<tr><td>ZBLL</td><td>Zborowski-Bruchem Last Layer: An advanced method for solving the 3x3 that requires the knowledge of hundreds of algorithms, allowing the solver to use only one algorithm to solve the last layer of the puzzle</td></tr>
+<tr><td>COLL</td><td>Corners + Orient Last Layer: A variant of OLL which can be used when all edges are oriented to ensure an easy PLL</td></tr>
+<tr><td>2GLL</td><td>2-Gen Last Layer: A set of last layer algorithms that can be done using only 2 faces (usually R and U), allowing them to be done extremely quickly.</td></tr>
+<tr><td>EO</td><td>Edge Orientation: Refers to whether edges are flipped correctly relative to the solved state</td></tr>
+<tr><td>Parity</td><td>A unique case that appears in big cubes (4x4 - 7x7), where pieces are in positions that seem impossible based on how a 3x3 cube works - an extra algorhitim is required to solve these cases</td></tr>
+<tr><td>OPA</td><td>OLL Parity Avoidance: An advanced method for solving 4x4 that avoids OLL parity</td></tr>
+<tr><td>Redux / Reduction</td><td>A common freestyle method used for solving 4x4 - 7x7</td></tr>
+<tr><td>Yau</td><td>A common structured method used for solving 4x4 - 7x7</td></tr>
+    </tbody>
+  </table>
+
+{% endblock %}

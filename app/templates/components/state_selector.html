@@ -1,4 +1,4 @@
-{% macro state_selector(c, include_blank=False) %}
+{% macro state_selector(c, include_blank=False, include_regions=False, group_by_region=False) %}
   <div class="row">
     <div class="label-container">
       <label for="state-selector" class="label">State</label>
@@ -8,12 +8,31 @@
         {% if include_blank %}
           <option></option>
         {% endif %}
-        {% for state in c.all_states() %}
-          <option data-stateid="{{ state.key.id() }}"
-                  data-statename="{{ state.name }}">
-            {{ state.name }}
-          </option>
-        {% endfor %}
+        {% if group_by_region %}
+          {% for region in c.regions() %}
+            {% if include_regions %}
+              <option data-stateid="{{ region.key.id() }}"
+                      data-statename="{{ region.name }}">
+                == {{ region.name }}
+              </option>
+            {% endif %}
+            {% for state in c.all_states() %}
+              {% if state.region == region.key %}
+                <option data-stateid="{{ state.key.id() }}"
+                        data-statename="{{ state.name }}">
+                  {{ state.name }}
+                </option>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% else %}
+          {% for state in c.all_states() %}
+            <option data-stateid="{{ state.key.id() }}"
+                    data-statename="{{ state.name }}">
+              {{ state.name }}
+            </option>
+          {% endfor %}
+        {% endif %}
       </select>
     </div>
   </div>

@@ -34,7 +34,9 @@ def regional():
                                    if not region.obsolete],
                                   key=lambda x: x[1])
 
-    championships = sorted(championships_list, key=lambda c: c.competition.get().start_date)
+    championships = [championship for championship in
+                     sorted(championships_list, key=lambda c: c.competition.get().start_date)
+                     if not championship.is_pbq]
     pbq_championships = {championship.region.id() : championship
                          for championship in championships_list if championship.is_pbq}
     championship_regions = [championship.region for championship in championships]
@@ -139,8 +141,8 @@ def regional_eligibility(region, year, pbq):
         if person['wcaId']:
           new_user.wca_person = ndb.Key(Person, person['wcaId'])
         ineligible_users += [{'user': new_user, 'state': None}]
-    eligible_users.sort(key=lambda u: u['user'].name)
-    ineligible_users.sort(key=lambda u: u['user'].name)
+    eligible_users.sort(key=lambda u: u['user'].name if u['user'].wca_person is None else u['user'].wca_person.get().name)
+    ineligible_users.sort(key=lambda u: u['user'].name if u['user'].wca_person is None else u['user'].wca_person.get().name)
     return render_template('regional_eligibility.html',
                            c=common.Common(),
                            eligible_users=eligible_users,

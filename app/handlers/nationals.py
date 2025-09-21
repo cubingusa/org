@@ -1,5 +1,6 @@
 import collections
 import datetime
+import json
 import os
 import requests
 
@@ -8,7 +9,9 @@ from flask import Blueprint
 from flask import render_template
 from flask import redirect
 from flask import request
+
 from google.cloud import ndb
+from google.cloud import storage
 
 from app.lib.common import Common
 from app.lib import auth
@@ -47,7 +50,7 @@ events = {
 @bp.route('/')
 def nats():
   with client.context():
-    return redirect('/nationals/2023')
+    return redirect('/nationals/2025')
 
 @bp.route('/2018')
 def nats2018():
@@ -300,6 +303,11 @@ def worlds2025policies():
   with client.context():
     return render_template('nationals/wc2025/policies.html', c=Common())
 
+@worlds_bp.route('/unofficial')
+def worlds2025unofficial():
+  with client.context():
+    return render_template('nationals/wc2025/unofficial.html', c=Common())
+
 @worlds_bp.route('/qualification')
 def worlds2025qualification():
   with client.context():
@@ -451,6 +459,16 @@ def worlds2025volunteers():
   with client.context():
     return render_template('nationals/wc2025/volunteers.html', c=Common())
 
+@worlds_bp.route('/stream')
+def worlds2025stream():
+  with client.context():
+    return render_template('nationals/wc2025/stream.html', c=Common())
+
+@worlds_bp.route('/venue')
+def worlds2025venue():
+  with client.context():
+    return render_template('nationals/wc2025/venue.html', c=Common())
+
 @worlds_bp.route('/contact', methods=['GET', 'POST'])
 def worlds2025contact():
   with client.context():
@@ -463,3 +481,93 @@ def worlds2025events():
   with client.context():
     return redirect('https://www.worldcubeassociation.org/competitions/WC2025#competition-events')
 
+@bp.route('/2025')
+def nats2025():
+  with client.context():
+    return render_template('nationals/2025/index.html',
+                           c=Common(wca_disclaimer=True))
+
+@bp.route('/2025/contact', methods=['GET', 'POST'])
+def nats2025contact():
+  with client.context():
+    return contact.handle_contact_request('nationals/2025/contact.html',
+                                          'Nationals 2025',
+                                          'nats-organizers@cubingusa.org')
+
+@bp.route('/2025/schedule')
+def nats2025schedule():
+  with client.context():
+    return render_template('nationals/2025/events.html', c=Common())
+
+@bp.route('/2025/travel')
+def nats2025travel():
+  with client.context():
+    return render_template('nationals/2025/travel.html', c=Common())
+
+@bp.route('/2025/registration')
+def nats2025qualifying():
+  with client.context():
+    return render_template('nationals/2025/registration.html', c=Common())
+
+@bp.route('/2025/volunteers')
+def nats2025volunteers():
+  with client.context():
+    return render_template('nationals/2025/volunteers.html', c=Common())
+
+@bp.route('/2025/spectators')
+def nats2025spectators():
+  with client.context():
+    return render_template('nationals/2025/spectators.html', c=Common())
+
+def personalBests(person, eventId):
+  best = 9999999999
+  average = 9999999999
+  for pb in person['personalBests']:
+    if eventId == pb['eventId']:
+      if pb['type'] == 'single':
+        best = pb['best']
+      else:
+        average = pb['best']
+  if 'bf' in eventId:
+    total = best
+  else:
+    total = average * 10000000000 + best
+  return (best, average, total)
+
+def sortkey(eventId):
+  return lambda personItem: personItem[1][2]
+
+@bp.route('/2025/competitors')
+def nats2025competitors():
+  with client.context():
+    storage_client = storage.Client()
+    bucket = storage_client.lookup_bucket('nats2025')
+    wcif = json.loads(bucket.get_blob('wcif.json').download_as_string())
+    competitors = [row.strip() for row in bucket.get_blob('competitors.csv').download_as_string().decode('utf-8').split('\n')]
+    by_event = {}
+    for evt in wcif['events']:
+      people = []
+      for person in wcif['persons']:
+        if person['wcaId'] not in competitors and 'organizer' not in person['roles']:
+          continue
+        if person['countryIso2'] == 'US' and person['registration'] is not None and evt['id'] in person['registration']['eventIds']:
+          people += [(person, personalBests(person, evt['id']))]
+      people.sort(key=sortkey(evt['id']))
+      by_event[evt['id']] = []
+      to_qualify = 8
+      if evt['id'] == '333':
+        to_qualify = 32
+      elif evt['id'] in ('222', '444', '555', '333oh', 'pyram', 'skewb'):
+        to_qualify = 16
+      elif evt['id'] == '333fm':
+        to_qualify = 12
+      last_total = 0
+      for person, bests in people:
+        if len(by_event[evt['id']]) < to_qualify or bests[2] == last_total:
+          by_event[evt['id']] += [(person, bests)]
+          last_total = bests[2]
+        else:
+          break
+    return render_template('nationals/2025/competitors.html',
+                           c=Common(),
+                           by_event=by_event)

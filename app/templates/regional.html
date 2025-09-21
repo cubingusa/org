@@ -53,8 +53,8 @@
                   {% endautoescape %}
                 </div>
               </div>
-              {% if championship.region in pbq_championships %}
-                {% set competition = pbq_championships[championship.region].competition.get() %}
+              {% if championship.region.id() in pbq_championships %}
+                {% set competition = pbq_championships[championship.region.id()].competition.get() %}
                 <hr class="pbq-divider">
                 <div class="row">
                   <div class="pbq-name-col competition-table-col">

@@ -1,0 +1,35 @@
+{% import "components/css.html" as css %}
+{% import "components/contact.html" as contact %}
+{% import "components/faq.html" as faq %}
+{% extends "nationals/2025/base.html" %}
+{% block title%}Contact{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2025/contact') }}
+{% endblock %}
+{% block content %}
+  {% call contact.contact_form(c, result) %}
+  <div>
+    Please use the form below to reach the organization team with any questions you have!
+  </div>
+  <p>
+    <div id="faq" role="tablist">
+      {% call faq.faq_item("Why is the format different from usual?", "why") %}
+        Because CubingUSA is organizing Rubik's WCA World Championship 2025, we did not feel it was feasible to also organize a large convention-style Nationals in the same year. We still wanted to give US competitors a chance to compete for the title of national champion, and this is a great way to do that while experimenting with a new and exciting competition format.
+      {% endcall %}
+      {% call faq.faq_item("Is the competition open to non-US competitors?", "intl") %}
+        Per WCA policies, any competitor may register for this competition. However, we ask international competitors not to register for this competition, as we want to make sure that top US competitors have a fair opportunity for the title of US National Champion.
+
+        CubingUSA is giving up our usual National Championship in 2025 in order to organize Rubik's WCA World Championship 2025 for the global community; we gladly welcome international competitors at either Rubik's WCA World Championship 2025 or CubingUSA Nationals 2026 instead.
+
+        International competitors will not be featured on stage, will not be eligible for awards or prizes, and will not be shown on the livestream.
+      {% endcall %}
+      {% call faq.faq_item("Will this format be used for CubingUSA Nationals 2026?", "2026") %}
+        No. CubingUSA Nationals 2026 will return to our typical convention-style competition format.
+      {% endcall %}
+      {% call faq.faq_item("How does advancement work?", "advancement") %}
+        The top 8 US competitors will advance to the finals of each event, in addition to any international competitors who place ahead of the 8th US competitor. Similarly, the top 16 US competitors will advance to the 3x3 Semifinals.
+      {% endcall %}
+    </div>
+  </p>
+  {% endcall %}
+{% endblock %}

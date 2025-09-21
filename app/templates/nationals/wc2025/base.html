@@ -2,7 +2,7 @@
 {% import "components/nav.html" as nav %}
 {% extends "base.html" %}
 {% block head %}
-  <meta property="og:image" content="https://cubingusa.org/static/img/seattle.jpg"/>
+  <meta property="og:image" content="https://cubingusa.org/static/img/worlds-logo-ogimage.jpg"/>
 {% endblock %}
 {% block style %}
   {{ css.css(c, 'nationals/wc2025/base') }}
@@ -24,11 +24,14 @@
         <ul class="navbar-left">
           {% call nav.navitem(c, '/worlds/') %} Worlds 2025 {% endcall %}
           {% call nav.navitem(c, '/worlds/events') %} Events {% endcall %}
-          {% call nav.navitem(c, '/worlds/qualification') %} Qualification {% endcall %}
           {% call nav.navitem(c, '/worlds/schedule') %} Schedule {% endcall %}
-          {% call nav.navitem(c, '/worlds/volunteers') %} Volunteers {% endcall %}
+          {% call nav.navitem(c, '/worlds/venue') %} Venue {% endcall %}
+          {% call nav.navitem(c, '/worlds/stream') %} Stream {% endcall %}
           {% call nav.navitem(c, '/worlds/policies') %} Policies {% endcall %}
           {% call nav.navitem(c, '/worlds/travel') %} Travel {% endcall %}
+          {% call nav.navitem(c, '/worlds/unofficial') %} Unofficial Events {% endcall %}
+          {% call nav.navitem(c, '/worlds/qualification') %} Qualification {% endcall %}
+          {% call nav.navitem(c, '/worlds/volunteers') %} Volunteers {% endcall %}
           {% call nav.navitem(c, '/worlds/contact') %} FAQ and Contact {% endcall %}
         </ul>
       </div>

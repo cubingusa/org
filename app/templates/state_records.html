@@ -12,7 +12,7 @@
   {{ event_selector.event_selector(c, include_magic=False, include_mbo=False, include_feet=False) }}
   <div class="row">
     <div class="state-selector-container">
-      {{ state_selector.state_selector(c, include_blank=True) }}
+      {{ state_selector.state_selector(c, include_blank=True, include_regions=True, group_by_region=True) }}
     </div>
     <div class="single-average-toggle">
       <div class="single-average-button" id="single">

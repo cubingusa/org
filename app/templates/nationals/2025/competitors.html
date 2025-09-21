@@ -1,0 +1,27 @@
+{% import "components/css.html" as css %}
+{% import "components/event_icon.html" as event_icon %}
+{% extends "nationals/2025/base.html" %}
+{% block title%}Competitors{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2025/competitors') }}
+{% endblock %}
+{% block content %}
+  <h4>Competitors</h4>
+  <p>
+    The following US competitors are currently qualified for their events. Please note that this list may change, as more competitors may register, and competitors may improve their personal bests. This list is not automatically updated; it may be a few hours or days stale.
+  </p>
+  {% for evt in c.events(False, False, False) %}
+    <h6>{{ event_icon.event_icon(evt, 'event-icon') }}{{ evt.name }}</h6>
+    <ol>
+      {% for person, bests in by_event[evt.key.id()] %}
+      <li><a href="https://wca.link/{{ person['wcaId'] }}">{{ person['name'] }}</a>:
+        {% if 'bf' in evt.key.id() %}
+          {{ c.formatters.FormatTime(bests[0], evt.key, False) }}
+        {% else %}
+          {{ c.formatters.FormatTime(bests[1], evt.key, True) }}
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  {% endfor %}
+{% endblock %}
