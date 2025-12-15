@@ -19,7 +19,7 @@ client = ndb.Client()
 @bp.route('/regional')
 def regional():
   with client.context():
-    year = 2025
+    year = 2026
 
     championships_list = Championship.query(ndb.AND(Championship.year == year,
                                                Championship.region != None)).fetch()

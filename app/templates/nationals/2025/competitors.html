@@ -8,13 +8,16 @@
 {% block content %}
   <h4>Competitors</h4>
   <p>
-    The following US competitors are currently qualified for their events. Please note that this list may change, as more competitors may register, and competitors may improve their personal bests. This list is not automatically updated; it may be a few hours or days stale.
+    The following US competitors are currently qualified for their events. Please note that this list may change, as more competitors may register, and competitors may improve their personal bests. This list is not automatically updated; it may be a few hours or days stale. Competitors in <b>bold</b> have confirmed their attendance.
   </p>
   {% for evt in c.events(False, False, False) %}
     <h6>{{ event_icon.event_icon(evt, 'event-icon') }}{{ evt.name }}</h6>
     <ol>
       {% for person, bests in by_event[evt.key.id()] %}
-      <li><a href="https://wca.link/{{ person['wcaId'] }}">{{ person['name'] }}</a>:
+        <li><a href="https://wca.link/{{ person['wcaId'] }}"
+               {% if person['wcaId'] in accepted_competitors %}style='font-weight:bold'{% endif %}>
+              {{ person['name'] }}
+            </a>:
         {% if 'bf' in evt.key.id() %}
           {{ c.formatters.FormatTime(bests[0], evt.key, False) }}
         {% else %}

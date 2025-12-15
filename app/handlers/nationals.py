@@ -519,15 +519,23 @@ def nats2025spectators():
   with client.context():
     return render_template('nationals/2025/spectators.html', c=Common())
 
-def personalBests(person, eventId):
+@bp.route('/2025/policies')
+def nats2025policies():
+  with client.context():
+    return render_template('nationals/2025/policies.html', c=Common())
+
+def personalBests(person, saved_wcif, eventId):
   best = 9999999999
   average = 9999999999
-  for pb in person['personalBests']:
-    if eventId == pb['eventId']:
-      if pb['type'] == 'single':
-        best = pb['best']
-      else:
-        average = pb['best']
+  for p in saved_wcif['persons']:
+    if p['wcaId'] != person['wcaId']:
+      continue
+    for pb in p['personalBests']:
+      if eventId == pb['eventId']:
+        if pb['type'] == 'single':
+          best = pb['best']
+        else:
+          average = pb['best']
   if 'bf' in eventId:
     total = best
   else:
@@ -543,15 +551,23 @@ def nats2025competitors():
     storage_client = storage.Client()
     bucket = storage_client.lookup_bucket('nats2025')
     wcif = json.loads(bucket.get_blob('wcif.json').download_as_string())
+    saved_wcif = json.loads(bucket.get_blob('saved_wcif.json').download_as_string())
     competitors = [row.strip() for row in bucket.get_blob('competitors.csv').download_as_string().decode('utf-8').split('\n')]
     by_event = {}
+    accepted_competitors = []
     for evt in wcif['events']:
       people = []
       for person in wcif['persons']:
+        saved_person = None
+        for s in saved_wcif['persons']:
+          if s['wcaId'] == person['wcaId']:
+            saved_person = s
         if person['wcaId'] not in competitors and 'organizer' not in person['roles']:
           continue
-        if person['countryIso2'] == 'US' and person['registration'] is not None and evt['id'] in person['registration']['eventIds']:
-          people += [(person, personalBests(person, evt['id']))]
+        if person['countryIso2'] == 'US' and person['registration'] is not None and evt['id'] in saved_person['registration']['eventIds'] and person['registration']['status'] not in ('deleted', 'rejected'):
+          people += [(person, personalBests(person, saved_wcif, evt['id']))]
+        if person['registration'] is not None and person['registration']['status'] == 'accepted':
+          accepted_competitors += [person['wcaId']]
       people.sort(key=sortkey(evt['id']))
       by_event[evt['id']] = []
       to_qualify = 8
@@ -561,6 +577,8 @@ def nats2025competitors():
         to_qualify = 16
       elif evt['id'] == '333fm':
         to_qualify = 12
+      if request.args.get('showall'):
+        to_qualify = 999
       last_total = 0
       for person, bests in people:
         if len(by_event[evt['id']]) < to_qualify or bests[2] == last_total:
@@ -570,4 +588,5 @@ def nats2025competitors():
           break
     return render_template('nationals/2025/competitors.html',
                            c=Common(),
-                           by_event=by_event)
+                           by_event=by_event,
+                           accepted_competitors=accepted_competitors)
