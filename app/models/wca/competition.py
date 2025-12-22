@@ -54,7 +54,8 @@ class Competition(BaseModel):
     # Only load US competitions that haven't been cancelled, plus Worlds.
     def filter_row(row):
       return ((row['countryId'] == 'USA' and int(row['cancelled']) != 1) or
-              ('World' in row['name'] and 'Championship' in row['name']))
+              ('World' in row['name'] and 'Championship' in row['name']) or
+              'NAC' in row['id'])
     return filter_row
 
   @staticmethod
