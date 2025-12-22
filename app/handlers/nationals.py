@@ -154,7 +154,7 @@ def nats2023unofficial():
 @nac_bp.route('/')
 def nac():
   with client.context():
-    return redirect('/nac/2024')
+    return redirect('/nac/2026')
 
 @nac_bp.route('/2024')
 def nac2024():
@@ -250,6 +250,47 @@ def nac2024projector(eventId):
                              event_names=events)
     return '', 404
 
+@nac_bp.route('/2026')
+def nac2026():
+  with client.context():
+    return render_template('nationals/2026/index.html', c=Common())
+
+@nac_bp.route('/2026/contact', methods=['GET', 'POST'])
+def nac2026contact():
+  with client.context():
+    return contact.handle_contact_request('nationals/2026/contact.html',
+                                          'NAC 2026',
+                                          'nac-organizers@cubingusa.org')
+
+@nac_bp.route('/2026/schedule')
+def nac2026schedule():
+  with client.context():
+    return render_template('nationals/2026/schedule.html', c=Common())
+
+@nac_bp.route('/2026/travel')
+def nac2026travel():
+  with client.context():
+    return render_template('nationals/2026/travel.html', c=Common())
+
+@nac_bp.route('/2026/qualifying')
+def nac2026qualifying():
+  with client.context():
+    return render_template('nationals/2026/qualifying.html', c=Common())
+
+@nac_bp.route('/2026/unofficial')
+def nac2026unofficial():
+  with client.context():
+    return render_template('nationals/2026/unofficial.html', c=Common())
+
+@nac_bp.route('/2026/volunteers')
+def nac2026volunteers():
+  with client.context():
+    return render_template('nationals/2026/volunteers.html', c=Common())
+
+@nac_bp.route('/2026/policies')
+def nac2026policies():
+  with client.context():
+    return render_template('nationals/2026/policies.html', c=Common())
 
 @worlds_bp.route('/person_states')
 def person_states():

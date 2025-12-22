@@ -1,0 +1,62 @@
+{% extends "nationals/2026/base.html" %}
+{% block title%}NAC 2026 Travel{% endblock %}
+{% block style %}
+  {{ css.css(c, 'nationals/2026/travel') }}
+{% endblock %}
+{% block content %}
+  <h3>Travel Information</h3>
+  <div class="nats-top-row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><span class="material-symbols-outlined">location_city</span> Venue</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <p>
+              The competition will be held at the <strong><a href="https://www.raleighconvention.com/" target="_blank">Raleigh Convention Center</a> in Raleigh, North Carolina.</strong>  We're pleased to be working with the Convention Center, which will be a great venue for our competition. The competition will be held in Hall B.
+            </p>
+          </div>
+          <div class="info-box-row">
+            <span class="material-symbols-outlined">location_on</span> <span class="info-box-label">Address:</span> <a href="https://maps.app.goo.gl/G26fVANfVop4BCo16" target="_blank">500 S Salisbury St, Raleigh, NC 27601</a>
+          </div>
+          <div class="info-box-row">
+            <span class="material-symbols-outlined">location_city</span> <span class="info-box-label">Main Room:</span> Exhibit Hall B
+          </div>
+          <div class="info-box-row">
+            <span class="material-symbols-outlined">location_city</span> <span class="info-box-label">Long Events:</span> Room L100
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3237.064211887124!2d-78.6411027!3d35.773799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89ac5f715c1cea6b%3A0x6880d973431472da!2sRaleigh%20Convention%20Center!5e0!3m2!1sen!2sus!4v1766276816050!5m2!1sen!2sus" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+  <div class="row">
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><span class="material-symbols-outlined">bed</span> Hotel</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            The official hotel of Rubik's WCA North American Championship 2026 is the <strong><a href="https://www.marriott.com/en-us/hotels/rdumc-raleigh-marriott-city-center/overview/">Raleigh Marriott City Center</a></strong>, conveniently located right across the street from the convention center. Our group discount code will be posted soon; please make sure to book using that link to get the best rate!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-box-container">
+      <div class="card">
+        <div class="card-header">
+          <h4><span class="material-symbols-outlined">directions_car</span> Transportation</h4>
+        </div>
+        <div class="card-body">
+          <div class="info-box-row">
+            <span class="material-symbols-outlined">travel</span> <span class="info-box-label">Nearest Airport:</span> <strong>Raleigh-Durham International Airport (RDU)</strong> serves Raleigh and has many daily flights. RDU is only a 20 minute drive from the Convention Center. Local bus options are available as well.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
