@@ -7,6 +7,7 @@ from app.models.wca.competition import Competition
 class Championship(ndb.Model):
   world_championship = ndb.BooleanProperty()
   national_championship = ndb.BooleanProperty()
+  nac_championship = ndb.BooleanProperty()
   region = ndb.KeyProperty(kind=Region)
   state = ndb.KeyProperty(kind=State)
   is_pbq = ndb.BooleanProperty()
@@ -26,6 +27,10 @@ class Championship(ndb.Model):
   @staticmethod
   def NationalsId(year):
     return str(year)
+
+  @staticmethod
+  def NacId(year):
+    return 'nac' + str(year)
 
   @staticmethod
   def RegionalsId(year, region, is_pbq=False):

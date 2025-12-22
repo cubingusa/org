@@ -12,6 +12,7 @@ from app.models.eligibility import RegionalChampionshipEligibility
 from app.models.eligibility import StateChampionshipEligibility
 from app.models.state import State
 from app.models.user import User
+from app.models.wca.continent import Continent
 from app.models.wca.country import Country
 from app.models.wca.event import Event
 from app.models.wca.result import Result
@@ -23,6 +24,11 @@ def ComputeEligibleCompetitors(championship, competition, results):
     # We don't save this in the datastore because it's easy enough to compute.
     return set([r.person.id() for r in results
                 if r.person_country == ndb.Key(Country, 'USA')])
+  if championship.nac_championship:
+    countries = set(Country.query(Country.continent == ndb.Key(Continent, '_North America'),
+                                  keys_only=True).fetch())
+    return set([r.person.id() for r in results
+                if r.person_country in countries])
   if championship.world_championship:
     return set([r.person.id() for r in results])
   competitors = set([r.person for r in results])
