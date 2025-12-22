@@ -29,7 +29,7 @@ def ComputeEligibleCompetitors(championship, competition, results):
                      Country.query(Country.continent ==
                                    ndb.Key(Continent, '_North America')).fetch(keys_only=True)])
     return set([r.person.id() for r in results
-                if r.person_country in countries])
+                if r.person_country.id() in countries])
   if championship.world_championship:
     return set([r.person.id() for r in results])
   competitors = set([r.person for r in results])
