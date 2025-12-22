@@ -25,8 +25,9 @@ def ComputeEligibleCompetitors(championship, competition, results):
     return set([r.person.id() for r in results
                 if r.person_country == ndb.Key(Country, 'USA')])
   if championship.nac_championship:
-    countries = set(Country.query(Country.continent == ndb.Key(Continent, '_North America'),
-                                  keys_only=True).fetch())
+    countries = set([key.id() for key in
+                     Country.query(Country.continent ==
+                                   ndb.Key(Continent, '_North America')).fetch(keys_only=True)])
     return set([r.person.id() for r in results
                 if r.person_country in countries])
   if championship.world_championship:
