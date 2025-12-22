@@ -11,6 +11,7 @@ class Champion(ndb.Model):
 
   world_champion = ndb.ComputedProperty(lambda e: e.championship.get().world_championship)
   national_champion = ndb.ComputedProperty(lambda e: e.championship.get().national_championship)
+  nac_champion = ndb.ComputedProperty(lambda e: e.championship.get().nac_championship)
   region = ndb.ComputedProperty(lambda e: e.championship.get().region)
   state = ndb.ComputedProperty(lambda e: e.championship.get().state)
   year = ndb.ComputedProperty(lambda e: e.championship.get().year)

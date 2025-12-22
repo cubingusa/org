@@ -20,6 +20,7 @@ def champions_table(event_id, championship_type, championship_region='', year=0)
     is_regional = championship_type == 'regional'
     is_state = championship_type == 'state'
     is_world = championship_type == 'world'
+    is_nac = championship_type == 'nac'
 
     all_champions = []
     filters = []
@@ -38,6 +39,8 @@ def champions_table(event_id, championship_type, championship_region='', year=0)
       filters.append(Champion.state == ndb.Key(State, championship_region))
     elif is_world:
       filters.append(Champion.world_champion == True)
+    elif is_nac:
+      filters.append(Champion.nac_champion == True)
 
     filters.append(Champion.event == ndb.Key(Event, str(event_id)))
     all_champions = Champion.query(ndb.AND(*filters)).fetch()
