@@ -16,16 +16,20 @@ class Person(BaseModel):
 
   def ParseFromDict(self, row):
     self.name = row['name']
-    self.country = ndb.Key(Country, row['countryId'])
+    self.country = ndb.Key(Country, row['country_id'])
     self.gender = row['gender']
 
   @staticmethod
   def Filter():
-    return lambda row: int(row['subid']) == 1
+    return lambda row: int(row['sub_id']) == 1
 
   @staticmethod
   def ColumnsUsed():
-    return ['name', 'countryId', 'gender']
+    return ['name', 'country_id', 'gender', 'id', 'sub_id']
 
   def GetWCALink(self):
     return 'https://worldcubeassociation.org/persons/%s' % self.key.id()
+
+  @staticmethod
+  def GetId(row):
+    return row['wca_id']

@@ -22,28 +22,26 @@ class Result(BaseModel):
   pos = ndb.IntegerProperty()
   best = ndb.IntegerProperty()
   average = ndb.IntegerProperty()
-  values = ndb.IntegerProperty(repeated=True)
 
   regional_single_record = ndb.StringProperty()
   regional_average_record = ndb.StringProperty()
 
   def ParseFromDict(self, row):
-    self.competition = ndb.Key(Competition, row['competitionId'])
-    self.event = ndb.Key(Event, row['eventId'])
-    self.round_type = ndb.Key(RoundType, row['roundTypeId'])
-    self.person = ndb.Key(Person, row['personId'])
-    self.fmt = ndb.Key(Format, row['formatId'])
+    self.competition = ndb.Key(Competition, row['competition_id'])
+    self.event = ndb.Key(Event, row['event_id'])
+    self.round_type = ndb.Key(RoundType, row['round_type_id'])
+    self.person = ndb.Key(Person, row['person_id'])
+    self.fmt = ndb.Key(Format, row['format_id'])
 
-    self.person_name = row['personName']
-    self.person_country = ndb.Key(Country, row['personCountryId'])
+    self.person_name = row['person_name']
+    self.person_country = ndb.Key(Country, row['person_country_id'])
 
     self.pos = int(row['pos'])
     self.best = int(row['best'])
     self.average = int(row['average'])
-    self.values = [v for v in [int(row['value%d' % n]) for n in (1, 2, 3, 4, 5)] if v != 0]
 
-    self.regional_single_record = row['regionalSingleRecord']
-    self.regional_average_record = row['regionalAverageRecord']
+    self.regional_single_record = row['regional_single_record']
+    self.regional_average_record = row['regional_average_record']
 
   @staticmethod
   def Filter():
@@ -51,15 +49,14 @@ class Result(BaseModel):
     known_competitions = set([championship.competition.id() for championship in Championship.query().iter()])
 
     def filter_row(row):
-      return row['competitionId'] in known_competitions
+      return row['competition_id'] in known_competitions
     return filter_row
 
   @staticmethod
   def GetId(row):
-    return '%s_%s_%s_%s' % (row['competitionId'], row['eventId'], row['roundTypeId'], row['personId'])
+    return '%s_%s_%s_%s' % (row['competition_id'], row['event_id'], row['round_type_id'], row['person_id'])
 
   @staticmethod
   def ColumnsUsed():
-    return ['competitionId', 'eventId', 'roundTypeId', 'personId', 'formatId', 'personName',
-            'personCountryId', 'pos', 'best', 'average', 'value1', 'value2', 'value3', 'value4',
-            'value5', 'regionalSingleRecord', 'regionalAverageRecord']
+    return ['competition_id', 'event_id', 'round_type_id', 'person_id', 'format_id', 'person_name',
+            'person_country_id', 'pos', 'best', 'average', 'regional_single_record', 'regional_average_record']

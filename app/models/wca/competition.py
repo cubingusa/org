@@ -26,20 +26,20 @@ class Competition(BaseModel):
 
   def ParseFromDict(self, row):
     self.start_date = datetime.date(int(row['year']), int(row['month']), int(row['day']))
-    self.end_date = datetime.date(int(row['year']), int(row['endMonth']), int(row['endDay']))
+    self.end_date = datetime.date(int(row['year']), int(row['end_month']), int(row['end_day']))
     self.year = int(row['year'])
 
     self.name = row['name']
-    self.short_name = row['cellName']
+    self.short_name = row['cell_name']
 
-    self.events = [ndb.Key(Event, event_id) for event_id in row['eventSpecs'].split(' ')]
+    self.events = [ndb.Key(Event, event_id) for event_id in row['event_specs'].split(' ')]
 
-    self.latitude = int(row['latitude'])
-    self.longitude = int(row['longitude'])
+    self.latitude = int(row['latitude_microdegrees'])
+    self.longitude = int(row['longitude_microdegrees'])
 
     state = None
-    if ',' in row['cityName']:
-      city_split = row['cityName'].split(',')
+    if ',' in row['city_name']:
+      city_split = row['city_name'].split(',')
       state_name = city_split[-1].strip()
       state = State.get_state(state_name)
       self.city_name = ','.join(city_split[:-1])
@@ -53,15 +53,15 @@ class Competition(BaseModel):
   def Filter():
     # Only load US competitions that haven't been cancelled, plus Worlds.
     def filter_row(row):
-      return ((row['countryId'] == 'USA' and int(row['cancelled']) != 1) or
+      return ((row['country_id'] == 'USA' and int(row['cancelled']) != 1) or
               ('World' in row['name'] and 'Championship' in row['name']) or
               'NAC' in row['id'])
     return filter_row
 
   @staticmethod
   def ColumnsUsed():
-    return ['year', 'month', 'day', 'endMonth', 'endDay', 'cellName', 'eventSpecs',
-            'latitude', 'longitude', 'cityName', 'countryId', 'name']
+    return ['year', 'month', 'day', 'end_month', 'end_day', 'cell_name', 'event_specs',
+            'latitude_microdegrees', 'longitude_microdegrees', 'city_name', 'country_id', 'name']
 
   def GetWCALink(self):
     return 'https://worldcubeassociation.org/competitions/%s' % self.key.id()

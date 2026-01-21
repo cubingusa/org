@@ -10,9 +10,9 @@ class Country(BaseModel):
 
   def ParseFromDict(self, row):
     self.name = row['name']
-    self.continent = ndb.Key(Continent, row['continentId'])
+    self.continent = ndb.Key(Continent, row['continent_id'])
     self.iso2 = row['iso2']
 
   @staticmethod
   def ColumnsUsed():
-    return ['name', 'continentId', 'iso2']
+    return ['name', 'continent_id', 'iso2']

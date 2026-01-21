@@ -9,9 +9,9 @@ class RoundType(BaseModel):
 
   def ParseFromDict(self, row):
     self.rank = int(row['rank'])
-    self.name = row['cellName']
+    self.name = row['cell_name']
     self.final = int(row['final']) == 1
 
   @staticmethod
   def ColumnsUsed():
-    return ['rank', 'cellName', 'final']
+    return ['rank', 'cell_name', 'final']

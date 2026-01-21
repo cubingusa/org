@@ -19,16 +19,16 @@ class RankBase(BaseModel):
 
   @staticmethod
   def GetId(row):
-    return '%s_%s' % (row['personId'], row['eventId'])
+    return '%s_%s' % (row['person_id'], row['event_id'])
 
   def ParseFromDict(self, row):
-    self.person = ndb.Key(Person, row['personId'])
-    self.event = ndb.Key(Event, row['eventId'])
+    self.person = ndb.Key(Person, row['person_id'])
+    self.event = ndb.Key(Event, row['event_id'])
     self.best = int(row['best'])
 
   @staticmethod
   def ColumnsUsed():
-    return ['personId', 'eventId', 'best']
+    return ['person_id', 'event_id', 'best']
 
   def ObjectsToGet(self):
     return [self.person]

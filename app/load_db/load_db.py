@@ -36,16 +36,16 @@ flags.DEFINE_boolean('only_update_state_records', False, 'Whether to only update
 flags.DEFINE_boolean('only_email_organizers', False, 'Whether to only email championship organizers.')
 
 def get_tables():
-  return [('Continents', Continent, 1),
-          ('Countries', Country, 1),
-          ('Events', Event, 1),
-          ('Formats', Format, 1),
-          ('RoundTypes', RoundType, 1),
-          ('Persons', Person, 1),
-          ('RanksSingle', RankSingle, 5),
-          ('RanksAverage', RankAverage, 5),
-          ('Competitions', Competition, 5),
-          ('Results', Result, 10),
+  return [('continents', Continent, 1),
+          ('countries', Country, 1),
+          ('events', Event, 1),
+          ('formats', Format, 1),
+          ('round_types', RoundType, 1),
+          ('persons', Person, 1),
+          ('ranks_single', RankSingle, 5),
+          ('ranks_average', RankAverage, 5),
+          ('competitions', Competition, 5),
+          ('results', Result, 10),
          ]
 
 
