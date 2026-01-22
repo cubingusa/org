@@ -46,8 +46,8 @@ class Competition(BaseModel):
     if state:
       self.state = state.key
     else:
-      self.city_name = row['cityName']
-    self.country = ndb.Key(Country, row['countryId'])
+      self.city_name = row['city_name']
+    self.country = ndb.Key(Country, row['country_id'])
 
   @staticmethod
   def Filter():
