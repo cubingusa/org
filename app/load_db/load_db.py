@@ -52,7 +52,7 @@ def get_tables():
 # Ideally this would live in person.py, but that would be a circular dependency
 # between Person and User.
 def get_modifier(table):
-  if table == 'Persons':
+  if table == 'persons':
     id_to_state = {}
     for user in User.query(User.state != None):
       if user.wca_person:
