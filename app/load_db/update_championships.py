@@ -16,7 +16,7 @@ def UpdateChampionships():
   states = {state.name : state for state in State.query().iter()}
   regions = {region.championship_name : region for region in Region.query().iter()}
 
-  comp_re = re.compile('(CubingUSA )?(.*) Championship (\d\d\d\d)')
+  comp_re = re.compile('(CubingUSA )?(.*) (Championship|Speedcubing Championship) (\d\d\d\d)')
   pbq_re = re.compile('(CubingUSA )?(.*) (PBQ|Quiet|FMC) Championship (\d\d\d\d)')
 
   to_write = []
