@@ -292,14 +292,14 @@ def nac2026policies():
   with client.context():
     return render_template('nationals/2026/policies.html', c=Common())
 
-@worlds_bp.route('/person_states')
+@nac_bp.route('/person_states')
 def person_states():
   with client.context():
     me = auth.user()
     if not me:
       return redirect('/login')
     wca_host = os.environ.get('WCA_HOST')
-    data = requests.get(wca_host + '/api/v0/competitions/WC2025/wcif/public')
+    data = requests.get(wca_host + '/api/v0/competitions/NAC2026/wcif/public')
     if data.status_code != 200:
       abort(data.status_code)
     competition = data.json()

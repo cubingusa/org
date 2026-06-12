@@ -52,9 +52,9 @@ def supported():
 @bp.route('/groups')
 def groups():
   with client.context():
-    return redirect('https://www.competitiongroups.com/competitions/WC2025')
+    return redirect('https://www.competitiongroups.com/competitions/NAC2026')
 
 @bp.route('/results')
 def results():
   with client.context():
-    return redirect('https://live.worldcubeassociation.org/competitions/7025')
+    return redirect('https://live.worldcubeassociation.org/competitions/10763')

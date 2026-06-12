@@ -52,3 +52,16 @@
 .crew-img {
   width: 50%;
 }
+
+td,th {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+th {
+  background-color: #ccc;
+}
+
+table {
+  border-collapse: collapse;
+}
