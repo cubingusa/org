@@ -34,6 +34,7 @@ flags.DEFINE_boolean('only_update_championships', False, 'Whether to only update
 flags.DEFINE_boolean('only_update_champions', False, 'Whether to only update champions.')
 flags.DEFINE_boolean('only_update_state_records', False, 'Whether to only update state records.')
 flags.DEFINE_boolean('only_email_organizers', False, 'Whether to only email championship organizers.')
+flags.DEFINE_boolean('only_fix_names', False, 'Whether to only fix names.')
 
 def get_tables():
   return [('continents', Continent, 1),
@@ -167,7 +168,8 @@ def main(argv):
     not FLAGS.only_update_champions and
     not FLAGS.only_update_championships and
     not FLAGS.only_update_state_records and
-    not FLAGS.only_email_organizers
+    not FLAGS.only_email_organizers and
+    not FLAGS.only_fix_names
   )
 
   if do_everything or FLAGS.only_load_db:
@@ -194,6 +196,8 @@ def main(argv):
       UpdateStateRecords()
     if do_everything or FLAGS.only_email_organizers:
       EmailChampionshipOrganizers()
+    if do_everything or FLAGS.only_fix_names:
+      FixNames()
 
 if __name__ == '__main__':
   app.run(main)
