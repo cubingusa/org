@@ -1,0 +1,138 @@
+{% extends "nationals/2026/base.html" %}
+{% import "components/css.html" as css %}
+{% import "components/event_icon.html" as event_icon %}
+{% block title%}Rubik's WCA North American Championship 2026 - Live Stream{% endblock %}
+{% block content %}
+  <h3>Live Stream</h3>
+  <p>
+    We are pleased to announce that all four days of the competition will be live streamed on the <a href="https://www.youtube.com/@WorldCubeAssociationOfficial">WCA YouTube channel!</a> The stream is brought to you by <a href="https://www.youtube.com/@clicky.studios">Clicky Studios</a>.
+  </p>
+  <p>Check out <a href="https://www.competitiongroups.com/competitions/NAC2026/stream">CompetitionGroups</a> to see which competitors you can expect to see on the stream! In addition to lightning fast official solves, we have an exciting schedule of interviews planned throughout the weekend. Our full planned schedule is below (please note that times are approximate, and some interviews may move earlier or later).</p>
+  <table class="table">
+  <h5>Thursday (9:45 AM &ndash; 8:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>10:10 AM</td><td>Tommy Cherry</td></tr>
+      <tr><td>10:40 AM</td><td>Omar Ellaban</td></tr>
+      <tr><td>11:50 AM</td><td>Cady Shields (Southeast Cubing)</td></tr>
+      <tr><td>12:20 PM</td><td>Dan Smith (WCA Executive Director)</td></tr>
+      <tr><td>12:45 PM</td><td>Enrique Oviedo Espinoza de los Monteros</td></tr>
+      <tr><td>1:30 PM</td><td>Hassan Khanani</td></tr>
+      <tr><td>2:00 PM</td><td>David Montenegro</td></tr>
+      <tr><td>2:30 PM</td><td>Shalóm Melquisedec Batz Rodríguez</td></tr>
+      <tr><td>3:00 PM</td><td>Brian Johnson</td></tr>
+      <tr><td>3:30 PM</td><td>Luke Garrett</td></tr>
+      <tr><td>4:00 PM</td><td>Parker Trager</td></tr>
+    </tbody>
+  </table>
+  <h5>Friday (8:45 AM &ndash; 7:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>9:00 AM</td><td>Andrew Tao</td></tr>
+      <tr><td>9:25 AM</td><td>Kate Grahame</td></tr>
+      <tr><td>9:55 AM</td><td>Fiona Bao</td></tr>
+      <tr><td>10:20 AM</td><td>Matty Hiroto Inaba</td></tr>
+      <tr><td>11:00 AM</td><td>Katie Hull</td></tr>
+      <tr><td>12:30 PM</td><td>George Scholey (Rubik's)</td></tr>
+      <tr><td>1:00 PM</td><td>Phil Yu (TheCubicle)</td></tr>
+      <tr><td>1:30 PM</td><td>Schwan Park</td></tr>
+      <tr><td>2:00 PM</td><td>Henry Lichner</td></tr>
+      <tr><td>3:20 PM</td><td>Sujan Feist</td></tr>
+    </tbody>
+  </table>
+  <h5>Saturday (8:45 AM &ndash; 7:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>8:45 AM</td><td>Brendyn Dunagan</td></tr>
+      <tr><td>9:25 AM</td><td>Dominic Redisi</td></tr>
+      <tr><td>9:55 AM</td><td>Owen Stotts (STUCube)</td></tr>
+      <tr><td>10:35 AM</td><td>Caleb Chen</td></tr>
+      <tr><td>2:00 PM</td><td>Abdullah Gulab</td></tr>
+      <tr><td>4:15 PM</td><td>Michael Nielsen</td></tr>
+    </tbody>
+  </table>
+  <h5>Sunday (8:45 AM &ndash; 6:00 PM)</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Interviews</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>10:30 AM</td><td>Stanley Chapel</td></tr>
+      <tr><td>10:55 AM</td><td>Graham Siggins</td></tr>
+    </tbody>
+  </table>
+  <h4 id="glossary">Glossary</h4>
+  <p>
+    New to cubing? Here are some of the terms you might hear on the stream!
+  </p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Term</th>
+        <th scope="col">Definition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Ao5; avg5</td><td>Average of 5: Final result drops the best and worst attempt and takes the average of the remaining 3 attempts; format used for most WCA events</td></tr>
+<tr><td>Mo3</td><td>Mean of 3: Final result is an average of all three attempts; format used for 6x6x6 Cube, 7x7x7 Cube and FMC</td></tr>
+<tr><td>Bo3 / Bo5</td><td>Best of X: Final result is the best of the attempts; format used for blindfolded events</td></tr>
+<tr><td>DNF</td><td>Did Not Finish</td></tr>
+<tr><td>Plus 2</td><td>A penalty that adds two seconds to a competitor's time, which most commonly occurs when the puzzle is off by one turn at the end of the solve</td></tr>
+<tr><td>TPS</td><td>Turns Per Second: A measurement of turning speed</td></tr>
+<tr><td>CN</td><td>Color Neutral: Ability to start a solve with any side/colour, common amongst top solvers (alternatively, many solvers are "white/yellow neutral", meaning they can start with the white or yellow face)</td></tr>
+<tr><td>Inspection</td><td>The 15-second period after the puzzle cover is lifted and before the competitor starts the timer, used by competitors to plan the solve</td></tr>
+<tr><td>BPA</td><td>Best Possible Average: A competitor’s average of 5 result after 4 solves if they get their best time on their 5th solve</td></tr>
+<tr><td>WPA</td><td>Worst Possible Average: A competitor’s average of 5 result after 4 solves if they get their worst time on their 5th solve</td></tr>
+<tr><td>PR</td><td>Personal Record: A competitor’s all-time best official result in an event</td></tr>
+<tr><td>NR</td><td>National Record</td></tr>
+<tr><td>NAR</td><td>North American Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>SAR</td><td>South American Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>ER</td><td>European Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>AFR</td><td>African Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>ASR</td><td>Asian Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>OCR</td><td>Oceanic Record (also marked as “CR” for Continental Record)</td></tr>
+<tr><td>WR</td><td>World Record</td></tr>
+<tr><td>FWR</td><td>Female World Record</td></tr>
+<tr><td>CFOP</td><td>Cross-F2L-OLL-PLL: The most common method for solving 3x3</td></tr>
+<tr><td>Cross</td><td>The first step of a CFOP solve</td></tr>
+<tr><td>F2L</td><td>First 2 Layers: Solving 4 different “slots” or "pairs" to finish the first 2 layers of a 3x3</td></tr>
+<tr><td>X-Cross</td><td>Solving the cross and the first F2L pair together, commonly used by advanced solvers to speed up the first 2 steps of CFOP</td></tr>
+<tr><td>LL</td><td>Last Layer: The last step(s) of a CFOP solve, after F2L</td></tr>
+<tr><td>OLL</td><td>Orient Last Layer: Second-last step of a CFOP solve, to solve the face of all last layer pieces</td></tr>
+<tr><td>PLL</td><td>Permute Last Layer: Last step of a CFOP solve, to solve the positions of all last layer pieces</td></tr>
+<tr><td>AUF</td><td>Adjust U Face: Adjusting the last layer right after the last algorithm to solve the puzzle</td></tr>
+<tr><td>Roux</td><td>A method for solving 3x3; common in one-handed solving due to move optimization</td></tr>
+<tr><td>ZBLL</td><td>Zborowski-Bruchem Last Layer: An advanced method for solving the 3x3 that requires the knowledge of hundreds of algorithms, allowing the solver to use only one algorithm to solve the last layer of the puzzle</td></tr>
+<tr><td>COLL</td><td>Corners + Orient Last Layer: A variant of OLL which can be used when all edges are oriented to ensure an easy PLL</td></tr>
+<tr><td>2GLL</td><td>2-Gen Last Layer: A set of last layer algorithms that can be done using only 2 faces (usually R and U), allowing them to be done extremely quickly.</td></tr>
+<tr><td>EO</td><td>Edge Orientation: Refers to whether edges are flipped correctly relative to the solved state</td></tr>
+<tr><td>Parity</td><td>A unique case that appears in big cubes (4x4 - 7x7), where pieces are in positions that seem impossible based on how a 3x3 cube works - an extra algorhitim is required to solve these cases</td></tr>
+<tr><td>OPA</td><td>OLL Parity Avoidance: An advanced method for solving 4x4 that avoids OLL parity</td></tr>
+<tr><td>Redux / Reduction</td><td>A common freestyle method used for solving 4x4 - 7x7</td></tr>
+<tr><td>Yau</td><td>A common structured method used for solving 4x4 - 7x7</td></tr>
+<tr><td>ZBLS</td><td>Zborowski-Bruchem Last Slot: An advanced algorithm set containing hundreds of algorithms that solves the last F2L pair while orienting all edges</td></tr>
+    </tbody>
+  </table>
+
+{% endblock %}

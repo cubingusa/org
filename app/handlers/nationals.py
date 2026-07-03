@@ -292,6 +292,11 @@ def nac2026policies():
   with client.context():
     return render_template('nationals/2026/policies.html', c=Common())
 
+@nac_bp.route('/2026/stream')
+def nac2026stream():
+  with client.context():
+    return render_template('nationals/2026/stream.html', c=Common())
+
 @nac_bp.route('/person_states')
 def person_states():
   with client.context():

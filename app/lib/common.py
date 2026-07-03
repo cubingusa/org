@@ -142,3 +142,14 @@ class Common(object):
     date_part = val.split('_')[-1][:8]
     return datetime.datetime.strptime(date_part, '%Y%m%d').strftime('%B %d, %Y').replace(' 0', ' ')
 
+  def get_video_id_for_homepage(self):
+    today = datetime.date.today()
+    if today < datetime.date(2026, 7, 2):
+      return 'tSeqWPs_E7w'
+    if today == datetime.date(2026, 7, 2):
+      return 'QIv2qQIeKb0'
+    if today == datetime.date(2026, 7, 3):
+      return '2gIGDb8FnKw'
+    if today == datetime.date(2026, 7, 4):
+      return 'wLtFbk07J4o'
+    return '8qWL1OLuaiU'
